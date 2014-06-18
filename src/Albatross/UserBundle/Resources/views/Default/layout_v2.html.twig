@@ -75,10 +75,10 @@
                 <!-- Start Header Nav -->
                 <div class="navbar navbar-inverse top-nav">
                     <div class="navbar-inner">
-                        <div class="container"> <span class="home-link"> <a href="#" class="icon-home"></a> </span>
+                        <div class="container"> <span class="home-link"> <a href="{{ path('albatross_core_homepage') }}" class="icon-home"></a> </span>
                             <div class="nav-collapse">
                                 <ul class="nav">
-                                    <li class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <img src="{{ asset('bundles/falgun/images/logo.png') }}" style="height:30px;" /><b class="icon-angle-down"></b> </a>
+                                    <li class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void();"> <img src="{{ asset('bundles/falgun/images/logo.png') }}" style="height:30px;" /><b class="icon-angle-down"></b> </a>
                                         <div class="dropdown-menu">
                                             <ul>
                                                 <li><a href="#">Albatross Forum</a></li>
@@ -90,7 +90,7 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle" href="#"> <i class=" icon-bar-chart"></i>Filter By<b class="icon-angle-down"></b> </a>
+                                    <li class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void();"> <i class=" icon-bar-chart"></i>Filter By<b class="icon-angle-down"></b> </a>
                                         <div class="dropdown-menu">
                                             <ul>
                                                 <li><a href="javascript:;" onclick="changeBu('');">All</a></li>
@@ -132,7 +132,7 @@
                                 <h3 class="page-header">{% block pageHeading 'Christofle Retail SW' %}</h3>
                             </div>
                             <ul class="breadcrumb">
-                                <li><a href="#" class="icon-home"></a><span class="divider"><i class="icon-angle-right"></i></span></li>
+                                <li><a href="{{ path('albatross_core_homepage') }}" class="icon-home"></a><span class="divider"><i class="icon-angle-right"></i></span></li>
           {% block breadcrumb %}
                                         <li class="active">Dashboard</li>
 		  {% endblock %}

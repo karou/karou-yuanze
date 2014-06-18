@@ -3,3 +3,4 @@ app/logs/
 vendor/gedmo/
 vendor/knplabs/
 vendor/phpoffice/
+web/
