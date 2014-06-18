@@ -1,5 +1,5 @@
 file:
-    resource: "@FileBundle/Resources/config/routing.yml"
+    resource: "@AlbatrossFileBundle/Resources/config/routing.yml"
     prefix:   /
 
 iof:

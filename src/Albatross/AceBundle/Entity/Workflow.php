@@ -6,81 +6,35 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Workflow
- *
- * @ORM\Table(name="workflow")
- * @ORM\Entity
  */
 class Workflow
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="workflow_step_id", type="bigint", nullable=false)
-     */
-    private $workflowStepId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="workflow_status", type="string", length=255, nullable=false)
-     */
-    private $workflowStatus;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
-
+    /**
+     * @var integer
+     */
+    private $WorkflowStepID;
 
     /**
-     * Set workflowStepId
-     *
-     * @param integer $workflowStepId
-     * @return Workflow
+     * @var string
      */
-    public function setWorkflowStepId($workflowStepId)
-    {
-        $this->workflowStepId = $workflowStepId;
-
-        return $this;
-    }
+    private $WorkflowStatus;
 
     /**
-     * Get workflowStepId
-     *
-     * @return integer 
+     * @var \Doctrine\Common\Collections\Collection
      */
-    public function getWorkflowStepId()
-    {
-        return $this->workflowStepId;
-    }
+    private $aolsurveys;
 
     /**
-     * Set workflowStatus
-     *
-     * @param string $workflowStatus
-     * @return Workflow
+     * Constructor
      */
-    public function setWorkflowStatus($workflowStatus)
+    public function __construct()
     {
-        $this->workflowStatus = $workflowStatus;
-
-        return $this;
-    }
-
-    /**
-     * Get workflowStatus
-     *
-     * @return string 
-     */
-    public function getWorkflowStatus()
-    {
-        return $this->workflowStatus;
+        $this->aolsurveys = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -91,5 +45,84 @@ class Workflow
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set WorkflowStepID
+     *
+     * @param integer $workflowStepID
+     * @return Workflow
+     */
+    public function setWorkflowStepID($workflowStepID)
+    {
+        $this->WorkflowStepID = $workflowStepID;
+
+        return $this;
+    }
+
+    /**
+     * Get WorkflowStepID
+     *
+     * @return integer 
+     */
+    public function getWorkflowStepID()
+    {
+        return $this->WorkflowStepID;
+    }
+
+    /**
+     * Set WorkflowStatus
+     *
+     * @param string $workflowStatus
+     * @return Workflow
+     */
+    public function setWorkflowStatus($workflowStatus)
+    {
+        $this->WorkflowStatus = $workflowStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get WorkflowStatus
+     *
+     * @return string 
+     */
+    public function getWorkflowStatus()
+    {
+        return $this->WorkflowStatus;
+    }
+
+    /**
+     * Add aolsurveys
+     *
+     * @param \Albatross\AceBundle\Entity\Aolsurvey $aolsurveys
+     * @return Workflow
+     */
+    public function addAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurveys)
+    {
+        $this->aolsurveys[] = $aolsurveys;
+
+        return $this;
+    }
+
+    /**
+     * Remove aolsurveys
+     *
+     * @param \Albatross\AceBundle\Entity\Aolsurvey $aolsurveys
+     */
+    public function removeAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurveys)
+    {
+        $this->aolsurveys->removeElement($aolsurveys);
+    }
+
+    /**
+     * Get aolsurveys
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAolsurveys()
+    {
+        return $this->aolsurveys;
     }
 }

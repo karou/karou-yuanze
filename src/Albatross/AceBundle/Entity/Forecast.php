@@ -6,166 +6,127 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Forecast
- *
- * @ORM\Table(name="forecast")
- * @ORM\Entity
  */
 class Forecast
 {
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fw_start_date", type="date", nullable=true)
-     */
-    private $fwStartDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fw_end_date", type="date", nullable=true)
-     */
-    private $fwEndDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="report_due_date", type="date", nullable=true)
-     */
-    private $reportDueDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="scope", type="string", length=255, nullable=true)
-     */
-    private $scope;
-
-    /**
      * @var integer
-     *
-     * @ORM\Column(name="editor", type="bigint", nullable=false)
-     */
-    private $editor;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="edittime", type="datetime", nullable=false)
-     */
-    private $edittime;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="reportduetext", type="string", length=255, nullable=true)
-     */
-    private $reportduetext;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="report_type", type="boolean", nullable=false)
-     */
-    private $reportType;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var \Albatross\AceBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\User")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * })
+     * @var \DateTime
      */
-    private $user;
+    private $fwstartdate;
+
+    /**
+     * @var \DateTime
+     */
+    private $fwenddate;
+
+    /**
+     * @var \DateTime
+     */
+    private $reportduedate;
+
+    /**
+     * @var string
+     */
+    private $scope;
+
+    /**
+     * @var \DateTime
+     */
+    private $edittime;
 
     /**
      * @var \Albatross\AceBundle\Entity\Task
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Task")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="task_id", referencedColumnName="id")
-     * })
      */
     private $task;
 
+    /**
+     * @var \Albatross\UserBundle\Entity\User
+     */
+    private $user;
 
 
     /**
-     * Set fwStartDate
+     * Get id
      *
-     * @param \DateTime $fwStartDate
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set fwstartdate
+     *
+     * @param \DateTime $fwstartdate
      * @return Forecast
      */
-    public function setFwStartDate($fwStartDate)
+    public function setFwstartdate($fwstartdate)
     {
-        $this->fwStartDate = $fwStartDate;
+        $this->fwstartdate = $fwstartdate;
 
         return $this;
     }
 
     /**
-     * Get fwStartDate
+     * Get fwstartdate
      *
      * @return \DateTime 
      */
-    public function getFwStartDate()
+    public function getFwstartdate()
     {
-        return $this->fwStartDate;
+        return $this->fwstartdate;
     }
 
     /**
-     * Set fwEndDate
+     * Set fwenddate
      *
-     * @param \DateTime $fwEndDate
+     * @param \DateTime $fwenddate
      * @return Forecast
      */
-    public function setFwEndDate($fwEndDate)
+    public function setFwenddate($fwenddate)
     {
-        $this->fwEndDate = $fwEndDate;
+        $this->fwenddate = $fwenddate;
 
         return $this;
     }
 
     /**
-     * Get fwEndDate
+     * Get fwenddate
      *
      * @return \DateTime 
      */
-    public function getFwEndDate()
+    public function getFwenddate()
     {
-        return $this->fwEndDate;
+        return $this->fwenddate;
     }
 
     /**
-     * Set reportDueDate
+     * Set reportduedate
      *
-     * @param \DateTime $reportDueDate
+     * @param \DateTime $reportduedate
      * @return Forecast
      */
-    public function setReportDueDate($reportDueDate)
+    public function setReportduedate($reportduedate)
     {
-        $this->reportDueDate = $reportDueDate;
+        $this->reportduedate = $reportduedate;
 
         return $this;
     }
 
     /**
-     * Get reportDueDate
+     * Get reportduedate
      *
      * @return \DateTime 
      */
-    public function getReportDueDate()
+    public function getReportduedate()
     {
-        return $this->reportDueDate;
+        return $this->reportduedate;
     }
 
     /**
@@ -192,29 +153,6 @@ class Forecast
     }
 
     /**
-     * Set editor
-     *
-     * @param integer $editor
-     * @return Forecast
-     */
-    public function setEditor($editor)
-    {
-        $this->editor = $editor;
-
-        return $this;
-    }
-
-    /**
-     * Get editor
-     *
-     * @return integer 
-     */
-    public function getEditor()
-    {
-        return $this->editor;
-    }
-
-    /**
      * Set edittime
      *
      * @param \DateTime $edittime
@@ -238,6 +176,85 @@ class Forecast
     }
 
     /**
+     * Set task
+     *
+     * @param \Albatross\AceBundle\Entity\Task $task
+     * @return Forecast
+     */
+    public function setTask(\Albatross\AceBundle\Entity\Task $task = null)
+    {
+        $this->task = $task;
+
+        return $this;
+    }
+
+    /**
+     * Get task
+     *
+     * @return \Albatross\AceBundle\Entity\Task 
+     */
+    public function getTask()
+    {
+        return $this->task;
+    }
+
+    /**
+     * Set user
+     *
+     * @param \Albatross\UserBundle\Entity\User $user
+     * @return Forecast
+     */
+    public function setUser(\Albatross\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Albatross\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    /**
+     * @var integer
+     */
+    private $editor;
+
+
+    /**
+     * Set editor
+     *
+     * @param integer $editor
+     * @return Forecast
+     */
+    public function setEditor($editor)
+    {
+        $this->editor = $editor;
+
+        return $this;
+    }
+
+    /**
+     * Get editor
+     *
+     * @return integer 
+     */
+    public function getEditor()
+    {
+        return $this->editor;
+    }
+    /**
+     * @var string
+     */
+    private $reportduetext;
+
+
+    /**
      * Set reportduetext
      *
      * @param string $reportduetext
@@ -259,83 +276,32 @@ class Forecast
     {
         return $this->reportduetext;
     }
+    /**
+     * @var boolean
+     */
+    private $reporttype;
+
 
     /**
-     * Set reportType
+     * Set reporttype
      *
-     * @param boolean $reportType
+     * @param boolean $reporttype
      * @return Forecast
      */
-    public function setReportType($reportType)
+    public function setReporttype($reporttype)
     {
-        $this->reportType = $reportType;
+        $this->reporttype = $reporttype;
 
         return $this;
     }
 
     /**
-     * Get reportType
+     * Get reporttype
      *
      * @return boolean 
      */
-    public function getReportType()
+    public function getReporttype()
     {
-        return $this->reportType;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set user
-     *
-     * @param \Albatross\AceBundle\Entity\User $user
-     * @return Forecast
-     */
-    public function setUser(\Albatross\AceBundle\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user
-     *
-     * @return \Albatross\AceBundle\Entity\User 
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * Set task
-     *
-     * @param \Albatross\AceBundle\Entity\Task $task
-     * @return Forecast
-     */
-    public function setTask(\Albatross\AceBundle\Entity\Task $task = null)
-    {
-        $this->task = $task;
-
-        return $this;
-    }
-
-    /**
-     * Get task
-     *
-     * @return \Albatross\AceBundle\Entity\Task 
-     */
-    public function getTask()
-    {
-        return $this->task;
+        return $this->reporttype;
     }
 }

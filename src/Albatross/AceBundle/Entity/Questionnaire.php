@@ -6,51 +6,41 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Questionnaire
- *
- * @ORM\Table(name="questionnaire")
- * @ORM\Entity
  */
 class Questionnaire
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Customwave", inversedBy="questionnaire")
-     * @ORM\JoinTable(name="questionnaire_customwave",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="customwave_id", referencedColumnName="id")
-     *   }
-     * )
+     * @var string
      */
-    private $customwave;
+    private $name;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $campaign;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->customwave = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->campaign = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -76,22 +66,50 @@ class Questionnaire
     }
 
     /**
-     * Get id
+     * Add campaign
      *
-     * @return integer 
+     * @param \Albatross\AceBundle\Entity\Campaign $campaign
+     * @return Questionnaire
      */
-    public function getId()
+    public function addCampaign(\Albatross\AceBundle\Entity\Campaign $campaign)
     {
-        return $this->id;
+        $this->campaign[] = $campaign;
+
+        return $this;
     }
+
+    /**
+     * Remove campaign
+     *
+     * @param \Albatross\AceBundle\Entity\Campaign $campaign
+     */
+    public function removeCampaign(\Albatross\AceBundle\Entity\Campaign $campaign)
+    {
+        $this->campaign->removeElement($campaign);
+    }
+
+    /**
+     * Get campaign
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCampaign()
+    {
+        return $this->campaign;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $customwave;
+
 
     /**
      * Add customwave
      *
-     * @param \Albatross\AceBundle\Entity\Customwave $customwave
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
      * @return Questionnaire
      */
-    public function addCustomwave(\Albatross\AceBundle\Entity\Customwave $customwave)
+    public function addCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave)
     {
         $this->customwave[] = $customwave;
 
@@ -101,9 +119,9 @@ class Questionnaire
     /**
      * Remove customwave
      *
-     * @param \Albatross\AceBundle\Entity\Customwave $customwave
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
      */
-    public function removeCustomwave(\Albatross\AceBundle\Entity\Customwave $customwave)
+    public function removeCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave)
     {
         $this->customwave->removeElement($customwave);
     }
@@ -116,5 +134,43 @@ class Questionnaire
     public function getCustomwave()
     {
         return $this->customwave;
+    }
+        /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $operationquestionnaire;
+
+
+    /**
+     * Add operationquestionnaire
+     *
+     * @param \Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire
+     * @return Questionnaire
+     */
+    public function addOperationquestionnaire(\Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire)
+    {
+        $this->operationquestionnaire[] = $operationquestionnaire;
+
+        return $this;
+    }
+
+    /**
+     * Remove operationquestionnaire
+     *
+     * @param \Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire
+     */
+    public function removeOperationquestionnaire(\Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire)
+    {
+        $this->operationquestionnaire->removeElement($operationquestionnaire);
+    }
+
+    /**
+     * Get operationquestionnaire
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOperationquestionnaire()
+    {
+        return $this->operationquestionnaire;
     }
 }

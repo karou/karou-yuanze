@@ -29,7 +29,7 @@ class AppKernel extends Kernel
             new Albatross\ProjectBundle\ProjectBundle(),
             new Albatross\ForecastBundle\ForecastBundle(),
             new Albatross\IofBundle\IofBundle(),
-            new Albatross\FileBundle\FileBundle(),
+            new Albatross\FileBundle\AlbatrossFileBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

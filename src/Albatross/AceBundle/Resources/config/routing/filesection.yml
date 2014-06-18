@@ -32,3 +32,7 @@ filesection_delete:
 section_list:
     pattern:  /SectionList
     defaults: { _controller: "AlbatrossAceBundle:FileSection:SectionList", current:'filelist' }
+    
+filesection_upload:
+    pattern:  /upload
+    defaults: { _controller: "AlbatrossFileBundle:Default:upload" }

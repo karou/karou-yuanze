@@ -5,53 +5,48 @@ namespace Albatross\AceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Filesection
- *
- * @ORM\Table(name="filesection")
- * @ORM\Entity
+ * FileSection
  */
-class Filesection
+class FileSection
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
-     */
-    private $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    private $description;
-
-    /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var \Albatross\AceBundle\Entity\Filesection
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Filesection")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
-     * })
+     * @var string
      */
-    private $parent;
+    private $name;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $attachments;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->attachments = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
      *
      * @param string $name
-     * @return Filesection
+     * @return FileSection
      */
     public function setName($name)
     {
@@ -71,10 +66,48 @@ class Filesection
     }
 
     /**
+     * Add attachments
+     *
+     * @param \Albatross\AceBundle\Entity\Attachments $attachments
+     * @return FileSection
+     */
+    public function addAttachment(\Albatross\AceBundle\Entity\Attachments $attachments)
+    {
+        $this->attachments[] = $attachments;
+
+        return $this;
+    }
+
+    /**
+     * Remove attachments
+     *
+     * @param \Albatross\AceBundle\Entity\Attachments $attachments
+     */
+    public function removeAttachment(\Albatross\AceBundle\Entity\Attachments $attachments)
+    {
+        $this->attachments->removeElement($attachments);
+    }
+
+    /**
+     * Get attachments
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAttachments()
+    {
+        return $this->attachments;
+    }
+    /**
+     * @var string
+     */
+    private $description;
+
+
+    /**
      * Set description
      *
      * @param string $description
-     * @return Filesection
+     * @return FileSection
      */
     public function setDescription($description)
     {
@@ -92,24 +125,19 @@ class Filesection
     {
         return $this->description;
     }
-
     /**
-     * Get id
-     *
-     * @return integer 
+     * @var \Albatross\AceBundle\Entity\FileSection
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $parent;
+
 
     /**
      * Set parent
      *
-     * @param \Albatross\AceBundle\Entity\Filesection $parent
-     * @return Filesection
+     * @param \Albatross\AceBundle\Entity\FileSection $parent
+     * @return FileSection
      */
-    public function setParent(\Albatross\AceBundle\Entity\Filesection $parent = null)
+    public function setParent(\Albatross\AceBundle\Entity\FileSection $parent = null)
     {
         $this->parent = $parent;
 
@@ -119,10 +147,19 @@ class Filesection
     /**
      * Get parent
      *
-     * @return \Albatross\AceBundle\Entity\Filesection 
+     * @return \Albatross\AceBundle\Entity\FileSection 
      */
     public function getParent()
     {
         return $this->parent;
+    }
+    
+    public function getLastUploadedAttachment($type = 3) {
+        $res = null;
+        foreach ($this->attachments as $attachment) {
+            if ($attachment->getType() == $type)
+                $res = $attachment;
+        }
+        return $res;
     }
 }

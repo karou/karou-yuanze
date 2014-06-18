@@ -6,92 +6,44 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Country
- *
- * @ORM\Table(name="country")
- * @ORM\Entity
  */
 class Country
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=255, nullable=false)
      */
     private $code;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
-     * @var \Albatross\AceBundle\Entity\Bu
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Bu")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="Bu_id", referencedColumnName="id")
-     * })
+     * @var string
      */
     private $bu;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Rules", mappedBy="country")
+     * @var \Albatross\AceBundle\Entity\Bu
      */
-    private $rules;
+    private $Bu;
+
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * Get id
      *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Recap", mappedBy="country")
+     * @return integer 
      */
-    private $recap;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Operationquestionnaire", mappedBy="country")
-     */
-    private $operationquestionnaire;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Operationproject", mappedBy="country")
-     */
-    private $operationproject;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Customfield", mappedBy="country")
-     */
-    private $customfield;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
+    public function getId()
     {
-        $this->rules = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->recap = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->operationquestionnaire = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->operationproject = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->customfield = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->id;
     }
-
 
     /**
      * Set name
@@ -140,22 +92,12 @@ class Country
     }
 
     /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set bu
      *
-     * @param \Albatross\AceBundle\Entity\Bu $bu
+     * @param string $bu
      * @return Country
      */
-    public function setBu(\Albatross\AceBundle\Entity\Bu $bu = null)
+    public function setBu($bu)
     {
         $this->bu = $bu;
 
@@ -165,53 +107,63 @@ class Country
     /**
      * Get bu
      *
-     * @return \Albatross\AceBundle\Entity\Bu 
+     * @return string 
      */
     public function getBu()
     {
         return $this->bu;
     }
+    /**
+     * @var string
+     */
+    private $bu_code;
+
 
     /**
-     * Add rules
+     * Set bu_code
      *
-     * @param \Albatross\AceBundle\Entity\Rules $rules
+     * @param string $buCode
      * @return Country
      */
-    public function addRule(\Albatross\AceBundle\Entity\Rules $rules)
+    public function setBuCode($buCode)
     {
-        $this->rules[] = $rules;
+        $this->bu_code = $buCode;
 
         return $this;
     }
 
     /**
-     * Remove rules
+     * Get bu_code
      *
-     * @param \Albatross\AceBundle\Entity\Rules $rules
+     * @return string 
      */
-    public function removeRule(\Albatross\AceBundle\Entity\Rules $rules)
+    public function getBuCode()
     {
-        $this->rules->removeElement($rules);
+        return $this->bu_code;
     }
+    public function __toString() {
+        return $this->name;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $recap;
 
     /**
-     * Get rules
-     *
-     * @return \Doctrine\Common\Collections\Collection 
+     * Constructor
      */
-    public function getRules()
+    public function __construct()
     {
-        return $this->rules;
+        $this->recap = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Add recap
      *
-     * @param \Albatross\AceBundle\Entity\Recap $recap
+     * @param \Albatross\CustomBundle\Entity\Recap $recap
      * @return Country
      */
-    public function addRecap(\Albatross\AceBundle\Entity\Recap $recap)
+    public function addRecap(\Albatross\CustomBundle\Entity\Recap $recap)
     {
         $this->recap[] = $recap;
 
@@ -221,9 +173,9 @@ class Country
     /**
      * Remove recap
      *
-     * @param \Albatross\AceBundle\Entity\Recap $recap
+     * @param \Albatross\CustomBundle\Entity\Recap $recap
      */
-    public function removeRecap(\Albatross\AceBundle\Entity\Recap $recap)
+    public function removeRecap(\Albatross\CustomBundle\Entity\Recap $recap)
     {
         $this->recap->removeElement($recap);
     }
@@ -237,14 +189,138 @@ class Country
     {
         return $this->recap;
     }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $customfield;
+
+
+    /**
+     * Add customfield
+     *
+     * @param \Albatross\CustomBundle\Entity\Customfield $customfield
+     * @return Country
+     */
+    public function addCustomfield(\Albatross\CustomBundle\Entity\Customfield $customfield)
+    {
+        $this->customfield[] = $customfield;
+
+        return $this;
+    }
+
+    /**
+     * Remove customfield
+     *
+     * @param \Albatross\CustomBundle\Entity\Customfield $customfield
+     */
+    public function removeCustomfield(\Albatross\CustomBundle\Entity\Customfield $customfield)
+    {
+        $this->customfield->removeElement($customfield);
+    }
+
+    /**
+     * Get customfield
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCustomfield()
+    {
+        return $this->customfield;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $poslistdata;
+
+
+    /**
+     * Add poslistdata
+     *
+     * @param \Albatross\CustomBundle\Entity\Poslistdata $poslistdata
+     * @return Country
+     */
+    public function addPoslistdatum(\Albatross\CustomBundle\Entity\Poslistdata $poslistdata)
+    {
+        $this->poslistdata[] = $poslistdata;
+
+        return $this;
+    }
+
+    /**
+     * Remove poslistdata
+     *
+     * @param \Albatross\CustomBundle\Entity\Poslistdata $poslistdata
+     */
+    public function removePoslistdatum(\Albatross\CustomBundle\Entity\Poslistdata $poslistdata)
+    {
+        $this->poslistdata->removeElement($poslistdata);
+    }
+
+    /**
+     * Get poslistdata
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPoslistdata()
+    {
+        return $this->poslistdata;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $location;
+
+
+    /**
+     * Add location
+     *
+     * @param \Albatross\AceBundle\Entity\Location $location
+     * @return Country
+     */
+    public function addLocation(\Albatross\AceBundle\Entity\Location $location)
+    {
+        $this->location[] = $location;
+
+        return $this;
+    }
+
+    /**
+     * Remove location
+     *
+     * @param \Albatross\AceBundle\Entity\Location $location
+     */
+    public function removeLocation(\Albatross\AceBundle\Entity\Location $location)
+    {
+        $this->location->removeElement($location);
+    }
+
+    /**
+     * Get location
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+        /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $operationquestionnaire;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $operationproject;
+
 
     /**
      * Add operationquestionnaire
      *
-     * @param \Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire
+     * @param \Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire
      * @return Country
      */
-    public function addOperationquestionnaire(\Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire)
+    public function addOperationquestionnaire(\Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire)
     {
         $this->operationquestionnaire[] = $operationquestionnaire;
 
@@ -254,9 +330,9 @@ class Country
     /**
      * Remove operationquestionnaire
      *
-     * @param \Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire
+     * @param \Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire
      */
-    public function removeOperationquestionnaire(\Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire)
+    public function removeOperationquestionnaire(\Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire)
     {
         $this->operationquestionnaire->removeElement($operationquestionnaire);
     }
@@ -274,10 +350,10 @@ class Country
     /**
      * Add operationproject
      *
-     * @param \Albatross\AceBundle\Entity\Operationproject $operationproject
+     * @param \Albatross\OperationBundle\Entity\OperationProject $operationproject
      * @return Country
      */
-    public function addOperationproject(\Albatross\AceBundle\Entity\Operationproject $operationproject)
+    public function addOperationproject(\Albatross\OperationBundle\Entity\OperationProject $operationproject)
     {
         $this->operationproject[] = $operationproject;
 
@@ -287,9 +363,9 @@ class Country
     /**
      * Remove operationproject
      *
-     * @param \Albatross\AceBundle\Entity\Operationproject $operationproject
+     * @param \Albatross\OperationBundle\Entity\OperationProject $operationproject
      */
-    public function removeOperationproject(\Albatross\AceBundle\Entity\Operationproject $operationproject)
+    public function removeOperationproject(\Albatross\OperationBundle\Entity\OperationProject $operationproject)
     {
         $this->operationproject->removeElement($operationproject);
     }
@@ -302,38 +378,5 @@ class Country
     public function getOperationproject()
     {
         return $this->operationproject;
-    }
-
-    /**
-     * Add customfield
-     *
-     * @param \Albatross\AceBundle\Entity\Customfield $customfield
-     * @return Country
-     */
-    public function addCustomfield(\Albatross\AceBundle\Entity\Customfield $customfield)
-    {
-        $this->customfield[] = $customfield;
-
-        return $this;
-    }
-
-    /**
-     * Remove customfield
-     *
-     * @param \Albatross\AceBundle\Entity\Customfield $customfield
-     */
-    public function removeCustomfield(\Albatross\AceBundle\Entity\Customfield $customfield)
-    {
-        $this->customfield->removeElement($customfield);
-    }
-
-    /**
-     * Get customfield
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getCustomfield()
-    {
-        return $this->customfield;
     }
 }

@@ -6,207 +6,73 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Task
- *
- * @ORM\Table(name="task")
- * @ORM\Entity
  */
 class Task
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="project_id", type="bigint", nullable=true)
      */
-    private $projectId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="group_id", type="bigint", nullable=true)
-     */
-    private $groupId;
+    private $id;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="resume", type="string", length=255, nullable=false)
      */
     private $resume;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="number", type="bigint", nullable=false)
      */
     private $number;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="status", type="string", length=255, nullable=false)
      */
     private $status;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="percentage_done", type="bigint", nullable=false)
      */
     private $percentageDone;
 
     /**
      * @var float
-     *
-     * @ORM\Column(name="actual_percentage_done", type="float", nullable=false)
      */
     private $actualPercentageDone;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_date", type="datetime", nullable=true)
      */
     private $createdDate;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ace_id", type="bigint", nullable=false)
      */
     private $aceId;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="task_type_id", type="bigint", nullable=true)
+     * @var \Albatross\AceBundle\Entity\Project
      */
-    private $taskTypeId;
+    private $project;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="aol_percent", type="bigint", nullable=true)
+     * @var \Albatross\AceBundle\Entity\Group
      */
-    private $aolPercent;
+    private $group;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="status_id", type="bigint", nullable=false)
+     * @var \Albatross\AceBundle\Entity\TaskType
      */
-    private $statusId;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="updated_aol", type="boolean", nullable=false)
-     */
-    private $updatedAol;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fw_start_date", type="string", length=255, nullable=true)
-     */
-    private $fwStartDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="fw_end_date", type="string", length=255, nullable=true)
-     */
-    private $fwEndDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="report_due_date", type="string", length=255, nullable=true)
-     */
-    private $reportDueDate;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="scope", type="bigint", nullable=true)
-     */
-    private $scope;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="pm", type="string", length=255, nullable=true)
-     */
-    private $pm;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="project_number", type="string", length=255, nullable=true)
-     */
-    private $projectNumber;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="updated", type="boolean", nullable=false)
-     */
-    private $updated;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
+    private $taskType;
 
 
     /**
-     * Set projectId
-     *
-     * @param integer $projectId
-     * @return Task
-     */
-    public function setProjectId($projectId)
-    {
-        $this->projectId = $projectId;
-
-        return $this;
-    }
-
-    /**
-     * Get projectId
+     * Get id
      *
      * @return integer 
      */
-    public function getProjectId()
+    public function getId()
     {
-        return $this->projectId;
-    }
-
-    /**
-     * Set groupId
-     *
-     * @param integer $groupId
-     * @return Task
-     */
-    public function setGroupId($groupId)
-    {
-        $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * Get groupId
-     *
-     * @return integer 
-     */
-    public function getGroupId()
-    {
-        return $this->groupId;
+        return $this->id;
     }
 
     /**
@@ -218,7 +84,7 @@ class Task
     public function setResume($resume)
     {
         $this->resume = $resume;
-
+    
         return $this;
     }
 
@@ -241,7 +107,7 @@ class Task
     public function setNumber($number)
     {
         $this->number = $number;
-
+    
         return $this;
     }
 
@@ -264,7 +130,7 @@ class Task
     public function setStatus($status)
     {
         $this->status = $status;
-
+    
         return $this;
     }
 
@@ -287,7 +153,7 @@ class Task
     public function setPercentageDone($percentageDone)
     {
         $this->percentageDone = $percentageDone;
-
+    
         return $this;
     }
 
@@ -310,7 +176,7 @@ class Task
     public function setActualPercentageDone($actualPercentageDone)
     {
         $this->actualPercentageDone = $actualPercentageDone;
-
+    
         return $this;
     }
 
@@ -333,7 +199,7 @@ class Task
     public function setCreatedDate($createdDate)
     {
         $this->createdDate = $createdDate;
-
+    
         return $this;
     }
 
@@ -356,7 +222,7 @@ class Task
     public function setAceId($aceId)
     {
         $this->aceId = $aceId;
-
+    
         return $this;
     }
 
@@ -371,27 +237,82 @@ class Task
     }
 
     /**
-     * Set taskTypeId
+     * Set project
      *
-     * @param integer $taskTypeId
+     * @param \Albatross\AceBundle\Entity\Project $project
      * @return Task
      */
-    public function setTaskTypeId($taskTypeId)
+    public function setProject(\Albatross\AceBundle\Entity\Project $project = null)
     {
-        $this->taskTypeId = $taskTypeId;
-
+            $this->project = $project;
+    
         return $this;
     }
 
     /**
-     * Get taskTypeId
+     * Get project
      *
-     * @return integer 
+     * @return \Albatross\AceBundle\Entity\Project 
      */
-    public function getTaskTypeId()
+    public function getProject()
     {
-        return $this->taskTypeId;
+        return $this->project;
     }
+
+    /**
+     * Set group
+     *
+     * @param \Albatross\AceBundle\Entity\Group $group
+     * @return Task
+     */
+    public function setGroup(\Albatross\AceBundle\Entity\Group $group = null)
+    {
+        $this->group = $group;
+    
+        return $this;
+    }
+
+    /**
+     * Get group
+     *
+     * @return \Albatross\AceBundle\Entity\Group 
+     */
+    public function getGroup()
+    {
+        return $this->group;
+    }
+
+    /**
+     * Set taskType
+     *
+     * @param \Albatross\AceBundle\Entity\TaskType $taskType
+     * @return Task
+     */
+    public function setTaskType(\Albatross\AceBundle\Entity\TaskType $taskType = null)
+    {
+        $this->taskType = $taskType;
+    
+        return $this;
+    }
+
+    /**
+     * Get taskType
+     *
+     * @return \Albatross\AceBundle\Entity\TaskType 
+     */
+    public function getTaskType()
+    {
+        return $this->taskType;
+    }
+    
+    public function __toString() {
+        return $this->id;
+    }
+    /**
+     * @var integer
+     */
+    private $aolPercent;
+
 
     /**
      * Set aolPercent
@@ -415,6 +336,11 @@ class Task
     {
         return $this->aolPercent;
     }
+    /**
+     * @var integer
+     */
+    private $statusId;
+
 
     /**
      * Set statusId
@@ -438,97 +364,132 @@ class Task
     {
         return $this->statusId;
     }
+    /**
+     * @var int
+     */
+    private $updatedaol;
+
 
     /**
-     * Set updatedAol
+     * Set updatedaol
      *
-     * @param boolean $updatedAol
+     * @param $updatedaol
      * @return Task
      */
-    public function setUpdatedAol($updatedAol)
+    public function setUpdatedaol($updatedaol)
     {
-        $this->updatedAol = $updatedAol;
+        $this->updatedaol = $updatedaol;
 
         return $this;
     }
 
     /**
-     * Get updatedAol
+     * Get updatedaol
      *
-     * @return boolean 
+     * @return \int 
      */
-    public function getUpdatedAol()
+    public function getUpdatedaol()
     {
-        return $this->updatedAol;
+        return $this->updatedaol;
     }
+    /**
+     * @var \DateTime
+     */
+    private $fwstartdate;
 
     /**
-     * Set fwStartDate
+     * @var \DateTime
+     */
+    private $fwenddate;
+
+    /**
+     * @var \DateTime
+     */
+    private $reportduedate;
+
+    /**
+     * @var integer
+     */
+    private $scope;
+
+    /**
+     * @var string
+     */
+    private $pm;
+
+    /**
+     * @var string
+     */
+    private $projectnumber;
+
+
+    /**
+     * Set fwstartdate
      *
-     * @param string $fwStartDate
+     * @param \DateTime $fwstartdate
      * @return Task
      */
-    public function setFwStartDate($fwStartDate)
+    public function setFwstartdate($fwstartdate)
     {
-        $this->fwStartDate = $fwStartDate;
+        $this->fwstartdate = $fwstartdate;
 
         return $this;
     }
 
     /**
-     * Get fwStartDate
+     * Get fwstartdate
      *
-     * @return string 
+     * @return \DateTime 
      */
-    public function getFwStartDate()
+    public function getFwstartdate()
     {
-        return $this->fwStartDate;
+        return $this->fwstartdate;
     }
 
     /**
-     * Set fwEndDate
+     * Set fwenddate
      *
-     * @param string $fwEndDate
+     * @param \DateTime $fwenddate
      * @return Task
      */
-    public function setFwEndDate($fwEndDate)
+    public function setFwenddate($fwenddate)
     {
-        $this->fwEndDate = $fwEndDate;
+        $this->fwenddate = $fwenddate;
 
         return $this;
     }
 
     /**
-     * Get fwEndDate
+     * Get fwenddate
      *
-     * @return string 
+     * @return \DateTime 
      */
-    public function getFwEndDate()
+    public function getFwenddate()
     {
-        return $this->fwEndDate;
+        return $this->fwenddate;
     }
 
     /**
-     * Set reportDueDate
+     * Set reportduedate
      *
-     * @param string $reportDueDate
+     * @param \DateTime $reportduedate
      * @return Task
      */
-    public function setReportDueDate($reportDueDate)
+    public function setReportduedate($reportduedate)
     {
-        $this->reportDueDate = $reportDueDate;
+        $this->reportduedate = $reportduedate;
 
         return $this;
     }
 
     /**
-     * Get reportDueDate
+     * Get reportduedate
      *
-     * @return string 
+     * @return \DateTime 
      */
-    public function getReportDueDate()
+    public function getReportduedate()
     {
-        return $this->reportDueDate;
+        return $this->reportduedate;
     }
 
     /**
@@ -578,27 +539,105 @@ class Task
     }
 
     /**
-     * Set projectNumber
+     * Set projectnumber
      *
-     * @param string $projectNumber
+     * @param string $projectnumber
      * @return Task
      */
-    public function setProjectNumber($projectNumber)
+    public function setProjectnumber($projectnumber)
     {
-        $this->projectNumber = $projectNumber;
+        $this->projectnumber = $projectnumber;
 
         return $this;
     }
 
     /**
-     * Get projectNumber
+     * Get projectnumber
      *
      * @return string 
      */
-    public function getProjectNumber()
+    public function getProjectnumber()
     {
-        return $this->projectNumber;
+        return $this->projectnumber;
     }
+    /**
+     * @var integer
+     */
+    private $step;
+
+
+    /**
+     * Set step
+     *
+     * @param integer $step
+     * @return Task
+     */
+    public function setStep($step)
+    {
+        $this->step = $step;
+
+        return $this;
+    }
+
+    /**
+     * Get step
+     *
+     * @return integer 
+     */
+    public function getStep()
+    {
+        return $this->step;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $forecast;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->forecast = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add forecast
+     *
+     * @param \Albatross\AceBundle\Entity\Forecast $forecast
+     * @return Task
+     */
+    public function addForecast(\Albatross\AceBundle\Entity\Forecast $forecast)
+    {
+        $this->forecast[] = $forecast;
+
+        return $this;
+    }
+
+    /**
+     * Remove forecast
+     *
+     * @param \Albatross\AceBundle\Entity\Forecast $forecast
+     */
+    public function removeForecast(\Albatross\AceBundle\Entity\Forecast $forecast)
+    {
+        $this->forecast->removeElement($forecast);
+    }
+
+    /**
+     * Get forecast
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getForecast()
+    {
+        return $this->forecast;
+    }
+    /**
+     * @var boolean
+     */
+    private $updated;
+
 
     /**
      * Set updated
@@ -621,15 +660,5 @@ class Task
     public function getUpdated()
     {
         return $this->updated;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

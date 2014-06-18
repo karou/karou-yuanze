@@ -6,43 +6,39 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * TaskType
- *
- * @ORM\Table(name="task_type")
- * @ORM\Entity
  */
 class TaskType
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="myorder", type="bigint", nullable=false)
      */
     private $myorder;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="ace_id", type="bigint", nullable=false)
      */
     private $aceId;
 
+
     /**
-     * @var integer
+     * Get id
      *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @return integer 
      */
-    private $id;
-
-
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -53,7 +49,7 @@ class TaskType
     public function setName($name)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 
@@ -76,7 +72,7 @@ class TaskType
     public function setMyorder($myorder)
     {
         $this->myorder = $myorder;
-
+    
         return $this;
     }
 
@@ -99,7 +95,7 @@ class TaskType
     public function setAceId($aceId)
     {
         $this->aceId = $aceId;
-
+    
         return $this;
     }
 
@@ -111,15 +107,5 @@ class TaskType
     public function getAceId()
     {
         return $this->aceId;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 }

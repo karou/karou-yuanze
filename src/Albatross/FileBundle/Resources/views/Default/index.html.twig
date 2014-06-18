@@ -11,7 +11,7 @@
 {% block body %}
 
 <!--BODY STARTS-->
-<link rel="stylesheet" href="css/file-list.css">
+<link rel="stylesheet" href="{{ asset('bundles/falgun/') }}css/file-list.css">
 <div class="row-fluid">
  
   <div class="span12">
@@ -22,8 +22,9 @@
 			<i class="icon-cloud-download" style="font-size:26px;"></i>
 		</div>
 		
-		<form name="frmFileListSearch" id="frmFileListSearch" action="" method="post" enctype="multipart/form-data" onsubmit="return chkFileUploadForm();">
+		<form name="frmFileListSearch" id="frmFileListSearch" action="{{ path('filesection_upload') }}" method="post" enctype="multipart/form-data" >
 			<input type="hidden" name="hidAct" id="hidAct" value="uploadFileList" />
+                        {{ form_widget(form.filesection, {'attr': {'style': 'display:none;'} }) }}
 			<div class="inner-widget-iof">
 				<select data-placeholder="Section" name="section" id="section" class="chzn-select span1 iBlock nBorder" style="width:99%; float:left;" tabindex="1" onchange="popSubSection(this.value);">
 					<option value="0" selected="selected">Select Section</option>
@@ -36,15 +37,16 @@
 				</select>
 			</div>
 			<div class="inner-widget-iof" style="width:25%">
-				File Name: &nbsp; <input type="text" placeholder="File Name" name="file_name" id="file_name" style="width:72%; float:right;" tabindex="5" />
+				File Name: &nbsp; {{ form_widget(form.label, {'attr': { 'placeholder': "File Name", "style": "width:72%; float:right;"} }) }}
 			</div>
 			<div class="inner-widget-iof" style="width:25%">
-				File Upload: &nbsp; <input type="file" placeholder="File Upload" name="file_upload" id="file_upload" style="width:74%; float:right;" tabindex="6" />
+				File Upload: &nbsp; {{ form_widget(form.file) }}
 			</div>
 			<div class="inner-widget-iof-last iof-filter-btns">
 				<button class="btn btn-info" type="submit" name="uploadFile" id="uploadFile" value="Upload" style="margin-right:8px;"><i class="icon-cloud-upload"></i>Upload</button>
 				<button class="btn btn-danger" type="reset" onclick="document.getElementById('frmFileListSearch').reset();">Cancel</button>
 			</div>
+                        {{ form_rest(form) }}
 		</form>
 			
 	  </div>
@@ -99,19 +101,19 @@ $(document).ready(function() {
 	/*====Select Box====*/
 	$(".chzn-select").chosen();
 	$(".chzn-select-deselect").chosen({
-		allow_single_deselect: true
+            allow_single_deselect: true
 	});
     
 	/*====Data Table====*/
 	oTable = $('#fileTable').dataTable({ 
-							  "iDisplayLength": 10,	
-							  "oLanguage" : { "sEmptyTable": "" , "sZeroRecords": "" },
-							  "sDom": "<'row-fluid'<'span12'>r>t<'row-fluid'<'span6'li><'span6'p>>",
-							  "aaSorting": [[1,'asc']],
-							  "bProcessing": true,
-							  "bServerSide": true,
-							  "sAjaxSource": "{{SITE_URL}}ajax?ajaxaction=getFileData"
-							});
+            "iDisplayLength": 10,	
+            "oLanguage" : { "sEmptyTable": "" , "sZeroRecords": "" },
+            "sDom": "<'row-fluid'<'span12'>r>t<'row-fluid'<'span6'li><'span6'p>>",
+            "aaSorting": [[1,'asc']],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "{{ path("ajax_get_file_data") }}"
+          });
 	
 	$('#fileTable tbody td i.file-list-plus-minus').live('click', function () {
 		var nTr = $(this).parents('tr')[0];
@@ -124,8 +126,8 @@ $(document).ready(function() {
 			var fileId = $(this).attr('id');
 			var result = $.ajax({
 					type: "POST",
-					url: "{{SITE_URL}}ajax",
-					data: 'ajaxaction=getSubFileData&id='+fileId,
+					url: "{{ path("ajax_get_sub_file_data") }}",
+					data: 'id='+fileId,
 					async: false
 				}).responseText;
 				
@@ -158,8 +160,8 @@ $(document).ready(function() {
 		{
 			var result = $.ajax({
 					type: "POST",
-					url: "{{SITE_URL}}ajax",
-					data: 'ajaxaction=getSubSectionFileData&id='+fileId,
+					url: "{{ path("ajax_get_sub_section_file_data") }}",
+					data: 'id='+fileId,
 					async: false
 				}).responseText;
 				
@@ -186,8 +188,8 @@ function popSubSection(val)
 {
 	var result = $.ajax({
 					type: "POST",
-					url: "{{SITE_URL}}ajax",
-					data: 'ajaxaction=getSubSectionList&id='+val,
+					url: "{{ path("ajax_get_sub_section_list") }}",
+					data: 'id='+val,
 					async: false
 				}).responseText;
 				
@@ -227,8 +229,8 @@ function deleteAttachment(id,fileId,type)
 	{
 		var result = $.ajax({
 					type: "POST",
-					url: "{{SITE_URL}}ajax",
-					data: 'ajaxaction=deleteAttachment&id='+id,
+					url: "{{ path("ajax_delete_attachment") }}",
+					data: 'id='+id,
 					async: false
 				}).responseText;
 			
@@ -238,8 +240,8 @@ function deleteAttachment(id,fileId,type)
 			{
 				var result = $.ajax({
 						type: "POST",
-						url: "{{SITE_URL}}ajax",
-						data: 'ajaxaction=getSubFileData&id='+fileId,
+						url: "{{ path("ajax_get_sub_file_data") }}",
+						data: 'id='+fileId,
 						async: false
 					}).responseText;
 					
@@ -260,8 +262,8 @@ function deleteAttachment(id,fileId,type)
 			{
 				var result = $.ajax({
 						type: "POST",
-						url: "{{SITE_URL}}ajax",
-						data: 'ajaxaction=getSubSectionFileData&id='+fileId,
+						url: "{{ path("ajax_get_sub_section_file_data") }}",
+						data: 'id='+fileId,
 						async: false
 					}).responseText;
 					

@@ -3,70 +3,125 @@
 namespace Albatross\FileBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Albatross\AceBundle\Form\AttachmentsType;
+use Albatross\AceBundle\Entity\Attachments;
 
-class DefaultController extends Controller
-{
-    public function indexAction()
-    {
-		$em = $this->getDoctrine()->getManager();
-		
-		 //
-        //user access
-        //
+class DefaultController extends Controller {
+
+    public function indexAction() {
+        $em = $this->getDoctrine()->getManager();
         $secu = $this->container->get('security.context');
         $user = $secu->getToken()->getUser();
-		
-		if(isset($_POST['hidAct']) and $_POST['hidAct']=='uploadFileList')
-		{
-			$connection = $em->getConnection();
-			
-			if(!is_dir($this->basicElements['rootPath'] . "web/otherFiles/".date('Y-m-d')))
-			{
-				mkdir($this->basicElements['rootPath'] . "web/otherFiles/".date('Y-m-d'),0777);
-			}
-	
-			$this->save_image($_FILES['file_upload']['name'],"file_upload",$this->basicElements['rootPath'] . "web/otherFiles/".date('Y-m-d')."/");
-			
-			$path = "otherFiles/" . date('Y-m-d') . "/" . $_FILES['file_upload']['name'];
-			
-			if($_POST['sub_section']!='' and $_POST['sub_section']!=0)
-				$filesection_id = $_POST['sub_section'];
-			else
-				$filesection_id = $_POST['section'];
-				
-			$sql = 'insert into attachments(user_id,type,status,submitteddate,filesection_id,label,path) values('.$_SESSION['user_id'].',3,"approved","'.date('Y-m-d H:i:s').'",'.$filesection_id.',"'.$_POST['file_name'].'","'.$path.'")';
-			
-			$statement = $connection->prepare($sql);
-			$statement->execute();
-			
-			return $this->redirect($this->generateUrl('file_list') . '?msg=success',301);
-		}
-		
-		$msgClass = $successOrErrMsg = '';
-		if(isset($_GET['msg']) and $_GET['msg']=='success')
-		{
-			$msgClass = 'successMsg';
-			$successOrErrMsg = 'File uploaded successfully';
-		}
-		
-		//////////for getting custom client detail////////////
-		$sectionqb = $em->createQueryBuilder();
-        $sectionqb->select('f')
-                ->from('AlbatrossAceBundle:Filesection', 'f')
-				->orderBy('f.name', 'ASC');
-		
-		$sectionQry = $sectionqb->getQuery();
-        $sectionArr = $sectionQry->getArrayResult();
-		
-		$list_section = '';
-		if(is_array($sectionArr) and count($sectionArr) > 0)
-		{
-			foreach($sectionArr as $section)
-			{
-				$list_section .= '<option value="'.$section['id'].'">'.$section['name'].'</option>';
-			}
-		}
-		
-		return $this->render('FileBundle:Default:index.html.twig', array('list_section' => $list_section,'msgClass' => $msgClass,'successOrErrMsg' => $successOrErrMsg));
+        $sales_and_bd = 0;
+        if ($secu->isGranted('ROLE_ADMIN') || $secu->isGranted('ROLE_SENIOR_PROJECT_MANAGER') || $secu->isGranted('ROLE_PROJECT_MANAGER') || $secu->isGranted('ROLE_BU_MANAGER') || $secu->isGranted('ROLE_EXECUTIVE_DIRECTOR')) {
+            $sales_and_bd = 1;
+        }
+        if ($secu->isGranted('ROLE_HD_MANAGER') && $user->getPosition()->getName() == 'Top Management') {
+            $sales_and_bd = 1;
+        }
+        $position = $user->getPosition()->getName();
+        $postionFileArr = array('Market Research Dept',
+            'Quality Control Dept',
+            'Finance Dept',
+            'Human Resource Dept',
+            'Consumer Insight Dept',
+            'Pacific Editing Dept',
+            'Greater China Ed. Dept',
+            'Atlantic Editing Dept',
+            'Global Operations Dept',
+            'Middle East BU',
+            'United States BU',
+            'Russia BU',
+            'Brazil BU',
+            'North East Europe BU',
+            'Australia BU',
+            'China BU',
+            'United Kingdom BU',
+            'Japan BU',
+            'Hong Kong BU',
+            'Singapore BU',
+            'India BU',
+            'Korea BU',
+            'Thailand BU',
+            'Taiwan BU',
+            'South West Europe BU',
+            'Client',
+        );
+
+
+        $sections = $em->getRepository("AlbatrossAceBundle:Filesection")->findBy(array("parent" => null), array("name" => "ASC"));
+
+
+        $list_section = '';
+        foreach ($sections as $section) {
+            $filename = $section->getName();
+            if (!(in_array($filename, $postionFileArr) && !($filename == $position || $secu->isGranted('ROLE_ADMIN')))) {
+                $list_section .= '<option value="' . $section->getId() . '">' . $filename . '</option>';
+            }
+        }
+
+        $attachmentsOption = $this->container->getParameter('valuelist');
+        $attachmentsOption['attachments']['type'] = array('3' => 'other');
+        $attachmentsForm = $this->createForm(new AttachmentsType(), $attachmentsOption);
+
+        return $this->render('AlbatrossFileBundle:Default:index.html.twig', array(
+                    'list_section' => $list_section,
+                    'form' => $attachmentsForm->createView(),
+        ));
     }
+
+    public function uploadAction() {
+        $attachmentsOption = $this->container->getParameter('valuelist');
+        $attachmentsOption['attachments']['type'] = array('3' => 'other');
+        $form = $this->createForm(new AttachmentsType(), $attachmentsOption);
+
+        $request = $this->getRequest();
+
+        $form->bindRequest($request);
+        $data = $form->getData();
+        if ($data['file'] == null) {
+            return $this->redirect($this->generateUrl('filelist'));
+        }
+        $dir = date('Y-m-d');
+        $filename = $data['file']->getClientOriginalName();
+        $data['file']->move(
+                $this->get('kernel')->getRootDir() . '/../web/otherFiles/' . $dir . '/', $filename
+        );
+
+        //get label
+        $label = $data['label'];
+
+        //get user info
+        $secu = $this->container->get('security.context');
+        $user_entity = $secu->getToken()->getUser();
+
+        //get path info
+        $path = 'otherFiles/' . $dir . '/' . $filename;
+
+        //get date time
+        $datetime = date('Y-m-d H:i:s');
+
+        $em = $this->getDoctrine()->getManager();
+        $attachment = new Attachments();
+        $attachment->setUser($user_entity);
+        $attachment->setPath($path);
+        $attachment->setSubmitteddate(new \DateTime($datetime));
+        $attachment->setStatus('0');
+        $attachment->setType('3');
+        $attachment->setLabel($label);
+
+        $section = $request->get('section');
+        $subsection = $request->get('sub_section');
+        if ($subsection) {
+            $filesection = $em->getRepository('AlbatrossAceBundle:FileSection')->findOneById($subsection);
+        } else {
+            $filesection = $em->getRepository('AlbatrossAceBundle:FileSection')->findOneById($section);
+        }
+        $attachment->setFilesection($filesection);
+
+        $em->persist($attachment);
+        $em->flush();
+        return $this->redirect($this->generateUrl('file_homepage'));
+    }
+
 }

@@ -1,3 +1,3 @@
 file_homepage:
     pattern:  /file_list
-    defaults: { _controller: FileBundle:Default:index }
+    defaults: { _controller: AlbatrossFileBundle:Default:index }

@@ -6,108 +6,59 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Attachinfo
- *
- * @ORM\Table(name="attachinfo")
- * @ORM\Entity
  */
 class Attachinfo
 {
     /**
      * @var integer
-     *
-     * @ORM\Column(name="scope", type="bigint", nullable=true)
-     */
-    private $scope;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fw_start_date", type="date", nullable=true)
-     */
-    private $fwStartDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="fw_end_date", type="date", nullable=true)
-     */
-    private $fwEndDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="report_due_date", type="date", nullable=true)
-     */
-    private $reportDueDate;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
-     */
-    private $comment;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="formindex", type="string", length=20, nullable=false)
-     */
-    private $formindex;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="report_due_date_text", type="string", length=255, nullable=true)
-     */
-    private $reportDueDateText;
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="report_type", type="boolean", nullable=false)
-     */
-    private $reportType;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var \Albatross\AceBundle\Entity\Bu
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Bu")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="bu_id", referencedColumnName="id")
-     * })
+     * @var integer
      */
-    private $bu;
+    private $scope;
+
+    /**
+     * @var string
+     */
+    private $fwstartdate;
+
+    /**
+     * @var \DateTime
+     */
+    private $fwenddate;
+
+    /**
+     * @var \DateTime
+     */
+    private $reportduedate;
+
+    /**
+     * @var string
+     */
+    private $comment;
 
     /**
      * @var \Albatross\AceBundle\Entity\Attachments
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Attachments")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="attachments_id", referencedColumnName="id")
-     * })
      */
     private $attachments;
 
     /**
-     * @var \Albatross\AceBundle\Entity\Project
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Project")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="project_id", referencedColumnName="id")
-     * })
+     * @var \Albatross\AceBundle\Entity\Bu
      */
-    private $project;
+    private $bu;
 
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set scope
@@ -133,72 +84,72 @@ class Attachinfo
     }
 
     /**
-     * Set fwStartDate
+     * Set fwstartdate
      *
-     * @param \DateTime $fwStartDate
+     * @param string $fwstartdate
      * @return Attachinfo
      */
-    public function setFwStartDate($fwStartDate)
+    public function setFwstartdate($fwstartdate)
     {
-        $this->fwStartDate = $fwStartDate;
+        $this->fwstartdate = $fwstartdate;
 
         return $this;
     }
 
     /**
-     * Get fwStartDate
+     * Get fwstartdate
      *
-     * @return \DateTime 
+     * @return string 
      */
-    public function getFwStartDate()
+    public function getFwstartdate()
     {
-        return $this->fwStartDate;
+        return $this->fwstartdate;
     }
 
     /**
-     * Set fwEndDate
+     * Set fwenddate
      *
-     * @param \DateTime $fwEndDate
+     * @param \DateTime $fwenddate
      * @return Attachinfo
      */
-    public function setFwEndDate($fwEndDate)
+    public function setFwenddate($fwenddate)
     {
-        $this->fwEndDate = $fwEndDate;
+        $this->fwenddate = $fwenddate;
 
         return $this;
     }
 
     /**
-     * Get fwEndDate
+     * Get fwenddate
      *
      * @return \DateTime 
      */
-    public function getFwEndDate()
+    public function getFwenddate()
     {
-        return $this->fwEndDate;
+        return $this->fwenddate;
     }
 
     /**
-     * Set reportDueDate
+     * Set reportduedate
      *
-     * @param \DateTime $reportDueDate
+     * @param \DateTime $reportduedate
      * @return Attachinfo
      */
-    public function setReportDueDate($reportDueDate)
+    public function setReportduedate($reportduedate)
     {
-        $this->reportDueDate = $reportDueDate;
+        $this->reportduedate = $reportduedate;
 
         return $this;
     }
 
     /**
-     * Get reportDueDate
+     * Get reportduedate
      *
      * @return \DateTime 
      */
-    public function getReportDueDate()
+    public function getReportduedate()
     {
-        return $this->reportDueDate;
+        return $this->reportduedate;
     }
 
     /**
@@ -225,82 +176,26 @@ class Attachinfo
     }
 
     /**
-     * Set formindex
+     * Set attachments
      *
-     * @param string $formindex
+     * @param \Albatross\AceBundle\Entity\Attachments $attachments
      * @return Attachinfo
      */
-    public function setFormindex($formindex)
+    public function setAttachments(\Albatross\AceBundle\Entity\Attachments $attachments = null)
     {
-        $this->formindex = $formindex;
+        $this->attachments = $attachments;
 
         return $this;
     }
 
     /**
-     * Get formindex
+     * Get attachments
      *
-     * @return string 
+     * @return \Albatross\AceBundle\Entity\Attachments 
      */
-    public function getFormindex()
+    public function getAttachments()
     {
-        return $this->formindex;
-    }
-
-    /**
-     * Set reportDueDateText
-     *
-     * @param string $reportDueDateText
-     * @return Attachinfo
-     */
-    public function setReportDueDateText($reportDueDateText)
-    {
-        $this->reportDueDateText = $reportDueDateText;
-
-        return $this;
-    }
-
-    /**
-     * Get reportDueDateText
-     *
-     * @return string 
-     */
-    public function getReportDueDateText()
-    {
-        return $this->reportDueDateText;
-    }
-
-    /**
-     * Set reportType
-     *
-     * @param boolean $reportType
-     * @return Attachinfo
-     */
-    public function setReportType($reportType)
-    {
-        $this->reportType = $reportType;
-
-        return $this;
-    }
-
-    /**
-     * Get reportType
-     *
-     * @return boolean 
-     */
-    public function getReportType()
-    {
-        return $this->reportType;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
+        return $this->attachments;
     }
 
     /**
@@ -325,29 +220,10 @@ class Attachinfo
     {
         return $this->bu;
     }
-
     /**
-     * Set attachments
-     *
-     * @param \Albatross\AceBundle\Entity\Attachments $attachments
-     * @return Attachinfo
+     * @var \Albatross\AceBundle\Entity\Project
      */
-    public function setAttachments(\Albatross\AceBundle\Entity\Attachments $attachments = null)
-    {
-        $this->attachments = $attachments;
-
-        return $this;
-    }
-
-    /**
-     * Get attachments
-     *
-     * @return \Albatross\AceBundle\Entity\Attachments 
-     */
-    public function getAttachments()
-    {
-        return $this->attachments;
-    }
+    private $project;
 
     /**
      * Set project
@@ -370,5 +246,90 @@ class Attachinfo
     public function getProject()
     {
         return $this->project;
+    }
+
+    /**
+     * @var integer
+     */
+    private $formindex;
+
+
+    /**
+     * Set formindex
+     *
+     * @param integer $formindex
+     * @return Attachinfo
+     */
+    public function setFormindex($formindex)
+    {
+        $this->formindex = $formindex;
+
+        return $this;
+    }
+
+    /**
+     * Get formindex
+     *
+     * @return integer 
+     */
+    public function getFormindex()
+    {
+        return $this->formindex;
+    }
+    /**
+     * @var string
+     */
+    private $reportduedatetext;
+
+
+    /**
+     * Set reportduedatetext
+     *
+     * @param string $reportduedatetext
+     * @return Attachinfo
+     */
+    public function setReportduedatetext($reportduedatetext)
+    {
+        $this->reportduedatetext = $reportduedatetext;
+
+        return $this;
+    }
+
+    /**
+     * Get reportduedatetext
+     *
+     * @return string 
+     */
+    public function getReportduedatetext()
+    {
+        return $this->reportduedatetext;
+    }
+    /**
+     * @var boolean
+     */
+    private $reporttype;
+
+
+    /**
+     * Set reporttype
+     *
+     * @param boolean $reporttype
+     * @return Attachinfo
+     */
+    public function setReporttype($reporttype)
+    {
+        $this->reporttype = $reporttype;
+
+        return $this;
+    }
+
+    /**
+     * Get reporttype
+     *
+     * @return boolean 
+     */
+    public function getReporttype()
+    {
+        return $this->reporttype;
     }
 }

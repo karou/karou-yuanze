@@ -5,53 +5,46 @@ namespace Albatross\AceBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Forecastscope
- *
- * @ORM\Table(name="forecastscope")
- * @ORM\Entity
+ * ForecastScope
  */
-class Forecastscope
+class ForecastScope
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
-     *
-     * @ORM\Column(name="month", type="string", length=255, nullable=false)
      */
     private $month;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="forecast", type="bigint", nullable=true)
      */
     private $forecast;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Albatross\AceBundle\Entity\Bu
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Bu")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="bu_id", referencedColumnName="id")
-     * })
      */
     private $bu;
 
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set month
      *
      * @param string $month
-     * @return Forecastscope
+     * @return ForecastScope
      */
     public function setMonth($month)
     {
@@ -74,7 +67,7 @@ class Forecastscope
      * Set forecast
      *
      * @param integer $forecast
-     * @return Forecastscope
+     * @return ForecastScope
      */
     public function setForecast($forecast)
     {
@@ -94,20 +87,10 @@ class Forecastscope
     }
 
     /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set bu
      *
      * @param \Albatross\AceBundle\Entity\Bu $bu
-     * @return Forecastscope
+     * @return ForecastScope
      */
     public function setBu(\Albatross\AceBundle\Entity\Bu $bu = null)
     {

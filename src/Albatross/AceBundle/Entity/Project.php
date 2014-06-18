@@ -6,88 +6,71 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Project
- *
- * @ORM\Table(name="project")
- * @ORM\Entity
  */
 class Project
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="number", type="bigint", nullable=false)
      */
     private $number;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="start_date", type="datetime", nullable=true)
      */
     private $startDate;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="end_date", type="datetime", nullable=true)
      */
     private $endDate;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="created_date", type="datetime", nullable=true)
      */
     private $createdDate;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="ace_id", type="bigint", nullable=false)
-     */
-    private $aceId;
-
-    /**
      * @var float
-     *
-     * @ORM\Column(name="percent", type="float", nullable=false)
      */
     private $percent;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=false)
-     */
-    private $description;
-
-    /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
-    private $id;
+    private $aceId;
 
     /**
-     * @var \Albatross\AceBundle\Entity\Customwave
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customwave")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customwave_id", referencedColumnName="id")
-     * })
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $customwave;
+    private $tasks;
 
-
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->tasks = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -98,7 +81,7 @@ class Project
     public function setName($name)
     {
         $this->name = $name;
-
+    
         return $this;
     }
 
@@ -121,7 +104,7 @@ class Project
     public function setNumber($number)
     {
         $this->number = $number;
-
+    
         return $this;
     }
 
@@ -144,7 +127,7 @@ class Project
     public function setStartDate($startDate)
     {
         $this->startDate = $startDate;
-
+    
         return $this;
     }
 
@@ -167,7 +150,7 @@ class Project
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
-
+    
         return $this;
     }
 
@@ -190,7 +173,7 @@ class Project
     public function setCreatedDate($createdDate)
     {
         $this->createdDate = $createdDate;
-
+    
         return $this;
     }
 
@@ -205,6 +188,29 @@ class Project
     }
 
     /**
+     * Set percent
+     *
+     * @param float $percent
+     * @return Project
+     */
+    public function setPercent($percent)
+    {
+        $this->percent = $percent;
+    
+        return $this;
+    }
+
+    /**
+     * Get percent
+     *
+     * @return float 
+     */
+    public function getPercent()
+    {
+        return $this->percent;
+    }
+
+    /**
      * Set aceId
      *
      * @param integer $aceId
@@ -213,7 +219,7 @@ class Project
     public function setAceId($aceId)
     {
         $this->aceId = $aceId;
-
+    
         return $this;
     }
 
@@ -228,27 +234,43 @@ class Project
     }
 
     /**
-     * Set percent
+     * Add tasks
      *
-     * @param float $percent
+     * @param \Albatross\AceBundle\Entity\Task $tasks
      * @return Project
      */
-    public function setPercent($percent)
+    public function addTask(\Albatross\AceBundle\Entity\Task $tasks)
     {
-        $this->percent = $percent;
-
+        $this->tasks[] = $tasks;
+    
         return $this;
     }
 
     /**
-     * Get percent
+     * Remove tasks
      *
-     * @return float 
+     * @param \Albatross\AceBundle\Entity\Task $tasks
      */
-    public function getPercent()
+    public function removeTask(\Albatross\AceBundle\Entity\Task $tasks)
     {
-        return $this->percent;
+        $this->tasks->removeElement($tasks);
     }
+
+    /**
+     * Get tasks
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTasks()
+    {
+        return $this->tasks;
+    }
+    
+    /**
+     * @var string
+     */
+    private $description;
+
 
     /**
      * Set description
@@ -272,37 +294,131 @@ class Project
     {
         return $this->description;
     }
-
-    /**
-     * Get id
-     *
-     * @return integer 
+        /**
+     * @var \Doctrine\Common\Collections\Collection
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $customwave;
+
 
     /**
-     * Set customwave
+     * Add customwave
      *
-     * @param \Albatross\AceBundle\Entity\Customwave $customwave
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
      * @return Project
      */
-    public function setCustomwave(\Albatross\AceBundle\Entity\Customwave $customwave = null)
+    public function addCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave)
     {
-        $this->customwave = $customwave;
+        $this->customwave[] = $customwave;
 
         return $this;
     }
 
     /**
+     * Remove customwave
+     *
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
+     */
+    public function removeCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave)
+    {
+        $this->customwave->removeElement($customwave);
+    }
+
+    /**
      * Get customwave
      *
-     * @return \Albatross\AceBundle\Entity\Customwave 
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getCustomwave()
     {
         return $this->customwave;
+    }
+
+    /**
+     * Set customwave
+     *
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
+     * @return Project
+     */
+    public function setCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave = null)
+    {
+        $this->customwave = $customwave;
+
+        return $this;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $attachinfo;
+
+
+    /**
+     * Add attachinfo
+     *
+     * @param \Albatross\AceBundle\Entity\Attachinfo $attachinfo
+     * @return Project
+     */
+    public function addAttachinfo(\Albatross\AceBundle\Entity\Attachinfo $attachinfo)
+    {
+        $this->attachinfo[] = $attachinfo;
+
+        return $this;
+    }
+
+    /**
+     * Remove attachinfo
+     *
+     * @param \Albatross\AceBundle\Entity\Attachinfo $attachinfo
+     */
+    public function removeAttachinfo(\Albatross\AceBundle\Entity\Attachinfo $attachinfo)
+    {
+        $this->attachinfo->removeElement($attachinfo);
+    }
+
+    /**
+     * Get attachinfo
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAttachinfo()
+    {
+        return $this->attachinfo;
+    }
+        /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $operationproject;
+
+
+    /**
+     * Add operationproject
+     *
+     * @param \Albatross\OperationBundle\Entity\OperationProject $operationproject
+     * @return Project
+     */
+    public function addOperationproject(\Albatross\OperationBundle\Entity\OperationProject $operationproject)
+    {
+        $this->operationproject[] = $operationproject;
+
+        return $this;
+    }
+
+    /**
+     * Remove operationproject
+     *
+     * @param \Albatross\OperationBundle\Entity\OperationProject $operationproject
+     */
+    public function removeOperationproject(\Albatross\OperationBundle\Entity\OperationProject $operationproject)
+    {
+        $this->operationproject->removeElement($operationproject);
+    }
+
+    /**
+     * Get operationproject
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getOperationproject()
+    {
+        return $this->operationproject;
     }
 }

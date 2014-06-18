@@ -62,6 +62,15 @@ doctrine:
               dql:
                   string_functions:
                     Regexp: Albatross\CoreBundle\DQL\Regexp
+              mappings:
+                    # An array of mappings, which may be a bundle name or something else
+                    AlbatrossAceBundle:
+                        mapping:              true
+                        type:                 yml
+                        dir:                  ~
+                        alias:                ~
+                        prefix:               ~
+                        is_bundle:            ~
 
 # Swiftmailer Configuration
 swiftmailer:

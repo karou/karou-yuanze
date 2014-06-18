@@ -6,121 +6,40 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Location
- *
- * @ORM\Table(name="location")
- * @ORM\Entity
  */
 class Location
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="loc_store_id", type="string", length=255, nullable=false)
-     */
-    private $locStoreId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="loc_name", type="string", length=255, nullable=true)
-     */
-    private $locName;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="loc_country_code", type="string", length=255, nullable=false)
-     */
-    private $locCountryCode;
-
-    /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var \Albatross\AceBundle\Entity\Country
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Country")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     * })
+     * @var string
      */
-    private $country;
-
-
+    private $LocStoreID;
 
     /**
-     * Set locStoreId
-     *
-     * @param string $locStoreId
-     * @return Location
+     * @var string
      */
-    public function setLocStoreId($locStoreId)
-    {
-        $this->locStoreId = $locStoreId;
-
-        return $this;
-    }
+    private $LocName;
 
     /**
-     * Get locStoreId
-     *
-     * @return string 
+     * @var string
      */
-    public function getLocStoreId()
-    {
-        return $this->locStoreId;
-    }
+    private $LocCountryCode;
 
     /**
-     * Set locName
-     *
-     * @param string $locName
-     * @return Location
+     * @var \Doctrine\Common\Collections\Collection
      */
-    public function setLocName($locName)
-    {
-        $this->locName = $locName;
-
-        return $this;
-    }
+    private $aolsurvey;
 
     /**
-     * Get locName
-     *
-     * @return string 
+     * Constructor
      */
-    public function getLocName()
+    public function __construct()
     {
-        return $this->locName;
-    }
-
-    /**
-     * Set locCountryCode
-     *
-     * @param string $locCountryCode
-     * @return Location
-     */
-    public function setLocCountryCode($locCountryCode)
-    {
-        $this->locCountryCode = $locCountryCode;
-
-        return $this;
-    }
-
-    /**
-     * Get locCountryCode
-     *
-     * @return string 
-     */
-    public function getLocCountryCode()
-    {
-        return $this->locCountryCode;
+        $this->aolsurvey = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -132,6 +51,113 @@ class Location
     {
         return $this->id;
     }
+
+    /**
+     * Set LocStoreID
+     *
+     * @param string $locStoreID
+     * @return Location
+     */
+    public function setLocStoreID($locStoreID)
+    {
+        $this->LocStoreID = $locStoreID;
+
+        return $this;
+    }
+
+    /**
+     * Get LocStoreID
+     *
+     * @return string 
+     */
+    public function getLocStoreID()
+    {
+        return $this->LocStoreID;
+    }
+
+    /**
+     * Set LocName
+     *
+     * @param string $locName
+     * @return Location
+     */
+    public function setLocName($locName)
+    {
+        $this->LocName = $locName;
+
+        return $this;
+    }
+
+    /**
+     * Get LocName
+     *
+     * @return string 
+     */
+    public function getLocName()
+    {
+        return $this->LocName;
+    }
+
+    /**
+     * Set LocCountryCode
+     *
+     * @param string $locCountryCode
+     * @return Location
+     */
+    public function setLocCountryCode($locCountryCode)
+    {
+        $this->LocCountryCode = $locCountryCode;
+
+        return $this;
+    }
+
+    /**
+     * Get LocCountryCode
+     *
+     * @return string 
+     */
+    public function getLocCountryCode()
+    {
+        return $this->LocCountryCode;
+    }
+
+    /**
+     * Add aolsurvey
+     *
+     * @param \Albatross\AceBundle\Entity\Aolsurvey $aolsurvey
+     * @return Location
+     */
+    public function addAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurvey)
+    {
+        $this->aolsurvey[] = $aolsurvey;
+
+        return $this;
+    }
+
+    /**
+     * Remove aolsurvey
+     *
+     * @param \Albatross\AceBundle\Entity\Aolsurvey $aolsurvey
+     */
+    public function removeAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurvey)
+    {
+        $this->aolsurvey->removeElement($aolsurvey);
+    }
+
+    /**
+     * Get aolsurvey
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getAolsurvey()
+    {
+        return $this->aolsurvey;
+    }
+    /**
+     * @var \Albatross\AceBundle\Entity\Country
+     */
+    private $country;
+
 
     /**
      * Set country

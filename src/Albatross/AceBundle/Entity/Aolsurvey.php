@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Aolsurvey
  */
-class Aolsurvey 
+class Aolsurvey
 {
     /**
      * @var integer
@@ -58,11 +58,6 @@ class Aolsurvey
      * @var \DateTime
      */
     private $Submittime;
-	
-	/**
-     * @var string
-     */
-    private $MailBoxName;
 
     /**
      * @var \Albatross\AceBundle\Entity\Billing

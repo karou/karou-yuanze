@@ -8,6 +8,10 @@ Albatross\AceBundle\Entity\FileSection:
     attachments:
       targetEntity: Attachments
       mappedBy: filesection
+  manyToOne:
+    parent:
+      targetEntity: FileSection
+      nullable: true
   fields:
     id:
       type: bigint

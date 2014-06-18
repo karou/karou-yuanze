@@ -6,65 +6,46 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Bu
- *
- * @ORM\Table(name="bu")
- * @ORM\Entity
  */
 class Bu
 {
     /**
+     * @var integer
+     */
+    private $id;
+
+    /**
      * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=true)
      */
     private $name;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="code", type="string", length=255, nullable=false)
      */
     private $code;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="number", type="bigint", nullable=true)
-     */
-    private $number;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
-     */
-    private $id;
-
-    /**
      * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Operationquestionnaire", mappedBy="bu")
      */
-    private $operationquestionnaire;
-
-    /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Operationproject", mappedBy="bu")
-     */
-    private $operationproject;
+    private $country;
 
     /**
      * Constructor
      */
     public function __construct()
     {
-        $this->operationquestionnaire = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->operationproject = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->country = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -113,6 +94,48 @@ class Bu
     }
 
     /**
+     * Add country
+     *
+     * @param \Albatross\AceBundle\Entity\country $country
+     * @return Bu
+     */
+    public function addCountry(\Albatross\AceBundle\Entity\country $country)
+    {
+        $this->country[] = $country;
+
+        return $this;
+    }
+
+    /**
+     * Remove country
+     *
+     * @param \Albatross\AceBundle\Entity\country $country
+     */
+    public function removeCountry(\Albatross\AceBundle\Entity\country $country)
+    {
+        $this->country->removeElement($country);
+    }
+
+    /**
+     * Get country
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+    
+    public function __toString() {
+        return $this->code;
+    }
+    /**
+     * @var integer
+     */
+    private $number;
+
+
+    /**
      * Set number
      *
      * @param integer $number
@@ -134,24 +157,24 @@ class Bu
     {
         return $this->number;
     }
+        /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $operationquestionnaire;
 
     /**
-     * Get id
-     *
-     * @return integer 
+     * @var \Doctrine\Common\Collections\Collection
      */
-    public function getId()
-    {
-        return $this->id;
-    }
+    private $operationproject;
+
 
     /**
      * Add operationquestionnaire
      *
-     * @param \Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire
+     * @param \Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire
      * @return Bu
      */
-    public function addOperationquestionnaire(\Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire)
+    public function addOperationquestionnaire(\Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire)
     {
         $this->operationquestionnaire[] = $operationquestionnaire;
 
@@ -161,9 +184,9 @@ class Bu
     /**
      * Remove operationquestionnaire
      *
-     * @param \Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire
+     * @param \Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire
      */
-    public function removeOperationquestionnaire(\Albatross\AceBundle\Entity\Operationquestionnaire $operationquestionnaire)
+    public function removeOperationquestionnaire(\Albatross\OperationBundle\Entity\OperationQuestionnaire $operationquestionnaire)
     {
         $this->operationquestionnaire->removeElement($operationquestionnaire);
     }
@@ -181,10 +204,10 @@ class Bu
     /**
      * Add operationproject
      *
-     * @param \Albatross\AceBundle\Entity\Operationproject $operationproject
+     * @param \Albatross\OperationBundle\Entity\OperationProject $operationproject
      * @return Bu
      */
-    public function addOperationproject(\Albatross\AceBundle\Entity\Operationproject $operationproject)
+    public function addOperationproject(\Albatross\OperationBundle\Entity\OperationProject $operationproject)
     {
         $this->operationproject[] = $operationproject;
 
@@ -194,9 +217,9 @@ class Bu
     /**
      * Remove operationproject
      *
-     * @param \Albatross\AceBundle\Entity\Operationproject $operationproject
+     * @param \Albatross\OperationBundle\Entity\OperationProject $operationproject
      */
-    public function removeOperationproject(\Albatross\AceBundle\Entity\Operationproject $operationproject)
+    public function removeOperationproject(\Albatross\OperationBundle\Entity\OperationProject $operationproject)
     {
         $this->operationproject->removeElement($operationproject);
     }
@@ -209,5 +232,81 @@ class Bu
     public function getOperationproject()
     {
         return $this->operationproject;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $log;
+
+
+    /**
+     * Add log
+     *
+     * @param \Albatross\UserBundle\Entity\Log $log
+     * @return Bu
+     */
+    public function addLog(\Albatross\UserBundle\Entity\Log $log)
+    {
+        $this->log[] = $log;
+
+        return $this;
+    }
+
+    /**
+     * Remove log
+     *
+     * @param \Albatross\UserBundle\Entity\Log $log
+     */
+    public function removeLog(\Albatross\UserBundle\Entity\Log $log)
+    {
+        $this->log->removeElement($log);
+    }
+
+    /**
+     * Get log
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getLog()
+    {
+        return $this->log;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $invoice;
+
+
+    /**
+     * Add invoice
+     *
+     * @param \Albatross\CustomBundle\Entity\Invoice $invoice
+     * @return Bu
+     */
+    public function addInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice)
+    {
+        $this->invoice[] = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Remove invoice
+     *
+     * @param \Albatross\CustomBundle\Entity\Invoice $invoice
+     */
+    public function removeInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice)
+    {
+        $this->invoice->removeElement($invoice);
+    }
+
+    /**
+     * Get invoice
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
     }
 }
