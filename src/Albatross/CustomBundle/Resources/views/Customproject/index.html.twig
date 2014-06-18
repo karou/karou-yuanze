@@ -1,0 +1,105 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% block title %}
+Project List
+{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('/css/custom_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(function() {
+        $('#scopeselect').val({{scopek}});
+        $('#typeselect').val({{typek}});
+    });
+    
+    function deleteProject(id){
+        var data = id;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('checkWaveBindToProject') }}",
+            data: data,
+            success: function(result) {
+                var v = confirm("There is/are "+result+" waves bind to this project, and will also delete the information bind to the wave. Are you sure to delete them all?");
+                if (v) {
+                    $('#project_delete_form_'+id).submit();
+                } else {
+                    return false;
+                }
+        }});
+    }
+</script>
+{% endblock %}
+{% block content -%}
+    <h1>Project list</h1>
+    <form action="{{ path('customproject') }}" method="GET" id="project_search_bar" >
+        <table>
+            <tr>
+                {% if user_type == 0 %}
+                <th>Search By Group:
+                </th>
+                <td><input type="text" value="{{groupk}}" name="groupk">
+                </td>
+                {% endif %}
+                {% if user_type == 0 %}
+                <th>Client:
+                </th>
+                {% else %}
+                <th>Search By Brand:
+                </th>
+                {% endif %}
+                <td colspan="2"><input type="text" value="{{clientk}}" name="clientk">
+                </td>
+            </tr>
+            <tr>
+                <th>Type:
+                </th>
+                <td>{{typeoption|raw}}
+                </td>
+                <th>Scope:
+                </th>
+                <td>{{scopeoption|raw}}
+                </td>
+                <td><input type="submit" value="Search"></td></td>
+            </tr>
+        </table>
+    </form>
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Scope</th>
+                <th>Type</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('customproject_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.name }}</td>
+                <td>{{ scope[entity.scope] }}</td>
+                <td>{{ type[entity.type] }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('customproject_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    {% if user_type == 0 %}
+                    <li>
+                        <a href="{{ path('customproject_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                    <!--li>
+                        <form action="{{ path('customproject_delete', { 'id': entity.id }) }}" method="POST" id="project_delete_form_{{entity.id}}">
+                            <a href="#" id="project_delete_button" onclick="deleteProject('{{entity.id}}');">delete</a>
+                        </form>
+                    </li-->
+                    {% endif %}
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{{ knp_pagination_render(entities) }}
+    {% endblock %}

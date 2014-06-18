@@ -1,0 +1,36 @@
+/* 
+    Document   : status
+    Created on : Aug 5, 2013, 5:18:20 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+.records_list { 
+    border: 1px #7F7C77 solid;
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    
+    font-size: 12px;
+    font-family: 'Trebuchet MS','arial';
+}
+.records_list thead tr th {
+    border-bottom: 3px #000100 solid;
+    height: 30px;
+    font-size: 15px;
+    color: white;
+    background-color: #6595D6;
+}
+.records_list tbody tr td {
+    border: 1px #7F7C77 solid;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+}
+.short {
+    width: 60px;
+}

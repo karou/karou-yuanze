@@ -1,0 +1,88 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% block title %}
+Client List
+{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('/css/custom_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    function deleteClient(id){
+        var data = id;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('checkProjectBindToClient') }}",
+            data: data,
+            success: function(result) {
+                var v = confirm("There is/are "+result+" projects bind to this client, and will also delete the waves and information bind to the wave. Are you sure to delete them all?");
+                if (v) {
+                    $('#client_delete_form_'+id).submit();
+                } else {
+                    return false;
+                }
+        }});
+    }
+</script>
+{% endblock %}
+{% block content -%}
+<h1>Client list</h1>
+<form action="{{ path('customclient') }}" method="POST" id="client_search_bar" >
+    <table>
+        <tr>
+            <th>Search By Name:
+            </th>
+            <td><input type="text" value="{{data}}" name="keyword">
+            </td>
+            <td><input type="submit" value="Search"></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="2" style="font-size: 12px">
+                Search client by <font color="blue">group name</font> or <font color="blue">client name</font>
+            </td>
+        </tr>
+    </table>
+</form>
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Group</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('customclient_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.name }}</td>
+                <td>{% if entity.clientgroup.name is defined %}{{ entity.clientgroup.name }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('customclient_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('customclient_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                        <li>
+                            <form action="{{ path('customclient_delete', { 'id': entity.id }) }}" method="POST" id="client_delete_form_{{entity.id}}">
+                                <a href="#" id="client_delete_button" onclick="deleteClient('{{entity.id}}');">delete</a>
+                            </form>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{{ knp_pagination_render(entities) }}
+    <ul>
+        <li>
+            <a href="{{ path('customclient_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

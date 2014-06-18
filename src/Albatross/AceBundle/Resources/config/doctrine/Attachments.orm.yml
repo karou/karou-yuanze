@@ -1,0 +1,63 @@
+Albatross\AceBundle\Entity\Attachments:
+  type: entity
+  table: attachments
+  repositoryClass: 
+    Albatross\AceBundle\Entity\AttachmentsRepository
+  manyToOne:
+    user:
+      targetEntity: Albatross\UserBundle\Entity\User
+    parent:
+      targetEntity: Albatross\AceBundle\Entity\Attachments
+      nullable: true
+    filesection:
+      targetEntity: FileSection
+      inversedBy: attachments
+      nullable: true
+  oneToMany:
+    attachinfo:
+      targetEntity: Attachinfo
+      mappedBy: attachments
+      cascade: ["remove"]
+    ioffile:
+      targetEntity: IOFFile
+      mappedBy: attachments
+      cascade: ["remove"]
+    iofmessage:
+      targetEntity: IOFMessage
+      mappedBy: attachments
+      cascade: ["remove"]
+  oneToOne:
+    customwave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+      inversedBy: attachments
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    type:
+      type: string
+      length: 255
+    status:
+      type: string
+      length: 255
+    submitby:
+      type: string
+      length: 20
+      nullable: true
+    submitteddate:
+      type: datetime
+    label:
+      type: string
+      length: 255
+      nullable: true
+    path:
+      type: string
+      length: 255
+      nullable: true
+    children:
+      type: boolean
+      nullable: true
+  lifecycleCallbacks:
+      preRemove: [preRemove]

@@ -1,0 +1,81 @@
+albatross_user_homepage:
+    pattern:  /
+    defaults: { _controller: AlbatrossUserBundle:Default:index, current:'homepage' }
+
+user_crud:
+    resource: "@AlbatrossUserBundle/Resources/config/routing/user.yml"
+    prefix: /
+nav:
+    pattern:  /nav
+    defaults: { _controller: AlbatrossUserBundle:User:nav, current:'nav_cal' }
+getBindProject:
+    pattern:  /getBindProject
+    defaults: { _controller: AlbatrossUserBundle:User:getBindProject }
+
+user_profile:
+    pattern:  /profile
+    defaults: { _controller: "AlbatrossUserBundle:User:profile" }
+edit_profile_ajax:
+     pattern: /profile/edit_profile_ajax
+     defaults: { _controller: AlbatrossUserBundle:User:editProfileByAjax}
+submitPic:
+    pattern:  /profile/submit_pic
+    defaults: { _controller: "AlbatrossUserBundle:User:savePic"}
+user_password_ajax:
+    pattern:  /profile/edit_password/{type}
+    defaults: { _controller: "AlbatrossUserBundle:User:changePassword", type:''}
+    requirements: { _method: post }
+#user_profile:
+#    pattern:  /profile
+#    defaults: { _controller: "AlbatrossUserBundle:User:show", id:0, current:'user' }
+user:
+    pattern:  /index
+    defaults: { _controller: "AlbatrossUserBundle:User:index" }
+user_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossUserBundle:User:show", current:'user' }
+user_new:
+    pattern:  /admin/new
+    defaults: { _controller: "AlbatrossUserBundle:User:new" }
+
+user_create:
+    pattern:  /admin/create
+    defaults: { _controller: "AlbatrossUserBundle:User:create" }
+    requirements: { _method: post }
+
+user_edit:
+    pattern:  /{id}/edit/{key}
+    defaults: { _controller: "AlbatrossUserBundle:User:edit", id:0, key:'', current:'user' }
+
+user_update:
+    pattern:  /{id}/update/{key}
+    defaults: { _controller: "AlbatrossUserBundle:User:update", key:'', current:'user' }
+    requirements: { _method: post|put }
+
+user_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossUserBundle:User:delete" }
+    requirements: { _method: post|delete }
+
+user_enable:
+    pattern:  /{id}/enable
+    defaults: { _controller: "AlbatrossUserBundle:User:enable" }
+    requirements: { _method: post|delete }
+
+admin:
+    pattern: /admin
+    defaults: { _controller: "AlbatrossUserBundle:Admin:index"}
+
+user_edit_ajax:
+    pattern:  /edit/{id}
+    defaults: { _controller: "AlbatrossUserBundle:User:editAjax", id:'' }
+    requirements: { _method: post }
+
+adminEdit:
+    pattern:  /adminedit/{id}
+    defaults: { _controller: "AlbatrossUserBundle:User:adminEdit", id:''}
+    requirements: { _method: post }
+
+log:
+    pattern:  /log
+    defaults: { _controller: "AlbatrossUserBundle:Admin:log"}

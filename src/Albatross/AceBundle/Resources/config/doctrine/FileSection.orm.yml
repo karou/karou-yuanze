@@ -1,0 +1,24 @@
+Albatross\AceBundle\Entity\FileSection:
+  type: entity
+  table: filesection
+  uniqueConstraints:
+    name:
+        columns: name
+  oneToMany:
+    attachments:
+      targetEntity: Attachments
+      mappedBy: filesection
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+      nullable: true
+    description:
+      type: text
+      nullable: true
+  lifecycleCallbacks: {}

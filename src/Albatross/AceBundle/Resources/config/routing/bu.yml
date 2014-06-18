@@ -1,0 +1,7 @@
+bu:
+    pattern:  /
+    defaults: { _controller: "AlbatrossAceBundle:Bu:index" }
+    
+bu_add:
+    pattern:  /{id}/add
+    defaults: { _controller: "AlbatrossAceBundle:Bu:add" }

@@ -1,0 +1,34 @@
+Albatross\AceBundle\Entity\Location:
+  type: entity
+  table: location
+  repositoryClass: 
+    Albatross\AceBundle\Entity\LocationRepository
+  oneToMany:
+    aolsurvey:
+      targetEntity: Albatross\AceBundle\Entity\Aolsurvey
+      mappedBy: location
+  manyToOne:
+    country:
+      targetEntity: Albatross\AceBundle\Entity\Country
+      inversedBy: location
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    LocStoreID:
+      type: string
+      length: 255
+      column: loc_store_id
+    LocName:
+      type: string
+      length: 255
+      column: loc_name
+      nullable: true
+    LocCountryCode:
+      type: string
+      length: 255
+      column: loc_country_code
+  lifecycleCallbacks: {}

@@ -1,0 +1,49 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Filesection
+ *
+ * @ORM\Table(name="filesection")
+ * @ORM\Entity
+ */
+class Filesection
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="description", type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Filesection
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Filesection")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * })
+     */
+    private $parent;
+
+
+}

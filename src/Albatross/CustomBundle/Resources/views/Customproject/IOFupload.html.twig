@@ -1,0 +1,226 @@
+{% block stylesheets %}
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/IOFUpload.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script src="{{ asset('js/ckeditor/ckeditor.js')}}"></script>
+<script type="text/javascript">
+    $(function() {
+        $('.calender').datepicker();
+        
+        {% if type == 'edit' %}
+        $('#pm-select').val({{pmid}});
+        {% endif %}
+    });
+    function addFileMessageOver(e){
+        $(e).css('background', 'rgb(231,126,35)');
+        $(e).children().children('.message-add-index2').show();
+    }
+    function addFileMessageOut(e){
+        $(e).css('background', '');
+        $(e).children().children('.message-add-index2').hide();
+    }
+    function addFileMessageClick(e){
+        var index1Str = $(e).parent().parent().parent().attr('id');
+        var index2Str = $(e).parent().prev().attr('class');
+        var index1 = index1Str.split('-')[2];
+        var index2 = index2Str.split('-')[3];
+        index2++;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('getFileMessageHtml') }}",
+            data: '{"index1":"'+index1+'","index2":"'+index2+'"}',
+            success: function(result) {
+                $(e).parent().before(result);
+                CKEDITOR.replace('iof-text['+index1+']['+index2+']');
+            }});
+    }
+    function addfile(e){
+        var indexStr = $(e).attr('id');
+        var index = indexStr.split('-')[4];
+        var index2 = indexStr.split('-')[0];
+        $(e).parent().parent().parent().children(':last').after('<tr><th>FILE:</th><td><input type="file" onchange="adaptValue(this);" name="iof-file['+index+']['+index2+'][]" /></td><th>LABEL:</th><td><input type="text" class="iof-label" name="iof-label['+index+']['+index2+'][]"></td><th></th></tr>');
+    }
+    function deletefile(e){
+        $(e).parent().parent().parent().children(':last').remove();
+    }
+    function adaptValue(e){
+        $(e).parent().next().next().children('input:.iof-label').val($(e).val().split('.')[0]);
+    }
+    function changeInfoBack(e){
+        if($(e).attr('checked') === 'checked'){
+            $(e).parent().parent().parent().find('input').each(function(){
+                $(this).removeAttr('disabled');
+            });
+            $(e).parent().parent().parent().parent().css('background', '#6A89A1');
+        }else{
+            $(e).parent().parent().parent().find('input').each(function(){
+                if(e != this){
+                    $(this).attr('disabled','disabled');
+                }
+            });
+            $(e).parent().parent().parent().parent().css('background', '');
+        }
+    }
+    function changeInfoBackForEdit(idStr){
+        if($('#'+idStr).attr('checked') === 'checked'){
+            $('#'+idStr).parent().parent().parent().find('input').each(function(){
+                $(this).removeAttr('disabled');
+            });
+            $('#'+idStr).parent().parent().parent().parent().css('background', '#6A89A1');
+        }else{
+            $('#'+idStr).parent().parent().parent().find('input').each(function(){
+                if($('#'+idStr) != this){
+                    $(this).attr('disabled','disabled');
+                }
+            });
+            $('#'+idStr).parent().parent().parent().parent().css('background', '');
+        }
+    }
+    function addIOFBigForm(){
+        var wid = $('#iof-form-waveid').val();
+        var indexStr = $('.iof-form:last').attr('id');
+        var index = indexStr.split('-')[2];
+        index++;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('IOFStractureHtml') }}",
+            data: '{"wid":"'+wid+'","index":"'+index+'"}',
+            success: function(result) {
+                $('.iof-form:last').after(result);
+                $('#form-iof-big').scrollTop(0);
+                formShow(index);
+                iofInfoSelected(index);
+                $('.calender').datepicker();
+            }});
+    }
+    function formShow(index){
+        var idStr = '';
+        var id = '';
+        $('.iof-form').each(function(){
+            idStr = $(this).attr('id');
+            id = idStr.split('-')[2];
+            if(id != index){
+                $(this).find('tr:gt(0)').hide();
+                $(this).find('tr:eq(0) th').css('cursor', 'pointer');
+                $(this).find('tr:eq(0) th').attr('onclick', 'formShowSub(this);');
+                $(this).find('tr:eq(0) th').mouseover(function(){
+                    $(this).css('background', '#FE7000');
+                });
+                $(this).find('tr:eq(0) th').mouseout(function(){
+                    $(this).css('background', '#E77E23');
+                });
+            }else{
+                if($(this).find('tr:gt(0)').css('display') === 'none'){
+                    $(this).find('tr:gt(0)').show();
+                    $('#form-iof-big').scrollTop(0);
+                }
+            }
+        });
+    }
+    function formShowSub(e){
+        CurrentidStr = $(e).parent().parent().parent().attr('id');
+        Currentid = CurrentidStr.split('-')[2];
+        formShow(Currentid);
+        iofInfoSelected(Currentid);
+    }
+    function iofInfoSelected(index){
+        initial(index);
+        $('.iof-info-td').each(function(){
+            if($(this).attr('id') !== index){
+                $(this).find('.iof-info-checkbox').each(function(){
+                    if($(this).attr('checked') === 'checked'){
+                        var selected = $(this).attr('id').split('-')[0];
+                        if($('#iof-info-td-'+index).find('#'+selected+'-iof-check-'+index).attr('checked') !== 'checked'){
+                            $('#iof-info-td-'+index).find('#'+selected+'-iof-check-'+index).parent().parent().parent().parent().css('background', '#c8c8c8');
+                            $('#iof-info-td-'+index).find('#'+selected+'-iof-check-'+index).attr('disabled', 'disabled');
+                        }
+                    }
+                });
+            }
+        });
+    }
+    function initial(index){
+        $('#iof-info-td-'+index).find('.iof-info-checkbox').each(function(){
+            if($(this).attr('checked') !== 'checked'){
+                $(this).parent().parent().parent().parent().css('background', '');
+                $(this).removeAttr('disabled');
+            }
+        });
+    }
+    function changeReportDueType(e){
+        $(e).parent().find('input:.reportinput').each(function(){
+            if($(this).css('display') === 'none'){
+                $(this).css('display', '');
+            }else{
+                $(this).css('display', 'none');
+            }
+            if($(this).hasClass('calender') && $(this).css('display') !== 'none'){
+                $(e).parent().find('input:.reporttype').val('0');
+            }
+            if(!$(this).hasClass('calender') && $(this).css('display') !== 'none'){
+                $(e).parent().find('input:.reporttype').val('1');
+            }
+        });
+    }
+</script>
+{% endblock %}
+<div id="cover_window_iof">
+    <div id="fileupload_IOF_form_box" >
+        <table id="iof-title-info-table">
+        <tr>
+            <th colspan="3" id="iof-upload-title">
+                {% if type == 'create' %}
+                    UPLOAD IOF
+                {% elseif type == 'edit' %}
+                    EDIT IOF
+                {% endif %}
+                <span id="close_button" title="close" onclick="fileuplodFormCancel();">
+                    <img src="{{ asset('/images/close.png')}}" height="20px" width=20px">
+                </span>
+            </th>
+        </tr>
+        <tr>
+            <th>CLIENT</th>
+            <th>:</th>
+            <td>{{wave['customproject']['customclient']['name']}}</td>
+        </tr>
+        <tr>
+            <th>PROJECT</th>
+            <th>:</th>
+            <td>{{wave['customproject']['name']}}</td>
+        </tr>
+        <tr>
+            <th>WAVE</th>
+            <th>:</th>
+            <td>{{wave['name']}}</td>
+        </tr>
+        <tr>
+            <th>USER</th>
+            <th>:</th>
+            <td>{{user.username}}</td>
+        </tr>
+        </table>
+        <div class="clear_both"></div>
+        <div id="form-iof-big">
+            {% if type == 'create' %}
+            <form action="{{ path('IOFFileUpload',{'wid': wave['id']}) }}" id="fileupload_project" method="post" enctype="multipart/form-data">
+            {% elseif type == 'edit' %}
+            <form action="{{ path('IOFFileEdit',{'id': iofid}) }}" id="fileupload_project" method="post" enctype="multipart/form-data">
+            {% endif %}
+            <table id="pm-select-table">
+                <tr>
+                    <th>PM:</th>
+                    <td>
+                        {{pmHtml|raw}}
+                    </td>
+                </tr>
+            </table>
+            {{iofHtml|raw}}
+            </form>
+        </div>
+    </div>
+</div>

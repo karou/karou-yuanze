@@ -1,0 +1,183 @@
+/* 
+    Document   : ioflist.css
+    Created on : Aug 20, 2013, 9:04:36 AM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#searchBar {
+    background: none repeat scroll 0 0 #F4F3F2;
+    border: 1px solid #C7C4BE;
+    border-radius: 3px 3px 3px 3px;
+    margin-bottom: 5px;
+    text-align: center;
+    font-size: 12px;
+    font-family: 'Trebuchet MS','arial';
+}
+.submittime {
+    text-align: left;
+}
+.submittime input {
+    width: 70px;
+}
+.download_file {
+    width: 80px;
+    text-align: center;
+}
+#ui-datepicker-div {
+    font-size: 12px;
+}
+#albatross_acebundle_iofsearchtype_status {
+    width: 142px;
+    height: 22px;
+}
+.chzn-single {
+    background: -moz-linear-gradient(center top , #FFFFFF 20%, #F6F6F6 50%, #EEEEEE 52%, #F4F4F4 100%) repeat scroll 0 0 padding-box transparent;
+    border: 1px solid #AAAAAA;
+    box-shadow: 0 0 3px white inset, 0 1px 1px rgba(0, 0, 0, 0.1);
+    color: #444444;
+    display: block;
+    height: 22px;
+    line-height: 23px;
+    overflow: hidden;
+    padding: 0 0 0 8px;
+    position: relative;
+    text-decoration: none;
+    white-space: nowrap;
+    /*width: 320px;*/
+}
+#albatross_acebundle_iofsearchtype_user_chzn, #albatross_acebundle_iofsearchtype_user, #albatross_acebundle_iofsearchtype_bu {
+    width: 142px;
+    height: 22px;
+}
+#iofview_cover, #cover_window {
+    position: fixed; 
+    left:0px; 
+    top:0px; 
+    height:100%; 
+    width:100%;
+    background: rgba(160,160,160,0.6)!important; 
+}
+
+#comment_box {
+    border: 2px #B3DAF9 solid;
+    background: #EEEEEE;
+    width: 300px;
+    min-height: 20px;
+    padding: 10px;
+}
+#show_table {
+    margin: 0 auto;
+    margin-top: 200px;
+}
+
+#comment_button {
+    text-align: center;
+}
+
+
+/*from project css*/
+#fileupload_project_form_box{
+    margin: 0 auto;
+    
+    margin-top: 2%;
+    
+    width: 95%;
+    min-height: 350px;
+    max-height: 550px;
+    background: rgb(101, 149, 214);
+    padding: 10px;
+    border: 2px #C7C4BE solid;
+    border-radius: 0 0 3px 3px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 12px;
+}
+#fileupload_project_form_box fieldset {
+    border: none;
+    border-bottom: 1px #C7C4BE dashed;
+}
+#fileupload_project_form_box form {
+    padding: 0px;
+    margin: 0px;
+    background: none;
+    border: none;
+}
+
+#fileupload_project_name{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#fileupload_button_box {
+    height: 30px;
+    line-height: 30px;
+}
+
+#fileupload_label_fieldset, #fileupload_option_fieldset {
+    height: 90px;
+}
+
+#fileupload_label_fieldset {
+    width: 55%;
+    float: right;
+}
+
+#fileupload_option_fieldset {
+    width: 40%;
+    float: left;
+}
+
+#fileupload_project_form_box fieldset legend {
+    color: white;
+    /*font-weight: bold;*/
+    font-size: 14px;
+}
+
+#fileupload_project_name_fieldset {
+    text-align: center;
+}
+
+#albatross_acebundle_attachmenttype_message {
+    width: 100%;
+    height: 75px;
+    resize: none;
+}
+
+#albatross_acebundle_attachmenttype_label {
+    width: 99%;
+}
+.options {
+    display: block;
+}
+.options tr td input{
+    width: 110px;
+}
+#success_box {
+/*    position: absolute;
+    display: block;*/
+    
+    width: 300px;
+    height: 100px;
+    background: #B3DAF9; 
+    text-align: center;
+    line-height: 100px;
+    margin: 0 auto;
+    
+    margin-top: 15%;
+    border: 2px #6595D6 solid;
+}
+#iof_action_td {
+    min-width: 200px;
+}
+#iof_action_td form, #iof_action_td input {
+    float: left;
+}
+.chz_project {
+    width: 400px;
+}

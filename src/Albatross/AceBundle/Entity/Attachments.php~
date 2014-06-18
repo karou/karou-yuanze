@@ -1,0 +1,114 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Attachments
+ *
+ * @ORM\Table(name="attachments")
+ * @ORM\Entity
+ */
+class Attachments
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="string", length=255, nullable=false)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=255, nullable=false)
+     */
+    private $status;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="submitteddate", type="datetime", nullable=false)
+     */
+    private $submitteddate;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="children", type="boolean", nullable=true)
+     */
+    private $children;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="submitby", type="string", length=20, nullable=true)
+     */
+    private $submitby;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="label", type="string", length=255, nullable=true)
+     */
+    private $label;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
+     */
+    private $user;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Attachments
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Attachments")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * })
+     */
+    private $parent;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Customwave
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customwave")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customwave_id", referencedColumnName="id")
+     * })
+     */
+    private $customwave;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Filesection
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Filesection")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="filesection_id", referencedColumnName="id")
+     * })
+     */
+    private $filesection;
+
+
+}

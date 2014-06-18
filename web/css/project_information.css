@@ -1,0 +1,40 @@
+/* 
+    Document   : project_information
+    Created on : Nov 18, 2013, 10:19:38 AM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#information_table {
+    width: 100%;
+    
+    font-size: 14px;
+    font-family: 'Calibri','arial';
+    
+    background: #F4F3F2;
+    border: 1px #006699 solid;
+}
+#information_table tr td, #information_table tr th {
+    border: 1px #fff solid;
+}
+#information_table tr th {
+    color: #F4F3F2;
+}
+.wave_name {
+    background: #E77E23;
+    color: #F4F3F2;
+}
+.operation_title {
+    background: #3598DC;
+}
+.title_line_1 th{
+    background: #006699;
+}
+.title_line_2 th{
+    background: #27AE61;
+}

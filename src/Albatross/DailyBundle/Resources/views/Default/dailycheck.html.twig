@@ -1,0 +1,440 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% block title %}
+Albatross Daily Check
+{% endblock %}
+{% block stylesheets %}
+<link href="{{ asset('/css/dailycheck.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+{% endblock %}
+{% block content -%}
+<script type="text/javascript">
+    $(function() {
+        $("#datepicker").datepicker();
+
+        $('#datepicker').change(function() {
+            var date = $('#datepicker').val();
+            var bu = $('#selectedBu').val();
+            location.href = "{{ path('daily') }}" + "/" + date + "/" + bu;
+        });
+
+        $('#selectedBu').change(function() {
+            var date = "{{ showdate }}";
+            var bu = $('#selectedBu').val();
+            location.href = "{{ path('daily') }}" + "/" + date + "/" + bu;
+        });
+
+        $('#selectedBu').children('option[value={{bu}}]').attr('selected', 'true'); //set bu select default value
+
+        background();
+
+        $("#showfiles").click(function showfiles() {
+            if ($("#filelistbox").is(":hidden")) {
+                if ($("#filelistbox").html()) {
+                    $("#filelistbox").show();
+                    $("#showfiles").val("Hide Files");
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ path('showfiles') }}/daily/" + "{{showdate}}",
+                        success: function(result) {
+                            $("#filelistbox").show();
+                            $("#showfiles").val("Hide Files");
+                            $("#filelistbox").css('display', 'block');
+                            $("#filelistbox").html(result);
+                        }
+                    });
+                }
+            } else {
+                $("#filelistbox").hide();
+                $("#showfiles").val("Show Files");
+            }
+        });
+        
+        $('.weekend').each(function(){
+            if($(this).html() == '0'){
+                $(this).html('-');
+            }
+        });
+        
+        {% if last_date_month != '' %}
+            var eqnum = {{last_date_month}} + 2;
+            if($("table tr:eq(4) td:eq("+eqnum+")").html() != '-' && $("table tr:eq(4) td:eq("+eqnum+")").html() != '0'){
+                $("table tr:eq(4) td:eq("+eqnum+")").css('color', 'red');
+            }
+        {% endif %}
+    });
+
+    function background() {
+        $("table tr").each(function() {
+            var cur = {{ cur_date }} + 1;
+            var gab;
+            $(this).find("td:eq(" + cur + ")").css('font-size', '12px');
+            $(this).find("td:eq(" + cur + ")").css('font-weight', 'bold');
+            $(this).find("td:eq(" + cur + ")").css('font-style', 'italic');
+            $(this).find("td:eq(" + cur + ")").css('border-left', '#6595D6 2px solid');
+            $(this).find("td:eq(" + cur + ")").css('border-right', '#6595D6 2px solid');
+            //gab calculate
+            var todayNum = $(this).find("td:eq(" + cur + ")").html();
+            if (cur != 2) {
+                var yesterdayNum = $(this).find("td:eq({{ cur_date }})").html();
+            } else {
+                var yesterdayNum = $(this).children("td[class=monday_gab]").html();
+            }
+            if ($(this).find("td:eq(1)").html() === 'Report Done') {
+                {% if report_done['Report Done'] is defined %}
+                    $(this).children("td[class=gab]").html("{{report_done['Report Done']}}");
+                {% else %}
+                    $(this).children("td[class=gab]").html("0");
+                {% endif %}
+            }else if ($(this).find("td:eq(1)").html() === 'Survey Validated Number') {
+                {% if report_done['Survey Validated Number'] is defined %}
+                    $(this).children("td[class=gab]").html("{{report_done['Survey Validated Number']}}");
+                {% else %}
+                    $(this).children("td[class=gab]").html("0");
+                {% endif %}
+            }else if ($(this).find("td:eq(1)").html() === 'QC Done') {
+                {% if report_done['QC Done'] is defined %}
+                    $(this).children("td[class=gab]").html("{{report_done['QC Done']}}");
+                {% else %}
+                    $(this).children("td[class=gab]").html("0");
+                {% endif %}
+            }else if ($(this).find("td:eq(1)").html() === 'Data Integrity Check Done') {
+                {% if report_done['Data Integrity Check Done'] is defined %}
+                    $(this).children("td[class=gab]").html("{{report_done['Data Integrity Check Done']}}");
+                {% else %}
+                    $(this).children("td[class=gab]").html("0");
+                {% endif %}
+            }else if ($(this).find("td:eq(1)").html() === 'LS Translation Done') {
+                {% if report_done['LS Translation Done'] is defined %}
+                    $(this).children("td[class=gab]").html("{{report_done['LS Translation Done']}}");
+                {% else %}
+                    $(this).children("td[class=gab]").html("0");
+                {% endif %}
+            }else if ($(this).find("td:eq(1)").html() === 'Invalid Survey Number') {
+                {% if report_done['Invalid Survey Number'] is defined %}
+                    $(this).children("td[class=gab]").html("{{report_done['Invalid Survey Number']}}");
+                {% else %}
+                    $(this).children("td[class=gab]").html("0");
+                {% endif %}
+            }else{
+                if (todayNum !== null && yesterdayNum !== null) {
+                    if (parseInt(todayNum) == 0)
+                        gab = '-';
+                    else
+                        gab = parseInt(todayNum) - parseInt(yesterdayNum);
+
+                    $(this).children("td[class=gab]").html(gab);
+                }
+            }
+        });
+    }
+
+    //For calculate forecast percent
+    function calcForecast() {
+
+        var addnum = 0;
+        background();
+        $("table tr").each(function() {
+            var cur = {{ cur_date }} + 1;
+            var submit = $(this).find("td:eq(1)").html();
+            if (submit === 'Submitted surveys') {
+                //For calculate percent
+                var num = $(this).find("td:eq(" + cur + ")").html();
+
+                addnum = num;
+            }
+        });
+
+        if (addnum === 0) {
+            $("#forecastPercent").text("0%");
+        } else {
+            var total = $("#forecastform").text();
+            var percent = (addnum / parseInt(total)) * 100;
+            var percent = percent.toFixed(0);
+            $("#forecastPercent").text(percent + "%");
+        }
+    }
+    {% if (is_granted('ROLE_HD_MANAGER') or is_granted('ROLE_ADMIN') )and bu != null %}
+    function showeditform(data) {
+        if ($(".editable").length > 0) {
+            cancel($(".editable").children().children().children('input[name=close]'));
+        }
+        var replace = '<td class="editable" id=' + data + ' style="background:#f00"><div class="editform"><form method="POST" action=""><input type="text" id="value' + data + '" name="num_value" style="width:103px;"/><br/><input type="button" value="Edit" onclick="changevalue(this)" ><input type="button" name="close" value="cancel" onclick="cancel(this)"/></form></div></td>';
+        $("#tmp").val($("#" + data).html());
+        $("#" + data).replaceWith(replace);
+        $("#" + data).children().children().children('input[name=num_value]').focus();
+    }
+    {% else %}
+    function showeditform(data) {
+        alert('Need to choose the corresponding BU before editing');
+    }
+    {% endif %}
+
+    function changevalue(edit) {
+        var id = $(edit).parent().parent().parent().attr('id');
+        var status_week = id.split("_");
+        var date = "{{ showdate }}";
+        var number = $("#value" + id).val();
+        var bu = $('#selectedBu').val();
+        var data = status_week[0] + ':' + status_week[1] + ':' + date + ':' + number + ':' + bu;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('setone') }}",
+            data: data,
+            success: function(result) {
+                var replace = '<td class="editable" id=' + id + ' onclick="showeditform(this.id)">' + result + '</td>';
+                $("#" + id).replaceWith(replace);
+                background();
+            }
+        });
+    }
+
+    function cancel(data) {
+        var id = $(data).parent().parent().parent().attr('id');
+        var temp = $("#tmp").val();
+        var replace = '<td class="editable" id=' + id + ' onclick="showeditform(this.id)">' + temp + '</td>';
+        $("#" + id).replaceWith(replace);
+        background();
+    }
+
+    function cancel2() {
+        var temp = $("#tmp2").val();
+        var replace = '<span id="forecastform" onclick="replaceForecast(this)" title="click to edit">' + temp + '</span>';
+        $("#forecastform").replaceWith(replace);
+    }
+
+    function replaceForecast(forcast_obj) {
+        var replace = '<span id="forecastform"><input type="text" id="forecast" style="width:50px" /><input type="button" value="Edit" onclick="changeForecast()"/><input type="button" value="cancel" onclick="cancel2()"/></span>';
+        $("#tmp2").val($(forcast_obj).text());
+        $(forcast_obj).replaceWith(replace);
+        $("#forecast").focus();
+    }
+
+    function changeForecast() {
+        var forcast = $("#forecast").val();
+        var date = "{{ showdate }}";
+        var bu = $('#selectedBu').val();
+        var data = date + ':' + bu + ':' + forcast;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('setforecast') }}",
+            data: data,
+            success: function(result) {
+                var replace = '<span id="forecastform" onclick="replaceForecast(this)" title="click to edit">' + result + '</span>';
+                $("#forecastform").replaceWith(replace);
+                calcForecast();
+            }
+        });
+    }
+
+    function deletefile(data) {
+        $.ajax({
+            data: data,
+            type: "POST",
+            url: "{{ path('deletefile') }}/daily/" + "{{showdate}}",
+            success: function(data) {
+                if (data == 1) {
+                    $("#filelistbox").hide();
+                    $("#filelistbox").html('');
+                    $("#showfiles").click();
+                } else {
+                    alert("error");
+                }
+            }
+        });
+    }
+    function refreshForecast() {
+        $('#reload').show();
+        $.ajax({
+            type: "POST",
+            url: "{{ path('forecast', {'isrefresh':'1'}) }}",
+            success: function(data) {
+                if(data == 1){
+                    location.reload();
+                    window.setTimeout(function() {
+                        $('#reload').hide();
+                    }, 3000);
+                }
+            }
+        });
+    }
+    </script>
+    <div id="reload" style="display: none">
+        <image id="loading_2" src="{{ asset('images/ajax_loader.gif') }}" width="140px" height="140px">
+    </div>
+    <div id="daily_top_left">
+        <a id="left_button" href="{{path('daily', {'date':preweek, 'bu': bu})}}">‹‹ PREVIOUS WEEK</a>
+        <span id = "show_date">{{ showdate }}<br/>
+    {% if bu is null %}
+                ALL
+    {% else %}
+        {{ all_bu[bu]}}
+    {% endif %}
+            </span>
+            <a id="right_button" href="{{path('daily', {'date':nxtweek, 'bu': bu})}}">NEXT WEEK ››</a>
+    </div>
+        <div id="daily_top_middle">
+            BU:
+            <select id="selectedBu">
+                <option value ="0">ALL</option>
+        {% for k,b in all_bu %}<!-- select the bu, k is id and b is bu code -->
+                <option value ="{{ k }}">{{ b }}</option>
+        {% endfor %}
+            </select>
+        </div>
+        <div id="daily_top_right">Calendar:
+            <input type="text" id="datepicker" />
+        </div>
+    {% if is_granted('ROLE_ADMIN') %}
+        <div id="fileupload_box">
+            <form action="{{ path('dailyfileupload', {'date':showdate}) }}" id="fileupload" method="post" enctype="multipart/form-data">
+        {{ form_label(fileForm.file, 'Filename:') }}
+        {{ form_widget(fileForm.file, {attr: {'style': 'display:none', 'size': '28', 'onchange' : "document.getElementById('albatross_dailybundle_fileuploadtype_text').value = this.value"}}) }}
+        {{ form_widget(fileForm.text, {attr: {'onclick' : "$('#albatross_dailybundle_fileuploadtype_file').click()"}}) }}
+                    <input type="submit" name="submit" value="Submit" />
+                    <div class="error_msg">{{ form_errors(fileForm) }}</div>
+            </form>
+            </div>
+            <div id="updateNumber_box">
+                <form action="{{ path('readDailyExcel',{'date':showdate}) }}" method="post">
+                    <input type="submit" id="UpdateNumber" name="submit" value="UpdateNumber" />
+                </form>
+            </div>
+            <form method="POST" style="float: left">
+                <input type="button" value="Show Files" id="showfiles" title="List of updated File today" />
+                <div id="filelistbox" ></div>
+            </form>
+            <div class="clear"></div>
+            {% endif %}
+            <table id="daily_table" border="1">
+                <tr id="first_row">
+                    <th rowspan="2" width="28px" class="tabletitle" style="border-right: 3px #000100 solid; color: #fff; background-color: #6595d6">No.
+                    </th>
+                    <th rowspan="2" style="background-color: #6595d6; border: 0; color: #fff;">
+                        The number of
+                    </th>
+                    <th style="background-color: #6595d6; border: 0; color: #fff;">Mon
+                    </th>
+                    <th style="background-color: #6595d6; border: 0; color: #fff;">Tue
+                    </th>
+                    <th style="background-color: #6595d6; border: 0; color: #fff;">Wed
+                    </th>
+                    <th style="background-color: #6595d6; border: 0; color: #fff;">Thu
+                    </th>
+                    <th style="background-color: #6595d6; border: 0; color: #fff;">Fri
+                    </th>
+                    <th style="background-color: #6595d6; border: 0; color: #fff;">Sat
+                    </th>
+                    <th style="background-color: #6595d6; border: 0; color: #fff;">Sun
+                    </th>
+                    <th rowspan="2" style="background-color: #6595d6; border: 0; color: #fff;">GAP(between today & yesterday)
+                    </th>
+                </tr>
+                <tr>
+                    <!-- upward size date for click start-->
+        {% for k,cur in cur_week_date_array%}
+                        <th width="28px"><a href="{{path('daily', {'date':cur, 'bu': bu})}}" class="datelink">{{k}}</a></th>
+        {% endfor %}
+                    <!-- upward size date for click end-->
+                        </tr>
+                        <tr>
+                            <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                            </th>
+                            <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                                Forecast in Total
+                                <!--span id="forecastform" onclick="replaceForecast(this);" title="click to edit">{{ forcast }}</span-->
+                                <span id="forecastform">{{ forcast }}</span>
+                                <input type="button" value="Refresh" onclick="refreshForecast();">
+                            </th>
+        {% for k,i in percent_calc %}
+            {% if k == cur_date %}
+                            <th id="forecastPercent" style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                {{i}}</th>
+            {% else %}
+                                <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                {{i}}</th>
+            {% endif %}
+        {% endfor %}
+                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                                    </th>
+                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                                        Situation as for today:
+                                    </th>
+                                    <th colspan="8" style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                                    </th>
+                                </tr>
+    {% set i = 1 %}<!-- table row number -->
+    {% set v = 0 %}<!-- distinguish editable  -->
+    {% for sts in status %}
+        {% if sts.today == 0 and v == 0 %}
+                                <tr>
+                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                                    </th>
+                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">Today's result:
+                                    </th>
+                                    <th colspan="7" style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
+                                    </th>
+                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">Sum of the current month</th>
+                                </tr>
+            {% set v = 1 %}
+        {% endif %}
+                                <tr>
+                                    <td style="border-right: 3px #000100 solid; background-color: #6595d6; color: #fff">{{ i }}</td>
+                                    <td>{{ sts.status }}</td>
+            {% set j = 0 %}<!-- consider if there is no date in this status  -->
+            {% for key,re in result %}
+                {% if key == sts.status %}
+                    {% if sts.editable == 1 %}
+                        {% for k,r in re %}<!-- k to check witch week day is it. 1 monday, 7 sunday  -->
+                            {% if k >= 6 %}
+                                    <td class="editable weekend" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
+                            {% else %}
+                                    <td class="editable" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        {% set j = 1 %}
+                    {% else %}
+                        {% for k,r in re %}
+                            {% if k >= 6 %}
+                                    <td class="survaynum weekend">{{ r }}</td>
+                            {% else %}
+                                    <td class="survaynum">{{ r }}</td>
+                            {% endif %}
+                        {% endfor %}
+                        {% set j = 1 %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if j == 0 %}
+                {% if sts.editable == 1 %}
+                    {% for empty in 1..7 %}
+                            {% if empty >= 6 %}
+                                     <td class="editable weekend" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
+                            {% else %}
+                                     <td class="editable" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
+                            {% endif %}
+                    {% endfor %}
+                {% else %}
+                    {% for empty in 1..7 %}
+                            {% if empty >= 6 %}
+                                     <td class="fixable weekend">0</td>
+                            {% else %}
+                                     <td class="fixable">0</td>
+                            {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endif %}
+                                    <td class="gab"></td><!-- gab line -->
+                                    <td class="monday_gab" style="display:none">{% if gab != null %}{{gab[sts.weight]}}{% else %}{{gab}}{% endif %}</td>
+                                </tr>
+    {% set i = i + 1 %}
+    {% endfor %}
+                            </table>
+                            <input type="text" id="tmp" value="0" style="display:none" />
+                            <input type="text" id="tmp2" value="0" style="display:none" />
+{% endblock %}

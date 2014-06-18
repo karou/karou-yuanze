@@ -1,0 +1,80 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% block title %}
+Client New
+{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('/css/new_edit_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(function() {
+        $('#creat_button').attr('disabled', true);
+        $('#albatross_custombundle_customclienttype_name').keyup(function(){
+            var data = $('#albatross_custombundle_customclienttype_name').val();
+            if($('#albatross_custombundle_customclienttype_name').val() === ''){
+                $('#creat_button').attr('disabled', true);
+                $('#error_message').html('Please enter a client name');
+                return;
+            }
+            $.ajax({
+                type: "POST",
+                url: "{{ path('checkClientName') }}",
+                data: data,
+                success: function(result) {
+                    if(result == 1){
+                        $('#creat_button').attr('disabled', false);
+                        $('#error_message').html('<font color="green">You can use this client name</font>');
+                    }else{
+                        $('#creat_button').attr('disabled', true);
+                        $('#error_message').html('<font color="red">This client name already exist</font>');
+                    }
+                }});
+        });
+    });
+</script>
+{% endblock %}
+{% block content -%}
+    <h1>Client creation</h1>
+
+    <form action="{{ path('customclient_create') }}" method="post" {{ form_enctype(form) }}>
+        <table id="create_edit_client_table">
+            <tr>
+                <th>
+                    {{ form_label(form.name) }}
+                </th>
+                <td>
+                    {{ form_widget(form.name) }}
+                </td>
+                <td id="error_message"></td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.file) }}
+                </th>
+                <td colspan="2">
+                    {{ form_widget(form.file) }}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.clientgroup) }}
+                </th>
+                <td colspan="2">
+                    {{ form_widget(form.clientgroup) }}
+                </td>
+            </tr>
+        </table>
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit" id="creat_button">Create</button>
+        </p>
+    </form>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('customclient') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,62 @@
+/* 
+    Document   : customwave_list
+    Created on : Sep 30, 2013, 10:50:12 AM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.records_list {
+    width: 100%;
+    font-size: 12px;
+}
+
+.records_list td {
+    height: 30px;
+    border-bottom: 1px #3875d7 dotted;
+}
+
+.records_list th {
+    background-color: #3875d7;
+    color: white;
+}
+
+.record_properties {
+    width: 100%;
+    font-size: 12px;
+}
+
+.record_properties td {
+    height: 30px;
+    border-bottom: 1px #3875d7 dotted;
+}
+
+.record_properties th {
+    background-color: #3875d7;
+    color: white;
+}
+
+#client_search_bar {
+    font-family: 'calibri','arial';
+}
+#project_search_bar {
+    font-family: 'calibri','arial';
+}
+
+#albatross_custombundle_customwavetype_customclient, #albatross_custombundle_customwavetype_customproject, #albatross_custombundle_customwavetype_number, #albatross_custombundle_customwavetype_date {
+    border: 1px solid #AAAAAA;
+    height: 21px;
+}
+#albatross_custombundle_customwavetype_projectname {
+    border: 1px solid #AAAAAA;
+    height: 17px;
+    margin-top: 1px;
+    color: #666;
+}
+#albatross_custombundle_customwavetype_customclient, #albatross_custombundle_customwavetype_customproject {
+    color: #666;
+}

@@ -1,0 +1,45 @@
+albatross_daily_homepage:
+    pattern:  /daily
+    defaults: { _controller: AlbatrossDailyBundle:Default:index }
+readDailyExcel:
+    pattern:  /daily/readdailyexcel/{date}
+    defaults: { _controller: AlbatrossDailyBundle:Client:readDailyExcel, date:'' }
+dailyfileupload:
+    pattern:  /daily/fileupload/{date}
+    defaults: { _controller: AlbatrossDailyBundle:Default:fileUpload, date:'' }
+    requirements: { _method: post }
+daily:
+    pattern:  /daily/{date}/{bu}
+    defaults: { _controller: AlbatrossDailyBundle:Default:daily, date:'', bu:'0', current:'daily' }
+setone:
+    pattern:  /setone
+    defaults: { _controller: AlbatrossDailyBundle:Default:setOneByAjax }
+    requirements: { _method: post }
+setforecast:
+    pattern:  /setforecast
+    defaults: { _controller: AlbatrossDailyBundle:Default:setForecastByAjax }    
+    requirements: { _method: post }
+syncClientList:
+    pattern:  /syncclientlist
+    defaults: { _controller: AlbatrossDailyBundle:Client:syncClientList }
+syncSurvey:
+    pattern:  /syncsurvey
+    defaults: { _controller: AlbatrossDailyBundle:Client:getSurvayByClient }
+client_crud:
+    resource: "@AlbatrossDailyBundle/Resources/config/routing/client.yml"
+    prefix: /client
+status_crud:
+    resource: "@AlbatrossDailyBundle/Resources/config/routing/status.yml"
+    prefix: /status
+rules:
+    pattern: /rules
+    defaults: { _controller: AlbatrossDailyBundle:Default:rules }
+rules_new:
+    pattern: /rules/new
+    defaults: { _controller: AlbatrossDailyBundle:Default:rulesNew }
+rules_edit:
+    pattern: /rules/edit/{id}
+    defaults: { _controller: AlbatrossDailyBundle:Default:rulesEdit }
+rules_delete:
+    pattern: /rules/delete/{id}
+    defaults: { _controller: AlbatrossDailyBundle:Default:rulesDelete }

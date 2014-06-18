@@ -1,0 +1,103 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Albatross File List
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('/css/filelist.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    function deleteconfirm(id) {
+        var result = confirm("Are you sure to delete this file?");
+        if (result) {
+            $("#iofview_cover").show();
+            $.ajax({
+                type: "POST",
+                url: "{{ path('deleteOtherFile') }}/" + id,
+                success: function() {
+                    window.location.reload(function() {
+                        $("#iofview_cover").hide();
+                    });
+                }
+            });
+        } else {
+            return false;
+        }
+    }
+
+    function download(id) {
+        $('#download_action').attr('action', '{{ path('downloadOtherFile') }}/' + id);
+
+        $('#download_action').submit();
+    }
+
+    function editLabel(id) {
+        if ($('#edit_form_switch').val() == 1) {
+            return false;
+        }
+        $('#edit_form_switch').val(1);
+        var replace = '<input id="edit_label_form" type="text" />';
+        var preLabel = $("#label_" + id).html();
+        $('#label_' + id).replaceWith(replace);
+        $('#edit_label_form').val(preLabel);
+        $('#edit_label_form').focus();
+
+        $('#edit_label_form').blur(function() {
+            var data = id + ':' + $('#edit_label_form').val();
+            var label = $('#edit_label_form').val();
+            $.ajax({
+                type: "POST",
+                data: data,
+                url: "{{ path('editfilelistlabel') }}/" + id,
+                success: function(result) {
+                    if (result == 1) {
+                        var replace2 = '<td id="label_' + id + '"  onclick="editLabel(' + id + ');">' + label + '</td>';
+                        $('#edit_form_switch').val(0);
+                        $('#edit_label_form').replaceWith(replace2);
+                    }
+                }
+            });
+        });
+    }
+</script>
+{% endblock %}
+{% block content %}
+    <div id="iofview_cover" style="display:none">
+        <table id="show_table">
+            <tr>
+                <td id="comment_box">Loading</td>
+            </tr>
+        </table>
+    </div>
+        <table id="other_file_list">
+            <thead>
+                <tr>
+                    <th>{{ knp_pagination_sortable(files, 'File Label', 'f.label') }}</th>
+                    <th width="15%">{{ knp_pagination_sortable(files, 'Submit Date', 'f.submitteddate') }}</th>
+                    <th width="21%">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+    {% for file in files %}
+                    <tr>
+                        <td id="label_{{ file.id }}" onclick="editLabel('{{ file.id }}');">{{ file.label }}</td>
+                        <td>{{ file.submitteddate.date }}</td>
+                        <td>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <input type="button" value="delete" onclick="deleteconfirm('{{file.id}}');"/>
+                            {% endif %}
+                                <form class="filelist_action_button" action="{{ path('downloadOtherFile', {'id':file.id}) }}" id="download_action">
+                                    <input type="submit" value="download" />
+                                </form>
+                                <!--a href="{{ file.getWebPath }}" download>Download</a-->
+                        </td>
+                    </tr>
+    {% endfor %}
+            </tbody>
+        </table>
+{{ knp_pagination_render(files) }}
+        <input type='text' style='display:none' id='edit_form_switch' val='0' />
+{% endblock %}

@@ -1,0 +1,26 @@
+Albatross\AceBundle\Entity\Questionnaire:
+  type: entity
+  table: questionnaire
+  oneToMany:
+    campaign:
+      targetEntity: Albatross\AceBundle\Entity\Campaign
+      mappedBy: questionnaire
+      cascade: ["remove"]
+      nullable: true
+    operationquestionnaire:
+      targetEntity: Albatross\OperationBundle\Entity\OperationQuestionnaire
+      mappedBy: questionnaire
+      cascade: ["remove"]
+  manyToMany:
+    customwave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+  lifecycleCallbacks: {}

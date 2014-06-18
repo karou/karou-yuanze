@@ -1,0 +1,38 @@
+Albatross\AceBundle\Entity\Bu:
+  type: entity
+  table: bu
+  uniqueConstraints:
+    code_uniq:
+        columns: code
+  oneToMany:
+    country:
+      targetEntity: Country
+      mappedBy: bu
+      cascade: ["remove"]
+    log:
+      targetEntity: Albatross\UserBundle\Entity\Log
+      mappedBy: bu
+  manyToMany:
+    operationquestionnaire:
+      targetEntity: Albatross\OperationBundle\Entity\OperationQuestionnaire
+      mappedBy: bu
+    operationproject:
+      targetEntity: Albatross\OperationBundle\Entity\OperationProject
+      mappedBy: bu
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+      nullable: true
+    code:
+      type: string
+      length: 255
+    number:
+      type: bigint
+      nullable: true
+  lifecycleCallbacks: {  }

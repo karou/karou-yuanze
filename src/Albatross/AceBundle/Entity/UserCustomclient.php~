@@ -1,0 +1,34 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * UserCustomclient
+ *
+ * @ORM\Table(name="user_customclient")
+ * @ORM\Entity
+ */
+class UserCustomclient
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $userId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="customclient_id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     */
+    private $customclientId;
+
+
+}

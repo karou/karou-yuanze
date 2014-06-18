@@ -1,0 +1,26 @@
+# src/Albatross/DailyBundle/Resources/config/doctrine/Date.orm.yml
+
+Albatross\DailyBundle\Entity\Date:
+  type: entity
+  table: date
+  manyToOne:
+    bu:
+      targetEntity: Albatross\AceBundle\Entity\Bu
+  uniqueConstraints:
+    daily_date_bu_id_uniq:
+      columns: [daily_date, bu_id]
+  repositoryClass: 
+    Albatross\DailyBundle\Entity\DateRepository
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    dailydate:
+      type: date
+      column: daily_date
+    forecast :
+      type: bigint
+      column: forecast
+      nullable: true
+  lifecycleCallbacks: { }

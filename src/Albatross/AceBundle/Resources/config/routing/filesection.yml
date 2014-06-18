@@ -1,0 +1,34 @@
+filesection:
+    pattern:  /
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:index" }
+
+filesection_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:show" }
+
+filesection_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:new" }
+
+filesection_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:create" }
+    requirements: { _method: post }
+
+filesection_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:edit" }
+
+filesection_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:update" }
+    requirements: { _method: post|put }
+
+filesection_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:delete" }
+    requirements: { _method: post|delete }
+    
+section_list:
+    pattern:  /SectionList
+    defaults: { _controller: "AlbatrossAceBundle:FileSection:SectionList", current:'filelist' }

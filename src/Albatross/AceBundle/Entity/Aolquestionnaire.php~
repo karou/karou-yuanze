@@ -1,0 +1,64 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Aolquestionnaire
+ *
+ * @ORM\Table(name="aolquestionnaire")
+ * @ORM\Entity
+ */
+class Aolquestionnaire
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Customfield
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customfield")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customfield_id", referencedColumnName="id")
+     * })
+     */
+    private $customfield;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Recap", inversedBy="aolquestionnaire")
+     * @ORM\JoinTable(name="aolquestionnaire_recap",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="aolquestionnaire_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="recap_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $recap;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->recap = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

@@ -1,0 +1,7 @@
+project_homepage:
+    pattern:  /list_project
+    defaults: { _controller: ProjectBundle:Default:index }
+
+view_project:
+    pattern: /view_project
+    defaults: { _controller: ProjectBundle:Default:view}

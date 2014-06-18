@@ -1,0 +1,61 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Deposiable
+{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+    function stepSave() {
+        $('#result_essage').html('saving the current step... ...');
+        $.ajax({
+            type: "POST",
+            url: "{{ path('disposableFunctionStep') }}",
+            success: function(result) {
+                $('#result_essage').html(result+' for step');
+            }
+        });
+    }
+    function deliverySave(offset) {
+        $('#result_essage').html('saving the current delievery... ...');
+        $.ajax({
+            type: "POST",
+            url: "{{ path('disposableFunctionDelivery') }}",
+            success: function(result) {
+                $('#result_essage').html(result+' for delivery');
+            }
+        });
+    }
+    function percentSave(offset) {
+        $('#result_essage').html('saving the current percent... ...');
+        $.ajax({
+            type: "POST",
+            url: "{{ path('disposableFunctionPercent') }}" + '/' + offset,
+            success: function(result) {
+                if(result == 'victory'){
+                    $('#result_essage').html(result);
+                }else{
+                    $('#result_essage').html(result);
+                    percentSave(result);
+                }
+            }
+        });
+    }
+    </script>
+{% endblock %}
+{% block content %}
+    
+        <table style="font-family:'Trebuchet MS','arial'; font-size: 12px;">
+            <tr>
+                <td><input style="background: none repeat scroll 0 0 rgba(231, 126, 35, 0.6); color:#00529C; border: 1px solid #E77E23; font-family:'Trebuchet MS','arial'; font-size: 14px;" type='button' value="Disposable Customwave Step" onclick="stepSave();"></td>
+                <td><input style="background: #F4F3F2; border: 1px solid #C7C4BE; font-family:'Trebuchet MS','arial'; font-size: 14px;" type='button' value="Disposable Customwave Delivery Date" onclick="deliverySave();"></td>
+                <td><input style=" background: none repeat scroll 0 0 rgba(0, 82, 156, 0.6); border: 1px solid #00529C; color:#EEE; font-family:'Trebuchet MS','arial'; font-size: 14px;" type='button' value="Disposable Customwave Percent" onclick="percentSave(0);"></td>
+            </tr>
+            <tr>
+                <td colspan="3" id="result_essage"></td>
+            </tr>
+        </table>
+{% endblock %}

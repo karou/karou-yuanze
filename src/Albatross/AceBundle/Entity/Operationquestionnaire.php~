@@ -1,0 +1,197 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Operationquestionnaire
+ *
+ * @ORM\Table(name="operationquestionnaire")
+ * @ORM\Entity
+ */
+class Operationquestionnaire
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fwsdate", type="string", length=20, nullable=true)
+     */
+    private $fwsdate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fwedate", type="string", length=20, nullable=true)
+     */
+    private $fwedate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reportdate", type="string", length=20, nullable=true)
+     */
+    private $reportdate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="survey_num", type="bigint", nullable=false)
+     */
+    private $surveyNum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="assigned_num", type="bigint", nullable=false)
+     */
+    private $assignedNum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fw_num", type="bigint", nullable=false)
+     */
+    private $fwNum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="editing_num", type="bigint", nullable=false)
+     */
+    private $editingNum;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_visit_date", type="string", length=20, nullable=false)
+     */
+    private $firstVisitDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_visit_date", type="string", length=20, nullable=false)
+     */
+    private $lastVisitDate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="info_type", type="integer", nullable=true)
+     */
+    private $infoType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="modified_date", type="string", length=20, nullable=false)
+     */
+    private $modifiedDate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="qid", type="integer", nullable=true)
+     */
+    private $qid;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="campid", type="integer", nullable=true)
+     */
+    private $campid;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="questionnaire_name", type="string", length=255, nullable=true)
+     */
+    private $questionnaireName;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Campaign
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Campaign")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="campaign_id", referencedColumnName="id")
+     * })
+     */
+    private $campaign;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Questionnaire
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Questionnaire")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id")
+     * })
+     */
+    private $questionnaire;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Customclient", inversedBy="operationquestionnaire")
+     * @ORM\JoinTable(name="operationquestionnaire_customclient",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="operationquestionnaire_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="customclient_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $customclient;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Country", inversedBy="operationquestionnaire")
+     * @ORM\JoinTable(name="operationquestionnaire_country",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="operationquestionnaire_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $country;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Bu", inversedBy="operationquestionnaire")
+     * @ORM\JoinTable(name="operationquestionnaire_bu",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="operationquestionnaire_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="bu_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $bu;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->customclient = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->country = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bu = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

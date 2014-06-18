@@ -1,0 +1,124 @@
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
+
+{% block title 'Daily' %}
+
+{% block breadcrumb %}
+	<li class="active">Daily</li>
+{% endblock %}
+
+{% block pageHeading 'Daily' %}
+
+{% block body %}
+
+<!--BODY STARTS-->
+
+<div class="row-fluid">
+ 
+  <div class="span12">
+	<div class="content-widgets blue-white">
+	  <div class="widget-container" style="min-height:50px;">
+	  	
+		<div class="inner-widget-iof-first">
+			<i class="icon-filter"></i>
+		</div>
+		
+		<form name="frmDailySearch" id="frmDailySearch" action="" method="post">
+			<input type="hidden" name="hidAct" id="hidAct" value="searchDaily" />
+			<input type="hidden" name="week_val" id="week_val" value="{{week_val}}" />
+			<div class="inner-widget-iof">
+				<a href="javascript:;" class="btn" onclick="changeWeekVal('previous');">&lt;&lt; &nbsp; PREVIOUS WEEK</a>
+			</div>
+			<div class="inner-widget-iof">
+				<h4 style="margin-top:5px;">{{monDate}} &nbsp;&nbsp;&nbsp; ALL</h4>
+			</div>
+			<div class="inner-widget-iof">
+				<a href="javascript:;" class="btn" onclick="changeWeekVal('next');">NEXT WEEK &nbsp; &gt;&gt;</a>
+			</div>
+			
+			<div class="inner-widget-iof">
+				<select name="bu[]" id="bu" multiple data-placeholder="Business Unit" class="chzn-select span6" tabindex="2" style="width:99%; float:left;" onchange="document.getElementById('frmDailySearch').submit();">
+					<option value="">Business Unit</option>
+					{{list_bu|raw}}
+				</select>
+			</div>
+			<div class="inner-widget-iof input-append" id="datetimepicker4">
+				<input name="calender" id="calender" placeholder="Calender" data-format="yyyy-MM-dd" type="text" style="width:74%; float:left;" onchange="document.getElementById('frmDailySearch').submit();" /><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+			</div>
+			
+		</form>
+			
+	  </div>
+	</div>
+  </div>
+	<div class="span12" style="margin:0;">
+		<div class="content-widgets">
+			<table class="stat-table responsive table table-stats table-striped table-sortable table-bordered" id="perTableContent">
+				<tbody>
+				
+				{{perResult|raw}}
+				
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	<div class="span12" style="margin:0;">
+		<div class="primary-head">
+			<br/><h3 class="page-header">Situation as for today</h3>
+		</div>
+		<div class="content-widgets">
+			<table class="stat-table responsive table table-stats table-striped table-sortable table-bordered">
+				<tbody>
+				
+				{{situationListing|raw}}
+				
+				</tbody>
+			</table>
+		</div>
+	</div>
+	
+	
+	<div class="span12" style="margin:0 0 30px;">
+		<div class="primary-head">
+			<br/><h3 class="page-header">Today's result</h3>
+		</div>
+		<div class="content-widgets">
+			<table class="stat-table responsive table table-stats table-striped table-sortable table-bordered">
+				<tbody>
+				
+				{{todaysResult|raw}}
+				
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!--BODY ENDS-->
+
+<script type="text/javascript">
+
+$(function () {
+	
+	/*====Select Box====*/
+	$(".chzn-select").chosen();
+	$(".chzn-select-deselect").chosen({
+		allow_single_deselect: true
+	});
+	
+	/*====Date Picker====*/
+	$('#datetimepicker4').datetimepicker({
+		pickTime: false
+	});
+	
+	$(".stat-table").tablecloth({
+	  theme: "stats",
+	  striped: true,
+	  sortable: true,
+	  condensed: false
+	});
+
+});
+</script>
+
+{% endblock %}

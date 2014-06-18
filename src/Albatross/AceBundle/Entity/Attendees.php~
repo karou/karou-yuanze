@@ -1,0 +1,56 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Attendees
+ *
+ * @ORM\Table(name="attendees")
+ * @ORM\Entity
+ */
+class Attendees
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="position", type="string", length=255, nullable=true)
+     */
+    private $position;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="albatross_attendees", type="boolean", nullable=true)
+     */
+    private $albatrossAttendees;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Customfield
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customfield")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customfield_id", referencedColumnName="id")
+     * })
+     */
+    private $customfield;
+
+
+}

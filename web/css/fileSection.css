@@ -1,0 +1,16 @@
+/* 
+    Document   : fileSection
+    Created on : Dec 27, 2013, 5:31:48 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.filesection_records_list {
+    width: 100%;
+    font-family: 'calibri';
+}

@@ -1,0 +1,30 @@
+operationquestionnaire:
+    pattern:  /
+    defaults: { _controller: "AlbatrossOperationBundle:OperationQuestionnaire:index" }
+
+operationquestionnaire_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossOperationBundle:OperationQuestionnaire:show" }
+
+operationquestionnaire_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossOperationBundle:OperationQuestionnaire:new" }
+
+operationquestionnaire_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossOperationBundle:OperationQuestionnaire:create" }
+    requirements: { _method: post }
+
+operationquestionnaire_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "AlbatrossOperationBundle:OperationQuestionnaire:edit" }
+
+operationquestionnaire_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossOperationBundle:OperationQuestionnaire:update" }
+    requirements: { _method: post|put }
+
+operationquestionnaire_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossOperationBundle:OperationQuestionnaire:delete" }
+    requirements: { _method: post|delete }

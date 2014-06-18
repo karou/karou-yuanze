@@ -1,0 +1,20 @@
+# src/Albatross/DailyBundle/Resources/config/doctrine/Client.orm.yml
+Albatross\DailyBundle\Entity\Client:
+  type: entity
+  table: client
+  uniqueConstraints:
+    aol_id_uniq:
+      columns: aol_id
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    clientName:
+      type: string
+      length: 255
+      column: client_name
+    aolId:
+      type: bigint
+      column: aol_id
+  lifecycleCallbacks: { }

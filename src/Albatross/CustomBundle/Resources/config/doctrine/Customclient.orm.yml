@@ -1,0 +1,45 @@
+Albatross\CustomBundle\Entity\Customclient:
+  type: entity
+  table: customclient
+  uniqueConstraints:
+    name_uniq:
+      columns: name
+  oneToMany:
+    customproject:
+      targetEntity: Customproject
+      mappedBy: customclient
+      cascade: ["remove"]
+    operationproject:
+      targetEntity: Albatross\OperationBundle\Entity\OperationProject
+      mappedBy: customclient
+  manyToMany:
+    user:
+      targetEntity: Albatross\UserBundle\Entity\User
+      mappedBy: customclient
+      nullable: true
+    operationquestionnaire:
+      targetEntity: Albatross\OperationBundle\Entity\OperationQuestionnaire
+      mappedBy: customclient
+  manyToOne:
+    clientgroup:
+      targetEntity: Clientgroup
+      inversedBy: customclient
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+    logo:
+      type: string
+      lenght: 255
+      nullable: true
+  lifecycleCallbacks:
+       preRemove: [storeFilenameForRemove]
+       postPersist: [upload]
+       postUpdate: [upload]
+       postRemove: [removeUpload]

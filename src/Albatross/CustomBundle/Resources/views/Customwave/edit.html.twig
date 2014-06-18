@@ -1,0 +1,154 @@
+{% block stylesheets %}
+    <link href="{{ asset('/css/custom_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $('.surveySelection').chosen({width: "100%"});
+        $('.campaignSelection').chosen({width: "100%"});
+
+        $('#albatross_custombundle_customwavetype_customclient').val('{{custom_client}}');
+        $('#albatross_custombundle_customwavetype_customproject').val('{{customproject}}');
+
+        $('#albatross_custombundle_customwavetype_number').val('{{number}}');
+        $('#albatross_custombundle_customwavetype_date').val('{{date}}');
+        {% for p in projArr %}
+            $('#albatross_custombundle_customwavetype_aceproject option').each(function(){
+                if($(this).val() == {{p}}){
+                    $(this).attr('selected', 'selected');
+                }
+            });
+        {% endfor %}
+
+        $(".chz_aceproject").chosen({width: "100%"});
+
+        $('#albatross_custombundle_customwavetype_projectname').val($('#albatross_custombundle_customwavetype_customproject option:selected').text());
+
+        $('#albatross_custombundle_customwavetype_customproject').change(function() {
+            $('#albatross_custombundle_customwavetype_projectname').val($('#albatross_custombundle_customwavetype_customproject option:selected').text());
+        });
+        //$('#albatross_custombundle_customwavetype_customclient').val($('#albatross_custombundle_customwavetype_customclient option:last').val());
+        $('#albatross_custombundle_customwavetype_customclient').change(function() {
+            getCustomprojectByCustomclient($('#albatross_custombundle_customwavetype_customclient').val());
+        });
+
+        {% if selectedList != 0 %}
+            var index = 1;
+            var survey = '';
+            var campaign = '';
+            {% for s in selectedList %}
+                survey = '{{ s['questionnaire']['id']|replace({"'": "\\'"}) }}';
+                campaign = '{{ s['id']|replace({"'": "\\'"}) }}';
+                if(index === 1){
+                    var html = '<tr><td class="survey">{{ aolform|replace({"'": "\\'"})|raw }}</td><td class="campaign"></td><td><button type="button" onclick="deleteSurvey(this);" class="button">Delete</button></td></tr>';
+                    $('#aolsurvey').html(html);
+                    $('#surveySelection_1').val(survey);
+                    var obj = $('#surveySelection_1');
+                    surveyChange(obj, 'presist');
+                    $('#campaign_surveySelection_1').val(campaign);
+                }else{
+                    addNewSurvey();
+                    $('#surveySelection_'+index).val(survey);
+                    surveyChange($('#surveySelection_'+index), 'presist');
+                    $('#campaign_surveySelection_'+index).val(campaign);
+                }
+                index++;
+            {% endfor %}
+            callChosen();
+        {% else %}
+            var html = '<tr><td class="survey">{{ aolform|replace({"'": "\\'"})|raw }}</td><td class="campaign"><select class="campaignSelection"><option value=""></option></select></td><td><button type="button" onclick="deleteSurvey(this);" class="button">Delete</button></td></tr>';
+            $('#aolsurvey').html(html);
+            callChosen();
+        {% endif %}
+    });
+    function callChosen(){
+        $('.surveySelection').chosen({width: "100%"});
+        $('.campaignSelection').chosen({width: "100%"});
+    }
+    function surveyChange(e, type){
+        var index = $(e).val();
+        $.ajax({
+            data: index,
+            async:false,
+            type: "POST",
+            url: "{{ path('getCampaignArr') }}",
+            success: function(result) {
+                $(e).parent().next().html(result);
+                var id = $(e).attr('id');
+                $(e).parent().next().children().attr('id', 'campaign_'+id);
+                if(type == null){
+                    callChosen();
+                }
+            }
+        });
+    }
+    function addNewSurvey(){
+        var formStr = '<tr><td class="survey">{{ aolform|replace({"'": "\\'"})|raw }}</td><td class="campaign"></td><td><button type="button" onclick="deleteSurvey(this);" class="button">Delete</button></td></tr>';
+        $('#aolsurvey').append(formStr);
+        var preId = $('td[class=survey]:last').children('select').attr('id');
+        var newIndex = $('#aolsurvey').find('.survey').length;
+        var newId = preId.substring(0, 16) + newIndex;
+        $('td[class=survey] select:last').attr('id', newId);
+        $('.campaign').last().html('<select class="campaignSelection"><option></option></select>');
+        
+        callChosen();
+    }
+    function deleteSurvey(obj){
+        $(obj).parent().parent().remove();
+    }
+    function getCustomprojectByCustomclient(id) {
+        $.ajax({
+            data: id,
+            type: "POST",
+            url: "{{ path('getcpbycc') }}",
+            success: function(result) {
+                $('#albatross_custombundle_customwavetype_customproject').html(result);
+                $('#albatross_custombundle_customwavetype_projectname').val('');
+            }
+        });
+    }
+    function submitWave(){
+        $('#window-cover').show();
+        $('#customwave_edit_form').submit();
+    }
+</script>
+{% endblock %}
+{% block content -%}
+    <form action="{{ path('customwave_update',{ 'id': entity.id}) }}" id="customwave_edit_form" method="post" {{ form_enctype(edit_form) }}>
+        <div class="wave_title_div">Edit Wave
+            <span id="close_button" title="close" onclick="cancelWave();" style="margin: 2px 5px; position: absolute; right:0;">
+                <img src="{{ asset('/images/close.png')}}" height="30px" width="30px">
+            </span>
+        </div>
+        <table class="create_wave_table">
+            <tr>
+                <th>Client</th>
+                <td colspan="2">{{ form_widget(edit_form.customclient, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}</td>
+                <th rowspan="5"><button type="button" onclick="submitWave();" style="height: 50px;">Create</button></th>
+            </tr>
+            <tr>
+                <th>Project</th>
+                <td colspan="2">{{ form_widget(edit_form.customproject, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td colspan="2">{{ form_widget(edit_form.projectname, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}
+                    w{{ form_widget(edit_form.number) }}{{ form_widget(edit_form.bis) }}{{ form_widget(edit_form.date) }}{{ form_widget(edit_form.totalnum, {attr: {'placeholder':"Total Number"}}) }}</td>
+            </tr>
+            <tr>
+                <th>AceProject</th>
+                <td colspan="2">{{ form_widget(edit_form.aceproject) }}</td>
+            </tr>
+            <tr>
+                <th>AolSurvey</th>
+                <th>
+                    <table id="aolsurvey">
+                    </table>
+                </th>
+                <th><button type="button" onclick="addNewSurvey();" class="button">Add</button></th>
+            </tr>
+        </table>
+        {{ form_widget(edit_form._token) }}
+    </form>
+{% endblock %}

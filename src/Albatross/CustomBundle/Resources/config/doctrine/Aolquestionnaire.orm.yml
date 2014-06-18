@@ -1,0 +1,23 @@
+Albatross\CustomBundle\Entity\Aolquestionnaire:
+  type: entity
+  table: aolquestionnaire
+  manyToOne:
+    customfield:
+      targetEntity: Customfield
+      inversedBy: aolquestionnaire
+  manyToMany:
+    recap:
+      targetEntity: Recap
+      inversedBy: aolquestionnaire
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+      nullable: true
+  lifecycleCallbacks: {}

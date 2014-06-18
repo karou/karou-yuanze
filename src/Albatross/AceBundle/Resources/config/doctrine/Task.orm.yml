@@ -1,0 +1,90 @@
+Albatross\AceBundle\Entity\Task:
+  type: entity
+  table: task
+  uniqueConstraints:
+    ace_id_uniq:
+      columns: ace_id
+  oneToMany:
+    forecast:
+      targetEntity: Forecast
+      mappedBy: task
+      cascade: ["remove"]
+  manyToOne:
+    project:
+      targetEntity: Project
+      inversedBy: tasks
+    group:
+      targetEntity: Group
+    taskType:
+      targetEntity: TaskType
+      joinColumn:
+        name: task_type_id
+        referencedColumnName: id
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    resume:
+      type: string
+      length: 255
+    number:
+      type: bigint
+    status:
+      type: string
+      length: 255
+    percentageDone:
+      type: bigint
+      column: percentage_done
+    actualPercentageDone:
+      type: float
+      column: actual_percentage_done
+    createdDate:
+      type: datetime
+      column: created_date
+      nullable: true
+    aceId:
+      type: bigint
+      column: ace_id
+    aolPercent:
+      type: bigint
+      column: aol_percent
+      nullable: true
+    statusId:
+      type: bigint
+      column: status_id
+    updatedaol:
+      type: boolean
+      column: updated_aol
+    fwstartdate:
+      column: fw_start_date
+      type: string
+      length: 255
+      nullable: true
+    fwenddate:
+      column: fw_end_date
+      type: string
+      length: 255
+      nullable: true
+    reportduedate:
+      column: report_due_date
+      type: string
+      length: 255
+      nullable: true
+    scope:
+      type: bigint
+      column: scope
+      nullable: true
+    pm:
+      type: string
+      length: 255
+      nullable: true
+    projectnumber:
+      type: string
+      column: project_number
+      length: 255
+      nullable: true
+    updated:
+      type: boolean
+  lifecycleCallbacks: {  }

@@ -1,0 +1,33 @@
+albatross_custom_homepage:
+    pattern:  /customproject
+    defaults: { _controller: AlbatrossCustomBundle:Default:index, current:'custom_project' }
+client_crud:
+    resource: "@AlbatrossCustomBundle/Resources/config/routing/customclient.yml"
+    prefix: /Customclient
+project_crud:
+    resource: "@AlbatrossCustomBundle/Resources/config/routing/customproject.yml"
+    prefix: /Customproject
+wave_crud:
+    resource: "@AlbatrossCustomBundle/Resources/config/routing/customwave.yml"
+    prefix: /Customwave
+saverecap:
+    pattern:  /saverecap
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:saverecap" }
+clientgroup_crud:
+    resource: "@AlbatrossCustomBundle/Resources/config/routing/clientgroup.yml"
+    prefix: /Clientgroup
+IOFFileUpload:
+    pattern:  /IOFFileUpload/{wid}
+    defaults: { _controller: AlbatrossCustomBundle:Customproject:IOFFileUpload, wid:''}
+    requirements: { __method: post }
+IOFFileEdit:
+    pattern:  /IOFFileEdit/{id}
+    defaults: { _controller: AlbatrossCustomBundle:Customproject:IOFFileEdit, id:''}
+    requirements: { __method: post }
+iofedit:
+    pattern:  /iofedit/{id}
+    defaults: { _controller: AlbatrossCustomBundle:Customproject:iofedit, id:''}
+    requirements: { __method: post }
+saveWaveYearAndMonth:
+    pattern:  /saveWaveYearAndMonth
+    defaults: { _controller: AlbatrossCustomBundle:Customwave:saveWaveYearAndMonth}

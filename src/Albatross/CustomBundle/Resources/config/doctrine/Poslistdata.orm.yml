@@ -1,0 +1,128 @@
+Albatross\CustomBundle\Entity\Poslistdata:
+  type: entity
+  table: poslistdata
+  manyToOne:
+    poslist:
+      targetEntity: Poslist
+      inversedBy: poslistdata
+    country:
+      targetEntity: Albatross\AceBundle\Entity\Country
+      inversedBy: poslistdata
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    store_id:
+      type: string
+      length: 255
+      nullable: true
+    location_name:
+      type: string
+      length: 255
+      nullable: true
+    number_of_visits:
+      type: bigint
+      nullable: true
+    store_name:
+      type: string
+      length: 255
+      nullable: true
+    address:
+      type: string
+      length: 255
+      nullable: true
+    address_2:
+      type: string
+      length: 255
+      nullable: true
+    city:
+      type: string
+      length: 255
+      nullable: true
+    county:
+      type: string
+      length: 255
+      nullable: true
+    state_region:
+      type: string
+      length: 255
+      nullable: true
+    postal_code:
+      type: string
+      length: 255
+      nullable: true
+    countrys:
+      type: string
+      length: 255
+      nullable: true
+    phone:
+      type: string
+      length: 255
+      nullable: true
+    fax:
+      type: string
+      length: 255
+      nullable: true
+    location_hours:
+      type: string
+      length: 255
+      nullable: true
+    export_email:
+      type: string
+      length: 255
+      nullable: true
+    export_email_name:
+      type: string
+      length: 255
+      nullable: true
+    export_language:
+      type: string
+      length: 255
+      nullable: true
+    location_status:
+      type: string
+      length: 255
+      nullable: true
+    location_photo_url:
+      type: string
+      length: 255
+      nullable: true
+    latitude:
+      type: string
+      length: 255
+      nullable: true
+    longitude:
+      type: string
+      length: 255
+      nullable: true
+    date_geocode_acquired:
+      type: string
+      length: 255
+      nullable: true
+    geocode_source:
+      type: string
+      length: 255
+      nullable: true
+    additional_comments:
+      type: string
+      length: 255
+      nullable: true
+    summary_label:
+      type: string
+      length: 255
+      nullable: true
+    summary_content:
+      type: string
+      length: 255
+      nullable: true
+    summary_display:
+      type: string
+      length: 255
+      nullable: true
+    region:
+      type: string
+      length: 255
+      nullable: true
+  lifecycleCallbacks: {}

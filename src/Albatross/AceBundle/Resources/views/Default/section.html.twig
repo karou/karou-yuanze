@@ -1,0 +1,59 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% block title %}
+File Section List
+{% endblock %}
+{% block stylesheets %}
+<link href="{{ asset('/css/fileSection.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block content -%}
+<fieldset>
+    <legend>Add File</legend>
+<form id="other_file_form" action="{{ path('uploadOtherFile') }}" method="post" enctype="multipart/form-data">
+    <table>
+        <tr>
+            <td>Section</td><td>{{ form_widget(attachmentsForm.filesection) }}</td>
+        </tr>
+        <tr>
+            <td>File Name: </td><td>{{ form_widget(attachmentsForm.label) }}</td>
+        </tr>
+        <tr>
+            <td>File Upload: </td><td>{{ form_widget(attachmentsForm.file) }}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input type="submit" name="submit" value="Submit" />
+            <div class="error_msg">{{ form_errors(attachmentsForm) }}</div></td>
+        </tr>
+    </table>
+</form>
+</fieldset>
+<table class="filesection_records_list">
+<thead>
+    <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Description</th>
+    </tr>
+</thead>
+<tbody>
+{% for entity in entities %}
+        {% if entity.name == 'Sales and BD' %}
+            {% if sales_and_bd == 1 %}
+            <tr>
+                <td><a href="{{ path('filesection_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td><a href="{{ path('filelist', { 'sid': entity.id }) }}">{{ entity.name }}</a></td>
+                <td>{{ entity.description }}</td>
+            </tr>
+            {% endif %}
+        {% else %}
+            {% if positionAccess[entity.name] == 1%}
+                <tr>
+                    <td><a href="{{ path('filesection_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                    <td><a href="{{ path('filelist', { 'sid': entity.id }) }}">{{ entity.name }}</a></td>
+                    <td>{{ entity.description }}</td>
+                </tr>
+            {% endif %}
+        {% endif %}
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

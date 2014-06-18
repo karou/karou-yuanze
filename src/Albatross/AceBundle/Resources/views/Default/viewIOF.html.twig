@@ -1,0 +1,151 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Albatross IOF View
+{% endblock %}
+{% block stylesheets %}
+<link href="{{ asset('/css/IOFView.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/custom_project_show.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/ckeditor/ckeditor.js')}}"></script>
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.download_button').mouseover(function(){
+            $(this).css('background', 'rgba(231, 126, 35, 0.8)');
+        });
+        $('.download_button').mouseout(function(){
+            $(this).css('background', 'rgba(231, 126, 35, 0.6)');
+        });
+        $('#iof-action').mouseover(function(){
+            $('#iof-action-table').show();
+        });
+        $('#iof-action').mouseout(function(){
+            $('#iof-action-table').hide();
+        });
+    });
+    function fileuplodFormCancel() {
+        $('#iof_upload').fadeOut();
+        $('#iof_upload').html('');
+    }
+    function editIOF(id) {
+        $.ajax({
+            type: "POST",
+            url: "{{ path('iofedit') }}/"+id,
+            success: function(result) {
+                $('#iof_upload').html(result);
+                
+                $('#iof_upload').show();
+            }});
+    }
+    function downloadIOF(e){
+        $(e).prev().submit();
+    }
+    function deleteIOF(){
+        var result = confirm("Are you sure to DELETE the IOF?");
+        if(result){
+            result2 = confirm("Really?");
+            if(result2){
+                $('#delete-iof-form').submit();
+            }
+        }
+    }
+    function showAndHideMessage(e){
+        if($(e).parent().parent().next('tr').is(':hidden')){
+            $(e).attr('class', 'hideMessageView');
+            $(e).parent().parent().next('tr').show();
+        }else{
+            $(e).attr('class', 'showMessageView');
+            $(e).parent().parent().next('tr').hide();
+        }
+    }
+</script>
+{% endblock %}
+{% block content %}
+{% spaceless %}
+<table id="iof-view-big-table">
+    <tr>
+        <th colspan="2" class="wave-name-th">
+            <a href="{{ path('customproject_show', { 'id': otherInfo['wave']['pid'] }) }}">
+                {{ otherInfo['wave']['name'] }}
+            </a>
+            <span id="user-name">( Editor: {{ otherInfo['user'].username }}; Pm: {{ otherInfo['pm'] }} )</span>
+        <div id="iof-action">
+            <img src="{{ asset('/images/option.png') }}" title="IOF Action" height="20px" width="20">
+            <table id="iof-action-table">
+                <tr><td onclick="editIOF('{{otherInfo['iof']}}');" id="edit-iof">EDIT</td></tr>
+                <tr><td onclick="updateIOF('{{otherInfo['iof']}}');" id="update-iof">UPDATE</td></tr>
+                <tr>
+                    <td onclick="deleteIOF('{{otherInfo['iof']}}');" id="delete-iof">
+                        <form action="{{ path('attachment_delete', { 'id': otherInfo['iof'] }) }}" method="POST" id="delete-iof-form">
+                        DELETE
+                        </form>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        </th>
+    </tr>
+    {% for k,rindex1 in result %} <!--first index-->
+    <tr class="bu-ace-tr-title">
+        <th colspan="2">FORM {{k}}</th>
+    </tr>
+    <tr>
+        <td colspan="2" style="padding:0;">
+        <table class="iof-view-info-table">
+            <tr>
+                <th class="iof-view-info-title">BU</th>
+                <th class="iof-view-info-title">ACE PROJECT</th>
+                <th class="iof-view-info-title">Fw Start</th>
+                <th class="iof-view-info-title">Fw End</th>
+                <th class="iof-view-info-title">Report Due</th>
+                <th class="iof-view-info-title">Scope</th>
+                <th class="iof-view-info-title">Comment</th>
+            </tr>
+                {% for project in rindex1['project'] %} <!--project and bu in index1-->
+            <tr>
+                <td class="iof-view-bu">{{ project['bu'] }}</td>
+                <td class="iof-view-project">{{ project['project'] }}</td>
+                <td class="iof-view-project">{{ project['fws'] }}</td>
+                <td class="iof-view-project">{{ project['fwe'] }}</td>
+                <td class="iof-view-project">{{ project['reportdue'] }}</td>
+                <td class="iof-view-project">{{ project['scope'] }}</td>
+                <td class="iof-view-project">{{ project['comment'] }}</td>
+            </tr>
+                {% endfor %} <!--end project and bu in index1-->
+        </table>
+        </td>
+    </tr>
+        {% for key,info in rindex1['fileinfo'] %} <!--file index2-->
+    <tr>
+        <th colspan="2" class="file-message-th">FIlE & MESSAGE {{key}}</th>
+    </tr>
+    <tr>
+        <th class="iof-view-label-title">LABEL</th>
+        <th class="iof-view-dowload-title">DOWNLOAD ACTION</th>
+    </tr>
+            {% for detailinfo in info['file'] %} <!--detail information in index2-->
+    <tr>
+        <td class="iof-view-label">{{detailinfo['label']}}</td>
+        <td class="iof-view-download">
+            <form action="{{ path('downloadIOF', {'fid':detailinfo['fid']}) }}">
+            </form>
+            <div class="download_button" onclick="downloadIOF(this);"><div class="download_button-img"></div>IOF</div>
+        </td>
+    </tr>
+            {% endfor %} <!--end detail information in index2-->
+    <tr>
+        <th colspan="2" class="iof-view-message-title">MESSAGE<span class="showMessageView" onclick="showAndHideMessage(this);"></span></th>
+    </tr>
+    <tr style="display:none">
+        <td colspan="2" class="iof-view-message">{{info['message']|raw}}</td>
+    </tr>
+        {% endfor %} <!--end file index2-->
+    {% endfor %}<!--end first index-->
+</table>
+
+<div id="iof_upload" style="display:none;"></div>
+{% endspaceless %}
+{% endblock %}

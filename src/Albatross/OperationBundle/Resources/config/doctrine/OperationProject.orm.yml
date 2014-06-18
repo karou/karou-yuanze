@@ -1,0 +1,62 @@
+Albatross\OperationBundle\Entity\OperationProject:
+  type: entity
+  table: operationproject
+  manyToOne:
+    project:
+      targetEntity: Albatross\AceBundle\Entity\Project
+      inversedBy: operationproject
+    customclient:
+      targetEntity: Albatross\CustomBundle\Entity\Customclient
+      inversedBy: operationproject
+  manyToMany:
+    bu:
+      targetEntity: Albatross\AceBundle\Entity\Bu
+      inversedBy: operationproject
+    country:
+      targetEntity: Albatross\AceBundle\Entity\Country
+      inversedBy: operationproject
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    fwsdate:
+      type: string
+      length: 20
+    fwedate:
+      type: string
+      length: 20
+    reportdate:
+      type: string
+      length: 20
+    survey_num:
+      type: bigint
+      nullable: true
+    assigned_num:
+      type: bigint
+      nullable: true
+    fw_num:
+      type: bigint
+      nullable: true
+    editing_num:
+      type: bigint
+      nullable: true
+    first_visit_date:
+      type: string
+      length: 20
+      nullable: true
+    last_visit_date:
+      type: string
+      length: 20
+      nullable: true
+    info_type:
+      type: bigint
+    modified_date:
+      type: string
+      length: 20
+    pm:
+      type: string
+      length: 64
+      nullable: true
+  lifecycleCallbacks: {}

@@ -1,0 +1,66 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Albatross IOF List
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/chosen.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/filelist.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/ioflist.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+{% endblock %}
+{% block content %}
+    <form action="{{ path('ioflist') }}" method="GET" id="searchBar" >
+        <table>
+            <tr>
+                <td>search By Client</td>
+                <td>{{form_widget(iofsearchForm.label)}}</td>
+                <td>Status</td>
+                <td>{{form_widget(iofsearchForm.status)}}</td>
+                <td>Bu</td>
+                <td>{{form_widget(iofsearchForm.bu)}}</td>
+            </tr>
+            <tr>
+                <td>Assigned to</td>
+                <td id="searchUser">{{form_widget(iofsearchForm.user)}}</td>
+                <td>Ace Name</td>
+                <td>{{form_widget(iofsearchForm.project)}}</td>
+                <td>Contract Number</td>
+                <td>{{form_widget(iofsearchForm.number)}}</td>
+            </tr>
+            <tr>
+                <td>Submitted Time</td>
+                <td colspan="3" class="submittime">{{form_widget(iofsearchForm.submit_from)}}&nbsp; to &nbsp;<span>{{form_widget(iofsearchForm.submit_to)}}</td>
+                <td colspan="2"><input type="submit" value="search" /></td>
+            </tr>
+        </table>
+    </form>
+    <div class="clear"></div>
+    <table id="other_file_list">
+        <thead>
+            <tr>
+                <th>File Label</th>
+                <th>Submit Date</th>
+                <th>Status</th>
+                <th>PM</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% for file in files %}
+                <tr>
+                    <td><a href="{{ path('viewiof', {'id':file['attachments']['id'], 'status':status[file['attachments']['status']]})}}">{{ file.label }}</a></td>
+                    <td>{{ file['attachments']['submitteddate'].date }}</td>
+                    <td>{{ status[file['attachments']['status']] }}</td>
+                    <td>{{ file['attachments']['user']['username'] }}</td>
+                </tr>
+    {% endfor %}
+        </tbody>
+        </table>
+{{ knp_pagination_render(files) }}
+<font style="font-style: italic; color: snow; background: #073640;">Total Count: {{ files.getTotalItemCount }}</font>
+{% endblock %}

@@ -1,0 +1,147 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Rules
+ *
+ * @ORM\Table(name="rules")
+ * @ORM\Entity
+ */
+class Rules
+{
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="state", type="boolean", nullable=false)
+     */
+    private $state;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="region", type="string", length=255, nullable=true)
+     */
+    private $region;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payrollCurr", type="string", length=255, nullable=true)
+     */
+    private $payrollcurr;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="survey_keyword", type="string", length=255, nullable=true)
+     */
+    private $surveyKeyword;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="billingRate", type="bigint", nullable=true)
+     */
+    private $billingrate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Bu
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Bu")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="bu_id", referencedColumnName="id")
+     * })
+     */
+    private $bu;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Survey", inversedBy="rules")
+     * @ORM\JoinTable(name="rules_survey",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="rules_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="survey_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $survey;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Status", inversedBy="rules")
+     * @ORM\JoinTable(name="rules_status",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="rules_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="status_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $status;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Country", inversedBy="rules")
+     * @ORM\JoinTable(name="rules_countries",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="rules_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $country;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Client", inversedBy="rules")
+     * @ORM\JoinTable(name="rules_clients",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="rules_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="client_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $client;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->survey = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->status = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->country = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->client = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

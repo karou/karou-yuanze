@@ -1,0 +1,26 @@
+{% block stylesheets %}
+    <link href="{{ asset('/css/menu.css') }}" rel="stylesheet" type="text/css" media="screen" />
+{% endblock %}
+<div id="menu_bar">
+    <ul>
+        {% for k,item in menu %}
+            {% if menu_cal_cur is defined and menu_cal_cur == k %}
+                <li class="menu_cal_cur">
+            {% else %}
+                <li class="menu_cal">
+            {% endif %}
+            <a href="{{ path(item.route) }}">{{ item.label }}</a>
+            {% if item.children is defined %}
+            <ul>
+                {% for child in item.children %}
+                <li>
+                    <a href="{{ path(child.route) }}">{{ child.label }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+<div class="clear"></div>

@@ -1,0 +1,167 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Operationproject
+ *
+ * @ORM\Table(name="operationproject")
+ * @ORM\Entity
+ */
+class Operationproject
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fwsdate", type="string", length=20, nullable=false)
+     */
+    private $fwsdate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fwedate", type="string", length=20, nullable=false)
+     */
+    private $fwedate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="reportdate", type="string", length=20, nullable=false)
+     */
+    private $reportdate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="survey_num", type="bigint", nullable=true)
+     */
+    private $surveyNum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="assigned_num", type="bigint", nullable=true)
+     */
+    private $assignedNum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="fw_num", type="bigint", nullable=true)
+     */
+    private $fwNum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="editing_num", type="bigint", nullable=true)
+     */
+    private $editingNum;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="first_visit_date", type="string", length=20, nullable=true)
+     */
+    private $firstVisitDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="last_visit_date", type="string", length=20, nullable=true)
+     */
+    private $lastVisitDate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="info_type", type="bigint", nullable=false)
+     */
+    private $infoType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="modified_date", type="string", length=20, nullable=false)
+     */
+    private $modifiedDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pm", type="string", length=64, nullable=true)
+     */
+    private $pm;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Customclient
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customclient")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customclient_id", referencedColumnName="id")
+     * })
+     */
+    private $customclient;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Project
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Project")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     * })
+     */
+    private $project;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Country", inversedBy="operationproject")
+     * @ORM\JoinTable(name="operationproject_country",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="operationproject_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $country;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Bu", inversedBy="operationproject")
+     * @ORM\JoinTable(name="operationproject_bu",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="operationproject_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="bu_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $bu;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->country = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bu = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

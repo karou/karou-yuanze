@@ -1,0 +1,93 @@
+/* 
+    Document   : form_box
+    Created on : Oct 29, 2013, 2:01:24 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#recap_box_title {
+    background: #2980b9;
+    font-size: 22px;
+    color: #FFF;
+    height: 37px;
+    text-align: center;
+}
+
+#recap_box {
+    font-size: 12px;
+    font-family: 'Calibri','arial';
+    position: fixed;
+    min-width: 300px;
+    min-height: 200px;
+    max-width: 700px;
+    max-height: 580px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    top: 2%;
+    
+    background: white;
+    border: 0 #2980b9 solid;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.recap_form_1 {
+    border-top: 1px #6595D6 dashed;
+    border-bottom: 1px #6595D6 dashed;
+    height: 30px;
+}
+
+.recap_form th{
+    background: #3498db;
+    height: 24px;
+}
+
+.recap_form tr td, .recap_form tr th{
+    border:1px #3498DB solid;
+}
+
+/*.recap_form_input {
+    float: left;
+}*/
+.recap_form {
+    margin-top: 5px;
+    float: left;
+}
+
+.recap_form_2 {
+    vertical-align: top;
+}
+
+.recap_form {
+    /*border:1px #7F7C77 solid;*/
+    border-collapse: collapse;
+    width: 100%;
+}
+
+#big_table tr td, #big_table tr th{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.recap_subtable_info input{
+    border: none;
+    margin: 0;
+    padding: 0;
+    height: 25px;
+    width: 100%;
+    background: none;
+}
+
+.recap_subtable_info {
+    background: #d0d2d0;
+}
+
+.recap_form td{
+    height: 25px;
+}

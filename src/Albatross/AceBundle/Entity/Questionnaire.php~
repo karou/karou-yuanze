@@ -1,0 +1,54 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Questionnaire
+ *
+ * @ORM\Table(name="questionnaire")
+ * @ORM\Entity
+ */
+class Questionnaire
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Customwave", inversedBy="questionnaire")
+     * @ORM\JoinTable(name="questionnaire_customwave",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="questionnaire_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="customwave_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $customwave;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->customwave = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

@@ -1,0 +1,49 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Poslist
+ *
+ * @ORM\Table(name="poslist")
+ * @ORM\Entity
+ */
+class Poslist
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="submittime", type="string", length=255, nullable=true)
+     */
+    private $submittime;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Customwave
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customwave")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customwave_id", referencedColumnName="id")
+     * })
+     */
+    private $customwave;
+
+
+}

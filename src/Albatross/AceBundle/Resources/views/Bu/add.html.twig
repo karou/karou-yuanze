@@ -1,0 +1,36 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block content -%}
+<h1>Add a new country to {{ entity.code }}</h1>
+
+<form action="{{ path('country_create', {id: entity.id}) }}" method="post" {{ form_enctype(form) }}>
+    <table>
+        <tr>
+            <td>{{ form_label(form.name) }}</td>
+            <td>{{ form_widget(form.name) }}</td>
+            <td>{{ form_errors(form.name) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form_label(form.code) }}</td>
+            <td>{{ form_widget(form.code) }}</td>
+            <td>{{ form_errors(form.code) }}</td>
+        </tr>
+
+        {{ form_widget(form._token) }}
+        <tr>
+            <td></td>
+            <td> <button type="submit">Add</button></td>
+            <td></td>
+        </tr>
+
+    </table>
+</form>
+
+<ul class="record_actions">
+    <li>
+        <a href="{{ path('bu') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\Ioffile" table="ioffile">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="label" type="string" column="label" length="255" nullable="true"/>
+    <field name="path" type="string" column="path" length="255" nullable="true"/>
+    <field name="formindex" type="bigint" column="formindex" nullable="false"/>
+    <field name="formindex2" type="string" column="formindex2" length="20" nullable="false"/>
+    <many-to-one field="iofmessage" target-entity="Iofmessage">
+      <join-columns>
+        <join-column name="iofmessage_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="attachments" target-entity="Attachments">
+      <join-columns>
+        <join-column name="attachments_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

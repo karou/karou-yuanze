@@ -1,0 +1,165 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Task
+ *
+ * @ORM\Table(name="task")
+ * @ORM\Entity
+ */
+class Task
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="project_id", type="bigint", nullable=true)
+     */
+    private $projectId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="group_id", type="bigint", nullable=true)
+     */
+    private $groupId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="resume", type="string", length=255, nullable=false)
+     */
+    private $resume;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="number", type="bigint", nullable=false)
+     */
+    private $number;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=255, nullable=false)
+     */
+    private $status;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="percentage_done", type="bigint", nullable=false)
+     */
+    private $percentageDone;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="actual_percentage_done", type="float", nullable=false)
+     */
+    private $actualPercentageDone;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_date", type="datetime", nullable=true)
+     */
+    private $createdDate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ace_id", type="bigint", nullable=false)
+     */
+    private $aceId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="task_type_id", type="bigint", nullable=true)
+     */
+    private $taskTypeId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="aol_percent", type="bigint", nullable=true)
+     */
+    private $aolPercent;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="status_id", type="bigint", nullable=false)
+     */
+    private $statusId;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="updated_aol", type="boolean", nullable=false)
+     */
+    private $updatedAol;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fw_start_date", type="string", length=255, nullable=true)
+     */
+    private $fwStartDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fw_end_date", type="string", length=255, nullable=true)
+     */
+    private $fwEndDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="report_due_date", type="string", length=255, nullable=true)
+     */
+    private $reportDueDate;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="scope", type="bigint", nullable=true)
+     */
+    private $scope;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pm", type="string", length=255, nullable=true)
+     */
+    private $pm;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="project_number", type="string", length=255, nullable=true)
+     */
+    private $projectNumber;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="updated", type="boolean", nullable=false)
+     */
+    private $updated;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+
+}

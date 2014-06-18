@@ -1,0 +1,114 @@
+/* 
+    Document   : homepage_style
+    Created on : Nov 5, 2013, 1:19:40 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#homepage_box {
+    height: 100%;
+    width: 100%;
+    border-collapse: collapse;
+}
+#homepage_box tr td{
+    height: 30%;
+    width: 30%;
+}
+
+.info_box div {
+    vertical-align: middle;
+}
+.info_box:hover {
+    background: #14a7c8;
+}
+
+.info_box_table td {
+    border: 1px #fff solid;
+    width: 33%;
+    height: 48%;
+}
+.info_box_table td:hover {
+    background: #B3DAF9;
+    cursor: pointer;
+}
+.count_number {
+    font-size: 28px;
+    color: #FF0033;
+    margin-bottom: 0px;
+}
+
+#show_info {
+    font-size: 14px;
+    overflow: auto;
+}
+
+#show_info table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#show_info table th{
+    height: 37px;
+    background: #2980B9;
+    font-size: 22px;
+    color: #fff;
+}
+#show_info table td{
+    border: 1px #13a0c0 dotted;
+}
+#close_button {
+    position: relative;
+    float: right;
+}
+#show_info table a{
+    text-decoration: none;
+    color: #000;
+    cursor: pointer;
+}
+#show_info table a:hover{
+    color: #2980B9;
+}
+.info-display-center {
+    text-align: center;
+}
+.info-display-color-title {
+    color: purple;
+    font-weight: bold;
+}
+.info-box-div {
+    height: 100%;
+}
+
+#main {
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+.info_box {
+    background: #13a0c0;
+    height: 240px;
+    width: 220px;
+    
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: 'Calibri','arial';
+    color: #fff;
+    
+    border: 2px #069 solid;
+    float: left;
+    margin-right: 5px;
+}
+
+.info_box_table {
+    font-size: 12px;
+    color: #000;
+    margin-top: 32px;
+    width: 100%;
+    height: 62%;
+}

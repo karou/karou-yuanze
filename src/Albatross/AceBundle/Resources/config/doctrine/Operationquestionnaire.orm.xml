@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\Operationquestionnaire" table="operationquestionnaire">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="fwsdate" type="string" column="fwsdate" length="20" nullable="true"/>
+    <field name="fwedate" type="string" column="fwedate" length="20" nullable="true"/>
+    <field name="reportdate" type="string" column="reportdate" length="20" nullable="true"/>
+    <field name="surveyNum" type="bigint" column="survey_num" nullable="false"/>
+    <field name="assignedNum" type="bigint" column="assigned_num" nullable="false"/>
+    <field name="fwNum" type="bigint" column="fw_num" nullable="false"/>
+    <field name="editingNum" type="bigint" column="editing_num" nullable="false"/>
+    <field name="firstVisitDate" type="string" column="first_visit_date" length="20" nullable="false"/>
+    <field name="lastVisitDate" type="string" column="last_visit_date" length="20" nullable="false"/>
+    <field name="infoType" type="integer" column="info_type" nullable="true"/>
+    <field name="modifiedDate" type="string" column="modified_date" length="20" nullable="false"/>
+    <field name="qid" type="integer" column="qid" nullable="true"/>
+    <field name="campid" type="integer" column="campid" nullable="true"/>
+    <field name="questionnaireName" type="string" column="questionnaire_name" length="255" nullable="true"/>
+    <many-to-one field="campaign" target-entity="Campaign">
+      <join-columns>
+        <join-column name="campaign_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="questionnaire" target-entity="Questionnaire">
+      <join-columns>
+        <join-column name="questionnaire_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="customclient" target-entity="Customclient" inversed-by="operationquestionnaire">
+      <join-table name="operationquestionnaire_customclient">
+        <join-columns>
+          <join-column name="operationquestionnaire_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="customclient_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="country" target-entity="Country" inversed-by="operationquestionnaire">
+      <join-table name="operationquestionnaire_country">
+        <join-columns>
+          <join-column name="operationquestionnaire_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="country_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="bu" target-entity="Bu" inversed-by="operationquestionnaire">
+      <join-table name="operationquestionnaire_bu">
+        <join-columns>
+          <join-column name="operationquestionnaire_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="bu_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

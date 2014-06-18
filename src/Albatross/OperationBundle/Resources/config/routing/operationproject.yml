@@ -1,0 +1,30 @@
+operationproject:
+    pattern:  /
+    defaults: { _controller: "AlbatrossOperationBundle:OperationProject:index" }
+
+operationproject_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossOperationBundle:OperationProject:show" }
+
+operationproject_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossOperationBundle:OperationProject:new" }
+
+operationproject_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossOperationBundle:OperationProject:create" }
+    requirements: { _method: post }
+
+operationproject_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "AlbatrossOperationBundle:OperationProject:edit" }
+
+operationproject_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossOperationBundle:OperationProject:update" }
+    requirements: { _method: post|put }
+
+operationproject_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossOperationBundle:OperationProject:delete" }
+    requirements: { _method: post|delete }

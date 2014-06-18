@@ -1,0 +1,179 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * User
+ *
+ * @ORM\Table(name="user")
+ * @ORM\Entity
+ */
+class User
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=64, nullable=false)
+     */
+    private $username;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=64, nullable=false)
+     */
+    private $password;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="email", type="string", length=255, nullable=false)
+     */
+    private $email;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="update_at", type="datetime", nullable=true)
+     */
+    private $updateAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pic", type="text", nullable=true)
+     */
+    private $pic;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="aol_username", type="string", length=64, nullable=true)
+     */
+    private $aolUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="aol_password", type="string", length=64, nullable=true)
+     */
+    private $aolPassword;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ace_username", type="string", length=64, nullable=true)
+     */
+    private $aceUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ace_password", type="string", length=64, nullable=true)
+     */
+    private $acePassword;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fullname", type="string", length=255, nullable=true)
+     */
+    private $fullname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="skype", type="string", length=255, nullable=true)
+     */
+    private $skype;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mobile", type="string", length=255, nullable=true)
+     */
+    private $mobile;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="office_phone", type="string", length=255, nullable=true)
+     */
+    private $officePhone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="office_address", type="string", length=255, nullable=true)
+     */
+    private $officeAddress;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="country", type="string", length=255, nullable=true)
+     */
+    private $country;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="crm_username", type="string", length=64, nullable=true)
+     */
+    private $crmUsername;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="crm_password", type="string", length=64, nullable=true)
+     */
+    private $crmPassword;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="bigint", nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="identity_id", type="bigint", nullable=true)
+     */
+    private $identityId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="position_id", type="bigint", nullable=true)
+     */
+    private $positionId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string", length=64, nullable=false)
+     */
+    private $status;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+
+}

@@ -1,0 +1,91 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Billing
+ *
+ * @ORM\Table(name="billing")
+ * @ORM\Entity
+ */
+class Billing
+{
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="billing_rate", type="float", nullable=false)
+     */
+    private $billingRate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="billing_curr", type="string", length=255, nullable=false)
+     */
+    private $billingCurr;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="pay_rate", type="float", nullable=true)
+     */
+    private $payRate;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="precalc_billing_items_sum", type="float", nullable=false)
+     */
+    private $precalcBillingItemsSum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="precalc_billing_items_count", type="smallint", nullable=false)
+     */
+    private $precalcBillingItemsCount;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="precalc_payroll_items_sum", type="float", nullable=false)
+     */
+    private $precalcPayrollItemsSum;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="precalc_payroll_items_count", type="smallint", nullable=false)
+     */
+    private $precalcPayrollItemsCount;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="payroll_curr", type="string", length=255, nullable=false)
+     */
+    private $payrollCurr;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Aolsurvey
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Aolsurvey")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="aolsurvey_id", referencedColumnName="id")
+     * })
+     */
+    private $aolsurvey;
+
+
+}

@@ -1,0 +1,15 @@
+/* 
+    Document   : new_edit_style
+    Created on : Oct 22, 2013, 5:48:46 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#create_edit_client_table {
+    font-family: 'calibri','arial';
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\Task" table="task">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="projectId" type="bigint" column="project_id" nullable="true"/>
+    <field name="groupId" type="bigint" column="group_id" nullable="true"/>
+    <field name="resume" type="string" column="resume" length="255" nullable="false"/>
+    <field name="number" type="bigint" column="number" nullable="false"/>
+    <field name="status" type="string" column="status" length="255" nullable="false"/>
+    <field name="percentageDone" type="bigint" column="percentage_done" nullable="false"/>
+    <field name="actualPercentageDone" type="float" column="actual_percentage_done" nullable="false"/>
+    <field name="createdDate" type="datetime" column="created_date" nullable="true"/>
+    <field name="aceId" type="bigint" column="ace_id" nullable="false"/>
+    <field name="taskTypeId" type="bigint" column="task_type_id" nullable="true"/>
+    <field name="aolPercent" type="bigint" column="aol_percent" nullable="true"/>
+    <field name="statusId" type="bigint" column="status_id" nullable="false"/>
+    <field name="updatedAol" type="boolean" column="updated_aol" nullable="false"/>
+    <field name="fwStartDate" type="string" column="fw_start_date" length="255" nullable="true"/>
+    <field name="fwEndDate" type="string" column="fw_end_date" length="255" nullable="true"/>
+    <field name="reportDueDate" type="string" column="report_due_date" length="255" nullable="true"/>
+    <field name="scope" type="bigint" column="scope" nullable="true"/>
+    <field name="pm" type="string" column="pm" length="255" nullable="true"/>
+    <field name="projectNumber" type="string" column="project_number" length="255" nullable="true"/>
+    <field name="updated" type="boolean" column="updated" nullable="false"/>
+  </entity>
+</doctrine-mapping>

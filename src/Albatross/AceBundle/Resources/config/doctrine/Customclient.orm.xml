@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\Customclient" table="customclient">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="255" nullable="false"/>
+    <field name="logo" type="string" column="logo" length="255" nullable="true"/>
+    <many-to-one field="clientgroup" target-entity="Clientgroup">
+      <join-columns>
+        <join-column name="clientgroup_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="operationquestionnaire" target-entity="Operationquestionnaire" mapped-by="customclient"/>
+  </entity>
+</doctrine-mapping>

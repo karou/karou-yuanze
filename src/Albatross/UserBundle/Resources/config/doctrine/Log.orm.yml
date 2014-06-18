@@ -1,0 +1,29 @@
+# src/Albatross/UserBundle/Resources/config/doctrine/Log.orm.yml
+
+Albatross\UserBundle\Entity\Log:
+  type: entity
+  table: log
+  manyToOne:
+    bu:
+      targetEntity: Albatross\AceBundle\Entity\Bu
+      inversedBy: log
+      nullable: true
+    user:
+      targetEntity: User
+      inversedBy: log
+      nullable: false
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    number_page:
+      type: integer
+      nullable: true
+    number_action:
+      type: integer
+      nullable: true
+    date_time:
+      type: datetime
+      nullable: true
+  lifecycleCallbacks: {}

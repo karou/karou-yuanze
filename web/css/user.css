@@ -1,0 +1,94 @@
+/* 
+    Document   : user
+    Created on : Aug 6, 2013, 12:13:56 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+.user_info_table {
+    width: 100%;
+    
+    border-collapse: collapse;
+    
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+}
+.user_info_table tr th, .user_info_table tr td {
+    /*border: 1px #7F7C77 solid;*/
+}
+#user_info_pic {
+    width: 75px;
+    height: 75px;
+    float: left;
+    cursor: pointer;
+    margin-right: 20px;
+    border: 3px #fff solid;
+}
+#user_info_name {
+    float: left;
+    min-width: 300px;
+}
+#fullname {
+    font-size: 22px;
+}
+.user_field {
+    width: 100%;
+}
+.user_field th, .user_field td{
+    text-align: left;
+}
+.user_field th{
+    width:20%;
+    font-size: 13px;
+}
+.user_field td{
+    width:30%;
+}
+
+.user_info_legend{
+    font-size: 16px;
+    color: #6595d6;
+    font-weight: bold;
+}
+#user_action {
+    margin-right: 2px;
+    float:right;
+}
+#password_edit_box {
+    position: fixed; 
+    left:0px; 
+    top:0px; 
+    background: rgba(160,160,160,0.6)!important; 
+    height:100%; width:100%;
+    text-align: center;
+    color: cornsilk;
+    font-family: 'Trebuchet MS','arial';
+    font-size: 25px;
+    font-weight: bold;
+    
+    text-align: center;
+}
+
+#password_form {
+    position: fixed;
+    width: 30%;
+    height: 30%;
+    background: #6595D6;
+    top: 35%;
+    left: 35%;
+    padding: 20px;
+    border: 2px #fff solid;
+    border-radius: 3px;
+    
+    font-size: 14px;
+}
+
+#password_form table {
+    width: 100%;
+    height: 100%;
+}

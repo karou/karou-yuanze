@@ -1,0 +1,199 @@
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    });
+    function checkzone(){
+        if($('#albatross_custombundle_customfieldtype_report_executive').attr('checked')){
+            $('#report_zone_tr').hide();
+        }else{
+            $('#report_zone_tr').show();
+        }
+    }
+    function checkMainBrief(){
+        if($('#albatross_custombundle_customfieldtype_main_brief').attr('checked')){
+            $('#brief_translation_tr').hide();
+        }else{
+            $('#brief_translation_tr').show();
+        }
+    }
+    function showCountry() {
+        $('#country_select_report').show();
+        $('#country_button_show_report').hide();
+        $('#country_button_hide_report').show();
+    }
+    function hideCountry() {
+        $('#country_select_report').hide();
+        $('#country_button_show_report').show();
+        $('#country_button_hide_report').hide();
+        $('#area_name').hide();
+    }
+    function cancelfieldform() {
+        $('#fieldform_box').fadeOut();
+        $('#fieldform input').each(function() {
+            if ($(this).attr('type') !== 'button' && $(this).attr('type') !== 'submit') {
+                if($(this).attr('type') === 'checkbox'){
+                    $(this).attr('checked', false);
+                }else{
+                    $(this).val('');
+                }
+            }
+        });
+        $('#fieldform select').each(function() {
+            $(this).val('');
+        });
+        $('#wave_name').html('');
+        hideCountry();
+        $('#fieldform_box tr td ul').html('');
+        $('#big_table font').remove();
+        $('#form_index').val('');
+    }
+    </script>
+{% endblock %}
+    <div id="fieldform_box" style="display: none;">
+        <form id="fieldform" method="post" enctype="multipart/form-data">
+            <table style="width:100%;" id="big_table"  cellspacing="0px" cellpadding="0px">
+                <tr>
+                    <th colspan="3" style="font-size: 22px; text-align: center" id="fieldform_title"><span id="fieldform_title_span"></span><span id="close_button" title="close" onclick="cancelfieldform();" style=" position: absolute; right:0;"><img src="{{ asset('/images/close.png')}}" height="30px" width="30px" style="margin-right: 5px;"></span></th>
+                </tr>
+                <tr>
+                    <th>Project Name</th>
+                    <td colspan="2">{{ projname }}</td>
+                </tr>
+                <tr>
+                    <th>Wave Name</th>
+                    <td colspan="2" id="wave_name_field"></td>
+                </tr>
+                <tr>
+                    <th>Submit Time</th>
+                    <td colspan="2" id="submit_time_field"></td>
+                </tr>
+                <tr>
+                    <th>Submit User</th>
+                    <td colspan="2" id="submit_user_field"></td>
+                </tr>
+                {{ form_widget(fieldform.customwave, {attr: {'style': 'display:none'}}) }}
+                <tr id="fileupload_tr">
+                    <th><span style="color:red">*</span>{{ form_label(fieldform.file)}}</th>
+                    <td>
+{{ form_widget(fieldform.file, {attr: {'style': 'display:none','onchange' : "$('#albatross_custombundle_customfieldtype_path').val($(this).val());"}}) }}
+{{ form_widget(fieldform.path, {attr: {'onclick' : "$('#albatross_custombundle_customfieldtype_file').click()"}}) }}
+<input type="button" id="file_upload_browse_button" value="Browse" onclick="$('#albatross_custombundle_customfieldtype_file').click();">
+                        </td>
+                    <td class="question_form dic_form">FILE LABEL: {{ form_widget(fieldform.question_file1_label)}}</td>
+                    </tr>
+                    <!--start report-->
+                    <tr id="country_select_report" style="display:none">
+                        <th>{{ form_label(fieldform.country) }}</th>
+                        <td colspan="2">{{ form_widget(fieldform.country) }}</td>
+                    </tr>
+                    <tr id="show_country_button_report" class="report_form dic_form">
+                        <th></th>
+                        <td colspan="2"><input id="country_button_show_report" type="button" onclick="showCountry();" value="Specify Country">
+                            <input id="country_button_hide_report" type="button" onclick="hideCountry();" value="Hide Country" style="display:none"></td>
+                    </tr>
+                    <tr class="report_form">
+                        <th>{{ form_label(fieldform.report_type) }}</th>
+                        <td>{{ form_widget(fieldform.report_type) }}</td>
+                    </tr>
+                    <tr class="report_form">
+                        <th>{{ form_label(fieldform.report_executive) }}</th>
+                        <td>{{ form_widget(fieldform.report_executive, {attr:{'onclick':'checkzone();'}}) }}</td>
+                    </tr>
+                    <tr class="report_form" id="report_zone_tr">
+                        <th>{{ form_label(fieldform.report_zone) }}</th>
+                        <td>{{ form_widget(fieldform.report_zone) }}</td>
+                    </tr>
+                    <!--end report-->   
+                    <!--start brief-->
+                    <tr class="brief_form">
+                        <th>{{ form_label(fieldform.main_brief) }}</th>
+                        <td>{{ form_widget(fieldform.main_brief, {attr:{'onclick':'checkMainBrief();'}}) }}</td>
+                    </tr>
+                    <tr class="brief_form" id="brief_translation_tr">
+                        <th>{{ form_label(fieldform.brief_translation) }}</th>
+                        <td>{{ form_widget(fieldform.brief_translation) }}</td>
+                    </tr>
+                    </div>
+                    <!--end brief-->
+                    <!--start material-->
+                    <tr class="material_form">
+                        <th><span style="color:red">*</span>{{ form_label(fieldform.material_name) }}</th>
+                        <td>{{ form_widget(fieldform.material_name) }}</td>
+                    </tr>
+                    <!--end material-->
+                    <!--start mm-->
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Brand</th>
+                        <td>{{ form_widget(fieldform.mm_brand) }}</td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Date</th>
+                        <td>{{ form_widget(fieldform.mm_date) }}</td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Attendees</th>
+                        <td>
+                            <ul class="tags3" data-prototype="{{ form_widget(fieldform.attendees.vars.prototype)|e }}"></ul>
+                        </td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Address</th>
+                        <td>{{ form_widget(fieldform.mm_address) }}</td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Purpose</th>
+                        <td>{{ form_widget(fieldform.mm_purpose) }}</td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Next Step</th>
+                        <td>{{ form_widget(fieldform.mm_nextstep) }}</td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Agenda of the meeting</th>
+                        <td>{{ form_widget(fieldform.mm_agenda_of_the_meeting) }}</td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Clients Feedback</th>
+                        <td>{{ form_widget(fieldform.mm_clients_feedback) }}</td>
+                    </tr>
+                    <tr class="mm_form">
+                        <th><span style="color:red">*</span>Comments</th>
+                        <td>{{ form_widget(fieldform.mm_comments) }}</td>
+                    </tr>
+                    <!--end mm-->
+                    <!--start question-->
+                <tr class="question_form">
+                    <th>{{ form_label(fieldform.file_2)}}</th>
+                    <td>
+{{ form_widget(fieldform.file_2, {attr: {'style': 'display:none','onchange' : "$('#albatross_custombundle_customfieldtype_path_2').val($(this).val());"}}) }}
+{{ form_widget(fieldform.path_2, {attr: {'onclick' : "$('#albatross_custombundle_customfieldtype_file_2').click()"}}) }}
+<input type="button" value="Browse" onclick="$('#albatross_custombundle_customfieldtype_file_2').click();">
+                        </td>
+                        <td>FILE LABEL: {{ form_widget(fieldform.question_file2_label)}}</td>
+                    </tr>
+                <tr class="question_form">
+                    <th>{{ form_label(fieldform.file_3)}}</th>
+                    <td>
+{{ form_widget(fieldform.file_3, {attr: {'style': 'display:none','onchange' : "$('#albatross_custombundle_customfieldtype_path_3').val($(this).val());"}}) }}
+{{ form_widget(fieldform.path_3, {attr: {'onclick' : "$('#albatross_custombundle_customfieldtype_file_3').click()"}}) }}
+<input type="button" value="Browse" onclick="$('#albatross_custombundle_customfieldtype_file_3').click();">
+                        </td>
+                        <td>FILE LABEL: {{ form_widget(fieldform.question_file3_label)}}</td>
+                    </tr>
+                <tr class="question_form">
+                    <th>{{ form_label(fieldform.file_4)}}</th>
+                    <td>
+{{ form_widget(fieldform.file_4, {attr: {'style': 'display:none','onchange' : "$('#albatross_custombundle_customfieldtype_path_4').val($(this).val());"}}) }}
+{{ form_widget(fieldform.path_4, {attr: {'onclick' : "$('#albatross_custombundle_customfieldtype_file_4').click()"}}) }}
+<input type="button" value="Browse" onclick="$('#albatross_custombundle_customfieldtype_file_4').click();">
+                        </td>
+                        <td>FILE LABEL: {{ form_widget(fieldform.question_file4_label)}}</td>
+                    </tr>
+                    <!--end question-->
+                    <tr class="button_tr">
+                        <td></td>
+                        <td colspan="2"><input type="button" value="Submit" id="submit_recap" onclick="validation();" /></td>
+                    </tr>
+                </table>
+            </form>
+        </div>

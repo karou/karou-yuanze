@@ -1,0 +1,189 @@
+/* 
+    Document   : header.css
+    Created on : Jun 11, 2013, 12:00:07 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+/*header*/
+header {
+    margin-bottom: 10px;
+}
+
+img { border: none; }
+
+.font_type {
+    font-size: 12px;
+    font-family: 'Trebuchet MS','arial';
+}
+
+.gray_font {
+    color: rgb( 150, 150, 150);
+}
+#logo {
+    float:left;
+}
+
+#page_title {
+    width: 300px;
+    height: 125px;
+    
+    float: left;
+    margin-left: 120px;
+    
+    color: rgb(179, 218, 249);
+    line-height: 57px;
+    font-family: 'Trebuchet MS','Times New Roman';
+    font-size: 46px;
+    font-weight: bold;
+    text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.35);
+}
+#title_left {
+    float:left;
+}
+#title_right {
+    float:right;
+}
+
+#anon_box {
+    font-weight: bold;
+    
+    margin-right: 50px;
+    
+    line-height: 50px;
+    
+    height: 30px;
+    float: right;
+}
+#anon_box a {
+    color: rgb( 150, 150, 150);
+}
+#anon_box a:hover {
+    color: red;
+}
+
+#uinfo_box {
+    width: 320px;
+    height: 85px;
+    
+    margin-top: 20px;
+    
+    border: 2px rgb(199, 196, 190) solid;
+    border-radius: 5px;
+    float: right;
+    
+    background: rgb(179, 218, 249);
+}
+#user_pic {
+    margin-top: 4px;
+    margin-right: 4px;
+    float: right;
+    
+    border: 1px rgb(100, 100, 100) solid;
+    border-radius: 3px;
+}
+#uinfo_box a {
+    text-decoration: none;
+}
+
+#uinfo_box ul {
+    width: 230px;
+    height: 75px;
+    margin-top: 5px;
+    margin-left: 5px;
+    float:left;
+}
+#uinfo_box ul li {
+    height: 37px;
+}
+
+#role_botton {
+    background: rgb( 127, 124, 119 );
+    
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    
+    line-height: 30px;
+    
+    width: 116px;
+    height: 30px;
+    
+    margin-top: 1px;
+    margin-left: 2px;
+    
+    border: 1px rgb(100, 100, 100) solid;
+    border-radius: 3px;
+    
+    float: left;
+}
+
+#user_name {
+    font-weight: bold;
+    width: 100px;
+    height: 25px;
+    
+    float: left;
+    
+    text-align: center;
+    line-height: 30px;
+}
+.link_button {
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    line-height: 25px;
+    color: black;
+    padding: 0px;
+    margin: 0px;
+    width: 140px;
+    height: 25px;
+}
+
+#aol_button, #ace_button, #login_button {
+    width: 142px;
+    height: 27px;
+}
+
+#aol_button, #ace_button, #login_button, .link_button {
+    margin-top: 5px;
+    
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+    cursor: pointer;
+    
+    background: #B3DAF9;
+    border: 1px #B3DAF9 solid;
+    border-radius: 4px 0 0 4px;
+    color: #000;
+    float: right;
+}
+
+#aol_button:hover, #ace_button:hover, .link_button:hover, #login_button:hover {
+    background: #3875D7;
+    border: 1px #3875D7 solid;
+    color: #FFF;
+    font-weight: bold;
+}
+
+#logout_btn {
+    float: right;
+    
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+root { 
+    display: block;
+}
+
+#link_box {
+    position: fixed;
+    right: 0%;
+    top: 30%;
+    
+    width: 150px;
+    
+    padding-left: 10px;
+    padding-bottom: 5px;
+}

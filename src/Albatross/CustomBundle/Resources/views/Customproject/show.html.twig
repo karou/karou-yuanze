@@ -1,0 +1,1008 @@
+{% extends 'AlbatrossUserBundle:Default:layout_big.html.twig' %}
+{% block title %}
+Project Show
+{% endblock %}
+{% block stylesheets %}
+<link href="{{ asset('/css/custom_project_show.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/screen.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/chosen_v2.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/projectshow_iof.js')}}"></script>
+<script src="{{ asset('js/ckeditor/ckeditor.js')}}"></script>
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script src="{{ asset('js/validation.js')}}"></script>
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.chz_recap_country').chosen({width: "100%"});
+        $('#big_table th').css('text-align', 'left');
+        $('.wave_name').mouseleave(function(){
+            $(this).children('div:.action-box').hide();
+            $(this).children('div:.action-box').css('display', 'none');
+        });
+        $('.wave_name').mouseover(function(){
+            $(this).children('div:.action-box').show();
+            $(this).children('div:.action-box').css('display', 'block');
+        });
+    });
+    function closeOption(){
+        $('#left-fixed-option-show-hide').hide();
+        $('#left-fixed-option').animate({width:'20px'}, "normal", "swing", function(){
+            $('#close-img').attr('id','open-img');
+            $('#open-img').attr('onclick','openOption();');
+        });
+    }
+    function openOption(){
+        $('#left-fixed-option').animate({width:'137px'}, "normal", "swing", function(){
+            $('#left-fixed-option-show-hide').show();
+            $('#open-img').attr('id','close-img');
+            $('#close-img').attr('onclick','closeOption();');
+        });
+    }
+    function recapGetAolquestionnaire(wid){
+        $('#aolquestionnaire').html('<img src="{{ asset('/images/loading_bar.gif')}}">');
+        var data =  wid;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('recapGetAolquestionnaire') }}",
+            data: data,
+            success: function(result) {
+                $('#aolquestionnaire').html(result);
+            }});
+    }
+
+    function recapGetCountry(wid){
+        $('#recap_country').html('<img src="{{ asset('/images/loading_bar.gif')}}">');
+        var data =  wid;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('recapGetCountry') }}",
+            data: data,
+            success: function(result) {
+                $('#recap_country').html(result);
+            }});
+    }
+
+    function showRacapBox(wid, wn) {
+        cancel();
+        recapGetAolquestionnaire(wid);
+        recapGetCountry(wid);
+        //set form index as recap
+        $('#form_index').val('recap');
+        
+        $('#albatross_custombundle_recaptype_customwave').val(wid);
+        $('#wave_name').html(wn);
+        $('#show_country_button').show();
+        $('#submit_recap').show();
+        // Get the ul that holds the collection of tags
+        var collectionHolder = $('ul.tags');
+        var collectionHolder2 = $('ul.tags2');
+
+        // setup an "add a tag" link
+        var $addTagLink = $('<a href="#" class="add_tag_link">Add a Scenario</a>');
+        var $addTagLink2 = $('<a href="#" class="add_tag_link">Add a Scenario</a>');
+        var $newLinkLi = $('<li></li>').append($addTagLink);
+        var $newLinkLi2 = $('<li></li>').append($addTagLink2);
+        // add the "add a tag" anchor and li to the tags ul
+        collectionHolder.append($newLinkLi);
+        collectionHolder2.append($newLinkLi2);
+        $('#recap_box').fadeIn();
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        collectionHolder.data('index', collectionHolder.find(':input').length);
+        collectionHolder2.data('index', collectionHolder.find(':input').length);
+
+        //default add one Scenario
+        addTagForm(collectionHolder, $newLinkLi);
+        addTagForm(collectionHolder2, $newLinkLi2);
+        
+        scenarioStyle();
+        
+        $addTagLink.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm(collectionHolder, $newLinkLi);
+            scenarioStyle();
+        });
+        $addTagLink2.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm(collectionHolder2, $newLinkLi2);
+            scenarioStyle();
+        });
+    }
+
+    function addTagForm(collectionHolder, $newLinkLi) {
+        // Get the data-prototype explained earlier
+        var prototype = collectionHolder.data('prototype');
+
+        // get the new index
+        var index = collectionHolder.data('index');
+
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+
+        // increase the index with one for the next item
+        collectionHolder.data('index', index + 1);
+
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<li></li>').append(newForm);
+        $newLinkLi.before($newFormLi);
+
+        addTagFormDeleteLink($newFormLi);
+    }
+
+    function showInput() {
+        $('.scenarios').remove();
+        $('#submit_time').html('');
+        $('#albatross_custombundle_recaptype_country').show();
+        $('#albatross_custombundle_recaptype_planned_pos').show();
+        $('#albatross_custombundle_recaptype_planned_surveys').show();
+        $('#albatross_custombundle_recaptype_actual_pos').show();
+        $('#albatross_custombundle_recaptype_actual_surveys').show();
+        $('#albatross_custombundle_recaptype_actual_misfire').show();
+        $('#albatross_custombundle_recaptype_actual_invalid').show();
+        $('#albatross_custombundle_recaptype_infomations_new_pos_in_Wave').show();
+        $('#albatross_custombundle_recaptype_infomations_delete_pos_in_Wave').show();
+        $('#albatross_custombundle_recaptype_infomations_invalids_to_be_invoiced').show();
+        $('#albatross_custombundle_recaptype_infomations_misfires_to_be_invoiced').show();
+        $('#albatross_custombundle_recaptype_infomations_purchases_made').show();
+        $('#albatross_custombundle_recaptype_name').show();
+
+        $('#albatross_custombundle_recaptype_name').next('span').html('');
+        $('#albatross_custombundle_recaptype_country').next('span').html('');
+        $('#albatross_custombundle_recaptype_planned_pos').next('span').html('');
+        $('#albatross_custombundle_recaptype_planned_surveys').next('span').html('');
+        $('#albatross_custombundle_recaptype_actual_pos').next('span').html('');
+        $('#albatross_custombundle_recaptype_actual_surveys').next('span').html('');
+        $('#albatross_custombundle_recaptype_actual_misfire').next('span').html('');
+        $('#albatross_custombundle_recaptype_actual_invalid').next('span').html('');
+        $('#albatross_custombundle_recaptype_infomations_new_pos_in_Wave').next('span').html('');
+        $('#albatross_custombundle_recaptype_infomations_delete_pos_in_Wave').next('span').html('');
+        $('#albatross_custombundle_recaptype_infomations_invalids_to_be_invoiced').next('span').html('');
+        $('#albatross_custombundle_recaptype_infomations_misfires_to_be_invoiced').next('span').html('');
+        $('#albatross_custombundle_recaptype_infomations_purchases_made').next('span').html('');
+    }
+
+    function recapInfo(c, pp, ps, ap, as, am, ai, iin, id, ii, im, ip, wn, submittime, user, planned, actual, name) {
+        tab1 = JSON.parse(decodeURIComponent(planned.replace(/\+/g, '%20')));
+        tab2 = JSON.parse(decodeURIComponent(actual.replace(/\+/g, '%20')));
+
+        $('#submit_recap').hide();
+        $('#country_select').show();
+        $('.scenarios').remove();
+        $('#albatross_custombundle_recaptype_country').hide();
+        $('#albatross_custombundle_recaptype_planned_pos').hide();
+        $('#albatross_custombundle_recaptype_planned_surveys').hide();
+        $('#albatross_custombundle_recaptype_actual_pos').hide();
+        $('#albatross_custombundle_recaptype_actual_surveys').hide();
+        $('#albatross_custombundle_recaptype_actual_misfire').hide();
+        $('#albatross_custombundle_recaptype_actual_invalid').hide();
+        $('#albatross_custombundle_recaptype_name').hide();
+        $('#albatross_custombundle_recaptype_infomations_new_pos_in_Wave').hide();
+        $('#albatross_custombundle_recaptype_infomations_delete_pos_in_Wave').hide();
+        $('#albatross_custombundle_recaptype_infomations_invalids_to_be_invoiced').hide();
+        $('#albatross_custombundle_recaptype_infomations_misfires_to_be_invoiced').hide();
+        $('#albatross_custombundle_recaptype_infomations_purchases_made').hide();
+
+        $('#albatross_custombundle_recaptype_name').after('<span>' + name + '</span>');
+        $('#recap_country').html('<span>' + c + '</span>');
+        $('#albatross_custombundle_recaptype_planned_pos').after('<span>' + pp + '</span>');
+        $('#albatross_custombundle_recaptype_planned_surveys').after('<span>' + ps + '</span>');
+        $('#albatross_custombundle_recaptype_actual_pos').after('<span>' + ap + '</span>');
+        $('#planned-scenarios').hide();
+        $('#actual-scenarios').hide();
+        for (i in tab1)
+            $('#planned-scenarios').before('<tr class="scenarios"><td>' + tab1[i]['name'] + '</td><td>' + tab1[i]['value'] + '</td></tr>');
+        for (i in tab2)
+            $('#actual-scenarios').before('<tr class="scenarios"><td>' + tab2[i]['name'] + '</td><td>' + tab2[i]['value'] + '</td></tr>');
+        $('#albatross_custombundle_recaptype_actual_surveys').after('<span>' + as + '</span>');
+        $('#albatross_custombundle_recaptype_actual_misfire').after('<span>' + am + '</span>');
+        $('#albatross_custombundle_recaptype_actual_invalid').after('<span>' + ai + '</span>');
+        $('#albatross_custombundle_recaptype_infomations_new_pos_in_Wave').after('<span>' + iin + '</span>');
+        $('#albatross_custombundle_recaptype_infomations_delete_pos_in_Wave').after('<span>' + id + '</span>');
+        $('#albatross_custombundle_recaptype_infomations_invalids_to_be_invoiced').after('<span>' + ii + '</span>');
+        $('#albatross_custombundle_recaptype_infomations_misfires_to_be_invoiced').after('<span>' + im + '</span>');
+        $('#albatross_custombundle_recaptype_infomations_purchases_made').after('<span>' + ip + '</span>');
+        $('#wave_name').html(wn);
+        $('#submit_time').html(submittime);
+        $('#submit_user').html(user);
+
+        $('#recap_box').fadeIn();
+    }
+
+    function showMMBox(wid, wn) {
+        cancelfieldform();
+        //set form index as mm
+        $('#form_index').val('mm');
+        
+        $('#fieldform_title_span').html('Meeting Minutes');
+        $('#fileupload_tr').hide();
+        $('#albatross_custombundle_customfieldtype_customwave').val(wid);
+        $('#wave_name_field').html(wn);
+        $('.brief_form').hide();
+        $('.material_form').hide();
+        $('.report_form').hide();
+        $('.question_form').hide();
+        $('.mm_form').show();
+        $('#fieldform_box').fadeIn();
+        $('#fieldform').attr('action', '{{ path('saveField') }}/mm');
+        // Get the ul that holds the collection of tags
+
+        var collectionHolder3 = $('ul.tags3');
+
+        // setup an "add a tag" link
+        var $addTagLink3 = $('<a href="#" class="add_tag_link_mm">Add Attendees</a>');
+        var $newLinkLi3 = $('<li></li>').append($addTagLink3);
+        // add the "add a tag" anchor and li to the tags ul
+        collectionHolder3.append($newLinkLi3);
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        collectionHolder3.data('index', collectionHolder3.find(':input').length);
+
+        $addTagLink3.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // add a new tag form (see next code block)
+            addTagForm(collectionHolder3, $newLinkLi3);
+        });
+    }
+
+    function addTagFormDeleteLink($tagFormLi) {
+        var $removeFormA = $('<a href="#">delete this tag</a>');
+        $tagFormLi.append($removeFormA);
+
+        $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // remove the li for the tag form
+            $tagFormLi.remove();
+        });
+    }
+
+    function showReportBox(wid, wn) {
+        cancelfieldform();
+        $('#form_index').val('report');
+        $('#fieldform_title_span').html('REPORT');
+        $('#albatross_custombundle_customfieldtype_customwave').val(wid);
+        $('#wave_name_field').html(wn);
+        $('#fileupload_tr').show();
+        $('.brief_form').hide();
+        $('.material_form').hide();
+        $('.mm_form').hide();
+        $('.question_form').hide();
+        $('.report_form').show();
+        $('#fieldform_box').fadeIn();
+        $('#fieldform').attr('action', '{{ path('saveField') }}/report');
+    }
+
+    function showDicBox(wid, wn) {
+        cancelfieldform();
+        $('#form_index').val('dic');
+        $('#fieldform_title_span').html('DIC');
+        $('#albatross_custombundle_customfieldtype_customwave').val(wid);
+        $('#wave_name_field').html(wn);
+        $('#fileupload_tr').show();
+        $('.brief_form').hide();
+        $('.material_form').hide();
+        $('.mm_form').hide();
+        $('.question_form').hide();
+        $('.report_form').hide();
+        $('.dic_form').show();
+        $('#fieldform_box').fadeIn();
+        $('#fieldform').attr('action', '{{ path('saveField') }}/dic');
+    }
+
+    function showBriefBox(wid, wn) {
+        cancelfieldform();
+        $('#form_index').val('brief');
+        $('#fieldform_title_span').html('SPE Brief');
+        $('#albatross_custombundle_customfieldtype_customwave').val(wid);
+        $('#wave_name_field').html(wn);
+        $('#fileupload_tr').show();
+        $('.report_form').hide();
+        $('.material_form').hide();
+        $('.mm_form').hide();
+        $('.question_form').hide();
+        $('.brief_form').show();
+        $('#fieldform_box').fadeIn();
+        $('#fieldform').attr('action', '{{ path('saveField') }}/brief');
+    }
+
+    function showMaterialBox(wid, wn) {
+        cancelfieldform();
+        //set form index as material
+        $('#form_index').val('material');
+        $('#fieldform_title_span').html('Brand Material');
+        $('#albatross_custombundle_customfieldtype_customwave').val(wid);
+        $('#wave_name_field').html(wn);
+        $('#fileupload_tr').show();
+        $('.brief_form').hide();
+        $('.report_form').hide();
+        $('.mm_form').hide();
+        $('.question_form').hide();
+        $('.material_form').show();
+        $('#fieldform_box').fadeIn();
+        $('#fieldform').attr('action', '{{ path('saveField') }}/material');
+    }
+
+    function showQuestionnaireBox(wid, wn) {
+        cancelfieldform();
+        $('#form_index').val('questionnaire');
+        $('#fieldform_title_span').html('Questionnaire');
+        $('#albatross_custombundle_customfieldtype_customwave').val(wid);
+        $('#wave_name_field').html(wn);
+        $('#fileupload_tr').show();
+        $('.brief_form').hide();
+        $('.report_form').hide();
+        $('.mm_form').hide();
+        $('.material_form').hide();
+        $('.question_form').show();
+        $('#fieldform_box').fadeIn();
+        $('#fieldform').attr('action', '{{ path('saveField') }}/questionnaire');
+    }
+
+    function getFieldInfoByAjax(id, type) {
+        var data = id + ':' + type;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('getFieldInfo') }}",
+            data: data,
+            success: function(result) {
+                $('#field_info').html(result);
+                $('#field_info').fadeIn(result);
+            }});
+    }
+
+    function getFieldQuestionnaireInfoByAjax(id, type, step) {
+        var data = id + ':' + type;
+        $.ajax({
+            type: "POST",
+            url: "{{ path('getFieldInfo') }}",
+            data: data,
+            success: function(result) {
+                $('#field_info').html(result);
+                if (step === '3') {
+                    $('#signature_input').html('<input id="signature_value" type="text"><br/><select id="question_choosen"><option value="1">For Upload</option><option value="2">For Cloning</option></select><input type="button" value="sign" onclick="setQuestionSign(' + id + ',' + step + ')">');
+                } else if (step === '7') {
+                    $('#signature_input').html('All Confirm Done');
+                } else if (step === '4') {
+                    $('#signature_input').html('<input id="signature_value" type="text">');
+                    $('#signature_tr').after('<tr><th>Aol Questionnaire</th><td><input class="aol_questionnaire" type="text"></br><input onclick="addAolQuest(this);" value="Add" type="button"></td></tr>');
+                    $('#cancel_button_quest').before('<input type="button" value="Submit" onclick="setQuestionSign2(' + id + ',' + step + ')">');
+                } else if (step === '1'){
+                    $('#signature_input').html('<input id="signature_value" style="color:gray;" type="text" value="on hold" readonly="readonly"><input type="button" value="sign" onclick="setQuestionSign(' + id + ',' + step + ')">');
+                } else {
+                    $('#signature_input').html('<input id="signature_value" type="text"><input type="button" value="sign" onclick="setQuestionSign(' + id + ',' + step + ')">');
+                }
+                $('#field_info').fadeIn();
+            }});
+    }
+
+    function setQuestionSign(id, step) {
+        $('#form_index').val('questionsign');
+        var validate = validation();
+        if(validate === 1){
+            $('#window-cover').show();
+            var value = $('#signature_value').val();
+            var choosen = $('#question_choosen').val();
+            $('#signature_value').val('');
+            if (step == '3') {
+                var data = id + ':' + step + ':' + value + ':' + choosen;
+            } else {
+                var data = id + ':' + step + ':' + value;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('setQuestionSign') }}",
+                data: data,
+                success: function(result) {
+                    location.reload();
+                }});
+        }
+    }
+
+    function setQuestionSign2(id, step) {
+        $('#form_index').val('questionsign2');
+        var validate = validation();
+        if(validate === 1){
+            $('#window-cover').show();
+            var value = $('#signature_value').val();
+            var aolquest = '';
+            $('.aol_questionnaire').each(function(){
+                aolquest = aolquest + $(this).val() + '&&';
+            });
+            var data = id + '***' + step + '***' + value + '***' + aolquest;
+            $.ajax({
+                type: "POST",
+                url: "{{ path('setQuestionSign2') }}",
+                data: data,
+                success: function() {
+                    location.reload();
+                }});
+        }
+    }
+
+    function closedFieldInfo() {
+        $('#field_info').fadeOut();
+        $('#field_info').html('');
+    }
+
+    function uploadPos(wid) {
+        $('#window-cover').show();
+        $.ajax({
+            type: "POST",
+            url: "{{ path('poslist_upload') }}/"+wid,
+            success: function(result) {
+                $('#window-cover').hide();
+                $('#poslist_upload').html(result);
+                $('#poslist_upload').show();
+            }});
+    }
+
+    function showFileUploadFormProject(wid) {
+        $.ajax({
+            type: "POST",
+            url: "{{ path('iofupload') }}/"+wid,
+            success: function(result) {
+                $('#iof_upload').html(result);
+                $('#iof_upload').show();
+            }});
+    }
+
+    function showInfo(obj){
+        $(obj).parent().children('ul').show();
+    }
+
+    function cancelUl(){
+        $('.info_list').hide();
+    }
+
+    function showWaveAdd(){
+        $('#window-cover').show();
+        $.ajax({
+            type: "POST",
+            url: "{{ path('customwave_new') }}",
+            success: function(result) {
+                $('#wave_control_box').html(result);
+                $('#albatross_custombundle_customwavetype_customproject').val({{entity.id}});
+                $('#albatross_custombundle_customwavetype_customclient').val({{entity.customclient.id}});
+                $('#albatross_custombundle_customwavetype_projectname').val($('#albatross_custombundle_customwavetype_customproject').find("option:selected").text());
+
+                $('#wave_control_box').fadeIn();
+                $('#window-cover').hide();
+                $('#wave_control_box').animate({maxHeight:"90%"});
+            }});
+    }
+
+    function cancelWave(){
+        $('#wave_control_box').animate({maxHeight:"0px"}, "slow", "linear", function(){$('#wave_control_box').hide();});
+    }
+
+    function showWaveInfo(id){
+        $('#window-cover').show();
+        $.ajax({
+            type: "POST",
+            url: "{{ path('customwave_show') }}/"+id,
+            success: function(result) {
+                $('#wave_control_box').html(result);
+                $('#window-cover').hide();
+                $('#wave_control_box').fadeIn();
+                $('#wave_control_box').animate({maxHeight:"90%"});
+            }});
+    }
+
+    function addAolQuest(e){
+        $(e).before('<input class="aol_questionnaire" type="text"><br/>');
+    }
+
+    function showposlist(id){
+        $('#window-cover').show();
+        var path = $('#dowloadPos').attr('action') + '/' + id;
+        $('#dowloadPos').attr('action', path);
+        $.ajax({
+            type: "POST",
+            data: id,
+            url: "{{ path('showposlist') }}",
+            success: function(result) {
+                $('#window-cover').hide();
+                $('#poslist_show_box').html(result);
+                $('#poslist_show_box_container').fadeIn();
+            }});
+    }
+
+    function cancelPoslist(){
+        $('#poslist_show_box_container').fadeOut();
+    }
+
+    function cancelWaveshow(){
+        $('#wave_control_box').animate({maxHeight:"0px"}, "slow", "linear", function(){$('#wave_control_box').hide();});
+    }
+    function editWave(id){
+        $('#window-cover').show();
+        $('#wave_control_box').animate({maxHeight:"0px"}, "slow", "linear", function(){$('#wave_control_box').hide();});
+        $.ajax({
+            type: "POST",
+            url: "{{ path('customwave_edit') }}/"+id,
+            success: function(result) {
+                $('#wave_control_box').html(result);
+                $('#window-cover').hide();
+                $('#wave_control_box').fadeIn();
+                $('#wave_control_box').animate({maxHeight:"90%"});
+            }});
+    }
+    function deleteWave(id,name){
+        $('#window-cover').show();
+        var result = confirm("Are you sure to DELETE the Wave? Name: "+name);
+        if(result){
+            $.ajax({
+                type: "POST",
+                url: "{{ path('customwave_delete') }}/"+id,
+                success: function(result) {
+                    if(result === 'confirm'){
+                        var confirmvar = confirm("This wave had bind ACE project. Are you sure to DELETE ? ");
+                        if(confirmvar){
+                            deleteConfirmWave(id);
+                        }else{
+                            $('#window-cover').hide();
+                            return false;
+                        }
+                    }else if(result === 'success'){
+                        location.reload();
+                    }else{
+                        alert('failed.');
+                        $('#window-cover').hide();
+                    }
+                }});
+        }else{
+            $('#window-cover').hide();
+            return false;
+        }
+    }
+    function deleteConfirmWave(id){
+        $('#window-cover').show();
+            $.ajax({
+                type: "POST",
+                url: "{{ path('customwave_confirm_delete') }}/"+id,
+                success: function(result) {
+                    if(result === 'success'){
+                        location.reload();
+                    }else{
+                        alert('failed.');
+                        $('#window-cover').hide();
+                    }
+                }});
+    }
+    </script>
+{% endblock %}
+{% block content -%}
+    <div id="project_header">
+        <img width="150" height="150" src="{{ asset(entity.customclient.getWebPath) }}" style="float: left;" />
+        <img width="150" height="150" src="{{ asset('images/project/type_'~entity.type~".png") }}" style="float: left;" />
+        <img width="150" height="150" src="{{ asset('images/project/scope_'~entity.scope~".png") }}" style="float: left;" />
+    </div>
+
+{% for wave in entity.customwave %}
+<table class="project_show_table" id="{{wave.id}}-table">
+<thead>
+    <tr class="title_line_1">
+        <td class="wave_name" style="padding-left: 10px; cursor: pointer;">
+            <font style="font-weight:bold;">{{ wavename[wave.id][0] }}</font>
+            {% if wave.bis != null%}
+                <font style="font-style: italic; font-size: 12px; color: snow;">(bis)</font>
+            {%endif%}
+            {% if wave.totalnum != null %}<br/>
+                (Total:{{wave.totalnum}})
+            {% endif %}
+            <br />
+            {{ wavename[wave.id][1] }}
+            <div class="action-box">
+                <input type="button" value="Show" onclick="showWaveInfo('{{ wave.id }}');" />
+                <input type="button" value="Edit" onclick="editWave('{{ wave.id }}');" />
+                <input type="button" value="Delete" onclick="deleteWave('{{ wave.id }}', '{{ wave.name }}');" />
+            </div>
+        </td>
+        <th>MM</th>
+        <th>Brand Material</th>
+        <th>Contract</th>
+        <th>Deposit</th>
+        <th>Questionnaire</th>
+        <th>POS list</th>
+        <th>SPE Brief</th>
+        {% if not is_granted('ROLE_TYPE_CLIENT') %}
+        <th>IOF</th>
+        <th>FW recap</th>
+        <th>DIC</th>
+        {% endif %}
+        <th>Report</th>
+        <th>Balance</th>
+        <th>GANTT CHART</th>
+    </tr>
+</thead>
+<tbody>
+<tr class="information_line_1">
+<td></td>
+<td class="wave-options">
+{% set mm = 0 %}
+<ul class="info_list" >
+{% for r in wave.customfield %}
+<li>
+{% if r.fieldtype == 'mm' %}
+{% set mm = 1 %}
+<span onclick="getFieldInfoByAjax('{{r.id}}', 'mm');" class="info_node">{{ r.mmpurpose }}</span>
+{% endif %}
+</li>
+{% endfor %}
+<input value="Cancel" onclick="cancelUl();" type="button" >
+</ul>
+{% if mm == 1 %}
+<img style="float:left;" onclick="showInfo(this);" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% endif %}
+{% if not is_granted('ROLE_TYPE_CLIENT') %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}" onclick="showMMBox('{{wave.id}}', '{{ wave.name }}');" />
+{% endif %}
+</td>
+<td class="wave-options">
+{% set mateKey = 0 %}
+<ul class="info_list">
+{% for r in wave.customfield %}
+<li>
+{% if r.fieldtype == 'material' %}
+{% set mateKey = 1 %}
+<span onclick="getFieldInfoByAjax('{{r.id}}', 'material');" class="info_node">{{ material[r.materialname] }}</span>
+{% endif %}
+</li>
+{% endfor %}
+<input value="Cancel" onclick="cancelUl();" type="button" >
+</ul>
+{% if mateKey == 1 %}
+<img style="float:left;" onclick="showInfo(this);" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% endif %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}" onclick="showMaterialBox('{{wave.id}}', '{{ wave.name }}');" />
+</td>
+<td class="wave-options"></td>
+<td class="wave-options"></td>
+<td class="wave-options">
+{% set questionKey = 0 %}
+<ul class="info_list">
+{% set hasquestion = 0 %}
+{% for r in wave.customfield %}
+<li>
+{% if r.fieldtype == 'questionnaire' %}
+{% set questionKey = 1 %}
+{% set hasquestion = 1 %}
+<span onclick="getFieldQuestionnaireInfoByAjax('{{r.id}}', 'questionnaire', '{{r.questionstatus}}');" class="info_node">
+{% if r.questionstatus == 4 %}
+{% if r.choosentype == 1 %}
+{{ qstep[8] }}
+{% elseif r.choosentype == 2 %}
+{{ qstep[9] }}
+{% endif %}
+{% else %}
+{{ qstep[r.questionstatus] }}
+{% endif %}
+</span>
+{% endif %}
+</li>
+{% endfor %}
+<input value="Cancel" onclick="cancelUl();" type="button" >
+</ul>
+{% if questionKey == 1 %}
+<img style="float:left;" onclick="showInfo(this);" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% for r in wave.customfield %}
+    {% if r.fieldtype == 'questionnaire' %}
+        {% if r.questionstatus == 4 %}
+            <span class="abbr_questionnaire">U</span>
+        {% elseif r.questionstatus == 1 %}
+            <span class="abbr_questionnaire">C</span>
+        {% elseif r.questionstatus == 2 %}
+            <span class="abbr_questionnaire">PM</span>
+        {% elseif r.questionstatus == 3 %}
+            <span class="abbr_questionnaire">P</span>
+        {% elseif r.questionstatus == 5 %}
+            <span class="abbr_questionnaire">QC</span>
+        {% elseif r.questionstatus == 6 %}
+            <span class="abbr_questionnaire">T</span>
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% endif %}
+{% if hasquestion == 0 %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}" onclick="showQuestionnaireBox('{{wave.id}}', '{{ wave.name }}');" />
+{% endif %}
+{% set hasquestion = 0 %}
+</td>
+<td class="wave-options">
+{% if wave.poslist != null %}
+<img style="float:left;" onclick="showposlist('{{wave.id}}');" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% else %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}" onclick="uploadPos('{{wave.id}}');">
+{% endif %}
+</td>
+<td class="wave-options">{% set briefKey = 0 %}
+<ul class="info_list">
+{% for r in wave.customfield %}
+<li>
+{% if r.fieldtype == 'brief' %}
+{% set briefKey = 1 %}
+{% if r.mainbrief == 1 %}
+<span class="info_node" onclick="getFieldInfoByAjax('{{r.id}}', 'brief');">Main Brief</span>
+{% else %}
+<span class="info_node" onclick="getFieldInfoByAjax('{{r.id}}', 'brief');">{{ language[r.brieftranslation] }} Translation</span>
+{% endif %}
+{% endif %}
+</li>
+{% endfor %}
+<input value="Cancel" onclick="cancelUl();" type="button" >
+</ul>
+{% if briefKey == 1 %}
+<img style="float:left;" onclick="showInfo(this);" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% endif %}
+{% if not is_granted('ROLE_TYPE_CLIENT') %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}"  onclick="showBriefBox('{{wave.id}}', '{{ wave.name }}');" />
+{% endif %}
+</td>
+{% if not is_granted('ROLE_TYPE_CLIENT') %}
+<td class="wave-options">
+{% if wave.attachments.id is defined%}<a href="{{ path('viewiof', {'id': lastIOF[wave.id]['id'], 'status':lastIOF[wave.id]['status']})}}">
+<img style="float:left;" id="mm_dataset" class="data_button" src="{{asset('images/dataset.png')}}"/></a>
+{% else %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}" onclick="showFileUploadFormProject('{{wave.id}}');" />
+{% endif %}
+</td>
+<td class="recap_td wave-options">
+{% set recapKey = 0 %}
+<ul class="info_list">
+{% set country_specify = 1 %}
+{% for r in wave.recap %}
+{% set country_specify = 0 %}
+{% set country_name = ' ' %}
+<li>{% set recapKey = 1 %}
+{% if r.country is defined %}
+{%for c in r.country%}
+{% set country_specify = 1 %}
+{% set country_name = country_name ~ c.name %}
+{% endfor %}
+{% endif %}
+<span  class="info_node" title="{{country_name}}" onclick="recapInfo('{{country_name}}', '{{r.planned.pos}}', '{{r.planned.surveys}}', '{{r.actual.pos}}', '{{r.actual.surveys}}', '{{r.actual.misfire}}', '{{r.actual.invalid}}', '{{r.infomations.newposinwave}}', '{{r.infomations.deleteposinwave}}', '{{r.infomations.invalidstobeinvoiced}}', '{{r.infomations.misfirestobeinvoiced}}', '{{r.infomations.purchasesmade}}', '{{ wave.name }}', '{{r.submittime}}', '{{r.user.username}}', '{{r.planned.scenarios|url_encode()}}', ' {{r.actual.scenarios|url_encode()}}', ' {{r.name|url_encode()}}');">{{r.name}}</span>
+</li>
+{% endfor %}
+<input value="Cancel" onclick="cancelUl();" type="button" >
+</ul>
+{% if recapKey == 1%}
+<img style="float:left;" onclick="showInfo(this);" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% endif %}
+{% if country_specify == 1 %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}" onclick="showRacapBox('{{wave.id}}', '{{ wave.name }}');" />
+{% endif %}
+</td>
+<td class="wave-options">{% set dicKey = 0 %}
+<ul class="info_list">
+{% for r in wave.customfield %}
+<li>
+{% if r.fieldtype == 'dic' %}{% set dicKey = 1 %}
+<span class="info_node" onclick="getFieldInfoByAjax('{{r.id}}', 'dic');" >{{r.questionfile1label}}</span>
+{% endif %}
+</li>
+{% endfor %}
+<input value="Cancel" onclick="cancelUl();"  type="button">
+</ul>
+{% if dicKey == 1 %}
+<img style="float:left;" onclick="showInfo(this);" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% endif %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}"  onclick="showDicBox('{{wave.id}}', '{{ wave.name }}');" />
+</td>
+{% endif %}
+<td class="wave-options">{% set reportKey = 0 %}
+<ul class="info_list">
+{% for r in wave.customfield %}
+<li>
+{% if r.fieldtype == 'report' %}{% set reportKey = 1 %}
+{% if r.reportexecutive == 1 %}
+<span class="info_node" onclick="getFieldInfoByAjax('{{r.id}}', 'report');" >Executive</span>
+{% else %}
+<span class="info_node" onclick="getFieldInfoByAjax('{{r.id}}', 'report');" >{{r.reportzone}}</span>
+{% endif %}
+{% endif %}
+</li>
+{% endfor %}
+<input value="Cancel" onclick="cancelUl();" type="button">
+</ul>
+{% if reportKey == 1 %}
+<img style="float:left;" onclick="showInfo(this);" class="data_button" src="{{asset('images/dataset.png')}}"/>
+{% endif %}
+{% if not is_granted('ROLE_TYPE_CLIENT') %}
+<img style="float:right;" class="add_button" src="{{ asset('images/add.png') }}" onclick="showReportBox('{{wave.id}}', '{{ wave.name }}');" />
+{% endif %}
+</td>
+<td class="wave-options"></td>
+<td class="wave-options">
+<a href="{{ path('getGantChart', {'id':wave.id}) }}" target="_blank">
+<img class="data_button" src="{{ asset('/images/gantt.png') }}"/>
+</a>
+</td>
+</tr>
+<tr class="title_line_2">
+    <td class="operation_title">Operations
+    </td>
+    <th>ACE name
+    </th>
+    <th>ACE number
+    </th>
+    <th>Step ACE/PM/IOF
+    </th>
+    <th>No surveys ACE/PM/IOF
+    </th>
+    <th>FW start
+    </th>
+    <th>FW end
+    </th>
+    <th>AOL name
+    </th>
+    <th>AOL campaign
+    </th>
+    <th>No surveys AOL
+    </th>
+    <th>% assigned
+    </th>
+    <th>% FW done
+    </th>
+    <th>% editing done
+    </th>
+    <th>Report delivery
+    </th>
+</tr>
+{% if operation[wave.id] is defined %}
+{% for bu,info in operation[wave.id] %}
+<tr class="information_line_2">
+    <td title="{{bu}}">{{ bu }}
+    </td>
+    {% if info['ace'] != '' %}
+    {% set projname = '' %}
+    {% set projnametitle = '' %}
+    {% for pname,aceinfo in info['ace']%}
+            {% set projname = projname ~ pname ~'<br/>'%}
+            {% set projnametitle = projnametitle ~ pname ~'&#10;'%}
+    {% endfor %}
+    <td title="{{projnametitle|raw}}">
+        {{projname|raw}}
+    </td>
+    {% set acenumtitle = '' %}
+    {% set acenum = '' %}
+    {% for pname,aceinfo in info['ace']%}
+            {% set acenumtitle = acenumtitle ~ aceinfo['number'] ~'&#10;'%}
+            {% set acenum = acenum ~ aceinfo['number'] ~'<br/>'%}
+    {% endfor %}
+    <td title="{{acenumtitle|raw}}">
+            {{acenum|raw}}
+    </td>
+    <td>
+        {% for pname,aceinfo in info['ace']%}
+            {{aceinfo['step']}}<br/>
+        {% endfor %}
+    </td>
+    <td>
+        {% for pname,aceinfo in info['ace']%}
+            {{aceinfo['scope']}}<br/>
+        {% endfor %}
+    </td>
+    <td>
+        {% for pname,aceinfo in info['ace']%}
+            {{aceinfo['fwstartdate']}}<br/>
+        {% endfor %}
+    </td>
+    <td>
+        {% for pname,aceinfo in info['ace']%}
+            {{aceinfo['fwenddate']}}<br/>
+        {% endfor %}
+    </td>
+    {% else %}
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    {% endif %}
+    {% if info['aol'] != '' %}
+    
+    {% set surveynametitle = '' %}
+    {% set surveyname = '' %}
+    {% for aolname in info['aol']['aolname']%}
+            {% set surveynametitle = surveynametitle ~ aolname ~'&#10;'%}
+            {% set surveyname = surveyname ~ aolname ~'<br/>'%}
+    {% endfor %}
+    <td class="absolute-div" title="{{surveynametitle|raw}}">
+        {{surveyname|raw}}
+    </td>
+    {% set campaignname = '' %}
+    {% set campaignnametitle = '' %}
+        {% for campaign in info['aol']['campaign']%}
+            {% set campaignnametitle = campaignnametitle ~ campaign ~'&#10;'%}
+            {% set campaignname = campaignname ~ campaign ~'<br/>'%}
+        {% endfor %}
+    <td class="absolute-div" title="{{campaignnametitle|raw}}">
+        {{campaignname|raw}}
+    </td>
+    <td>{{info['aol']['total']}}
+    </td>
+    <td>{{info['aol']['assignPercent']}}
+    </td>
+    <td>{{info['aol']['fwdonePercent']}}
+    </td>
+    <td>{{info['aol']['validationPercent']}}
+    </td>
+    {% else %}
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    {% endif %}
+    <td>{% if info['ace'] != '' %}
+        {% for pname,aceinfo in info['ace']%}
+            {{aceinfo['reportduedate']}}<br/>
+        {% endfor %}
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+{% else %}
+    <td class="empty_value"></td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+    <td class="empty_value">empty</td>
+{% endif %}
+</tbody>
+</table>
+{% endfor %}
+<!-- field form start -->
+{{ render(controller('AlbatrossCustomBundle:Customproject:recapform', {'projName': entity.name })) }}
+{{ render(controller('AlbatrossCustomBundle:Customproject:fieldform', {'projName': entity.name })) }}
+<!-- field form end -->
+
+<div id="left-fixed-option">
+        <div id="open-img" onclick="openOption();" style="float:right; height: 10px; width: 10px"></div>
+    <div id="left-fixed-option-show-hide">
+        {% if not is_granted('ROLE_TYPE_CLIENT') %}
+        <input type="button" value="Add Wave" onclick="showWaveAdd();" class="button" style="margin-top:10px; margin-left: 5px; width: 122px;"></br>
+        {% endif %}
+        <input type="button" value="<< Back to the list" onclick="location.href='{{ path('customproject') }}';" class="button" style="margin-top: 5px; margin-left: 5px; margin-bottom: 10px;">
+        <div style="overflow-y: scroll;">
+        {{waveNameList|raw}}
+        </div>
+    </div>
+</div>
+<table id="field_info" style="display:none;"></table>
+<div id="poslist_upload" style="display:none;"></div>
+<div id="iof_upload" style="display:none;"></div>
+<div id="wave_control_box" style="display:none;"></div>
+<div id="window-cover" style="display: none;"><image id="loading_2" src="{{ asset('images/ajax_loader.gif') }}" width="140px" height="140px"></div>
+<div id="poslist_show_box_container" style="display: none;">
+    <form id="dowloadPos" action="{{ path('downloadPOS')}}">
+        <input type="submit" value="download"/>
+    </form>
+    <span id="close_button" title="close" onclick="cancelPoslist();"><img src="{{ asset('/images/close.png')}}" height="30px" width="30px"></span><div class="clear_both"></div><div id="poslist_show_box"></div></div>
+<input id="form_index" style="display: none;" type="text">
+{% endblock %}

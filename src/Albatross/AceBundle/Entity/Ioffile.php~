@@ -1,0 +1,73 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Ioffile
+ *
+ * @ORM\Table(name="ioffile")
+ * @ORM\Entity
+ */
+class Ioffile
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="label", type="string", length=255, nullable=true)
+     */
+    private $label;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="formindex", type="bigint", nullable=false)
+     */
+    private $formindex;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="formindex2", type="string", length=20, nullable=false)
+     */
+    private $formindex2;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Iofmessage
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Iofmessage")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="iofmessage_id", referencedColumnName="id")
+     * })
+     */
+    private $iofmessage;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Attachments
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Attachments")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="attachments_id", referencedColumnName="id")
+     * })
+     */
+    private $attachments;
+
+
+}

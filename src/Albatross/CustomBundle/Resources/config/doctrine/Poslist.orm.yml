@@ -1,0 +1,27 @@
+Albatross\CustomBundle\Entity\Poslist:
+  type: entity
+  table: poslist
+  oneToOne:
+    customwave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+      inversedBy: poslist
+  oneToMany:
+    poslistdata:
+      targetEntity: Poslistdata
+      mappedBy: poslist
+      cascade: ["remove"]
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    path:
+      type: string
+      length: 255
+      nullable: true
+    submittime:
+      type: string
+      length: 255
+      nullable: true
+  lifecycleCallbacks: {}

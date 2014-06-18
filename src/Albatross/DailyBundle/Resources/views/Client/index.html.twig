@@ -1,0 +1,79 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Albatross Client List
+{% endblock %}
+{% block stylesheets %}
+<link href="{{ asset('/css/client.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+
+{% block content -%}
+<script type="text/javascript">
+    $(function() {
+       
+        $("#syncClient").click(function saveSurvey() {
+            var key = getKey1();
+            $("#load_window").show();
+            $.ajax({
+                type: "POST",
+                data: key,
+                url: "{{ path('syncSurvey') }}",
+                success: function(result) {
+                    var obj = JSON.parse(result);
+                    if(obj.key !== 'stop'){
+                        $("#loading").css("width", obj.percent);
+                        $("#tmp").val(obj.key);
+                        saveSurvey();
+                    }else{
+                        $('#loadingtext').text('Complete.');
+                        window.setTimeout(function() {
+                            $("#load_window").hide();
+                        }, 3000);
+                        $("#tmp").val(0);
+                    }
+                }
+            });
+        });
+    });
+    
+    function getKey1(){
+        var key = $("#tmp").val();
+        return key;
+    }
+</script>
+<div id="load_window" style="display:none"> <!-- LOADING -->
+    <!--progress bar start-->
+    <div id='progressbar'><div id='loading' style="width:0px;"></div></div>
+    <!--progress bar end-->
+    <div id="loadingtext">loading... ...</div>
+</div>
+<div id="form_box">
+    <form action="{{ path('syncClientList') }}" method="POST">
+        <input type="submit" value="Sync Client List" class="sync_client">
+    </form>
+    <form action="{{ path('syncSurvey') }}" method="POST">
+        <input type="button" value="Sync Survey" class="sync_client" id="syncClient">
+    </form>
+</div>
+<input id="tmp" style="display:inline; height:24px; width:20px;" type="text" value="0">
+<table id="client_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Client Name</th>
+            <th>Aol Id</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entity in entities %}
+        <tr>
+            <td>{{ entity.id }}</td>
+            <td>{{ entity.clientName }}</td>
+            <td>{{ entity.aolId }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{{ knp_pagination_render(entities) }}
+    {% endblock %}

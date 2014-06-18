@@ -1,0 +1,439 @@
+{% extends 'AlbatrossUserBundle:Default:layout_big.html.twig' %}
+{% block stylesheets %}
+<link href="{{ asset('/css/forecast.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/chosen_v1.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block title %}
+Forecast List
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.user_choose').chosen({width: "80%"});
+        
+        $('#albatross_acebundle_forecastsearchtype_fw_s_f').datepicker();
+        $('#albatross_acebundle_forecastsearchtype_fw_s_t').datepicker();
+        $('#albatross_acebundle_forecastsearchtype_fw_e_f').datepicker();
+        $('#albatross_acebundle_forecastsearchtype_fw_e_t').datepicker();
+        $('#albatross_acebundle_forecastsearchtype_due_f').datepicker();
+        $('#albatross_acebundle_forecastsearchtype_due_t').datepicker();
+        $('#albatross_acebundle_forecastsearchtype_update_f').datepicker();
+        $('#albatross_acebundle_forecastsearchtype_update_t').datepicker();
+        
+       for(i =0; i<21; i++){
+            var wid = $('#forecastList tr:eq(2) td:eq('+i+')').width();
+            
+            {% if lastYearScope != '' %}
+                $('#table_tail_1 td:eq('+i+')').css('min-width', wid);
+                $('#table_tail_1 td:eq('+i+')').css('max-width', wid);
+                $('#table_tail_2 td:eq('+i+')').css('min-width', wid);
+                $('#table_tail_2 td:eq('+i+')').css('max-width', wid);
+            {% else %}
+                $('#table_tail td:eq('+i+')').css('min-width', wid);
+                $('#table_tail td:eq('+i+')').css('max-width', wid);
+            {% endif %}
+                $('#table_header th:eq('+ i +')').css('min-width', wid);
+                $('#table_header th:eq('+ i +')').css('max-width', wid);
+        }
+        calcTotal();
+        $('#table_header').show();
+        $('#table_tail').fadeIn();
+
+        $(window.document).scroll(function(){
+            if($(window.document).scrollTop() > '288'){
+              $('#table_header').css('position', 'fixed');
+              $('#table_header').css('top', '0');
+            }
+            if($(window.document).scrollTop() < '288'){
+              $('#table_header').css('position', 'static');
+            }
+        });
+
+    });
+
+    function calcTotal() {
+        var scope = 0;
+        var filterScope = 0;
+        $(".scope_num").each(function() {
+            if((/^CI-.*|^.*-CI-.*/).test($(this).parent().children('td:first').html())){
+                filterScope = filterScope + parseInt($(this).html());
+            }else{
+                scope = scope + parseInt($(this).html());
+            }
+        });
+        $('#num_8').html(scope+"<br/><span class='filter-gray'>"+filterScope+"</span>");
+        for (i = 0; i <= 11; i++) {
+            var total = 0;
+            var filterScope = 0;
+            $(".forecast_" + i).each(function() {
+                if((/^CI-.*|^.*-CI-.*/).test($(this).parent().children('td:first').html())){
+                    filterScope = filterScope + parseInt($(this).html());
+                }else{
+                    total = total + parseInt($(this).html());
+                }
+            });
+
+            var num = i + 9;
+            $("#num_" + num).html(total+"<br/><span class='filter-gray'>"+filterScope+"</span>");
+        }
+        {% if lastYearScope != '' %}
+            {% for k,lastyear in lastYearScope %}
+                $("#lastYearNum_" + {{k}}).html({{lastyear}});
+            {% endfor %}
+        {% endif %}
+    }
+
+    function show_edit_box(pid, pname, bu, contract, step, tid, fs, fe, due, scope, pm, reporttype) {
+        var x = $('#' + pid + '_' + bu).offset().top;
+        var y = $('#' + pid + '_' + bu).offset().left;
+
+        $('#albatross_acebundle_forecasttype_reportduedate').val('');
+        $('#albatross_acebundle_forecasttype_reportduetext').val('');
+        
+        $('#forecast_edit_project_name').html(pname);
+        $('#albatross_acebundle_forecasttype_project').val(pid);
+        $('#albatross_acebundle_forecasttype_task').val(tid);
+
+        $('#albatross_acebundle_forecasttype_pm').val(pm);
+        $('#albatross_acebundle_forecasttype_fwstartdate').val(fs);
+        $('#albatross_acebundle_forecasttype_fwenddate').val(fe);
+        $('#albatross_acebundle_forecasttype_scope').val(scope);
+
+        $('#forecast_edit_project_bu').html(bu);
+        $('#albatross_acebundle_forecasttype_bu').val(bu);
+
+        $('#forecast_edit_project_contract').html(contract);
+
+        $('#forecast_edit_project_step').html(step);
+
+        $('#forecast_edit_form_box').css({"position": "absolute", "top": x, "left": y});
+        if( reporttype === 'date' ){
+            $('#albatross_acebundle_forecasttype_reportduedate').css('display', '');
+            $('#albatross_acebundle_forecasttype_reportduedate').css('background', '#E77E23');
+            $('#albatross_acebundle_forecasttype_reportduedate').removeAttr('disabled');
+            $('#albatross_acebundle_forecasttype_reportduedate').val(due);
+            
+            $('#albatross_acebundle_forecasttype_reporttype').val('0');
+        }else if( reporttype === 'text'){
+            $('#albatross_acebundle_forecasttype_reportduetext').css('display', '');
+            $('#albatross_acebundle_forecasttype_reportduetext').css('background', '#27AE61');
+            $('#albatross_acebundle_forecasttype_reportduetext').removeAttr('disabled');
+            $('#albatross_acebundle_forecasttype_reportduetext').val(due);
+            
+            $('#albatross_acebundle_forecasttype_reporttype').val('1');
+        }
+        $('#forecast_edit_form_box').fadeIn();
+        bindCalender();
+    }
+
+    function bindCalender() {
+        $('#albatross_acebundle_forecasttype_fwstartdate').datepicker();
+        $('#albatross_acebundle_forecasttype_fwenddate').datepicker();
+        $('#albatross_acebundle_forecasttype_reportduedate').datepicker();
+    }
+
+    function box_cancel() {
+        $('#forecast_edit_form_box').fadeOut();
+
+        $('#forecast_edit_project_name').html('');
+        $('#albatross_acebundle_forecasttype_project').val('');
+
+        $('#forecast_edit_project_bu').html('');
+        $('#albatross_acebundle_forecasttype_bu').val('');
+
+        $('#forecast_edit_project_contract').html('');
+
+        $('#forecast_edit_project_step').html('');
+        //report due type attr
+        $('#albatross_acebundle_forecasttype_reportduetext').css('display', 'none');
+        $('#albatross_acebundle_forecasttype_reportduetext').css('background', '');
+        $('#albatross_acebundle_forecasttype_reportduetext').attr('disabled', 'disabled');
+        $('#albatross_acebundle_forecasttype_reportduetext').val('');
+        $('#albatross_acebundle_forecasttype_reportduedate').css('display', 'none');
+        $('#albatross_acebundle_forecasttype_reportduedate').css('background', '');
+        $('#albatross_acebundle_forecasttype_reportduedate').attr('disabled', 'disabled');
+        $('#albatross_acebundle_forecasttype_reportduedate').val('');
+        $('#albatross_acebundle_forecasttype_reporttype').val('0');
+    }
+
+    function clearSearchBar() {
+        $('#searchBar input').each(function() {
+            if ($(this).attr('type') == 'text') {
+                $(this).val('');
+            }
+        });
+        $('#searchBar select').each(function() {
+            $(this).val('');
+        });
+    }
+
+    function monthFilter(month) {
+        $('#albatross_acebundle_forecastsearchtype_f_month').val(month);
+        $('#searchBar').submit();
+    }
+
+    function totalwidth() {
+        var tablex = $('#forecastList').offset().top;
+        var i = 0;
+        $('#forecastList tr th').each(function() {
+            if (i == 1) {
+
+            }
+            $('#total_num td:eq(' + i + ')').css('width', $(this).width());
+            i++;
+        });
+    }
+    
+    function changeReportDueType(){
+        if($('#albatross_acebundle_forecasttype_reporttype').val() == '0'){
+            $('#albatross_acebundle_forecasttype_reportduetext').css('display', '');
+            $('#albatross_acebundle_forecasttype_reportduetext').css('background', '#27AE61');
+            $('#albatross_acebundle_forecasttype_reportduetext').removeAttr('disabled');
+            
+            $('#albatross_acebundle_forecasttype_reportduedate').css('display', 'none');
+            $('#albatross_acebundle_forecasttype_reportduedate').css('background', '');
+            $('#albatross_acebundle_forecasttype_reportduedate').attr('disabled', 'disabled');
+            
+            $('#albatross_acebundle_forecasttype_reporttype').val('1');
+        }else{
+            $('#albatross_acebundle_forecasttype_reportduedate').css('display', '');
+            $('#albatross_acebundle_forecasttype_reportduedate').css('background', '#E77E23');
+            $('#albatross_acebundle_forecasttype_reportduedate').removeAttr('disabled');
+            
+            $('#albatross_acebundle_forecasttype_reportduetext').css('display', 'none');
+            $('#albatross_acebundle_forecasttype_reportduetext').css('background', '');
+            $('#albatross_acebundle_forecasttype_reportduetext').attr('disabled', 'disabled');
+            
+            $('#albatross_acebundle_forecasttype_reporttype').val('0');
+        }
+    }
+    </script>
+{% endblock %}
+{% block content -%}
+    {% spaceless %}
+    <form action="{{ path('forecast') }}" method="GET" id="searchBar" >
+        <table id="searchBarTable">
+            <tr>
+                <td>Client</td>
+                <td>{{form_widget(forecastsearchForm.client)}}</td>
+                <td>Ace name</td>
+                <td>{{form_widget(forecastsearchForm.project)}}</td>
+                <td>Contract Number</td>
+                <td>{{form_widget(forecastsearchForm.contract)}}</td>
+                <td colspan="2">PM
+                <span id="searchUser">{{form_widget(forecastsearchForm.user)}}</span></td>
+                <td>Step</td>
+                <td>{{form_widget(forecastsearchForm.step)}}</td>
+            </tr>
+            <tr>
+                <td>Fw Start Date</td>
+                <td colspan="3" class="submittime">{{form_widget(forecastsearchForm.fw_s_f)}}&nbsp; to &nbsp;<span>{{form_widget(forecastsearchForm.fw_s_t)}}</td>
+                <td>Fw End Date</td>
+                <td colspan="3" class="submittime">{{form_widget(forecastsearchForm.fw_e_f)}}&nbsp; to &nbsp;<span>{{form_widget(forecastsearchForm.fw_e_t)}}</td>
+                <td rowspan="2" ><!--Month--></td>
+                <td rowspan="2" ><!--{{ form_widget(forecastsearchForm.f_month) }}--></td>
+            </tr>
+            <tr>
+                <td>Scope</td>
+                <td colspan="3" class="submittime">{{form_widget(forecastsearchForm.scope_f)}}&nbsp; to &nbsp;<span>{{form_widget(forecastsearchForm.scope_t)}}</td>
+                <td>Report Due Date</td>
+                <td colspan="3" class="submittime">{{form_widget(forecastsearchForm.due_f)}}&nbsp; to &nbsp;<span>{{form_widget(forecastsearchForm.due_t)}}</td>
+            </tr>
+            <tr>
+                <td>Update Date</td>
+                <td colspan="3" class="submittime">{{form_widget(forecastsearchForm.update_f)}}&nbsp; to &nbsp;<span>{{form_widget(forecastsearchForm.update_t)}}</td>
+                <td>Bu</td>
+                <td>{{form_widget(forecastsearchForm.bu)}}</td>
+                <td>Show all previous projects : </td>
+                <td>{{form_widget(forecastsearchForm.scope_year)}}</td>
+                <td>
+                </td>
+                <td>
+                    <input type="submit" value="search" />
+                    <input type="button" value="clear" onclick="clearSearchBar();" title="Clear Search Contents" />
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="forecastList">
+        <thead>
+            <tr id="table_header">
+                <th>Name</th>
+                <th class="contract_number">Contract</th>
+                <th>Bu</th>
+                <th>Pm</th>
+                <th>Step</th>
+                <th>FW start date</th>
+                <th>FW end date</th>
+                <th>Report due date</th>
+                <th>Scope</th>
+                {% for m in month %}
+                    <th>{{m}}</th>
+                {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% set count = 0 %}
+                    {% set nameFilter = 0 %}
+        {% for t in tasks %}
+                {% for b in t.bu %}
+                        <tr id="result_list_table">
+                            {% if user.identity is defined %}
+                                {% if user.identity.name == 'HD manager' or user.identity.name == 'Operations Executive'%}
+                                    <td style="min-width:372px" class="project_name" id="{{b.pid}}_{{b.bu}}">{{b.name}}</td>
+                                {% elseif user.identity.name == 'Executive Director' or user.identity.name == 'Administrator' %}
+                                    <td style="min-width:372px" class="project_name project_editable" id="{{b.pid}}_{{b.bu}}" onclick="show_edit_box('{{b.pid}}', '{{b.name|e("js")}}', '{{b.bu}}', '{{b.contract}}', '{{b.step}}', '{{b.tid}}','{{b.fws}}','{{b.fwe}}',{%if b.step == 'Contract'%}'{{t.All}}'{% else %}'{{b.All}}'{% endif %}, '{{b.scope}}', {% if b.pm is not defined %}'{{t.pmid}}'{% else %}'{{ b.pmid }}'{% endif %}, '{{ b.reprottype }}');">{{b.name}}</td>
+                                {% elseif user.identity.name == 'BU manager' or user.identity.name == 'Senior Project Manager' %}
+                                    {% if t.pmid != 0 %}
+                                        {% if b.pmid is defined %}
+                                            {% if user.position.id == pmlist[b.pmid] %}
+                                                <td style="min-width:372px" class="project_name project_editable" id="{{b.pid}}_{{b.bu}}" onclick="show_edit_box('{{b.pid}}', '{{b.name|e("js")}}', '{{b.bu}}', '{{b.contract}}', '{{b.step}}', '{{b.tid}}','{{b.fws}}','{{b.fwe}}',{%if b.step == 'Contract'%}'{{t.All}}'{% else %}'{{b.All}}'{% endif %}, '{{b.scope}}', {% if b.pm is not defined %}'{{t.pmid}}'{% else %}'{{ b.pmid }}'{% endif %}, '{{ b.reprottype }}');">{{b.name}}</td>
+                                            {% else %}
+                                                <td style="min-width:372px" class="project_name" id="{{b.pid}}_{{b.bu}}">{{b.name}}</td>
+                                            {% endif %}
+                                        {% else %}
+                                            {% if user.position.id == pmlist[t.pmid] %}
+                                                <td style="min-width:372px" class="project_name project_editable" id="{{b.pid}}_{{b.bu}}" onclick="show_edit_box('{{b.pid}}', '{{b.name|e("js")}}', '{{b.bu}}', '{{b.contract}}', '{{b.step}}', '{{b.tid}}','{{b.fws}}','{{b.fwe}}',{%if b.step == 'Contract'%}'{{t.All}}'{% else %}'{{b.All}}'{% endif %}, '{{b.scope}}', {% if b.pm is not defined %}'{{t.pmid}}'{% else %}'{{ b.pmid }}'{% endif %}, '{{ b.reprottype }}');">{{b.name}}</td>
+                                            {% else %}
+                                                <td style="min-width:372px" class="project_name" id="{{b.pid}}_{{b.bu}}">{{b.name}}</td>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% else %}
+                                        <td style="min-width:372px" class="project_name" id="{{b.pid}}_{{b.bu}}">{{b.name}}</td>
+                                    {% endif %}
+                                {% elseif user.identity.name == 'Project Manager' %}
+                                    {% if user.id == t.pmid %}
+                                        <td style="min-width:372px" class="project_name project_editable" id="{{b.pid}}_{{b.bu}}" onclick="show_edit_box('{{b.pid}}', '{{b.name|e("js")}}', '{{b.bu}}', '{{b.contract}}', '{{b.step}}', '{{b.tid}}','{{b.fws}}','{{b.fwe}}','{{t.All}}', '{{b.scope}}', {% if b.pm is not defined %}'{{t.pmid}}'{% else %}'{{ b.pmid }}'{% endif %});">{{b.name}}</td>
+                                    {% else %}
+                                        <td style="min-width:372px" class="project_name" id="{{b.pid}}_{{b.bu}}">{{b.name}}</td>
+                                    {% endif %}
+                                {% else %}
+                                    <td style="min-width:372px" class="project_name" id="{{b.pid}}_{{b.bu}}">{{b.name}}</td>
+                                {% endif %}
+                            {% else %}
+                                <td style="min-width:372px" class="project_name" id="{{b.pid}}_{{b.bu}}">{{b.name}}</td>
+                            {% endif %}
+                            <td style="min-width:110px" class="contract_number" title="{{b.contracttitle}}">{{b.contract}}
+                            </td>
+                            <td style="min-width:22px">{{b.bu}}
+                            </td>
+                            <td style="min-width:100px">{% if b.pm is not defined %}{{t.pm}}{% else %}{{ b.pm }}{% endif %}
+                            </td>
+                            <td style="min-width:65px">{{b.step}}
+                            </td>
+                            <td style="min-width:68px">{{b.fws}}
+                            </td>
+                            <td style="min-width:68px">{{b.fwe}}
+                            </td>
+                            <td style="min-width:68px">{% if b.All is not defined %}{{t.All}}{% else %}{{ b.All }}{% endif %}
+                            </td>
+                            <td style="min-width:32px" class="scope_num">{{b.scope}}
+                            </td>
+                        {% for key,f in b.forecast %}
+                            <td style="min-width:27px" class="forecast_{{key}}">{{f}}</td>
+                        {% endfor %}
+                            {% if b.name matches '{^CI-.*|^.*-CI-.*}' %}
+                            {% set nameFilter = nameFilter +1 %}
+                            {% else %}
+                            {% set count = count + 1%}
+                            {% endif %}
+                        </tr>
+                {% endfor %}
+        {% endfor %}
+                        {% if lastYearScope != '' %}
+                        <tr id="table_tail_1">
+                        {% else %}
+                        <tr id="table_tail">
+                        {% endif %}
+                                <td class="table_tail_td">ToTal:<br/><span class="filter-gray">CI:</span></td>
+                            <td class="table_tail_td">{{count}} results<br/><span class='filter-gray'>{{nameFilter}} results</span></td>
+                                {% for i in 1..6 %}
+                            <td class="table_tail_td">
+                            </td>
+                                {% endfor %}
+                                {% for i in 8..20 %}
+                            <td id="num_{{i}}" class="table_tail_td">&nbsp;
+                            </td>
+                                {% endfor %}
+                        </tr>
+                        {% if lastYearScope != '' %}
+                        <tr id="table_tail_2">
+                            <td class="table_tail_td">Last Year:</td>
+                            <td class="table_tail_td"></td>
+                                {% for i in 1..6 %}
+                            <td class="table_tail_td">
+                            </td>
+                                {% endfor %}
+                                {% for i in 8..20 %}
+                            <td id="lastYearNum_{{i-9}}" class="table_tail_td">&nbsp;
+                            </td>
+                                {% endfor %}
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                <div id="forecast_edit_form_box" style="display:none">
+                    <form action="{{ path('savepmedit') }}" id="forecast_edit_form" method="post">
+                        <fieldset id="forecast_edit_form_fieldset">
+                            <legend>Forecast Edit</legend>
+                            <table>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Contract</th>
+                                    <th>Bu</th>
+                                    <th>Pm</th>
+                                    <th>Step</th>
+                                    <th>FW start date</th>
+                                    <th>FW end date</th>
+                                    <th>Report due date
+                                        <div class="change-date-report" title="Exchange Date and Text" onclick="changeReportDueType();"></div>
+                                    </th>
+                                    <th>Scope</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span id="forecast_edit_project_name"></span>
+                        {{ form_widget(forecastForm.project,{attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(forecastForm.task,{attr: {'style': 'display:none'}}) }}
+                                    </td>
+                                    <td id="forecast_edit_project_contract">
+                                    </td>
+                                    <td>
+                                        <span id="forecast_edit_project_bu"></span>
+                        {{ form_widget(forecastForm.bu,{attr: {'style': 'display:none'}}) }}
+                                    </td>
+                                    <td>
+                        {{ form_widget(forecastForm.pm) }}
+                                    </td>
+                                    <td id="forecast_edit_project_step">
+                                    </td>
+                                    <td>
+                        {{ form_widget(forecastForm.fwstartdate) }}
+                                    </td>
+                                    <td>
+                        {{ form_widget(forecastForm.fwenddate) }}
+                                    </td>
+                                    <td id="reportduedate-edit-td">
+                        {{ form_widget(forecastForm.reportduedate, {attr:{'style' : 'display:none', 'disabled' : 'disabled'}}) }}
+                        {{ form_widget(forecastForm.reportduetext, {attr:{'style' : 'display:none', 'disabled' : 'disabled'}}) }}
+                        {{ form_widget(forecastForm.reporttype, {attr:{'style' : 'display:none'}}) }}
+                                    </td>
+                                    <td>
+                        {{ form_widget(forecastForm.scope) }}
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                        <div class="clear"></div>
+                        <div id="fileupload_button_box">
+                            <input type="submit" value="Submit" name="submit" style="float:left;">
+                            <input type="button" value="Cancel" name="cancel" onclick="box_cancel();" style="float:right;">
+                        </div>
+                    </form>
+                </div>
+    {% endspaceless %}
+{% endblock %}

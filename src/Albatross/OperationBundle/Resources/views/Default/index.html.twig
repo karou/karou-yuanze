@@ -1,0 +1,551 @@
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
+
+{% block title 'Operations' %}
+
+{% block breadcrumb %}
+	<li class="active">Operations</li>
+{% endblock %}
+
+{% block pageHeading 'Operations' %}
+
+{% block body %}
+
+<!--BODY STARTS-->
+
+<div class="row-fluid">
+	<div class="span-12">
+		<div class="tab-widget">
+			<ul class="nav nav-tabs" id="myTab1">
+				<li class="active"><a href="#questionnaire">QUESTIONNAIRE SEARCH</a></li>
+				<li><a href="#ace">ACE PROJECT SEARCH</a></li>
+			</ul>
+			<div class="tab-content">
+				
+				<div class="tab-pane active" id="ace">
+					<div class="navbar-inner gray controls search-holder">
+						<form action="#" class="navbar-search" style="padding:15px 0px 10px 0px;width:100%;">
+							<div class="pull-left left-search-cont">
+								<i class="icon-filter pull-left" style="font-size:30px;margin-right:10px;"></i>
+								<select data-placeholder="Ace Name" multiple class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>AN1</option>
+									<option>AN2</option>
+									<option>AN3</option>
+									<option>AN4</option>
+									<option>AN5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select data-placeholder="Ace Number" multiple class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>AN1</option>
+									<option>AN2</option>
+									<option>AN3</option>
+									<option>AN4</option>
+									<option>AN5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select data-placeholder="Brand" multiple class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>B1</option>
+									<option>B2</option>
+									<option>B3</option>
+									<option>B4</option>
+									<option>B5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select data-placeholder="Project Manager" multiple class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>PM1</option>
+									<option>PM2</option>
+									<option>PM3</option>
+									<option>PM4</option>
+									<option>PM5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select class="span1 iBlock nBorder" style="margin-top:-12px;">
+									<option>Show Projects</option>
+									<option>My Projects</option>
+									<option>Late Projects</option>
+									<option>All Projects</option>
+								</select>
+								&nbsp;&nbsp;
+								<div class="iBlock">
+									<a href="#" id="advLink2"><i class="icon-plus"></i> Advance Options</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="pull-right right-search-cont">
+								<button class="btn btn-success" type="submit">Search</button>
+								<button class="btn" type="reset">Clear</button>
+							</div>
+							<div class="clearfix"></div>
+							<div id="advSearch2">
+								<div class="ctrl fleft">
+									<select data-placeholder="Business Unit" multiple class="chzn-select iBlock nBorder" style="width:200px;">
+										<option value=""></option>
+										<option>BU1</option>
+										<option>BU2</option>
+										<option>BU3</option>
+										<option>BU4</option>
+										<option>BU5</option>
+									</select>
+								</div>
+								<div class="ctrl fleft">
+									<select data-placeholder="Country" multiple class="chzn-select iBlock nBorder" style="width:200px;">
+										<option value=""></option>
+										<option>C1</option>
+										<option>C2</option>
+										<option>C3</option>
+										<option>C4</option>
+										<option>C5</option>
+									</select>
+								</div>
+								<div class="ctrl fleft" style="margin-top:3px;">
+									<div id="datetimepicker1" class="input-append">
+										<input data-format="yyyy-MM-dd" type="text" placeholder="FW Start Date" class="elWidthDate"><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+									</div>
+								</div>
+								<div class="ctrl fleft" style="margin-top:3px;">
+									<div id="datetimepicker2" class="input-append">
+										<input data-format="yyyy-MM-dd" type="text" placeholder="FW End Date" class="elWidthDate"><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+									</div>
+								</div>
+								<div class="ctrl fleft" style="margin-top:3px;">
+									<div id="datetimepicker3" class="input-append">
+										<input data-format="yyyy-MM-dd" type="text" placeholder="Report Delivery Datee" class="elWidthDate"><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+									</div>
+								</div>
+								<div class="ctrl fleft">
+									<div>
+										<input type="number" placeholder="% Assigned" class="elWidth2" style="border:1px solid #aaa;padding:4px;" /> to <input type="number" placeholder="% Assigned" class="elWidth2" style="border:1px solid #aaa;padding:4px;" />
+									</div>
+								</div>
+								<div class="ctrl fleft">
+									<div>
+										<input type="number" placeholder="% Done" class="elWidth2" style="border:1px solid #aaa;padding:4px;" /> to <input type="number" placeholder="% Done" class="elWidth2" style="border:1px solid #aaa;padding:4px;" />
+									</div>
+								</div>
+								<div class="ctrl fleft">
+									<div>
+										<input type="number" placeholder="% Editing Done" class="elWidth2" style="border:1px solid #aaa;padding:4px;" /> to <input type="number" placeholder="% Editing Done" class="elWidth2" style="border:1px solid #aaa;padding:4px;" />
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+				<div class="tab-pane active" id="questionnaire">
+					<div class="navbar-inner gray controls search-holder">
+						<form action="#" class="navbar-search" style="padding:15px 0px 10px 0px;width:100%;">
+							<div class="pull-left left-search-cont">
+								<i class="icon-filter pull-left" style="font-size:30px;margin-right:10px;"></i>
+								<select data-placeholder="Questionnaire/Campaign" class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>Q1</option>
+									<option>Q2</option>
+									<option>Q3</option>
+									<option>Q4</option>
+									<option>Q5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select data-placeholder="Brand" multiple class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>B1</option>
+									<option>B2</option>
+									<option>B3</option>
+									<option>B4</option>
+									<option>B5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select data-placeholder="Business Unit" multiple class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>BU1</option>
+									<option>BU2</option>
+									<option>BU3</option>
+									<option>BU4</option>
+									<option>BU5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select data-placeholder="Country" multiple class="chzn-select span1 iBlock nBorder">
+									<option value=""></option>
+									<option>C1</option>
+									<option>C2</option>
+									<option>C3</option>
+									<option>C4</option>
+									<option>C5</option>
+								</select>
+								&nbsp;&nbsp;
+								<select class="span1 iBlock nBorder" style="margin-top:-12px;">
+									<option>Show Projects</option>
+									<option>My Projects</option>
+									<option>Late Projects</option>
+									<option>All Projects</option>
+								</select>
+								&nbsp;&nbsp;
+								<div class="iBlock">
+									<a href="#" id="advLink"><i class="icon-plus"></i> Advance Options</a>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+							<div class="pull-right right-search-cont">
+								<button class="btn btn-success" type="submit">Search</button>
+								<button class="btn" type="reset">Clear</button>
+							</div>
+							<div class="clearfix"></div>
+							<div id="advSearch">
+								<div class="ctrl fleft">
+									<input type="text" placeholder="Keyword" class="span1" style="border:1px solid #aaa;padding:4px;" />
+								</div>
+								<div class="ctrl fleft">
+									<div id="datetimepicker1" class="input-append">
+										<input data-format="yyyy-MM-dd" type="text" placeholder="FW Start Date" class="elWidthDate span1"><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+									</div>
+								</div>
+								<div class="ctrl fleft">
+									<div id="datetimepicker2" class="input-append">
+										<input data-format="yyyy-MM-dd" type="text" placeholder="FW End Date" class="elWidthDate span1"><span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+									</div>
+								</div>
+								<div class="ctrl fleft">
+									<div>
+										<input type="number" placeholder="% Assigned" class="elWidth2 span1" style="border:1px solid #aaa;padding:4px;" /> to <input type="number" placeholder="% Assigned" class="elWidth2" style="border:1px solid #aaa;padding:4px;" />
+									</div>
+								</div>
+								<div class="ctrl fleft">
+									<div>
+										<input type="number" placeholder="% Done" class="elWidth2 span1" style="border:1px solid #aaa;padding:4px;" /> to <input type="number" placeholder="% Done" class="elWidth2" style="border:1px solid #aaa;padding:4px;" />
+									</div>
+								</div>
+								<div class="ctrl fleft">
+									<div>
+										<input type="number" placeholder="% Editing Done" class="elWidth2 span1" style="border:1px solid #aaa;padding:4px;" /> to <input type="number" placeholder="% Editing Done" class="elWidth2" style="border:1px solid #aaa;padding:4px;" />
+									</div>
+								</div>
+								<div class="clearfix"></div>
+							</div>
+						</form>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="row-fluid">
+	<div class="span12">
+		<br><br><br>
+		<table class="table table-striped table-bordered" id="data-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>By Questionnaire</th>
+					<th>FW Start</th>
+					<th>FW End</th>
+					<th>No. Surveys<br>AOL</th>
+					<th>% Assigned</th>
+					<th>% FW Done</th>
+					<th>% Editing<br>Done</th>
+					<th>First Visit<br>Actual Date</th>
+					<th>Last Visit<br>Actual Date</th>
+					<th>Report<br>Delivery</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="sub" id="r1">
+					<td class="center"><a href="#">1</a></td>
+					<td class="left"><a href="#"><i class="icon-plus-sign-alt"></i> WW-FASHION-BURBERRY-REGULAR STORIES-RETAIL...</a><br><em>2013-02 (February)</em></td>
+					<td class="left">2013-02-01</td>
+					<td class="left">2013-02-27 <i class="icon-exclamation-sign color-red"></i></td>
+					<td class="center">1</td>
+					<td class="center">0% <em>(0)</em></td>
+					<td class="center">0% <em>(0)</em></td>
+					<td class="center">0% <em>(0)</em></td>
+					<td class="center">none</td>
+					<td class="center">none</td>
+					<td class="center"><em>none</em></td>
+					</td>
+				</tr>
+				<tr class="sub" id="r2">
+					<td class="center"><a href="#">2</a></td>
+					<td class="left"><a href="#"><i class="icon-plus-sign-alt"></i> WW-FASHION-MULBERRY-RETAILR-2013</a><br><em>2013-07 (July)</em></td>
+					<td class="left"><em>none</em></td>
+					<td class="left"><em>none</em></td>
+					<td class="center">47</td>
+					<td class="center">100% <em>(47)</em></td>
+					<td class="center">100% <em>(47)</em></td>
+					<td class="center">100% <em>(47)</em></td>
+					<td class="center">2013-08-01</td>
+					<td class="center">2013-08-30</td>
+					<td class="center"><em>none</em></td>
+					</td>
+				</tr>
+					<!-- Sub Rows -->
+					<tr class="sub1" id="sr1">
+						<td class="center"><span style="visibility:hidden;">2</span></td>
+						<td class="left"><a href="#" style="display:block;margin-left:30px;"><i class="icon-plus-sign-alt"></i> United Kingdom</td>
+						<td class="left"></td>
+						<td class="left"></td>
+						<td class="center">32</td>
+						<td class="center">100% <em>(32)</em></td>
+						<td class="center">100% <em>(32)</em></td>
+						<td class="center">100% <em>(32)</em></td>
+						<td class="center">2013-08-01</td>
+						<td class="center">2013-08-19</td>
+						<td class="center"></td>
+						</td>
+					</tr>
+						<!-- Rows Sub Rows -->
+						<tr class="sub2" id="rsr1">
+							<td class="center"><span style="visibility:hidden;">2</span></td>
+							<td class="left"><label style="display:block;margin-left:60px;">United Kingdom</label></td>
+							<td class="left"></td>
+							<td class="left"></td>
+							<td class="center">31</td>
+							<td class="center">100% <em>(31)</em></td>
+							<td class="center">100% <em>(31)</em></td>
+							<td class="center">100% <em>(31)</em></td>
+							<td class="center">2013-08-01</td>
+							<td class="center">2013-08-19</td>
+							<td class="center"></td>
+							</td>
+						</tr>
+						<tr class="sub2" id="rsr2">
+							<td class="center"><span style="visibility:hidden;">2</span></td>
+							<td class="left"><label style="display:block;margin-left:60px;">Ireland</label></td>
+							<td class="left"></td>
+							<td class="left"></td>
+							<td class="center">1</td>
+							<td class="center">100% <em>(1)</em></td>
+							<td class="center">100% <em>(1)</em></td>
+							<td class="center">100% <em>(1)</em></td>
+							<td class="center">2013-08-11</td>
+							<td class="center">2013-08-11</td>
+							<td class="center"></td>
+							</td>
+						</tr>
+						<!-- End Rows Sub Rows -->
+					<tr class="sub1" id="sr2">
+					   <td class="center"><span style="visibility:hidden;">2</span></td>
+					   <td class="left"><a href="#" style="display:block;margin-left:30px;"><i class="icon-plus-sign-alt"></i> North East Europe</td>
+					   <td class="left"></td>
+					   <td class="left"></td>
+					   <td class="center">7</td>
+					   <td class="center">100% <em>(7)</em></td>
+					   <td class="center">100% <em>(7)</em></td>
+					   <td class="center">100% <em>(7)</em></td>
+					   <td class="center">2013-08-01</td>
+					   <td class="center">2013-08-30</td>
+					   <td class="center"></td>
+					   </td>
+				   </tr>
+					<tr class="sub1" id="sr3">
+					   <td class="center"><span style="visibility:hidden;">2</span></td>
+					   <td class="left"><a href="#" style="display:block;margin-left:30px;"><i class="icon-plus-sign-alt"></i> South West Europe</td>
+					   <td class="left"></td>
+					   <td class="left"></td>
+					   <td class="center">2</td>
+					   <td class="center">100% <em>(2)</em></td>
+					   <td class="center">100% <em>(2)</em></td>
+					   <td class="center">100% <em>(2)</em></td>
+					   <td class="center">2013-08-03</td>
+					   <td class="center">2013-08-05</td>
+					   <td class="center"></td>
+					   </td>
+				   </tr>
+					<tr class="sub1" id="sr4">
+					   <td class="center"><span style="visibility:hidden;">2</span></td>
+					   <td class="left"><a href="#" style="display:block;margin-left:30px;"><i class="icon-plus-sign-alt"></i> United States</td>
+					   <td class="left"></td>
+					   <td class="left"></td>
+					   <td class="center">6</td>
+					   <td class="center">100% <em>(6)</em></td>
+					   <td class="center">100% <em>(6)</em></td>
+					   <td class="center">100% <em>(6)</em></td>
+					   <td class="center">2013-08-01</td>
+					   <td class="center">2013-08-17</td>
+					   <td class="center"></td>
+					   </td>
+				   </tr>
+					<!-- End Sub Rows -->
+				<tr class="sub" id="r3">
+					<td class="center"><a href="#">3</a></td>
+					<td class="left"><a href="#"><i class="icon-plus-sign-alt"></i> ICN-COSMETICS-LOREAL LUXE-SHU UEMURA-RETAI...</a><br><em>2013-04 (April)</em></td>
+					<td class="left"><em>none</em></td>
+					<td class="left"><em>none</em></td>
+					<td class="center">6</td>
+					<td class="center">100% <em>(6)</em></td>
+					<td class="center">100% <em>(6)</em></td>
+					<td class="center">100% <em>(6)</em></td>
+					<td class="center">2013-08-01</td>
+					<td class="center">2013-08-17</td>
+					<td class="center"><em>none</em></td>
+					</td>
+				</tr>
+				<tr class="sub" id="r4">
+					<td class="center"><a href="#">4</a></td>
+					<td class="left"><a href="#"><i class="icon-plus-sign-alt"></i> ICN-COSMETICS-LOREAL LUXE-SHU UEMURA-RETAI...</a><br><em>2013-04 (April)</em></td>
+					<td class="left"><em>none</em></td>
+					<td class="left"><em>none</em></td>
+					<td class="center">6</td>
+					<td class="center">100% <em>(6)</em></td>
+					<td class="center">100% <em>(6)</em></td>
+					<td class="center">100% <em>(6)</em></td>
+					<td class="center">2013-08-01</td>
+					<td class="center">2013-08-17</td>
+					<td class="center"><em>none</em></td>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+<br />
+<!--BODY ENDS-->
+<style>
+html, *{outline:none;}
+.wave-content-list{margin:5px 0px 5px 0px;}
+.wave-content-list label.pull-left{width:150px;}
+.submit-dropdown i{color:#fff;padding:3px 2px 3px 1px;display:inline-block;margin-right:10px;}
+.copyright-box{background:#e1e1e1;padding-top:15px;padding-bottom:15px;}
+.noborder{border:none;padding:5px 10px;color:#fff;}
+.progress{background:#e1e1e1;height:5px;margin-bottom:5px;}
+.color-red{color:red;}
+.icon-exclamation-sign{font-size:14px;}
+.search-holder{position:absolute;padding:0px;}
+.left-search-cont{width:88%;padding-left:15px;}
+.right-search-cont{padding-right:15px;}
+.iBlock{display:inline-block;}
+.nBorder{border:1px solid #aaa;}
+.row-fluid .span1{width:200px;}
+.chzn-container{margin-top:3px;}
+.ctrl{margin-left:5px;margin-right:5px;}
+.fleft{float:left;}
+.fright{float:right;}
+.sub1{display:none;}
+.sub2{display:none;}
+
+#advSearch{display:none;padding-left:15px;padding-right:15px;}
+#advSearch .elWidth{width:166px;}
+#advSearch .elWidth2{width:95px;}
+#advSearch .elWidthDate{width:120px;}
+#data-table_length{float:left;margin-top:19px;margin-right:15px;}
+#data-table_info{float: left;font-weight:bold;}
+#data-table{transition:margin-top .3s ease-in-out;-webkit-transition:margin-top .3s ease-in-out;-moz-transition:margin-top .3s ease-in-out;}
+#datetimepicker1 input[type=text]{border:1px solid #aaa;padding:4px;}
+#datetimepicker1 span{padding:4px;}
+#datetimepicker2 input[type=text]{border:1px solid #aaa;padding:4px;}
+#datetimepicker2 span{padding:4px;}
+#datetimepicker3 input[type=text]{border:1px solid #aaa;padding:4px;}
+#datetimepicker3 span{padding:4px;}
+
+#advSearch2{display:none;padding-left:15px;padding-right:15px;}
+#advSearch2 .elWidth{width:166px;}
+#advSearch2 .elWidth2{width:60px;}
+#advSearch2 .elWidthDate{width:120px;}
+</style>
+
+<script type="text/javascript">
+$(function() {
+	$('textarea.chat-inputbox').tinymce({
+		script_url : 'js/tiny_mce/tiny_mce.js',
+		theme : "simple"
+	});
+});
+
+$(function() {
+	$(".paper-table").tablecloth({
+		theme: "paper",
+		striped: true,
+		sortable: true,
+		condensed: false
+	});
+});
+
+$(function () {
+	$('#data-table').dataTable({
+		"sDom": "<'row-fluid'<'span12'>r>t<'row-fluid'<'span6'li><'span6'p>>"
+	});
+
+});
+
+$(function () {
+	$(".chzn-select").chosen();
+	$(".chzn-select-deselect").chosen({
+		allow_single_deselect: true
+	});
+});
+
+$(function () {
+	$('#datetimepicker1, #datetimepicker2, #datetimepicker3').datetimepicker({
+		pickTime: false
+	});
+});
+
+$(document).ready(function(){
+	$(".search-holder").width($(".tab-content").width() + 1);
+	
+	$(window).resize(function(){
+		$(".search-holder").width($(".tab-content").width() + 1);
+	});
+	
+	$("#advLink").click(function(){
+		$("#advSearch").slideToggle(function(){
+			if (!$("#advSearch").is(":visible")) {
+				$("#advLink i").removeClass("icon-minus").addClass("icon-plus");
+				$("#data-table").css("margin-top","0");
+			} else {
+				$("#advLink i").removeClass("icon-plus").addClass("icon-minus");
+				$("#data-table").css("margin-top",$("#advSearch").height());
+			}
+		});
+		return false;
+	});
+	
+	$("#advLink2").click(function(){
+		$("#advSearch2").slideToggle(function(){
+			if (!$("#advSearch2").is(":visible")) {
+				$("#advLink2 i").removeClass("icon-minus").addClass("icon-plus");
+				$("#data-table").css("margin-top","0");
+			} else {
+				$("#advLink2 i").removeClass("icon-plus").addClass("icon-minus");
+				$("#data-table").css("margin-top",$("#advSearch2").height());
+			}
+		});
+		return false;
+	});
+	
+	$('.sub1 td').css('background-color','#dcecf9');
+	$('.sub2 td').css('background-color','#eaf8e7');
+	
+	$("#r2, #r2 a").click(function(){
+		$("#sr1,#sr2,#sr3,#sr4").slideToggle(function(){
+			if ($(this).is(':visible')) {
+				$('#r2 i').removeClass('icon-plus-sign-alt').addClass('icon-minus-sign');
+			} else {
+				$('#r2 i').removeClass('icon-minus-sign').addClass('icon-plus-sign-alt');
+				$('#rsr1, #rsr2').hide();
+			}
+		});
+		return false;
+	});
+	
+	$("#sr1, #sr1 a").click(function(){
+		$("#rsr1,#rsr2").slideToggle(function(){
+			if ($(this).is(':visible')) {
+				$('#sr1 i').removeClass('icon-plus-sign-alt').addClass('icon-minus-sign');
+			} else {
+				$('#sr1 i').removeClass('icon-minus-sign').addClass('icon-plus-sign-alt');
+			}
+		});
+		return false;
+	});
+	
+	$('.elWidthDate, .elWidth2').width('200px');
+});
+</script>
+
+{% endblock %}

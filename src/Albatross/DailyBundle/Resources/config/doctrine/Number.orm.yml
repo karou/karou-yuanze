@@ -1,0 +1,24 @@
+# src/Albatross/DailyBundle/Resources/config/doctrine/Number.orm.yml
+
+Albatross\DailyBundle\Entity\Number:
+  type: entity
+  table: number
+  uniqueConstraints:
+    date_status_uniq:
+        columns: [date_id, status_id]
+  manyToOne:
+    date:
+      targetEntity: Date
+    status:
+      targetEntity: Status
+  repositoryClass: 
+    Albatross\DailyBundle\Entity\NumberRepository
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    number:
+      type: bigint
+      column: number
+  lifecycleCallbacks: { }

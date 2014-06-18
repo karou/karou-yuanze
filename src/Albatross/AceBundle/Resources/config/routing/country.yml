@@ -1,0 +1,8 @@
+country_create:
+    pattern:  /{id}/create
+    defaults: { _controller: "AlbatrossAceBundle:Country:create" }
+    requirements: { _method: post }
+
+country_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossAceBundle:Country:delete" }

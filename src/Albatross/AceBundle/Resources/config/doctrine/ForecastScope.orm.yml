@@ -1,0 +1,28 @@
+# src/Albatross/AceBundle/Resources/config/doctrine/ForecastScope.orm.yml
+
+Albatross\AceBundle\Entity\ForecastScope:
+  type: entity
+  table: forecastscope
+  manyToOne:
+    bu:
+      targetEntity: Bu
+      nullable: true
+  uniqueConstraints:
+    month_uniq:
+      columns: [month, bu_id]
+  repositoryClass: 
+    Albatross\AceBundle\Entity\ForecastScopeRepository
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    month:
+      type: string
+      length: 255
+      column: month
+    forecast:
+      type: bigint
+      column: forecast
+      nullable: true
+  lifecycleCallbacks: {}

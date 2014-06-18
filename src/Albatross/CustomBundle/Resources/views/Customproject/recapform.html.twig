@@ -1,0 +1,213 @@
+{% block stylesheets %}
+<link href="{{ asset('/css/form_box.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+
+    $(function(){
+        $('#albatross_custombundle_recaptype_planned_surveys').click(function(){
+            if($('#albatross_custombundle_recaptype_planned_surveys').val() === 'Please fill in.'){
+                $('#albatross_custombundle_recaptype_planned_surveys').val('');
+                $('#albatross_custombundle_recaptype_planned_surveys').css('color', '#000');
+            }
+        });
+        $('#albatross_custombundle_recaptype_planned_pos').click(function(){
+            if($('#albatross_custombundle_recaptype_planned_pos').val() === 'Please fill in.'){
+                $('#albatross_custombundle_recaptype_planned_pos').val('');
+                $('#albatross_custombundle_recaptype_planned_pos').css('color', '#000');
+            }
+        });
+        $('#albatross_custombundle_recaptype_actual_pos').click(function(){
+            if($('#albatross_custombundle_recaptype_actual_pos').val() === 'Please fill in.'){
+                $('#albatross_custombundle_recaptype_actual_pos').val('');
+                $('#albatross_custombundle_recaptype_actual_pos').css('color', '#000');
+            }
+        });
+        $('#albatross_custombundle_recaptype_actual_surveys').click(function(){
+            if($('#albatross_custombundle_recaptype_actual_surveys').val() === 'Please fill in.'){
+                $('#albatross_custombundle_recaptype_actual_surveys').val('');
+                $('#albatross_custombundle_recaptype_actual_surveys').css('color', '#000');
+            }
+        });
+        $('#albatross_custombundle_recaptype_actual_misfire').click(function(){
+            if($('#albatross_custombundle_recaptype_actual_misfire').val() === 'Please fill in.'){
+                $('#albatross_custombundle_recaptype_actual_misfire').val('');
+                $('#albatross_custombundle_recaptype_actual_misfire').css('color', '#000');
+            }
+        });
+        $('#albatross_custombundle_recaptype_actual_invalid').click(function(){
+            if($('#albatross_custombundle_recaptype_actual_invalid').val() === 'Please fill in.'){
+                $('#albatross_custombundle_recaptype_actual_invalid').val('');
+                $('#albatross_custombundle_recaptype_actual_invalid').css('color', '#000');
+            }
+        });
+    });
+    function scenarioStyle(){
+        $('.tags label').each(function(){
+            $(this).css('float', 'left');
+            $(this).css('height', '22px');
+        });
+        $('.tags2 label').each(function(){
+            $(this).css('float', 'left');
+            $(this).css('height', '22px');
+        });
+        $('.tags input').each(function(){
+            $(this).css('float', 'right');
+        });
+        $('.tags2 input').each(function(){
+            $(this).css('float', 'right');
+        });
+        $('.tags a').each(function(){
+            $(this).before('<div class="clear_both"></div>');
+        });
+        $('.tags2 a').each(function(){
+            $(this).before('<div class="clear_both"></div>');
+        });
+    }
+    function cancel() {
+        showInput();
+        $('#big_table font').remove();
+        $('#recap_box').fadeOut();
+        $('#recap_box input').each(function() {
+            if ($(this).attr('type') !== 'button' && $(this).attr('type') !== 'submit') {
+                $(this).val('');
+            }
+        });
+        $('#albatross_custombundle_recaptype_name').val('');
+        $('#wave_name').html('');
+        $('#recap_box tr td ul').html('');
+        $('#aolquestionnaire').html('');
+        $('#recap_country').html('');
+    }
+</script>
+{% endblock %}
+    <div id="recap_box" style="display: none;">
+        <form action="{{ path('saverecap') }}" id="recap_edit_form" method="post" {{ form_enctype(recapform) }}>
+            <table style="width:100%;" id="big_table">
+                <tr>
+                    <td colspan="3" id="recap_box_title">Fieldwork Recap<span id="close_button" title="close" onclick="cancel();" style=" position: absolute; right:0;"><img src="{{ asset('/images/close.png')}}" height="30px" width="30px" style="margin-right: 5px;"></span></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                    <table>
+                        <tr>
+                            <td>Project Name:
+                            </td>
+                            <td>{{ projname }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Wave Name:
+                            </td>
+                            <td id="wave_name">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Submit Time:
+                            </td>
+                            <td id="submit_time">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Submit User:
+                            </td>
+                            <td id="submit_user">
+                            </td>
+                        </tr>
+                    </table>
+                    </td>
+                </tr>
+                <tr id="area_name" class="recap_form_1">
+                    <th><span style="color:red">*</span>Area Name</th>
+                    <td colspan="2">{{ form_widget(recapform.name) }}</td>
+                </tr>
+                <tr class="recap_form_1"><th>Country</th>
+                    <td colspan="2" id="recap_country"></td>
+                </tr>
+                <tr class="recap_form_1"><th>Aol Questionnaire</th>
+                    <td colspan="2" id="aolquestionnaire"></td>
+                </tr>
+                    {{ form_widget(recapform.customwave, {attr: {'style': 'display:none'}}) }}
+                <tr>
+                    <td class="recap_form_2">
+                        <table class="recap_form">
+                            <tr>
+                                <th colspan="2">
+                                    Planned
+                                </th>
+                            </tr>
+                            <tr>
+                                <td><span style="color:red">*</span>{{ form_label(recapform.planned.pos) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.planned.pos) }}</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:red">*</span>{{ form_label(recapform.planned.surveys) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.planned.surveys) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><ul class="tags" data-prototype="{{ form_widget(recapform.planned.scenarios.vars.prototype)|e }}"></ul></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="recap_form_2">
+                        <table class="recap_form">
+                            <tr>
+                                <th colspan="2">
+                                    Actual
+                                </th>
+                            </tr>
+                            <tr>
+                                <td><span style="color:red">*</span>{{ form_label(recapform.actual.pos) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.actual.pos) }}</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:red">*</span>{{ form_label(recapform.actual.surveys) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.actual.surveys) }}</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:red">*</span>{{ form_label(recapform.actual.misfire) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.actual.misfire) }}</td>
+                            </tr>
+                            <tr>
+                                <td><span style="color:red">*</span>{{ form_label(recapform.actual.invalid) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.actual.invalid) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><ul class="tags2" data-prototype="{{ form_widget(recapform.actual.scenarios.vars.prototype)|e }}"></ul></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="recap_form_2">
+                        <table class="recap_form">
+                            <tr>
+                                <th colspan="2">
+                                    Addtional Information
+                                </th>
+                            </tr>
+                            <tr>
+                                <td>{{ form_label(recapform.infomations.new_pos_in_Wave) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.infomations.new_pos_in_Wave) }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form_label(recapform.infomations.delete_pos_in_Wave) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.infomations.delete_pos_in_Wave) }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form_label(recapform.infomations.invalids_to_be_invoiced) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.infomations.invalids_to_be_invoiced) }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form_label(recapform.infomations.misfires_to_be_invoiced) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.infomations.misfires_to_be_invoiced) }}</td>
+                            </tr>
+                            <tr>
+                                <td>{{ form_label(recapform.infomations.purchases_made) }}</td>
+                                <td class="recap_subtable_info">{{ form_widget(recapform.infomations.purchases_made) }}</td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <input type="button" value="Submit" id="submit_recap" onclick="validation();" />
+        </form>
+    </div>

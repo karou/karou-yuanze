@@ -1,0 +1,148 @@
+sync_project:
+    pattern:  /project/sync
+    defaults: { _controller: AlbatrossAceBundle:Default:projectSync }
+project:
+    pattern:  /project/{filter}
+    defaults: { _controller: AlbatrossAceBundle:Default:project, current:'project', filter:'' }
+sync_task:
+    pattern:  /task/sync
+    defaults: { _controller: AlbatrossAceBundle:Default:taskSync }
+getTasks:
+    pattern:  /gettasks/{projectId}
+    defaults: { _controller: AlbatrossAceBundle:Default:getTasks, projectId:'0'}
+backup_tasks:
+    pattern:  /backuptasks
+    defaults: { _controller: AlbatrossAceBundle:Default:backupTasks}
+    requirements: { _method: post }
+restore_tasks:
+    pattern:  /restoretasks
+    defaults: { _controller: AlbatrossAceBundle:Default:restoreTasks}
+    requirements: { _method: post }
+aolsync:
+    pattern:  /aolsync
+    defaults: { _controller: AlbatrossAceBundle:Default:aolsync }
+    requirements: { _method: post }
+fileupload:
+    pattern:  /fileupload
+    defaults: { _controller: AlbatrossAceBundle:Default:fileUpload }
+    requirements: { _method: post }
+saveacetask:
+    pattern:  /saveacetask
+    defaults: { _controller: AlbatrossAceBundle:Default:saveAceTask }
+    requirements: { _method: post }
+bu_crud:
+    resource: "@AlbatrossAceBundle/Resources/config/routing/bu.yml"
+    prefix: /bu
+country_crud:
+    resource: "@AlbatrossAceBundle/Resources/config/routing/country.yml"
+    prefix: /country
+showfiles:
+    pattern:  /showfiles/{type}/{date}
+    defaults: { _controller: AlbatrossAceBundle:Default:showfiles, type:'', date:'' }
+    requirements: { __method: post }
+deletefile:
+    pattern:  /deletefile/{type}/{date}
+    defaults: { _controller: AlbatrossAceBundle:Default:deletefile, type:'', date:'' }
+    requirements: { __method: post }
+updatestatus:
+    pattern:  /updatestatus/{tid}
+    defaults: { _controller: AlbatrossAceBundle:Default:updatestatus, tid:''}
+    requirements: { __method: post }
+uploadProjectFile:
+    pattern:  /uploadprojectfile
+    defaults: { _controller: AlbatrossAceBundle:Default:uploadProjectFile}
+    requirements: { __method: post }
+filelist:
+    pattern:  /filelist/{sid}
+    defaults: { _controller: AlbatrossAceBundle:Default:filelist, current:'filelist', sid:'' }
+uploadOtherFile:
+    pattern:  /uploadotherfile
+    defaults: { _controller: AlbatrossAceBundle:Default:uploadOtherFile}
+    requirements: { __method: post }
+deleteOtherFile:
+    pattern:  /deleteotherfile/{id}
+    defaults: { _controller: AlbatrossAceBundle:Default:deleteOtherFile, id:''}
+    requirements: { __method: post }
+downloadOtherFile:
+    pattern:  /downloadotherfile/{id}
+    defaults: { _controller: AlbatrossAceBundle:Default:downloadOtherFile, id:''}
+    requirements: { __method: post }
+ioflist:
+    pattern:  /ioflist
+    defaults: { _controller: AlbatrossAceBundle:Default:ioflist, current:'ioflist'}
+    requirements: { __method: post }
+iofview:
+    pattern:  /iofview/{id}/{status}
+    defaults: { _controller: AlbatrossAceBundle:Default:iofview, id:'', status:'', current:'ioflist'}
+    requirements: { __method: post }
+downloadIOF:
+    pattern:  /downloadIOF/{fid}
+    defaults: { _controller: AlbatrossAceBundle:Default:downloadIOF, fid:''}
+    requirements: { __method: post }
+viewiof:
+    pattern:  /viewiof/{id}/{status}
+    defaults: { _controller: AlbatrossAceBundle:Default:viewiof, id:'', status:'', current:'ioflist'}
+    requirements: { __method: post }
+forecast:
+    pattern:  /forecast/{isrefresh}
+    defaults: { _controller: AlbatrossAceBundle:Default:forecast, current:'forecast', isrefresh:''}
+    requirements: { __method: post }
+savepmedit:
+    pattern:  /savepmedit
+    defaults: { _controller: AlbatrossAceBundle:Default:savepmedit}
+    requirements: { __method: post }
+editfilelistlabel:
+    pattern:  /editfilelistlabel/{id}
+    defaults: { _controller: AlbatrossAceBundle:Default:editFileListLabel, id:''}
+getSpecificAttachInfo:
+    pattern:  /getspecificAttachinfo
+    defaults: { _controller: AlbatrossAceBundle:Default:getSpecificAttachInfo}
+    requirements: { __method: post }
+getSpecificProject:
+    pattern:  /getSpecificProject
+    defaults: { _controller: AlbatrossAceBundle:Default:getSpecificProject}
+    requirements: { __method: post }
+getSpecificWave:
+    pattern:  /getSpecificWave
+    defaults: { _controller: AlbatrossAceBundle:Default:getSpecificWave}
+    requirements: { __method: post }
+getAutoList:
+    pattern:  /getAutoList
+    defaults: { _controller: AlbatrossAceBundle:Default:autoAttachmentInfoList}
+    requirements: { __method: post }
+filesection_crud:
+    resource: "@AlbatrossAceBundle/Resources/config/routing/filesection.yml"
+    prefix: /filesection
+saveAolSurveyByAjax:
+    pattern:  /saveAolSurveyByAjax
+    defaults: { _controller: AlbatrossAceBundle:Default:saveAolSurveyByAjax}
+attachment_delete:
+    pattern:  /attachmentDelete/{id}
+    defaults: { _controller: AlbatrossAceBundle:Default:attachmentDelete}
+saveFileAndMessageForPre:
+    pattern:  /saveFileAndMessageForPre
+    defaults: { _controller: AlbatrossCustomBundle:Customproject:saveFileAndMessageForPre}
+refreshSurveys:
+    pattern:  /refreshSurveys
+    defaults: { _controller: AlbatrossAceBundle:Default:refreshSurveys}
+showDeletedSurveys:
+    pattern:  /showDeletedSurveys
+    defaults: { _controller: AlbatrossAceBundle:Default:showDeletedSurveys}
+ajaxFetchData:
+    pattern:  /ajax
+    defaults: { _controller: AlbatrossAceBundle:Ajax:ajax}
+ajax_route:
+    resource: "@AlbatrossAceBundle/Resources/config/routing/ajax.yml"
+    prefix: /ajax
+disposableFunctionCollection:
+    pattern:  /disposableFunctionCollection
+    defaults: { _controller: AlbatrossAceBundle:Disposable:disposableFunctionCollection}
+disposableFunctionStep:
+    pattern:  /disposableFunctionStep
+    defaults: { _controller: AlbatrossAceBundle:Disposable:disposableFunctionStep}
+disposableFunctionDelivery:
+    pattern:  /disposableFunctionDelivery
+    defaults: { _controller: AlbatrossAceBundle:Disposable:disposableFunctionDelivery}
+disposableFunctionPercent:
+    pattern:  /disposableFunctionPercent/{offset}
+    defaults: { _controller: AlbatrossAceBundle:Disposable:disposableFunctionPercent, offset:''}

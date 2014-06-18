@@ -1,0 +1,54 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Albatross Business Unit List
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('/css/project.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content -%}
+    <h1>Business Unit List</h1>
+
+    <table class="records_list" style="border: 1px solid #000; text-align: center;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000;">Code</th>
+                <th style="border: 1px solid #000;">Countries</th>
+                <th style="border: 1px solid #000;">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for k,entity in entities %}
+            <tr{% if k%2 == 1 %} class="active"{% endif %}>
+                <td style="border: 1px solid #000;">{{ entity.code }}</td>
+                <td style="border: 1px solid #000;">
+                    <ul>
+                        <li>
+                            <table style="width: 100%">
+                                {% for c in entity.country %}
+                                <tr>
+                                    <td style="width: 80%">{{ c.name}}</td>
+                                    <td style="width: 10%">{{ c.code}}</td>
+                                    <td style="width: 10%">{% if is_granted('ROLE_ACE_BU_EDIT') %}<a href="javascript:void(0)" onclick="if (confirm('Are you sure you want to delete this country ?'))window.location.href = '{{ path('country_delete', {id: c.id}) }}';">X</a>{% endif %}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </li>
+                    </ul>
+                </td>
+                <td style="border: 1px solid #000;">
+                {% if is_granted('ROLE_ACE_BU_EDIT') %}
+                <ul>
+                    <li>
+                        <a href="{{ path('bu_add', { 'id': entity.id }) }}">Add Country</a>
+                    </li>
+                </ul>
+                {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <meta charset="UTF-8" />
+            <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+            <![endif]-->
+            <title>
+                {% block title %}
+                {% endblock %}
+            </title>
+                <meta name="description" content="{% block description %}{% endblock %}">
+                <link href="{{ asset('/css/user_layout.css') }}" rel="stylesheet" type="text/css" />
+                <link href="{{ asset('/css/header.css') }}" rel="stylesheet" type="text/css" />
+                <script src="{{ asset('js/jquery.min.js')}}"></script>
+                {% block stylesheets %}
+                {% endblock %}
+                
+            {% block javascripts %}
+            {% endblock %}
+                <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        </head>
+        <body>
+            <header>
+                {{ render(controller('AlbatrossUserBundle:Default:header')) }}
+            </header>
+            <navbig>
+                {{ render(controller('AlbatrossUserBundle:Default:navBig', {'current': current })) }}
+            </navbig>
+                <div class="clear"></div>
+            <div id="bigpage">
+                    {% block content %}
+                    {% endblock %}
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>                
+            <footer>
+                {{ render(controller('AlbatrossUserBundle:Default:footer')) }}
+            </footer>
+        </body>
+</html>

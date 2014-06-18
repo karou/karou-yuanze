@@ -1,0 +1,70 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700);
+.gantti > article, .gantti > aside, .gantti > details, .gantti > figcaption, .gantti > figure, .gantti > footer, .gantti > header, .gantti > hgroup, .gantti > nav, .gantti > section {
+  display: block; }
+
+.gantti > * {
+  margin: 0;
+  padding: 0; }
+
+.gantti > body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 22px;
+  background: #fdf6e3;
+  color: #657b83;
+  padding: 50px 0; }
+
+.gantti > a {
+  color: #d33682;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
+
+.gantti > header, .gantti > article {
+  width: 500px;
+  margin: 0 auto;
+  padding: 50px 20px; }
+
+.gantti > figure {
+  font-size: 13px;
+  line-height: 13px; }
+
+.gantti > h1 {
+  font-size: 30px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  color: #d33682; }
+
+.gantti > h2 {
+  color: #b58900;
+  font-weight: normal;
+  margin-bottom: 10px; }
+
+.gantti > p {
+  margin-bottom: 20px; }
+
+.gantti > ul li {
+  list-style: square; }
+
+.gantti > article {
+  padding-bottom: 100px; }
+
+.gantti > pre {
+  font-family: "Monaco", "Courier", monospace;
+  position: relative;
+  overflow: auto;
+  background: #002b36;
+  color: #93a1a1;
+  box-shadow: rgba(0, 0, 0, 0.8) 0px 2px 10px inset;
+  padding: 20px;
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 24px;
+  border-radius: 3px; }
+
+.gantti > pre code {
+  font-family: "Monaco", "Courier", monospace;
+  background: none;
+  padding: 0;
+  white-space: pre;
+  box-shadow: none;
+  border-radius: 0; }

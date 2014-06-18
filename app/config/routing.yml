@@ -1,0 +1,54 @@
+file:
+    resource: "@FileBundle/Resources/config/routing.yml"
+    prefix:   /
+
+iof:
+    resource: "@IofBundle/Resources/config/routing.yml"
+    prefix:   /
+
+forecast:
+    resource: "@ForecastBundle/Resources/config/routing.yml"
+    prefix:   /
+
+project:
+    resource: "@ProjectBundle/Resources/config/routing.yml"
+    prefix:   /
+
+albatross_operation:
+    resource: "@AlbatrossOperationBundle/Resources/config/routing.yml"
+    prefix:   /
+
+albatross_custom:
+    resource: "@AlbatrossCustomBundle/Resources/config/routing.yml"
+    prefix:   /
+
+albatross_daily:
+    resource: "@AlbatrossDailyBundle/Resources/config/routing.yml"
+    prefix:   /
+
+albatross_user:
+    resource: "@AlbatrossUserBundle/Resources/config/routing.yml"
+    prefix:   /
+
+albatross_core:
+    resource: "@AlbatrossCoreBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+albatross_ace:
+    resource: "@AlbatrossAceBundle/Resources/config/routing.yml"
+    prefix:   /
+    
+login:
+    pattern:  /login
+    defaults: { _controller: "AlbatrossUserBundle:User:login", current: 'login'}
+
+login_check:
+    pattern: /login_check
+
+logout:
+    pattern: /logout
+
+ajax:
+     pattern: /ajax
+     defaults: { _controller: AlbatrossAceBundle:Ajax:ajax }
+    

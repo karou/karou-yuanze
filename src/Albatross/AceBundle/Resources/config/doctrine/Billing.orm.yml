@@ -1,0 +1,41 @@
+Albatross\AceBundle\Entity\Billing:
+  type: entity
+  table: billing
+  oneToOne:
+    aolsurvey:
+      targetEntity: Albatross\AceBundle\Entity\Aolsurvey
+  repositoryClass: 
+    Albatross\AceBundle\Entity\BillingRepository
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    BillingRate:
+      type: float
+      column: billing_rate
+    BillingCurr:
+      type: string
+      length: 255
+      column: billing_curr
+    PayRate:
+      type: float
+      column: pay_rate
+      nullable: true
+    PrecalcBillingItemsSum:
+      type: float
+      column: precalc_billing_items_sum
+    PrecalcBillingItemsCount:
+      type: smallint
+      column: precalc_billing_items_count
+    PrecalcPayrollItemsSum:
+      type: float
+      column: precalc_payroll_items_sum
+    PrecalcPayrollItemsCount:
+      type: smallint
+      column: precalc_payroll_items_count
+    PayrollCurr:
+      type: string
+      column: payroll_curr
+  lifecycleCallbacks: {}

@@ -1,0 +1,170 @@
+/* 
+    Document   : IOFUpload.css
+    Created on : Dec 30, 2013, 10:14:15 AM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#fileupload_IOF_form_box {
+    width: 50%;
+    height: 99%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    background: rgba(248, 248, 248, 70);
+    font-family: 'Calibri','arial';
+    border-bottom: 3px #006699 solid;
+    border-left: 2px solid #006699;
+    border-right: 2px solid #006699;
+}
+
+#iof-title-info-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-style: italic;
+    border-bottom: 2px #006699 solid;
+}
+#iof-upload-title {
+    background:  #006699;
+    color: snow;
+    font-size: 18px;
+}
+#form-iof-big {
+    width: 100%;
+    height: 80%;
+    overflow: auto;
+}
+#form-iof-big table{
+    border-collapse: collapse;
+    font-size: 12px;
+}
+.iof-form {
+    width: 100%;
+    border-bottom: 2px #006699 solid;
+}
+.iof-form tr td {
+    padding: 0;
+}
+.form-info-table {
+    width: 100%;
+    border-bottom: 1px #006699 solid;
+}
+.message-fieldset {
+    border: none;
+}
+.add-file-button {
+    height: 10px;
+    width: 10px;
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -36px -132px rgba(0, 0, 0, 0);
+    cursor: pointer;
+    float:left;
+    margin-left: 10px;
+}
+.delete-file-button {
+    height: 10px;
+    width: 10px;
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -67px -132px rgba(0, 0, 0, 0);
+    cursor: pointer;
+    float:left;
+    margin-left: 10px;
+}
+.file-iof-table {
+    margin-left: 10px;
+}
+.form-title {
+    background: #E77E23;
+    color: snow;
+    font-size: 14px;
+}
+#iof-form-add-big-button {
+    height: 40px;
+    width: 40px;
+    background: url("/images/add_black.png") no-repeat scroll rgba(231,126,35,1);
+    -webkit-background-size:100% 100%;
+    -o-background-size:100% 100%;
+    background-size:100% 100%;
+    float: right;
+    cursor: pointer;
+    margin: 10px;
+    border: 1px solid #006699;
+}
+.file-message-td {
+    color: #0000ee;
+    font-style: italic;
+    border-bottom: 1px #006699 dashed;
+    height: 30px;
+}
+.file-message-table {
+    /*border: 1px #006699 dashed;*/
+    /*background: #04B3A2;*/
+    background: rgba(231,126,35,0.6);
+    width: 100%;
+}
+#add-index2-button {
+    height: 20px;
+    margin-left: 11px;
+}
+.add-index2-td {
+    height: 30px;
+    border-bottom: 1px #E77E23 solid;
+    cursor: pointer;
+}
+.message-add-index2 {
+    display: none;
+    width: 200px;
+    font-style: italic;
+    font-weight: bold;
+    color: #0000EE;
+    margin-left: 10px;
+}
+#iof-submit-button {
+    background: #E77E23;
+    border: 1px #006699 solid;
+    height:40px;
+    margin: 10px;
+}
+.change-date-report {
+    height: 12px;
+    width: 12px;
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -115px -84px rgba(0, 0, 0, 0);
+    float: left;
+    margin-left: 10px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+.change-date-report:hover {
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -68px -84px rgba(0, 0, 0, 0);
+}
+.reportinput {
+    float: left;
+}
+.reportdate {
+    background: #E77E23;
+    border: 1px #E77E23 solid;
+    padding: 2px;
+}
+.reporttext {
+    background: #27AE61;
+    border: 1px #27AE61 solid;
+    padding: 2px;
+}
+#pm-select-table {
+    width: 100%;
+    background: #006666;
+}
+#pm-select-table th{
+    width: 20%;
+    color: snow;
+}
+#pm-select-table td select {
+    background: #006666;
+    border: 0;
+    width: 100%;
+    color: snow;
+}

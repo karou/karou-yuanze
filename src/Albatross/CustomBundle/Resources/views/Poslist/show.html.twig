@@ -1,0 +1,146 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Poslist</h1>
+
+    <table class="record_properties">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ entity.id }}</td>
+            </tr>
+            <tr>
+                <th>Store_id</th>
+                <td>{{ entity.storeid }}</td>
+            </tr>
+            <tr>
+                <th>Location_name</th>
+                <td>{{ entity.locationname }}</td>
+            </tr>
+            <tr>
+                <th>Number_of_visits</th>
+                <td>{{ entity.numberofvisits }}</td>
+            </tr>
+            <tr>
+                <th>Store_name</th>
+                <td>{{ entity.storename }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ entity.address }}</td>
+            </tr>
+            <tr>
+                <th>Address_2</th>
+                <td>{{ entity.address2 }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ entity.city }}</td>
+            </tr>
+            <tr>
+                <th>County</th>
+                <td>{{ entity.county }}</td>
+            </tr>
+            <tr>
+                <th>State_region</th>
+                <td>{{ entity.stateregion }}</td>
+            </tr>
+            <tr>
+                <th>Postal_code</th>
+                <td>{{ entity.postalcode }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ entity.country }}</td>
+            </tr>
+            <tr>
+                <th>Phone</th>
+                <td>{{ entity.phone }}</td>
+            </tr>
+            <tr>
+                <th>Fax</th>
+                <td>{{ entity.fax }}</td>
+            </tr>
+            <tr>
+                <th>Location_hours</th>
+                <td>{{ entity.locationhours }}</td>
+            </tr>
+            <tr>
+                <th>Export_email</th>
+                <td>{{ entity.exportemail }}</td>
+            </tr>
+            <tr>
+                <th>Export_email_name</th>
+                <td>{{ entity.exportemailname }}</td>
+            </tr>
+            <tr>
+                <th>Export_language</th>
+                <td>{{ entity.exportlanguage }}</td>
+            </tr>
+            <tr>
+                <th>Location_status</th>
+                <td>{{ entity.locationstatus }}</td>
+            </tr>
+            <tr>
+                <th>Location_photo_url</th>
+                <td>{{ entity.locationphotourl }}</td>
+            </tr>
+            <tr>
+                <th>Latitude</th>
+                <td>{{ entity.latitude }}</td>
+            </tr>
+            <tr>
+                <th>Longitude</th>
+                <td>{{ entity.longitude }}</td>
+            </tr>
+            <tr>
+                <th>Date_geocode_acquired</th>
+                <td>{{ entity.dategeocodeacquired }}</td>
+            </tr>
+            <tr>
+                <th>Geocode_source</th>
+                <td>{{ entity.geocodesource }}</td>
+            </tr>
+            <tr>
+                <th>Additional_comments</th>
+                <td>{{ entity.additionalcomments }}</td>
+            </tr>
+            <tr>
+                <th>Summary_label</th>
+                <td>{{ entity.summarylabel }}</td>
+            </tr>
+            <tr>
+                <th>Summary_content</th>
+                <td>{{ entity.summarycontent }}</td>
+            </tr>
+            <tr>
+                <th>Summary_display</th>
+                <td>{{ entity.summarydisplay }}</td>
+            </tr>
+            <tr>
+                <th>Region</th>
+                <td>{{ entity.region }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('poslist') }}">
+            Back to the list
+        </a>
+    </li>
+    <li>
+        <a href="{{ path('poslist_edit', { 'id': entity.id }) }}">
+            Edit
+        </a>
+    </li>
+    <li>
+        <form action="{{ path('poslist_delete', { 'id': entity.id }) }}" method="post">
+            <input type="hidden" name="_method" value="DELETE" />
+            {{ form_widget(delete_form) }}
+            <button type="submit">Delete</button>
+        </form>
+    </li>
+</ul>
+{% endblock %}

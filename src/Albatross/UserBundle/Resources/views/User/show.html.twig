@@ -1,0 +1,359 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% block stylesheets %}
+<link href="{{ asset('/css/user.css') }}" rel="stylesheet" type="text/css" media="screen" />
+{% endblock %}
+{% block title %}
+    Albatross User Profile
+{% endblock %}
+{% block javascripts %}
+<script>
+     $(function() {
+         checkButtonVal({{platform}}, {{aol}}, {{ace}}, {{crm}});
+         $('#user_info_pic').mouseover(function(){
+             $('#user_info_pic').css('border', '3px #3598DC solid');
+         });
+         $('#user_info_pic').mouseleave(function(){
+             $('#user_info_pic').css('border', '3px #fff solid');
+         });
+     });
+    function checkButtonVal(platform, aol, ace, crm){
+        if(platform == 1){
+            $('#platform').val('Edit Platform Password');
+        }else{
+            $('#platform').val('Set Platform Password');
+        }
+        if(aol == 1){
+            $('#aol').val('Edit Aol Password');
+        }else{
+            $('#aol').val('Set Aol Password');
+        }
+        if(ace == 1){
+            $('#ace').val('Edit Ace Password');
+        }else{
+            $('#ace').val('Set Ace Password');
+        }
+        if(crm == 1){
+            $('#crm').val('Edit Crm Password');
+        }else{
+            $('#crm').val('Set Crm Password');
+        }
+    }
+    function edit() {
+        var editform = '<input type="button" value="submit" onclick="submit()"> <input type="button" value="cancel" onclick="cancel();">';
+        $('#user_action').html(editform);
+
+        $('.user_edit').each(function() {
+            var form = $(this).html();
+            var change = '<input type="text" value="' + form + '" class="user_edit_form">';
+            $(this).html(change);
+        });
+    }
+
+    function submit() {
+        var data = '{';
+
+        $('.user_edit').each(function() {
+            data += '"' +$(this).attr('id') + '":"' + $(this).children().val() + '",';
+        });
+        data = data.substring(0, data.length-1);
+        data += '}';
+
+        $.ajax({
+            type: "POST",
+            data: data,
+            url: "{{ path('user_edit_ajax') }}/{{entity.id}}",
+            success: function(result) {
+                var obj = JSON.parse(result);
+                for (var i in obj) {
+                    $('#' + i).html(obj[i]);
+                }
+                var editform = '<input type="button" value = "edit" onclick="edit();">';
+                $('#user_action').html(editform);
+            }
+        });
+    }
+
+    function cancel() {
+        $('.user_edit').each(function() {
+            var data = $(this).children().val();
+            $(this).html(data);
+            var editform = '<input type="button" value = "edit" onclick="edit();">';
+            $('#user_action').html(editform);
+        });
+    }
+
+//password part
+    function showPsw(obj) { //show the change psw form, and assign the psw type to pswType;
+        clearPwValue();
+        var type = $(obj).attr('id');
+        $('#pswType').val(type);
+        
+        if((type == 'platform' && {{platform}} == 0) || (type == 'aol' && {{aol}} == 0) || (type == 'ace' && {{ace}} == 0) || (type == 'crm' && {{crm}} == 0)){
+            $('.oldPassword').attr('style', 'display:none');
+        }else{
+            $('.oldPassword').attr('style', 'display:display');
+        }
+        $('#password_edit_box').fadeIn();
+    }
+    function hidePsw() {
+        clearPwValue();
+        $('#password_edit_box').fadeOut();
+    }
+    function clearPwValue(){
+        $('#pwmessage').html('');
+        $('#Error0').html('');
+        $('#Error1').html('');
+        $('#Error2').html('');
+        $('#old_password').val('');
+        $('#new_password').val('');
+        $('#confirm_password').val('');
+    }
+    function clickEditPsw(data) {
+        var type = getPswType();
+        $.ajax({
+            type: "POST",
+            data: data,
+            url: "{{ path('user_password_ajax') }}/" + type + "/{{entity.id}}",
+            success: function(result) {
+                $('#pwmessage').html(result);
+                if (result === '<font style="color:green; font-size:12px">Change the password successfully.</font>') {
+                    window.setTimeout(function() {
+                        $('#password_edit_box').fadeOut();
+                        clearPwValue();
+                        if(type == 'platform'){
+                            $('#platform').val('Edit Platform Password');
+                        }
+                        if(type == 'aol'){
+                            $('#aol').val('Edit Aol Password');
+                        }
+                        if(type == 'ace'){
+                            $('#ace').val('Edit Ace Password');
+                        }
+                        if(type == 'crm'){
+                            $('#crm').val('Edit Crm Password');
+                        }
+                    }, 2000);
+                }
+            }
+        });
+    }
+
+    function getData() { //get password value and make is as array
+        var dataArr = [$('#old_password').val(), $('#new_password').val(), $('#confirm_password').val()];
+        return dataArr;
+    }
+
+    function getPswType() {
+        var type = $('#pswType').val();
+        return type;
+    }
+
+    function validate() {
+        var dataArr = getData();
+        var v = 0;
+        var result = '';
+        $.each(dataArr, function(n, value) {
+            if (value === '' && n !== 0) {
+                $('#Error' + n).html('<font color="red" style="font-size:12px;">Cannot empty</font>');
+                v = 1;
+            } else {
+                result += value + ',';//make a password string to backend
+                $('#Error' + n).html('');
+            }
+
+        });
+        if (v === 0) {
+            clickEditPsw(result);
+        } else {
+            return false;
+        }
+    }
+    function submitPicFile(){
+        $('#user-pic-file').click();
+    }
+    function submitPic(){
+        var formData = new FormData();
+        var fileObj = document.getElementById("user-pic-file").files;
+        for (var i = 0; i < fileObj.length; i++){           
+            formData.append("file" + i, fileObj[i]);  
+        }
+        var url = '{{path('submitPic', {'id':entity.id})}}';
+        $.ajax({
+            data: formData,
+            contentType: false,
+            processData: false,
+            type: "POST",
+            url: url,
+            success: function(result) {
+                var newPic = '<img height="75px" width="75px" src="/'+result+'">';
+                $('#user_info_pic').html(newPic);
+            }
+        });
+    }
+    </script>
+{% endblock %}
+{% block content -%}
+
+    <table class="user_info_table">
+        <tbody>
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend class="user_info_legend">
+                            Name
+                        </legend>
+                        <div id="user_info_pic" onclick="submitPicFile();">
+                            <div id="pic-cover" style="display: none;">Change Photo</div>
+                            <img id="pic-user" height="75px" width="75px" src="{{ entity.pic ?  asset(entity.webPath) : '/images/user/default.png' }}" />
+                        </div>
+                            <input type="file" id="user-pic-file" onchange="submitPic();" style="display: none;">
+                        <div id="user_info_name">
+                            <table class="user_field">
+                                <tr>
+                                    <th>Full name:
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td id = "fullname" class="user_edit">{{ entity.fullname }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend class="user_info_legend">
+                            Site name
+                        </legend>
+                        <div id="user_info_info">
+                            <table class="user_field">
+                                <tr>
+                                    <th>PlatForm name:</th>
+                                    <td id="username" class="user_edit">{{ entity.username }}</td>
+                                    <td></td>
+                                    <td><input type="button" id="platform" value="Edit Platform Password" onclick="showPsw(this);"></td>
+                                </tr>
+                                <tr>
+                                    <th>Aol name:
+                                    </th>
+                                    <td id="aolusername" class="user_edit">{{ entity.aolusername }}</td>
+                                    <td></td>
+                                    <td><input type="button" id="aol" value="Edit Aol Password" onclick="showPsw(this);"></td>
+                                </tr>
+                                <tr>
+                                    <th>Ace name:
+                                    </th>
+                                    <td id="aceusername" class="user_edit">{{ entity.aceusername }}</td>
+                                    <td></td>
+                                    <td><input type="button" id="ace" value="Edit Ace Password" onclick="showPsw(this);"></td>
+                                </tr>
+                                <tr>
+                                    <th>Crm name:
+                                    </th>
+                                    <td id="crmusername" class="user_edit">{{ entity.crmusername }}</td>
+                                    <td></td>
+                                    <td><input type="button" id="crm" value="Edit Crm Password" onclick="showPsw(this);"></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <fieldset>
+                        <legend class="user_info_legend">
+                            Information
+                        </legend>
+                        <div id="user_info_info">
+                            <table class="user_field">
+                                <tr>
+                                    <th>Email:</th>
+                                    <td id="email" class="user_edit">{{ entity.email }}</td>
+                                    <th>Title:
+                                    </th>
+                                    <td id="title" class="user_edit">{{ entity.title }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Skype:
+                                    </th>
+                                    <td id="skype" class="user_edit">{{ entity.skype }}</td>
+                                    <th>Mobile:
+                                    </th>
+                                    <td id="mobile" class="user_edit">{{ entity.mobile }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Office phone:
+                                    </th>
+                                    <td id="officephone" class="user_edit">{{ entity.officephone }}</td>
+                                    <th>Country:
+                                    </th>
+                                    <td id="country" class="user_edit">{{ entity.country }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Office address:
+                                    </th>
+                                    <td id="officeaddress" class="user_edit" colspan="2">{{ entity.officeaddress }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="user_action">
+                        <input type="button" value = "edit" onclick="edit();">
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <input id="pswType" style="display:none" value="">
+    <div id="password_edit_box" style="display:none">
+        <div id="password_form">
+            <table>
+                <tr>
+                    <td style="color: black; font-size: 20px; font-weight: bold;" colspan="2">
+                        Edit Password
+                    </td>
+                </tr>
+                <tr class="oldPassword">
+                    <th><label  for="old_password" >Old Password</label></th>
+                    <td><input id="old_password" type="password" name="old_password" value='' /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><span id="Error0"></span></td>
+                </tr>
+                <tr>
+                    <th><label  for="new_password">New Password</label></th>
+                    <td><input id="new_password" type="password" name="new_password" value='' /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><span id="Error1"></span></td>
+                </tr>
+                <tr>
+                    <th><label  for="confirm_password">Confirm Password</label></th>
+                    <td><input id="confirm_password" type="password" name="confirm_password" value='' /></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><span id="Error2"></span></td>
+                </tr>
+                <tr>
+                    <td id="pwmessage" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <input id="password_edit_button" type="button" value='Edit' onclick="validate();"/>
+                        <input id="password_cancel_button" type="button" value='cancel' onclick="hidePsw();"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

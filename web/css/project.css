@@ -1,0 +1,367 @@
+/* 
+    Document   : project
+    Created on : Jun 11, 2013, 12:19:32 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+body {
+    width: 960px;
+    margin: 0 auto;
+    font-size: 12px;
+    line-height: 18px;
+    background-color: #FFFFFF;
+    height: 100%;
+    display: block;
+    
+    font-family: 'Trebuchet MS','arial';
+}
+
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.clear{ clear:both; float:none;}
+
+#main {
+    margin: 0 auto;
+    border: 1px rgb(199, 196, 190) solid;
+}
+
+root { 
+    display: block;
+}
+
+.sync_button {
+    background: none repeat scroll 0 0 #F4F3F2;
+    
+    border: 1px solid #C7C4BE;
+    border-radius: 3px 3px 3px 3px;
+    
+    cursor: pointer;
+    
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+    height: 30px;
+    margin-bottom: 5px;
+    width: 140px;
+}
+
+/** TABLE LIST **/
+table.records_list {
+    border-collapse: separate;
+    border-spacing: 0;
+    width: 100%;
+    text-align: left;
+    
+    margin: 0 auto;
+}
+
+table.records_list > thead {
+    background: none repeat scroll 0 0 #B3DAF9;
+}
+
+table.records_list tr.active {
+    background: none repeat scroll 0 0 #E2F3FF;
+}
+
+ul.inline li{
+    display: inline;
+}
+
+#progressbar {
+    margin: 0 auto;
+    margin-top: 295px;
+    margin-bottom: 10px;
+    /*padding: 2px 0 2px 0;*/
+    width:748px; 
+    height:30px; 
+    background: cornsilk;
+    border: 2px #3598DC solid;
+    /*border-radius: 4px;*/
+}
+
+#loading {
+    background: #3598DC;
+    height: 30px;
+    float: left;
+    /*border-radius: 0 1px 1px 0;*/
+}
+
+#load_window{
+    position: fixed; 
+    left:0px; 
+    top:0px; 
+    background: rgba(160,160,160,0.6)!important; 
+    height:100%; width:100%;
+    text-align: center;
+    color: cornsilk;
+    font-family: 'Trebuchet MS','arial';
+    font-size: 25px;
+    font-weight: bold;
+}
+
+#fileupload{
+    text-align: center;
+    line-height: 30px;
+    background:#F4F3F2; 
+    float:left; 
+    border:1px solid #C7C4BE; 
+    height: 28px; 
+    width: 288px;
+    margin-left:10px; 
+    /*margin-top:5px;*/ 
+    border-radius: 3px;
+}
+
+#searchBar{
+    border:1px solid #C7C4BE; 
+    border-radius: 3px;
+    background:#F4F3F2; 
+    height: 28px; 
+    line-height: 30px;
+    text-align: center;
+    /*margin-top:5px;*/ 
+    margin-bottom:5px; 
+}
+
+#filelistbox{
+    border-bottom: 1px #C7C4BE solid; 
+    border-left: 1px #C7C4BE solid; 
+    border-right: 1px #C7C4BE solid; 
+    width: 287px;
+    text-align: center; 
+    margin-top: -5px;
+    position:absolute; 
+    display: none; 
+    background: #fff;
+}
+
+.filelist{
+    margin:2px;
+    height:25px;
+    border:1px #646464 solid;
+    border-radius: 3px;
+    width: 280px;
+    line-height: 25px;
+}
+.filename {
+    float:left;
+    margin-left: 5px;
+}
+.deletefile {
+    float:right;
+    margin-right: 3px;
+    cursor: pointer;
+}
+.deletefile:hover{
+    color:red;
+}
+
+.file_project {
+    display: block;
+    height: 18px;
+    width: 16px;
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat 0px -95px;
+}
+
+#cover_window {
+    position: fixed; 
+    left:0px; 
+    top:0px; 
+    background: rgba(160,160,160,0.6)!important; 
+    height:100%; width:100%;
+}
+
+#fileupload_project_form_box{
+    margin: 0 auto;
+    
+    margin-top: 5%;
+    
+    width: 95%;
+    min-height: 180px;
+    max-height: 450px;
+    background: rgb(101, 149, 214);
+    padding: 10px;
+    border: 2px #C7C4BE solid;
+    border-radius: 0 0 3px 3px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 12px;
+}
+#fileupload_project_form_box fieldset {
+    border: none;
+    border-bottom: 1px #C7C4BE dashed;
+}
+#fileupload_project_form_box form {
+    padding: 0px;
+    margin: 0px;
+    background: none;
+    border: none;
+}
+
+#fileupload_project_name{
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#fileupload_button_box {
+    height: 30px;
+    line-height: 30px;
+}
+
+#fileupload_label_fieldset, #fileupload_option_fieldset {
+    width: 47.5%;
+    height: 40px;
+}
+
+#fileupload_label_fieldset {
+    float: left;
+}
+
+#fileupload_option_fieldset {
+    float: right;
+}
+
+#fileupload_project_form_box fieldset legend {
+    color: white;
+    /*font-weight: bold;*/
+    font-size: 14px;
+}
+
+#fileupload_project_name_fieldset {
+    text-align: center;
+}
+
+#albatross_acebundle_attachmenttype_message {
+    width: 100%;
+    height: 75px;
+    resize: none;
+}
+
+#albatross_acebundle_attachmenttype_label {
+    width: 99%;
+}
+.options {
+    display: block;
+}
+.options tr td input{
+    width: 110px;
+}
+#success_box {
+/*    position: absolute;
+    display: block;*/
+    
+    width: 300px;
+    height: 100px;
+    background: #B3DAF9; 
+    text-align: center;
+    line-height: 100px;
+    margin: 0 auto;
+    
+    margin-top: 15%;
+    border: 2px #6595D6 solid;
+}
+#albatross_acebundle_attachmenttype_user_chzn {
+    min-width: 100px;
+}
+#window-cover {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(233, 233, 233, 0.3);
+}
+/*#loading_2 {
+    position: fixed;
+    left:0px;
+    right:0px;
+    margin:0 auto;
+    top: 30%;
+}*/
+#fileSavePercent {
+    text-align: center;
+}
+#load_container{
+    position: fixed;
+    left:0px;
+    right:0px;
+    margin:0 auto;
+    top: 30%;
+    width: 150px;
+}
+#refresh-survey-button {
+    width: 140px;
+    background: rgba(231, 126, 35, 0.6);
+    border: 1px rgba(231, 126, 35, 1) solid;
+}
+#refresh-survey-button:hover {
+    background: rgba(231, 126, 35, 0.8);
+}
+#show-deleted-button {
+    width: 140px;
+    background: rgba(0, 82, 156, 0.6);
+    border: 1px rgba(0, 82, 156, 1) solid;
+}
+#show-deleted-button:hover {
+    background: rgba(0, 82, 156, 0.8);
+}
+#deletedSurveyBox {
+    width: 50%;
+    position: fixed;
+    top: 5%;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    min-height: 50%;
+    max-height: 80%;
+    overflow-y: scroll;
+    background: #FFF;
+    border: 1px #E1E1E1 solid;
+    box-shadow: 5px 5px 7px #111;
+    -moz-box-shadow: 5px 5px 7px #111;
+    -webkit-box-shadow: 5px 5px 7px #111;
+    -webkit-border-bottom-right-radius: 15px;
+}
+#deleted-survey-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+#deleted-survey-table-title {
+    background: #E1E1E1;
+}
+#deleted-survey-table td, #deleted-survey-table th{
+    border: 1px #E1E1E1 solid;
+    color: #3598DC;
+    height: 24px;
+}
+#deleted-survey-table-title {
+    font-size: 20px;
+}
+#deleted-survey-table-subtitle {
+    background: #FAFAFA;
+}
+#closeShowDeletedSurvey {
+    float: right;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+#log-table td, #log-table th {
+    border: 1px solid #C7C4BE;
+} 
+#log-table th {
+    background: #B3DAF9;
+}
+.long-tr-group {
+    background: #E2F3FF;
+}
+#log-table{
+    border-collapse: separate;
+    margin: 0 auto;
+    text-align: left;
+    width: 100%;
+}

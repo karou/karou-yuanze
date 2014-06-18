@@ -1,0 +1,368 @@
+{% extends "AlbatrossUserBundle:Default:layout_v2.html.twig" %}
+
+{% block title 'Profile' %}
+
+    {% block breadcrumb %}
+        <li class="active">{{ userInfo.fullname }}</li>
+    {% endblock %}
+
+    {% block pageHeading userInfo.fullname %}
+
+        {% block javascripts %}
+            <script src="js/profile.js"></script>
+        {% endblock %}
+        {% block body %}
+
+            <!--BODY STARTS-->
+            <link rel="stylesheet" href="css/profile-info.css">
+            <div class="row-fluid">
+                <div class="span-12">
+                    <table class="content-container-table">
+                        <tr>
+                            <td class="content-container-table-left-td">
+                                <div class="left-container-profile">
+                                    <div class="thumbnail pull-left" id="profile-user-pic">
+                                        <div id="profile-pic-cover">
+                                        </div>
+                                        <span id="profile-edit-pic-button" onclick="$('#user-pic-file').click();">
+                                            <i class="icon-pencil"></i>
+                                        </span>
+                                        <img alt="240*240" data-src="holder.js/300x200" style="width: 240px; height: 240px;" src="{{ userInfo.pic ?  asset(userInfo.webPath) : 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAELElEQVR4nO3bMW7iQABA0b3/UXwDDkBP75aaK2QrR7NeO4HskvCtVzwJWQOaZr7Gg/3rdru9ART8+ukJANxLsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgTrQE6n09s0Te8ul8vu2PP5/JSxjxh/c/HK8+XnCdZBbC3+aZrezufzX2PXYftfY+81z/PufKdpertery81X16HYB3A5XJ5X5jzPO9eW19fwjAG5KtjHzFGZbl2vV7fr51Op5eaL69DsA5gCcC40McAjAt1GbvecWxdv3fsXmzGsWOc9nY9463cM+dLl2Ad1Lj4x1usvXOdZfwYnEfGbu3oHt3dbAXrWfOlSbAOZn0+NMZq3AntLeolFo+MXax3enu7rj3rndez50uPYB3MuNNZ3wY9OwDrW8O9Q/QtWztCwWJNsA5qawF/RwC+8kjB+J1xvGCxJlgH9i+L+qsBGL93z+5qL1bfNV9aBOvAfuIQe/0c1EfnVx/F6rvmS4tgxd2zsxgX6tYjEOP1rccE7hl7u/15frb+vJ73GKuP/kF85nzpEawD2DrgHv8tHIPxrAcxx3AuYdg7eB9/97OIeHCUkWAdwPrc6LNbsme86vLZ0+vj+L25jp49X5oE60DWi/S7Xn7e282tvzvP86fvEe4djnv5mdtNsIAQwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjJ+A8sf5ZmmLjF2AAAAAElFTkSuQmCC' }}">
+                                        <input type="file" id="user-pic-file" onchange="submitUserPic();" style="display: none;">
+                                    </div>
+                                    <div class="clear-both"></div>
+                                    <div class="proj-list-profile">
+                                        <ul>
+                                            <li class="proj-list-profile-title">
+                                                Projects
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                            <li class="proj-list-profile-content">
+                                                Burberry_Retail_WW
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="clear-both"></div>
+                                </div>
+                            </td>
+                            <td class="content-container-table-right-td">
+                                <div class="right-container-profile">
+                                    <div id="project-head">
+                                        <div class="profile-info-box"><i class="icon-user"></i> Profile Info </div>
+                                        <div id="project-action-button">
+                                            <button class="btn btn-profile-info-edit" type="button" onclick="translateIntoEditInfo();">
+                                                <i class="icon-pencil"></i> Edit Profile 
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="clear-both"></div>
+                                    <div class="right-container-profile-content">
+                                        <!-- start table for site name -->
+                                        <table class="site-name-table">
+                                            <tr>
+                                                <th colspan="3">
+                                            <h3 class="page-header">Site Name</h3>
+                                            </th>
+                                            </tr>
+                                            <tr id="profile-error-message-1">
+                                                <td colspan="3">
+                                                    <div class="profile-error-container">
+                                                        <h4>There are serious errors in your submission, please see below for details.</h4>
+                                                        <ol>
+                                                            <li>
+
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Platform name:
+                                                </td>
+                                                <td id="platformname-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.username }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                                <td>
+                                                    <button id="platform-password" class="btn-profile-password-edit" type="button" onclick="showPasswordForm(this,{% if userInfo.password is not empty %}1{% else %}0{% endif %});" >
+                                                        EDIT Platform Password
+                                                        <i class="icon-lock"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">AOL name:
+                                                </td>
+                                                <td id="aolname-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.aolusername }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                                <td>
+                                                    <button id="aol-password" class="btn-profile-password-edit" type="button" onclick="showPasswordForm(this,{% if userInfo.aolpassword is not empty %}1{% else %}0{% endif %});">
+                                                        EDIT AOL Password
+                                                        <i class="icon-lock"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">ACE name:
+                                                </td>
+                                                <td id="acename-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.aceusername }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                                <td>
+                                                    <button id="ace-password" class="btn-profile-password-edit" type="button" onclick="showPasswordForm(this,{% if userInfo.acepassword is not empty %}1{% else %}0{% endif %});">
+                                                        EDIT ACE Password
+                                                        <i class="icon-lock"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">CRM name:
+                                                </td>
+                                                <td id="crmname-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.crmusername }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                                <td>
+                                                    <button id="crm-password" class="btn-profile-password-edit" type="button" onclick="showPasswordForm(this,{% if userInfo.crmpassword is not empty %}1{% else %}0{% endif %});"> 
+                                                        EDIT CRM Password
+                                                        <i class="icon-lock"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!-- end table for site name -->
+                                        <!-- start table for information -->
+                                        <table class="information-table">
+                                            <tr>
+                                                <th colspan="2">
+                                            <h3 class="page-header">Information</h3>
+                                            </th>
+                                            </tr>
+                                            <tr id="profile-error-message-2">
+                                                <td colspan="3">
+                                                    <div class="profile-error-container">
+                                                        <h4>There are serious errors in your submission, please see below for details.</h4>
+                                                        <ol>
+                                                        </ol>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Full name:
+                                                </td>
+                                                <td id="fullname-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.fullname }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Title:
+                                                </td>
+                                                <td id="title-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.title }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Country:
+                                                </td>
+                                                <td id="country-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.country }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Email:
+                                                </td>
+                                                <td id="email-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.email }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Skype:
+                                                </td>
+                                                <td id="skype-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.skype }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Office Phone:
+                                                </td>
+                                                <td id="officephone-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.officephone }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Mobile:
+                                                </td>
+                                                <td id="mobile-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.mobile }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="profile-info-td-bold">Office Adress:
+                                                </td>
+                                                <td id="officeaddress-td" class="profile-editable-td">
+                                                    <span class="fixed-info">{{ userInfo.officeaddress }}</span>
+                                                    <span class="editable-info"></span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <!--end table for information-->
+                                        <!--password form start-->
+                                        <div id="password_form">
+                                            <table>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <h3 class="page-header">Edit <span id="password_type"></span> Password</h3>
+                                                    </td>
+                                                </tr>
+                                                <tr class="oldPassword">
+                                                    <td><label  for="old_password" >Old Password</label></td>
+                                                    <td><input id="old_password" type="password" name="old_password" value='' style="height: 20px; width: 150px; margin:0; padding: 0 0 0 8px;" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><span id="Error0"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label  for="new_password">New Password</label></td>
+                                                    <td><input id="new_password" type="password" name="new_password" value='' style="height: 20px; width: 150px; margin:0; padding: 0 0 0 8px;" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><span id="Error1"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td><label  for="confirm_password">Confirm Password</label></td>
+                                                    <td><input id="confirm_password" type="password" name="confirm_password" value='' style="height: 20px; width: 150px; margin:0; padding: 0 0 0 8px;" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td><span id="Error2"></span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td id="pwmessage" colspan="2"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <button id="password_edit_button" class="btn btn-primary profile-submit-button" onclick="validate();" type="button">
+                                                            <i class="icon-ok"></i>
+                                                            Submit
+                                                        </button>
+                                                        <input id="password_cancel_button" class="btn btn-default" type="button" value='Cancel' onclick="hidePasswordForm();"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <!--password form end-->
+                                        <!--start upload & comment-->
+                                        <div class="primary-head profile-info-comments-upload">
+                                            <h3 class="page-header">Comments & Uploads</h3>
+                                        </div>
+                                        <div class="tab-widget profile-info-comments-upload">
+                                            <ul class="nav nav-tabs" id="myTab2">
+                                                <li class="active"><a href="#tab-upload"><i class="icon-cloud-upload"></i>Uploads</a></li>
+                                                <li class><a href="#tab-comment"><i class="icon-comments"></i>Comments</a></li>
+                                            </ul>
+                                            <div class="tab-content">
+                                                <div class="tab-pane active" id="tab-upload">
+                                                    <div class="comment-items">
+                                                        <?php for($i=1;$i<=5;$i++): ?>
+                                                        <div class="item-block clearfix">
+                                                            <div class="item-thumb pull-left">
+                                                                <ul>
+                                                                    <li class="item-pic"><img src="images/item-pic.png" width="34" height="34" alt="anchor"></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="item-intro pull-left" style="width:50%;">
+                                                                <a href="#">IOF-FR-CHRISTOFLE-RETAIL-R-September wave 2013</a>
+                                                                <div class="item-meta">
+                                                                    <ul>
+                                                                        <li><strong>Type:</strong> IOF File</li>
+                                                                        <li><strong>Uploaded:</strong> 2013-08-21</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="pull-right">
+                                                                <button class="btn btn-primary" type="button"><i class="icon-upload-alt"></i> Download</button>
+                                                            </div>
+                                                        </div>
+                                                        <?php endfor; ?>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane" id="tab-comment">
+                                                    <div class="comment-items">
+                                                        <?php for($i=1;$i<=5;$i++): ?>
+                                                        <div class="item-block clearfix">
+                                                            <div class="item-thumb pull-left">
+                                                                <ul>
+                                                                    <li class="item-pic"><img src="images/user-icon.png" width="34" height="34" alt="anchor"></li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="item-intro pull-left" style="width:85%;">
+                                                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                                                                <div class="item-meta">
+                                                                    <ul>
+                                                                        <li>@ibouguet</li>
+                                                                        <li>Project: <a href="#">Christofle_Retail_SW</a></li>
+                                                                        <li>1 Min ago</li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <?php endfor; ?>
+                                                   
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!--end upload & comment-->
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!--BODY ENDS-->
+            <script>
+                $(function() {
+                    $('textarea.chat-inputbox').tinymce({
+                        script_url: 'js/tiny_mce/tiny_mce.js',
+                        theme: "simple",
+                        width: 350
+                    });
+                });
+            </script>
+        {% endblock %}

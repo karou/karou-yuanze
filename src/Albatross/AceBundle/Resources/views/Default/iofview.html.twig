@@ -1,0 +1,602 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Albatross IOF View
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('/css/filelist.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/ioflist.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/chosen.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+<script src="{{ asset('js/ckeditor/ckeditor.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#showPre').click(function(){
+            if($('#showPre').val() === 'Hide Previous Version'){
+                $('#preversion').fadeOut();
+                $('#showPre').val('Show Previous Version');
+            }else if($('#showPre').val() === 'Show Previous Version'){
+                $('#preversion').fadeIn();
+                $('#showPre').val('Hide Previous Version');
+            }
+        });
+
+        $('#albatross_acebundle_iofsearchtype_submit_from').datepicker();
+        $('#albatross_acebundle_iofsearchtype_submit_to').datepicker();
+
+        $("#hidden_frame").attr('src', document.location);
+        
+        //project filter
+        $('#albatross_acebundle_attachmenttype_customclient').change(function() {
+            getCustomprojectByCustomclient($('#albatross_acebundle_attachmenttype_customclient').val());
+        });
+        $('#albatross_acebundle_attachmenttype_customproject').change(function() {
+            getCustomwaveByCustomproject($('#albatross_acebundle_attachmenttype_customproject').val());
+        });
+        $('#albatross_acebundle_attachmenttype_wave').change(function() {
+            getAutoInfoList($('#albatross_acebundle_attachmenttype_wave').val());
+        });
+    });
+
+    function getCustomprojectByCustomclient(id) {
+        $.ajax({
+            data: id,
+            type: "POST",
+            url: "{{ path('getSpecificProject') }}",
+            success: function(result) {
+                $('#albatross_acebundle_attachmenttype_customproject').html(result);
+            }
+        });
+    }
+    function getCustomwaveByCustomproject(id) {
+        $.ajax({
+            data: id,
+            type: "POST",
+            url: "{{ path('getSpecificWave') }}",
+            success: function(result) {
+                $('#albatross_acebundle_attachmenttype_wave').html(result);
+            }
+        });
+    }
+    
+    function getAutoInfoList(id) {
+        $.ajax({
+            data: id,
+            type: "POST",
+            url: "{{ path('getAutoList') }}",
+            success: function(result) {
+                $('.options').html('');
+                getAttachInfo(result);
+            }
+        });
+    }
+
+    function getAttachInfo(info) {
+        var collectionHolder = $('.options');
+        var $addTagLink = $('<input type="button" style="display:none" value="Add a Information" class="add_tag_link" />');
+        var $newLinkLi = $('<span></span>').append($addTagLink);
+        // add the "add a tag" anchor and li to the tags ul
+        collectionHolder.append($newLinkLi);
+
+        // count the current form inputs we have (e.g. 2), use that as the new
+        // index when inserting a new item (e.g. 2)
+        collectionHolder.data('index', collectionHolder.find(':input').length);
+        if (info !== '') {
+            info = info.split(',');
+            for (var i = 0; i < info.length; i++) {
+                // add a new tag form (see next code block)
+                addTagForm(collectionHolder, $newLinkLi, info[i]);
+            }
+        } else {
+            addTagForm(collectionHolder, $newLinkLi, '');
+        }
+    }
+    function showFileUploadFormProject(type) {
+
+        $('#albatross_acebundle_attachmenttype_attachtype').val(type);
+        clearFileFormValue();
+        getAttachInfo('');
+        $('#albatross_acebundle_attachmenttype_user').val("{{uid}}");
+
+        if (!CKEDITOR.instances.albatross_acebundle_attachmenttype_message) {
+            CKEDITOR.replace('albatross_acebundle_attachmenttype_message');
+        }
+        $('#cover_window').fadeIn();
+    }
+
+    function fileuplodFormCancel() {
+        clearFileFormValue();
+        $('#cover_window').fadeOut();
+    }    
+    function getAttachInfoArr(id) {
+        $.ajax({
+            data: id,
+            type: "POST",
+            url: "{{ path('getSpecificAttachInfo') }}",
+            success: function(result) {
+                getAttachInfo(result);
+            }
+        });
+    }
+    function clearFileFormValue() {
+        $('#albatross_acebundle_attachmenttype_label').val('');
+        $('#albatross_acebundle_attachmenttype_file').val('');
+        $('#albatross_acebundle_attachmenttype_text').val('');
+        $('#albatross_acebundle_attachmenttype_wave').val(1);
+        $('#albatross_acebundle_attachmenttype_customclient').val('');
+        $('#albatross_acebundle_attachmenttype_customproject').val('');
+        $('#albatross_acebundle_attachmenttype_wave').val('');
+        if (CKEDITOR.instances.albatross_acebundle_attachmenttype_message) {
+            CKEDITOR.instances.albatross_acebundle_attachmenttype_message.setData('');
+        }
+        $('.options').html('');
+    }
+    function addTagForm(collectionHolder, $newLinkLi, update) {
+        // Get the data-prototype explained earlier
+        var prototype = collectionHolder.data('prototype');
+
+        // get the new index
+        var index = collectionHolder.data('index');
+        // Replace '__name__' in the prototype's HTML to
+        // instead be a number based on how many items we have
+        var newForm = prototype.replace(/__name__/g, index);
+        // increase the index with one for the next item
+        collectionHolder.data('index', index + 1);
+        // Display the form in the page in an li, before the "Add a tag" link li
+        var $newFormLi = $('<tr></tr>').append(newForm);
+        if (index == 1) {
+            $newLinkLi.before('<tr><th>Num</th><th>Bu</th><th>Project</th><th>Scope</th><th>FW start date</th><th>FW end date</th><th>Report due date</th><th>Comment</th></tr>');
+        }
+        $newLinkLi.before($newFormLi);
+        //take the calendar
+        for (var i = 1; i <= index; i++) {
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + i).html(i);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + i + '_fwstartdate').datepicker();
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + i + '_fwenddate').datepicker();
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + i + '_reportduedate').datepicker();
+        }
+
+        //default date value will inherit before information
+        if (index != 1) {
+            var before = index - 1;
+            var fwstartdate = $('#albatross_acebundle_attachmenttype_attachinfo_1_fwstartdate').val();
+            var fwenddate = $('#albatross_acebundle_attachmenttype_attachinfo_1_fwenddate').val();
+            var reportduedate = $('#albatross_acebundle_attachmenttype_attachinfo_1_reportduedate').val();
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_fwstartdate').val(fwstartdate);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_fwenddate').val(fwenddate);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_reportduedate').val(reportduedate);
+        }
+        if (update !== '') {
+            var updateArr = update.split(':');
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_bu').val(updateArr[5]);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_project').val(updateArr[6]);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_fwstartdate').val(updateArr[1]);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_fwenddate').val(updateArr[2]);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_reportduedate').val(updateArr[3]);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_scope').val(updateArr[0]);
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_comment').val(updateArr[4]);
+            
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_bu').attr('onbeforeactivate',"return false");
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_bu').attr('onfocus',"this.blur()");
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_bu').attr('onmouseover',"this.setCapture()");
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_bu').attr('onmouseout',"this.releaseCapture()");
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_project').attr('onbeforeactivate',"return false");
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_project').attr('onfocus',"this.blur()");
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_project').attr('onmouseover',"this.setCapture()");
+            $('#albatross_acebundle_attachmenttype_attachinfo_' + index + '_project').attr('onmouseout',"this.releaseCapture()");
+        }
+
+        addTagFormDeleteLink($newFormLi);
+    }
+
+    function addTagFormDeleteLink($tagFormLi) {
+        var $removeFormA = $('<input type="button" style="display:none" value="Delete" />');
+        $tagFormLi.append($removeFormA);
+
+        $removeFormA.on('click', function(e) {
+            // prevent the link from creating a "#" on the URL
+            e.preventDefault();
+
+            // remove the li for the tag form
+            $tagFormLi.remove();
+        });
+    }
+
+    function projectFileFinish() {
+        clearFileFormValue();
+        $('#success_box').fadeIn();
+        location.reload();
+        $('#fileupload_project_form_box').fadeOut();
+        window.setTimeout(function() {
+            $("#cover_window").fadeOut();
+            $('#success_box').attr('style', 'display:none');
+        }, 3000);
+    }
+
+    function getBrowserValue() {
+        $('#albatross_acebundle_attachmenttype_text').val($('#albatross_acebundle_attachmenttype_file').val());
+        var extStart = $('#albatross_acebundle_attachmenttype_file').val().lastIndexOf(".");
+        var name = $('#albatross_acebundle_attachmenttype_file').val().substring(0, extStart);
+        $('#albatross_acebundle_attachmenttype_label').val(name);
+    }
+
+    function updateAttachment(id, label, status, user, type, message, wid, pid, cid) {
+        $('#cover_window').fadeIn();
+        getAttachInfoArr(id);
+        $('#albatross_acebundle_attachmenttype_user').val("{{uid}}");
+
+        if (!CKEDITOR.instances.albatross_acebundle_attachmenttype_message) {
+            CKEDITOR.replace('albatross_acebundle_attachmenttype_message');
+        }
+        if (type === 'edit'){
+            CKEDITOR.instances.albatross_acebundle_attachmenttype_message.setData(decodeURIComponent(message.replace(/\+/g, '%20')));
+            $('#albatross_acebundle_attachmenttype_label').val(decodeURIComponent(label.replace(/\+/g, '%20')));
+            $('#albatross_acebundle_attachmenttype_text').val(decodeURIComponent(label.replace(/\+/g, '%20')));
+        }
+        if(wid === ''){
+            {% if firstVersionIOF is not null %}
+                    wid = '{{firstVersionIOF.customwave.id}}';
+                    pid = '{{firstVersionIOF.customwave.customproject.id}}';
+                    cid = '{{firstVersionIOF.customwave.customproject.customclient.id}}';
+            {% endif %}
+        }
+        $('#albatross_acebundle_attachmenttype_wave').val(wid);
+        if(wid !== ''){
+            $('#albatross_acebundle_attachmenttype_wave').attr('onbeforeactivate',"return false");
+            $('#albatross_acebundle_attachmenttype_wave').attr('onfocus',"this.blur()");
+            $('#albatross_acebundle_attachmenttype_wave').attr('onmouseover',"this.setCapture()");
+            $('#albatross_acebundle_attachmenttype_wave').attr('onmouseout',"this.releaseCapture()");
+        }
+        $('#albatross_acebundle_attachmenttype_customproject').val(pid);
+        if(pid !== ''){
+            $('#albatross_acebundle_attachmenttype_customproject').attr('onbeforeactivate',"return false");
+            $('#albatross_acebundle_attachmenttype_customproject').attr('onfocus',"this.blur()");
+            $('#albatross_acebundle_attachmenttype_customproject').attr('onmouseover',"this.setCapture()");
+            $('#albatross_acebundle_attachmenttype_customproject').attr('onmouseout',"this.releaseCapture()");
+        }
+        $('#albatross_acebundle_attachmenttype_customclient').val(cid);
+        if(cid !== ''){
+            $('#albatross_acebundle_attachmenttype_customclient').attr('onbeforeactivate',"return false");
+            $('#albatross_acebundle_attachmenttype_customclient').attr('onfocus',"this.blur()");
+            $('#albatross_acebundle_attachmenttype_customclient').attr('onmouseover',"this.setCapture()");
+            $('#albatross_acebundle_attachmenttype_customclient').attr('onmouseout',"this.releaseCapture()");
+        }
+        $('#albatross_acebundle_attachmenttype_attachtype').val(type);
+        $('#albatross_acebundle_attachmenttype_user').val(user);
+        $('#albatross_acebundle_attachmenttype_status').val(status);
+        $('#albatross_acebundle_attachmenttype_parents').val(id);
+    }
+    function validateIOF(){
+        var checkValue = 0;
+        if($('#albatross_acebundle_attachmenttype_text').val() === ''){
+            $('#albatross_acebundle_attachmenttype_text').attr('placeholder', 'Please Upload File');
+            checkValue = 1;
+        }
+        if(checkValue === 0){
+            $('#iof_submit').click();
+        }
+    }
+    function showComment(comment) {
+        $('#iofview_cover').fadeIn();
+        $('#comment_box').html(comment);
+    }
+
+    function closedComment() {
+        $('#comment_box').html('');
+        $('#iofview_cover').fadeOut();
+    }
+
+    function getPreVersion() {
+        if($('#showPre').val() === 'Hide Previous Version'){
+            $('#showPre').click(function(){
+                $('#preversion').fadeOut();
+                $('#showPre').val('Show Previous Version');
+            });
+        }
+    }
+    
+    function deleteIOF() {
+        var result = confirm("Are you sure Delete the IOF?");
+        if (result) {
+            $('#delete-iof-form').submit();
+        } else {
+            return false;
+        }
+    }
+</script>
+{% endblock %}
+{% form_theme attachmentsForm.attachinfo 'AlbatrossAceBundle:Theme:iof_form_theme.html.twig' %}
+{% block content %}
+{% spaceless %}
+<table id="other_file_list">
+    <thead>
+        <tr>
+            <th colspan="7" style="color: #fff; font-size: 16px; border-bottom: 2px #000 solid; border-top: 2px #000 solid;">{% if infomation[0] is defined%}{{ infomation[0].attachments.label }}{% endif %}</th>
+        </tr>
+        <tr>
+            <th>ACE project</th>
+            <th>BU</th>
+            <th>FW start date</th>
+            <th>FW end date</th>
+            <th>Report due date</th>
+            <th>Scope</th>
+            <th>Comment</th>
+        </tr>
+    </thead>
+    <tbody>
+{% for k,info in infomation %}
+            <tr>
+                <td style="min-width: 300px">{{ info.project.name }}</td>
+                <td>{{ info.bu.name }}</td>
+                <td>
+                    {% if info.fwstartdate != null %}
+                    {{ info.fwstartdate.date|date("Y-m-d") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if info.fwenddate != null %}
+                    {{ info.fwenddate.date|date("Y-m-d") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if info.reportduedate != null %}
+                    {{ info.reportduedate.date|date("Y-m-d") }}
+                    {% endif %}
+                </td>
+                <td>{{ info.scope }}</td>
+                <td>
+                    {% if info.comment != '' %}
+                        <input type="button" style="width: 50px;" value="show" id="show_comment" onclick="showComment('{{info.comment}}');">
+                    {% else %}
+                        no comment
+                    {% endif %}
+                </td>
+            </tr>
+{% endfor %}
+            <tr>
+                
+                {% if is_granted('ROLE_ADMIN') %}
+                <th colspan="3">
+                {% else %}
+                <th colspan="4">
+                {% endif %}
+                    Go to Project Management Page</th>
+                <th>Download IOF</th>
+                <th>Edit IOF</th>
+                <th>Update IOF</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Delete IOF</th>
+                {% endif %}
+            </tr>
+            <tr>
+                {% if is_granted('ROLE_ADMIN') %}
+                <td colspan="3">
+                {% else %}
+                <td colspan="4">
+                {% endif %}
+                    {% if infomation[0].attachments.customwave.name is defined %}
+                        <a href="{{ path('customproject_show', { 'id': infomation[0].attachments.customwave.customproject.id }) }}">{{ infomation[0].attachments.customwave.name }}
+                    {% else %}
+                        <font>No wave bind this IOF</font>
+                    {% endif %}
+                </td>
+                <td>
+                    <table class="iof-action-table">
+                        <tr>
+                            <td>
+                                <form class="filelist_action_button" action="{{ path('downloadOtherFile', {'id':aid}) }}">
+                                    <input class="download_button" style="50px" type="submit" value="IOF"/>
+                                </form>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    {% if file.customwave.id is defined %}
+                    <input class="edit_button" id="editAttachment" type="button" value="Edit" onclick="updateAttachment('{{file.id}}', '{{file.label|url_encode()}}', '{{status[file.status]}}', '{{file.user.id}}', 'edit', '{{file.message|url_encode()}}', '{{file.customwave.id}}', '{{file.customwave.customproject.id}}', '{{file.customwave.customproject.customclient.id}}');" />
+                    {% else %}
+                    <input class="edit_button" id="editAttachment" type="button" value="Edit" onclick="updateAttachment('{{file.id}}', '{{file.label|url_encode()}}', '{{status[file.status]}}', '{{file.user.id}}', 'edit', '{{file.message|url_encode()}}', '', '', '');" />
+                    {% endif %}
+                </td>
+                <td>
+                    {% if file.customwave.id is defined %}
+                    <input class="update_button" id="updateAttachment" type="button" value="Update" onclick="updateAttachment('{{file.id}}', '{{file.label}}', '{{status[file.status]}}', '{{file.user.id}}', 'update' ,'', '{{file.customwave.id}}', '{{file.customwave.customproject.id}}', '{{file.customwave.customproject.customclient.id}}');" />
+                    {% else %}
+                    <input class="update_button" id="updateAttachment" type="button" value="Update" onclick="updateAttachment('{{file.id}}', '{{file.label}}', '{{status[file.status]}}', '{{file.user.id}}', 'update' ,'', '', '', '');" />
+                    {% endif %}
+                </td>
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>
+                    <form action="{{ path('attachment_delete', { 'id': file.id }) }}" method="POST" id="delete-iof-form">
+                        <input class="delete_button" id="iof-delete-button" type="button" value="Delete" onclick="deleteIOF();" />
+                    </form>
+                </td>
+                {% endif %}
+            </tr>
+            <tr>
+                <th colspan="7">Message</th>
+            </tr>
+            <tr>
+                {% if message == '' %}
+                    No message for this IOF
+                {% else %}
+                    <td colspan="7"> {{ message|raw }} </td>
+                {% endif %}
+            </tr>
+        </tbody>
+    </table>
+    <div id="iofview_cover" style="display:none">
+        <table id="show_table">
+            <tr>
+                <td id="comment_box"></td>
+            </tr>
+            <tr>
+                <td id="comment_button"><input type="button" value="close" onclick="closedComment();" /></td>
+            </tr>
+        </table>
+    </div>
+    {% if button == 1 %}
+        <input id="showPre" class="button" type="button" value="Show Previous Version" style="margin-top: 5px;"/><br />
+    {%endif%}
+
+<div id="preversion" style="display:none">
+{% for pre in preinfo %}
+        <table class="pre_file_list">
+            <thead>
+                <tr>
+                    <th colspan="7" style="font-size: 16px; border-bottom: 2px #000 solid; border-top: 2px #000 solid;">{{ pre.label }}</th>
+                </tr>
+                <tr>
+                    <th>ACE project</th>
+                    <th>BU</th>
+                    <th>FW start date</th>
+                    <th>FW end date</th>
+                    <th>Report due date</th>
+                    <th>Scope</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+       {%if pre.attachinfo[0].id is defined %}
+            {% for k,info in pre.attachinfo %}
+            <tr>
+                <td style="min-width: 300px">{{ info.project.name }}</td>
+                <td>{{ info.bu.name }}</td>
+                <td>
+                    {% if info.fwstartdate != null %}
+                        {{ info.fwstartdate.date|date("Y-m-d") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if info.fwenddate != null %}
+                        {{ info.fwenddate.date|date("Y-m-d") }}
+                    {% endif %}
+                </td>
+                <td>
+                    {% if info.reportduedate != null %}
+                        {{ info.reportduedate.date|date("Y-m-d") }}
+                    {% endif %}
+                </td>
+                <td>{{ info.scope }}</td>
+                <td>
+                    {% if info.comment != '' %}
+                        <input type="button" style="width: 50px;" value="show" id="show_comment" onclick="showComment('{{info.comment}}');">
+                    {% else %}
+                        no comment
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="7">
+                    <font color="lightseagreen">
+                    Warning! please check the ace project bind with the wave which this IOF belong to.
+                    </font>
+                </td>
+            </tr>
+        {% endif %}
+            <tr>
+                <th colspan="7" class="sub-title">Message</th>
+            </tr>
+            <tr>
+                <td colspan="7">{% if pre.message != '' %}{{ pre.message|raw }}{% else %}<font color="lightseagreen">No message for this IOF</font>{% endif %}<font color=""></td>
+            </tr>
+            <tr>
+                <td colspan="6" class="sub-title">Submite Time</td>
+                <td class="sub-title">Download IOF</td>
+            </tr>
+            <tr>
+                <td colspan="6">{{ pre.submitteddate.date }}</td>
+                <td>
+                    <form class="filelist_action_button" action="{{ path('downloadOtherFile', {'id':aid}) }}">
+                        <input style="50px" type="submit" value="download"/>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endfor %}
+</div>
+<input type="button" value="<< Back to the IOF list" onclick="location.href='{{ path('ioflist') }}';"  class="button" style="margin-top: 5px; min-width: 158px;">
+
+        <div id="cover_window" style="display:none">
+            <div id="fileupload_project_form_box" >
+                <form action="{{ path('uploadProjectFile') }}" id="fileupload_project"  method="post" enctype="multipart/form-data">
+                    <fieldset id="fileupload_label_fieldset">
+                        <legend>Project</legend>
+                        {{ form_widget(attachmentsForm.label, {attr: {'style': 'display:none'}}) }}
+                        <table>
+                            <tr>
+                                <th>{{ form_label(attachmentsForm.customclient) }}</th>
+                                <td>{{ form_widget(attachmentsForm.customclient) }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ form_label(attachmentsForm.customproject) }}</th>
+                                <td>{{ form_widget(attachmentsForm.customproject) }}</td>
+                            </tr>
+                            <tr>
+                                <th>{{ form_label(attachmentsForm.wave) }}
+                                <td>{{ form_widget(attachmentsForm.wave) }}</td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                    <fieldset id="fileupload_option_fieldset">
+                        <legend>File Option</legend>
+                        <table>
+                            <tr>
+                                <td width="30%">
+                        {{ form_widget(attachmentsForm.file, {attr: {'style': 'display:none', 'size': '28', 'onchange' : "getBrowserValue();"}}) }}
+                        {{ form_widget(attachmentsForm.text, {attr: {'onclick' : "$('#albatross_acebundle_attachmenttype_file').click()"}}) }}
+                                </td>
+                                <td width="10%" style="text-align:right">
+                        {{ form_label(attachmentsForm.file, 'Browser', {attr:{'class':"fileupload_label"}}) }}
+                                </td>
+                                <td width="10%" style="text-align:right">
+                        {{ form_label(attachmentsForm.type, 'Type') }}
+                                </td>
+                                <td width="20%">
+                        {{form_widget(attachmentsForm.type)}}
+                                </td>
+                                <td width="10%" style="text-align:right">
+                        {{ form_label(attachmentsForm.user, 'User') }}
+                                </td>
+                                <td width="30%">
+                        {{form_widget(attachmentsForm.user)}}
+                                </td>
+                            </tr>
+                        </table>
+                        {{ form_widget(attachmentsForm.project_id, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.project_name, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.status, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.parents, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.attachtype, {attr: {'style': 'display:none'}}) }}
+                        </fieldset>
+                        <div class="clear"></div>
+                        <fieldset id="fileupload_message_fieldset">
+                            <legend>File Message</legend>
+{{ form_widget(attachmentsForm.message) }}
+                        </fieldset>
+                        <table class="options" data-prototype="{{ form_widget(attachmentsForm.attachinfo.vars.prototype)|e }}">
+{% for info in attachmentsForm.attachinfo %}
+{% endfor %}
+                            </table>
+                            <div class="clear"></div>
+                            <div id="fileupload_button_box">
+                                <input type="button" id="iof_submit_button" value="SUBMIT" onclick="validateIOF();" style="float:left;">
+                                <input type="submit" id="iof_submit" value="Submit" name="submit" style="display:none;">
+                                <input type="button" value="Cancel" name="cancel" style="float:right;" onclick = "fileuplodFormCancel();">
+                            </div>
+                        </form>
+                    </div>
+                    <div id="success_box" style="display: none">File Upload Success</div>
+                </div>
+{% endspaceless %}
+{% endblock %}

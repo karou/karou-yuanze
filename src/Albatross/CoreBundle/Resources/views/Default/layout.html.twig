@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <!--[if lt IE 9]>
+        <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <title>
+            {% block title %}
+            {% endblock %}
+        </title>
+        <meta name="description" content="{% block description %}{% endblock %}">
+        <link href="{{ asset('/css/header.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('/css/footer.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ asset('/css/project.css') }}" rel="stylesheet" type="text/css" />
+        {% block stylesheets %}
+        {% endblock %}
+        <script>window.jQuery || document.write('<script src="{{ asset('js/jquery.min.js')}}"><\/script>')</script>
+        {% block javascripts %}
+        {% endblock %}
+        <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        <noscript>Javascript is disabled on your browers. Please enable Javascript for better performance.</noscript>
+        <header>
+            {{ render(controller('AlbatrossUserBundle:Default:header')) }}
+        </header>
+        <div id="main">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div class="clear"></div>
+        <footer>
+            {{ render(controller('AlbatrossUserBundle:Default:footer')) }}
+        </footer>
+    </body>
+</html>

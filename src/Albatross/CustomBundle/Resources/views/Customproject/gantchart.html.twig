@@ -1,0 +1,60 @@
+{% block stylesheets %}
+<link href="{{ asset('/css/gantti.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/screen.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/gantt_page.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/jquery.min.js')}}"></script>
+<script type="text/javascript">
+    $(function() {
+        
+        $('#projectSelect').val({{proj}});
+        $('#buSelect').val({{bu}});
+        
+        $('#projectSelect').change(function() {
+            pid = $('#projectSelect').val();
+            wid = $('#gunttiwid').val();
+            bid = 'null';
+            $.ajax({
+                type: "POST",
+                url: "{{ path('getGantChart') }}/" + wid + '/' + bid + '/' + pid,
+                success: function(result) {
+                    $('.gantti').html(result);
+                }
+            });
+        });
+        $('#buSelect').change(function() {
+            pid = $('#projectSelect').val();
+            wid = $('#gunttiwid').val();
+            bid = $('#buSelect').val();
+            $.ajax({
+                type: "POST",
+                url: "{{ path('getGantChart') }}/" + wid + '/' + bid + '/' + pid,
+                success: function(result) {
+                    $('.gantti').html(result);
+                }
+            });
+        });
+    });
+
+    function clickout(){
+        $('#show_control_pannel').hide();
+        $('#control_layer').show();
+    }
+    
+    function clickin(){
+        $('#control_layer').hide();
+        $('#show_control_pannel').show();
+    }
+    </script>
+{% endblock %}
+    <div class="gantti">
+        <div id="control_layer" style="display: none">
+            {{projectSelect|raw}}
+            {{buSelect|raw}}
+            <span onclick="clickin();"><img height="12px;" widht="5px;" src="{{ asset('/images/in.png') }}" /></span>
+        </div>
+        <div id="show_control_pannel" onclick="clickout();"><span><img height="30px;" widht="5px;" src="{{ asset('/images/out.png') }}" /></span></div>
+            {{ gantti|raw }}
+            <input style="display: none" id="gunttiwid" value="{{wid}}">
+        </div>

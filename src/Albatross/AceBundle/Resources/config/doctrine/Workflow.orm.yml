@@ -1,0 +1,26 @@
+Albatross\AceBundle\Entity\Workflow:
+  type: entity
+  table: workflow
+  uniqueConstraints:
+    stepid_status_uniq:
+        columns: [ workflow_step_id, workflow_status ]
+  repositoryClass: 
+    Albatross\AceBundle\Entity\WorkflowRepository
+  oneToMany:
+    aolsurveys:
+      targetEntity: Albatross\AceBundle\Entity\Aolsurvey
+      mappedBy: workflow
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    WorkflowStepID:
+      type: bigint
+      column: workflow_step_id
+    WorkflowStatus:
+      type: string
+      length: 255
+      column: workflow_status
+  lifecycleCallbacks: {}

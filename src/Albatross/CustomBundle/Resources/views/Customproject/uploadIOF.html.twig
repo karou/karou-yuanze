@@ -1,0 +1,106 @@
+{% block stylesheets %}
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#albatross_acebundle_attachmenttype_customclient').val({{cid}});
+        $('#albatross_acebundle_attachmenttype_customproject').val({{pid}});
+        $('#albatross_acebundle_attachmenttype_wave').val({{wid}});
+    });
+    function getAutoInfoList(id) {
+        $.ajax({
+            data: id,
+            type: "POST",
+            url: "{{ path('getAutoList') }}",
+            success: function(result) {
+                getAttachInfo(result);
+            }
+        });
+    }
+</script>
+{% endblock %}
+{% form_theme attachmentsForm.attachinfo 'AlbatrossAceBundle:Theme:iof_form_theme.html.twig' %}
+<div id="cover_window_iof">
+    <div id="fileupload_project_form_box" >
+        <div id="fileupload_box_title">
+            Upload IOF
+            <span id="close_button" title="close" onclick="fileuplodFormCancel();" style="margin: 5px; right:0;">
+                <img src="{{ asset('/images/close.png')}}" height="30px" width="30px">
+            </span>
+        </div>
+            <div class="clear_both"></div>
+        <form action="{{ path('uploadProjectFile') }}" id="fileupload_project" method="post" enctype="multipart/form-data">
+            <fieldset id="fileupload_label_fieldset">
+                <legend>Project</legend>
+                        {{ form_widget(attachmentsForm.label, {attr: {'style': 'display:none'}}) }}
+                <table>
+                    <tr>
+                        <th class="project_option_title">{{ form_label(attachmentsForm.customclient, 'Client') }}</th>
+                        <td>{{ form_widget(attachmentsForm.customclient, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}</td>
+                    </tr>
+                    <tr>
+                        <th class="project_option_title">{{ form_label(attachmentsForm.customproject, 'Project') }}</th>
+                        <td>{{ form_widget(attachmentsForm.customproject, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}</td>
+                    </tr>
+                    <tr>
+                        <th class="project_option_title">{{ form_label(attachmentsForm.wave) }}</th>
+                        <td>{{ form_widget(attachmentsForm.wave, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}</td>
+                    </tr>
+                </table>
+            </fieldset>
+            <fieldset id="fileupload_option_fieldset">
+                <legend>File Option</legend>
+                <table>
+                    <tr>
+                        <td width="30%">
+                        {{ form_widget(attachmentsForm.file, {attr: {'style': 'display:none', 'size': '28', 'onchange' : "getBrowserValue();"}}) }}
+                        {{ form_widget(attachmentsForm.text, {attr: {'onclick' : "$('#albatross_acebundle_attachmenttype_file').click()"}}) }}
+                        </td>
+                        <td width="10%" style="text-align:right" class="project_option_title">
+                        {{ form_label(attachmentsForm.file, 'Browser', {attr:{'class':"fileupload_label"}}) }}
+                        </td>
+                        <td width="10%" style="text-align:right" class="project_option_title">
+                        {{ form_label(attachmentsForm.type, 'Type') }}
+                        </td>
+                        <td width="20%">
+                        {{form_widget(attachmentsForm.type)}}
+                        </td>
+                        <td width="10%" style="text-align:right" class="project_option_title">
+                        {{ form_label(attachmentsForm.user, 'User') }}
+                        </td>
+                        <td width="30%">
+                        {{form_widget(attachmentsForm.user)}}
+                        </td>
+                     </tr>
+                </table>
+                        {{ form_widget(attachmentsForm.project_id, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.project_name, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.status, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.parents, {attr: {'style': 'display:none'}}) }}
+                        {{ form_widget(attachmentsForm.attachtype, {attr: {'style': 'display:none'}}) }}
+            </fieldset>
+            <div class="clear"></div>
+            <fieldset id="fileupload_message_fieldset">
+                <legend>File Message</legend>
+                {{ form_widget(attachmentsForm.message) }}
+            </fieldset>
+            <table class="options_iof" data-prototype="{{ form_widget(attachmentsForm.attachinfo.vars.prototype)|e }}">
+            {% for info in attachmentsForm.attachinfo %}
+            {% endfor %}
+            </table>
+            <div class="clear"></div>
+            <div id="submit_button_div">
+                <input type="button" id="iof_submit_button" value="SUBMIT" onclick="validateIOF();">
+                <input type="submit" style="display:none" id="iof_submit" name="submit" >
+            </div>
+            
+            </form>
+        </div>
+        <input tyle="text" value="0" id="iof_exit" style="display: none" />
+        <div id="success_box" style="display: none">File Upload Success</div>
+</div>

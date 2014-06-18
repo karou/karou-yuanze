@@ -1,0 +1,13 @@
+iof_homepage:
+    pattern:  /iof
+    defaults: { _controller: IofBundle:Default:index }
+
+iof_view:
+     pattern: /iof_view
+     defaults: { _controller: IofBundle:Default:view }
+
+iof_list_ajax:
+     pattern: /iof_list_ajax
+     defaults: { _controller: AlbatrossAceBundle:Ajax:iof_list_ajax }
+
+

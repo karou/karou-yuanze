@@ -1,0 +1,25 @@
+Albatross\CustomBundle\Entity\Attendees:
+  type: entity
+  table: attendees
+  manyToOne:
+    customfield:
+      targetEntity: Customfield
+      inversedBy: attendees
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+      nullable: true
+    position:
+      type: string
+      length: 255
+      nullable: true
+    albatross_attendees:
+      type: boolean
+      nullable: true
+  lifecycleCallbacks: {}

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\Infomation" table="infomation">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="newPosInWave" type="string" column="new_pos_in_Wave" length="255" nullable="true"/>
+    <field name="deletePosInWave" type="string" column="delete_pos_in_Wave" length="255" nullable="true"/>
+    <field name="invalidsToBeInvoiced" type="string" column="invalids_to_be_invoiced" length="255" nullable="true"/>
+    <field name="misfiresToBeInvoiced" type="string" column="misfires_to_be_invoiced" length="255" nullable="true"/>
+    <field name="purchasesMade" type="string" column="purchases_made" length="255" nullable="true"/>
+    <many-to-one field="recap" target-entity="Recap">
+      <join-columns>
+        <join-column name="recap_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

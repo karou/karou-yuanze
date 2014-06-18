@@ -1,0 +1,70 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Infomation
+ *
+ * @ORM\Table(name="infomation")
+ * @ORM\Entity
+ */
+class Infomation
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="new_pos_in_Wave", type="string", length=255, nullable=true)
+     */
+    private $newPosInWave;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="delete_pos_in_Wave", type="string", length=255, nullable=true)
+     */
+    private $deletePosInWave;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="invalids_to_be_invoiced", type="string", length=255, nullable=true)
+     */
+    private $invalidsToBeInvoiced;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="misfires_to_be_invoiced", type="string", length=255, nullable=true)
+     */
+    private $misfiresToBeInvoiced;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="purchases_made", type="string", length=255, nullable=true)
+     */
+    private $purchasesMade;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Recap
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Recap")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="recap_id", referencedColumnName="id")
+     * })
+     */
+    private $recap;
+
+
+}

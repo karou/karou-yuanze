@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\Recap" table="recap">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="name" type="string" column="name" length="255" nullable="false"/>
+    <field name="countrytype" type="boolean" column="countryType" nullable="false"/>
+    <field name="submittime" type="string" column="submittime" length="255" nullable="false"/>
+    <many-to-one field="user" target-entity="User">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="actual" target-entity="SurveyNumber">
+      <join-columns>
+        <join-column name="actual_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="infomations" target-entity="Infomation">
+      <join-columns>
+        <join-column name="infomations_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="customwave" target-entity="Customwave">
+      <join-columns>
+        <join-column name="customwave_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="planned" target-entity="SurveyNumber">
+      <join-columns>
+        <join-column name="planned_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="country" target-entity="Country" inversed-by="recap">
+      <join-table name="recap_country">
+        <join-columns>
+          <join-column name="recap_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="country_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+    <many-to-many field="aolquestionnaire" target-entity="Aolquestionnaire" mapped-by="recap"/>
+  </entity>
+</doctrine-mapping>

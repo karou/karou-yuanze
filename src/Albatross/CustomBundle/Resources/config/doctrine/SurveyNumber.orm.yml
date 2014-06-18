@@ -1,0 +1,40 @@
+Albatross\CustomBundle\Entity\SurveyNumber:
+  type: entity
+  table: survey_number
+  oneToOne:
+    recap:
+      targetEntity: Albatross\CustomBundle\Entity\Recap
+      cascade: ["persist"]
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    pos:
+      type: string
+      length: 255
+      nullable: true
+    surveys:
+      type: string
+      length: 255
+      nullable: true
+    misfire:
+      type: string
+      length: 255
+      nullable: true
+    invalid:
+      type: string
+      length: 255
+      nullable: true
+    surveys:
+      type: string
+      length: 255
+      nullable: true
+    scenarios:
+      type: text
+      nullable: true
+    type:
+      type: string
+      length: 64
+  lifecycleCallbacks: {}

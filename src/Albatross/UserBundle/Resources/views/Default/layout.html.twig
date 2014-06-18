@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <meta charset="UTF-8" />
+            <!--[if lt IE 9]>
+            <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+            <![endif]-->
+            <title>
+                {% block title %}
+                {% endblock %}
+            </title>
+                <meta name="description" content="{% block description %}{% endblock %}">
+                <link href="{{ asset('/css/user_layout.css') }}" rel="stylesheet" type="text/css" />
+                <link href="{{ asset('/css/header.css') }}" rel="stylesheet" type="text/css" />
+                <script src="{{ asset('js/jquery.min.js')}}"></script>
+                {% block stylesheets %}
+                {% endblock %}
+                
+            {% block javascripts %}
+            {% endblock %}
+                <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" />
+        </head>
+        <body>
+            <div id="container">
+            <noscript>Javascript is disabled on your browers. Please enable Javascript for better performance.</noscript>
+                <header>
+                    {{ render(controller('AlbatrossUserBundle:Default:header')) }}
+                </header>
+                <link>
+                    {{ render(controller('AlbatrossUserBundle:Default:link')) }}
+                </link>
+                {% if current is defined %}
+                    {% if current != 'login' and current != 'register' %}
+                        <nav>
+                            {{ render(controller('AlbatrossUserBundle:Default:nav', {'current': current })) }}
+                        </nav>
+                    {% endif %}
+                {% else %}
+                        <nav>
+                            {{ render(controller('AlbatrossUserBundle:Default:nav')) }}
+                        </nav>
+                {% endif %}
+                <div id="bigleft">
+                    {% if menu_bar is defined %}
+                        <menu>
+                            {% if menu_bar == 'admin' %}
+                                {{ render(controller('AlbatrossUserBundle:Admin:menu', { 'current_menu':menu_cal_cur })) }}
+                            {% elseif menu_bar == 'custom' %}
+                                {{ render(controller('AlbatrossCustomBundle:Default:menu', { 'current_menu':menu_cal_cur })) }}
+                            {% endif %}
+                        </menu>
+                    {% endif %}
+                    <div id="main">
+                        {% block content %}
+                        {% endblock %}
+                        </div>
+                    <div class="clear"></div>
+                </div>
+                <div class="clear"></div>
+                <footer>
+            {{ render(controller('AlbatrossUserBundle:Default:footer')) }}
+                </footer>
+            </div>
+        </body>
+</html>

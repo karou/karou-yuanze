@@ -1,0 +1,29 @@
+albatross_operation_homepage:
+    pattern:  /operations
+    defaults: { _controller: AlbatrossOperationBundle:Default:index }
+
+projectStatus:
+    pattern:  /projectStatus/{type}
+    defaults: { _controller: "AlbatrossOperationBundle:Default:projectStatus", type:'' }
+        
+getBuResult:
+    pattern:  /getBuResult
+    defaults: { _controller: "AlbatrossOperationBundle:Default:getBuResult" }
+    
+getCountryResult:
+    pattern:  /getCountryResult
+    defaults: { _controller: "AlbatrossOperationBundle:Default:getCountryResult" }
+getAceCountryResult:
+    pattern:  /getAceCountryResult
+    defaults: { _controller: "AlbatrossOperationBundle:Default:getAceCountryResult" }
+
+getAceBuResult:
+    pattern:  /getAceBuResult
+    defaults: { _controller: "AlbatrossOperationBundle:Default:getAceBuResult" }
+    
+saveOperationData:
+    pattern:  /saveOperationData
+    defaults: { _controller: "AlbatrossOperationBundle:Default:saveOperationData" }
+saveOperationDataAce:
+    pattern:  /saveOperationDataAce
+    defaults: { _controller: "AlbatrossOperationBundle:Default:saveOperationDataAce" }

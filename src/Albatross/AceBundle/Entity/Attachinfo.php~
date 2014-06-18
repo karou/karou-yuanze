@@ -1,0 +1,111 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Attachinfo
+ *
+ * @ORM\Table(name="attachinfo")
+ * @ORM\Entity
+ */
+class Attachinfo
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="scope", type="bigint", nullable=true)
+     */
+    private $scope;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fw_start_date", type="date", nullable=true)
+     */
+    private $fwStartDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="fw_end_date", type="date", nullable=true)
+     */
+    private $fwEndDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="report_due_date", type="date", nullable=true)
+     */
+    private $reportDueDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="comment", type="string", length=255, nullable=true)
+     */
+    private $comment;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="formindex", type="string", length=20, nullable=false)
+     */
+    private $formindex;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="report_due_date_text", type="string", length=255, nullable=true)
+     */
+    private $reportDueDateText;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="report_type", type="boolean", nullable=false)
+     */
+    private $reportType;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Bu
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Bu")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="bu_id", referencedColumnName="id")
+     * })
+     */
+    private $bu;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Attachments
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Attachments")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="attachments_id", referencedColumnName="id")
+     * })
+     */
+    private $attachments;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Project
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Project")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="project_id", referencedColumnName="id")
+     * })
+     */
+    private $project;
+
+
+}

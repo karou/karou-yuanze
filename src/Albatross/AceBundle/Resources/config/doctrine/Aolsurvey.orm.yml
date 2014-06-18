@@ -1,0 +1,62 @@
+Albatross\AceBundle\Entity\Aolsurvey:
+  type: entity
+  table: aolsurvey
+  uniqueConstraints:
+    surveyinstanceid_uniq:
+        columns: survey_instance_id
+  repositoryClass: 
+    Albatross\AceBundle\Entity\AolsurveyRepository
+  manyToOne:
+    campaign:
+      targetEntity: Albatross\AceBundle\Entity\Campaign
+      inversedBy: aolsurvey
+    workflow:
+      targetEntity: Albatross\AceBundle\Entity\Workflow
+      inversedBy: aolsurveys
+    location:
+      targetEntity: Albatross\AceBundle\Entity\Location
+      inversedBy: aolsurvey
+  oneToOne:
+    billing:
+      targetEntity: Albatross\AceBundle\Entity\Billing
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    SurveyInstanceID:
+      type: bigint
+      column: survey_instance_id
+    RFAsOpen:
+      type: bigint
+      column: rfas_open
+    RFAsClosed:
+      type: bigint
+      column: rfas_closed
+    isReturnedToShopper:
+      type: boolean
+      column: is_returned_to_shopper
+    isNoDecline:
+      type: boolean
+      column: is_no_decline
+    SurveyStatusName:
+      type: string
+      length: 255
+      column: survey_status_name
+    Date:
+      type: string
+      length: 255
+      column: date
+    Client:
+      type: string
+      column: client
+    MailboxName:
+      type: string
+      column: mail_box_name
+      nullable: true
+    Submittime:
+      type: datetime
+      column: submit_time
+  lifecycleCallbacks: 
+      preRemove: [preRemove]

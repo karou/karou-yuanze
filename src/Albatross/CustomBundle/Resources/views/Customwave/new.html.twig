@@ -1,0 +1,106 @@
+{% block stylesheets %}
+    <link href="{{ asset('/css/custom_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(".chz_aceproject").chosen({width: "100%"});
+        $('.surveySelection').chosen({width: "100%"});
+        $('.campaignSelection').chosen({width: "100%"});
+        $('#albatross_custombundle_customwavetype_projectname').val($('#albatross_custombundle_customwavetype_customproject option:selected').text());
+        $('#albatross_custombundle_customwavetype_customproject').change(function() {
+            $('#albatross_custombundle_customwavetype_projectname').val($('#albatross_custombundle_customwavetype_customproject option:selected').text());
+        });
+        //$('#albatross_custombundle_customwavetype_customclient').val($('#albatross_custombundle_customwavetype_customclient option:last').val());
+        $('#albatross_custombundle_customwavetype_customclient').change(function() {
+            getCustomprojectByCustomclient($('#albatross_custombundle_customwavetype_customclient').val());
+        });
+    });
+    
+    function surveyChange(e){
+        var index = $(e).val();
+        $.ajax({
+            data: index,
+            type: "POST",
+            url: "{{ path('getCampaignArr') }}",
+            success: function(result) {
+                $(e).parent().next().html(result);
+                var id = $(e).attr('id');
+                $(e).parent().next().children().attr('id', 'campaign_'+id);
+                $('.campaignSelection').chosen({width: "100%"});
+            }
+        });
+    }
+    function getCustomprojectByCustomclient(id) {
+        $.ajax({
+            data: id,
+            type: "POST",
+            url: "{{ path('getcpbycc') }}",
+            success: function(result) {
+                $('#albatross_custombundle_customwavetype_customproject').html(result);
+                $('#albatross_custombundle_customwavetype_projectname').val('');
+            }
+        });
+    }
+    function submitWave(){
+        $('#window-cover').show();
+        $('#customwave_create_form').submit();
+    }
+    function addNewSurvey(){
+        var formStr = '<tr><td class="survey">{{ aolform|replace({"'": "\\'"})|raw }}</td><td class="campaign"></td><td><button type="button" onclick="deleteSurvey(this);" class="button">Delete</button></td></tr>';
+        $('#aolsurvey').append(formStr);
+        var preId = $('td[class=survey]:last').children('select').attr('id');
+        var newIndex = $('#aolsurvey').find('.survey').length;
+        var newId = preId.substring(0, 16) + newIndex;
+        $('td[class=survey] select:last').attr('id', newId);
+        $('.campaign').last().html('<select class="campaignSelection"><option></option></select>');
+        $('.surveySelection').chosen({width: "100%"});
+        $('.campaignSelection').chosen({width: "100%"});
+    }
+    function deleteSurvey(obj){
+        $(obj).parent().parent().remove();
+    }
+</script>
+{% endblock %}
+<form action="{{ path('customwave_create') }}" id="customwave_create_form" method="post" {{ form_enctype(form) }}>
+    <div class="wave_title_div">Create Wave
+        <span id="close_button" title="close" onclick="cancelWave();" style="margin: 2px 5px; position: absolute; right:0;">
+            <img src="{{ asset('/images/close.png')}}" height="30px" width="30px">
+        </span>
+    </div>
+    <table class="create_wave_table">
+        <tr>
+            <th>Client</th>
+            <td colspan="2">{{ form_widget(form.customclient, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}</td>
+            <th rowspan="5"><button type="button" onclick="submitWave();" style="height: 50px; width: 50px;">Create</button></th>
+        </tr>
+        <tr>            
+            <th>Project</th>
+            <td colspan="2">{{ form_widget(form.customproject, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}})|raw }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td colspan="2">{{ form_widget(form.projectname, {attr: {'onbeforeactivate':"return false", 'onfocus':"this.blur()", 'onmouseover':"this.setCapture()", 'onmouseout':"this.releaseCapture()"}}) }}
+            w{{ form_widget(form.number) }}{{ form_widget(form.bis) }}{{ form_widget(form.date) }}{{ form_widget(form.totalnum, {attr: {'placeholder':"Total Number"}}) }}</td>
+        </tr>
+        <tr>
+            <th>AceProject</th>
+            <td colspan="2">{{ form_widget(form.aceproject) }}</td>
+        </tr>
+        <tr>
+            <th>AolSurvey</th>
+            <th>
+                <table id="aolsurvey">
+                    <tr>
+                        <td class="survey">{{ aolform|raw }}</td>
+                        <td class="campaign"><select class="campaignSelection"><option></option></select></td>
+                        <td><button type="button" onclick="deleteSurvey(this);" class="button">Delete</button></td>
+                    </tr>
+                </table>
+            </th>
+            <th><button type="button" onclick="addNewSurvey();" class="button">Add</button></th>
+        </tr>
+    </table>
+    {{ form_widget(form._token) }}
+</form>

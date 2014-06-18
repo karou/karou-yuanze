@@ -1,0 +1,67 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Information
+ *
+ * @ORM\Table(name="information")
+ * @ORM\Entity
+ */
+class Information
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="attachments_id", type="bigint", nullable=true)
+     */
+    private $attachmentsId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="new_pos_in_Wave", type="bigint", nullable=true)
+     */
+    private $newPosInWave;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="delete_pos_in_Wave", type="bigint", nullable=true)
+     */
+    private $deletePosInWave;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="invalids_to_be_invoiced", type="bigint", nullable=true)
+     */
+    private $invalidsToBeInvoiced;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="misfires_to_be_invoiced", type="bigint", nullable=true)
+     */
+    private $misfiresToBeInvoiced;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="purchases_made", type="bigint", nullable=true)
+     */
+    private $purchasesMade;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+
+}

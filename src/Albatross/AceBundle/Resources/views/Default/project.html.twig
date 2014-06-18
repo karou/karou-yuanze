@@ -1,0 +1,364 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+Albatross Project List
+{% endblock %}
+
+{% block stylesheets %}
+
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/chosen.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/project.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#hidden_frame").attr('src', document.location);
+        $("#gettasks").click(function gettasks() {
+            var time = getdata();
+            $("#load_window").show();
+            $.ajax({
+                type: "POST",
+                url: "{{ path('sync_task') }}",
+                data: {times: time},
+                success: function(result) {
+                    var obj = JSON.parse(result);
+                    if (obj.pagenum != 'stop') {
+                        $("#pn").val(obj.pagenum);
+                        $("#loading").css("width", obj.percent);
+                        gettasks();
+                    } else {
+                        $("#pn").val('1');
+                        $('#loadingtext').text('Complete.');
+                        window.setTimeout(function() {
+                            $("#load_window").hide();
+                        }, 3000);
+                    }
+                }});
+        });
+        
+        $("#showfiles").click(function showfiles() {
+            if ($("#filelistbox").is(":hidden")) {
+                if ($("#filelistbox").html()) {
+                    $("#filelistbox").show();
+                    $("#showfiles").val("Hide Files");
+                } else
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ path('showfiles') }}",
+                        success: function(result) {
+                            $("#filelistbox").show();
+                            $("#showfiles").val("Hide Files");
+                            $("#filelistbox").css('display', 'block');
+                            $("#filelistbox").html(result);
+                        }
+                    });
+            } else {
+                $("#filelistbox").hide();
+                $("#showfiles").val("Show Files");
+            }
+        });
+
+        $("#aolsync").click(function syncaol() {
+            var num = getdata2();
+            $("#load_window").show();
+            $.ajax({
+                data: num,
+                type: "POST",
+                url: "{{ path('aolsync') }}",
+                success: function(result) {
+                    var obj = JSON.parse(result);
+                    if (obj.times != 'stop') {
+                        $("#pn2").val(obj.times);
+                        $("#loading").css("width", obj.percent);
+                        syncaol();
+                    } else {
+                        $('#loadingtext').text('Complete.');
+                        window.setTimeout(function() {
+                            $("#load_window").hide();
+                        }, 3000);
+                    }
+                }
+            });
+        });
+
+        $("#saveacetask").click(function savtoace() {
+            var num3 = getdata3();
+            $("#load_window").show();
+            $.ajax({
+                data: num3,
+                type: "POST",
+                url: "{{ path('saveacetask') }}",
+                success: function(result) {
+                    var obj = JSON.parse(result);
+                    if (obj.times != 'stop') {
+                        $("#pn3").val(obj.times);
+                        $("#loading").css("width", obj.percent);
+                        savtoace();
+                    } else {
+                        $('#loadingtext').text('Complete.');
+                        window.setTimeout(function() {
+                            $("#load_window").hide();
+                        }, 3000);
+                    }
+                }
+            });
+        });
+        
+        $('#refresh-survey-button').click(function(){
+            var refreshSurveyConfirm = confirm('Are you sure to refresh Survey?');
+            if(refreshSurveyConfirm){
+                $('#window-cover').show();
+                $('#fileSavePercent').hide();
+                $('#refresh-survey-button').parent().submit();
+            }
+        });
+        
+        $('#show-deleted-button').click(function(){
+            $.ajax({
+                type: "POST",
+                url: "{{ path('showDeletedSurveys') }}",
+                success: function(result) {
+                    $('#deletedSurveyBox').show();
+                    $('#deletedSurveyBox').html(result);
+            }});
+        });
+        
+        
+    });
+
+    function closeSurveyShow(){
+        $('#deletedSurveyBox').hide();
+        $('#deletedSurveyBox').html('');
+    }
+
+    function getdata() {
+        var data = $("#pn").val();
+        return data;
+    }
+
+    function getdata2() {
+        var num = $("#pn2").val();
+        return num;
+    }
+
+    function getdata3() {
+        var num3 = $("#pn3").val();
+        return num3;
+    }
+
+    //get tasks from selected project.
+    function getprojecttasks(proj_id) {
+        $.ajax({
+            type: "POST",
+            url: "{{ path('getTasks') }}" + "/" + proj_id,
+            data: {proj_id: proj_id},
+            success: function(result) {
+                if ($("#" + proj_id).is(":visible")) {
+                    $(".tasklayer:visible").hide();
+                } else {
+                    hideOther();
+                    $("#" + proj_id).show();
+                    $("#" + proj_id).html(result);
+                }
+            }});
+    }
+    ;
+
+    function hideOther() {
+        $(".tasklayer:visible").css("display", "none");
+    }
+
+    function deletefile(data) {
+        $.ajax({
+            data: data,
+            type: "POST",
+            url: "{{ path('deletefile') }}",
+            success: function(data) {
+                if (data == 1) {
+                    $("#filelistbox").hide();
+                    $("#filelistbox").html('');
+                    $("#showfiles").click();
+                } else {
+                    alert("error");
+                }
+            }
+        });
+    }
+
+    function updateStatus(e) {
+        if (e.checked) {
+            var checked = 1;
+        } else {
+            var checked = 0;
+        }
+        $.ajax({
+            data: "checked:" + checked,
+            type: "POST",
+            url: "{{ path('updatestatus') }}" + "/" + e.name,
+            success: function(result) {
+            }
+        });
+    }
+    
+    function submitFile(type) {
+        showLoadingImg();
+        var url = '';
+        if(type === 'file'){
+            url = "{{ path('fileupload') }}";
+            var formData = new FormData();
+            var fileObj = document.getElementById("albatross_acebundle_fileuploadtype_file").files;
+            for (var i = 0; i < fileObj.length; i++){           
+                formData.append("file" + i, fileObj[i]);  
+            }
+        }else if(type === 'save'){
+            url = "{{ path('saveAolSurveyByAjax') }}";
+            var formData = '{"path":"'+$('#filePath').val()+'","number":"' + $('#numCount').val() + '"}';
+        }
+        $.ajax({
+            data: formData,
+            contentType: false,
+            processData: false,
+            type: "POST",
+            url: url,
+            success: function(result) {
+                if(result === 'finish'){
+                    $('#fileSavePercent').html('100 %');
+                    $('#albatross_acebundle_fileuploadtype_text').val('');
+                    $('#albatross_acebundle_fileuploadtype_file').val('');
+                    window.setTimeout(function() {
+                        $('#window-cover').hide();
+                        location.reload();
+                    }, 3000);
+                } else {
+                    var obj = jQuery.parseJSON(result);
+                    $('#numCount').val(obj.number);
+                    $('#filePath').val(obj.path);
+                    $('#fileSavePercent').html(obj.percent+' %');
+                    submitFile('save');
+                }
+            }
+        });
+    }
+
+    function showLoadingImg(){
+        $('#window-cover').show();
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div id="load_window" style="display: none">
+        <!--progress bar start-->
+        <div id='progressbar'><div id='loading' style="width:0px;"></div>
+            <img height="36px;" style="float: left;" src="/images/skidmark.png" title="homepage" alt="">
+        </div>
+        <!--progress bar end-->
+        <div id="loadingtext">loading... ...</div>
+    </div>
+    {% if tasks is defined %}
+        {{tasks}}
+    {% endif %}
+    {% if is_granted('ROLE_ADMIN') %}
+    <form action="{{ path('sync_project') }}" method="POST" style="width: 150px; float: left;">
+        <input type="submit" value="Refresh Project List" class="sync_button" />
+    </form>
+    <form style="width: 150px; float: left;" method="POST" action="{{ path('getTasks') }}" >
+        <input type="button" value="Refresh Task" id="gettasks" class="sync_button" />
+        <input tupe='text' id='pn' value="1" style="display:none" />
+    </form>
+    <form action="{{ path('aolsync') }}" method="POST" style="width: 149px; float: left;">
+        <input type="button" value="Syncronize AOL" id="aolsync" title="Syncronize AOL" class="sync_button" />
+        <input type='text' id='pn2' value="0" style="display:none" />
+    </form>
+    <!---->
+    <form action="{{ path('refreshSurveys') }}" method="POST" style="float: left;">
+        <input type="button" value="Refresh Surveys" id="refresh-survey-button" title="If survey is deleted from AOL , refresh survey will delete that survey from PLATFORM." class="sync_button" />
+    </form>
+    <form action="" method="POST" style="float: right;">
+        <input type="button" value="Deleted Surveys List" id="show-deleted-button" title="Show Todays Deleted Surveys" class="sync_button" />
+    </form>
+    <!-- {% if count is defined %} {{ count }} {% endif %} results -->
+    <div class="clear"></div>
+    <form action="{{ path('saveacetask') }}" method="POST" style="width: 140px; float: left;">
+        <input type="button" value="Save to Ace" id="saveacetask" title="Save the task to ace" class="sync_button" />
+        <input tupe='text' id='pn3' value="0" style="display:none" />
+    </form>
+    <form id="fileupload" method="post" enctype="multipart/form-data">
+    {{ form_label(fileForm.file, 'Filename') }}
+    {{ form_widget(fileForm.file, {attr: {'style': 'display:none', 'size': '28', 'onchange' : "document.getElementById('albatross_acebundle_fileuploadtype_text').value = this.value"}}) }}
+    {{ form_widget(fileForm.text, {attr: {'onclick' : "$('#albatross_acebundle_fileuploadtype_file').click()"}}) }}
+        <input type="button" name="submit" onclick="submitFile('file');" value="Submit" />
+        <div class="error_msg">{{ form_errors(fileForm) }}</div>
+    </form>
+    <form method="POST" style="float: left; margin-left: 9px">
+        <input type="button" value="Show Files" id="showfiles" title="List of updated File today" class="sync_button" style="width:289px" />
+        <div id="filelistbox" ></div>
+    </form>
+    <div class="clear"></div>
+    <div class="error_msg">{{ form_errors(fileForm) }}</div>
+    {% endif %}
+        <form action="{{ path('project') }}" method="GET" id="searchBar" >
+            search By Id<input type="text" value="{{ post_id }}" name="srh_id" style="margin:0 30px 5px 5px" />
+            By Name<input type="text" value="{{ post_name }}" name="srh_name" style="margin:0 30px 5px 5px" />
+            By Percent<input type="text" value="{{ post_percent_a }}" name="srh_percent_a" style="width:30px; margin:0 0 5px 5px" />&nbsp;to
+            <input type="text" value="{{ post_percent_b }}" name="srh_percent_b" style="width:30px" />
+            <input type="submit" value="search" />
+        </form>
+
+        <ul class="inline">
+            <li><a href="{{ path('project') }}">All</a></li>
+        {% if is_granted('ROLE_ADMIN') %}
+                <li>&nbsp;</li>
+                <li><a href="{{ path('project', {'filter':'noAolPercent'}) }}">Show Projects With Description and no Match</a></li>
+                <li><a href="{{ path('project', {'filter':'aolPercent'}) }}">Show Projects With AolPercent</a></li>
+                <li><a href="{{ path('project', {'filter':'diffcampaign'}) }}">Show Projects With Different Campaign</a></li>
+                <!--<li><a href="{{ path('project', {'filter':'fulldesc'}) }}">Show Only Projects With Correct Description</a></li>-->
+        {% endif %}
+            </ul>
+
+            <table class="records_list">
+                <thead>
+                    <tr>
+                        <th style="width: 315px;">
+                {{ knp_pagination_sortable(pagination, 'Name', 'p.name') }}
+                        </th>
+                        <th>
+                {{ knp_pagination_sortable(pagination, 'Description', 'p.description') }}
+                        </th>
+                        <th>
+                {{ knp_pagination_sortable(pagination, 'Percent', 'p.percent') }}
+                        </th>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+        {% for k,project in pagination %}
+                    <tr{% if k%2 == 1 %} class="active"{% endif %}>
+                        <td><a onclick="getprojecttasks({{ project.id }});" style="cursor: pointer;">{{ project.name }}</a></td>
+                        <td><a onclick="getprojecttasks({{ project.id }});" style="cursor: pointer;">{{ project.description }}</a></td>
+                        <td><a onclick="getprojecttasks({{ project.id }});" style="cursor: pointer;">{{ project.percent }} %</a></td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><ul style="display:none" id="{{ project.id }}" class="tasklayer"></ul></td>
+                    </tr>
+        {% endfor %}
+                </tbody>
+            </table>
+    <div id="window-cover" style="display: none;">
+        <div id="load_container"><image id="loading_2" src="{{ asset('images/ajax_loader.gif') }}" width="140px" height="140px"><br/>
+            <div id="fileSavePercent" style="font-size:24px; font-weight: bold">0%</div>
+        </div>
+    </div>
+    <div id="deletedSurveyBox" style="display:none;">
+    </div>
+{{ knp_pagination_render(pagination) }}
+<input id="numCount" value="" type="text" style="display: none;">
+<input id="filePath" value="" type="text" style="display: none;">
+{% endblock %}

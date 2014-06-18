@@ -1,0 +1,105 @@
+customproject:
+    pattern:  /
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:index" }
+
+customproject_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:show" }
+
+customproject_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:new" }
+
+customproject_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:create" }
+    requirements: { _method: post }
+
+customproject_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:edit" }
+
+customproject_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:update" }
+    requirements: { _method: post|put }
+
+customproject_delete:
+    pattern:  /delete/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:delete", id:'' }
+    requirements: { _method: post|delete }
+    
+followProject:
+    pattern:  /followProject/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:followProject", id:'' }
+
+saveField:
+    pattern:  /saveField/{type}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:saveField", type:'' }
+
+getFieldInfo:
+    pattern:  /getFieldInfo
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:getFieldInfo"}
+
+setQuestionSign:
+    pattern:  /setQuestionSign
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:setQuestionSign"}
+
+setQuestionSign2:
+    pattern:  /setQuestionSign2
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:setQuestionSign2"}
+
+downloadFile:
+    pattern:  /downloadFile/{id}/{filenum}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:downloadFile", id:'', filenum:''}
+
+getGantChart:
+    pattern:  /getGantChart/{id}/{bu}/{project}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:getGantChart", id:'', bu:'', project:''}
+
+poslist_upload:
+    pattern:  /upload/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:upload", id:'' }
+
+saveupload:
+    pattern:  /saveupload/{wid}
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:saveupload" }
+
+uploadiof:
+    pattern:  /uploadiof/{wid}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:uploadiof", wid:'' }
+
+iofupload:
+    pattern:  /iofupload/{wid}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:iofupload", wid:'' }
+
+IOFStractureHtml:
+    pattern:  /IOFStractureHtml
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:IOFStractureHtml" }
+getFileMessageHtml:
+    pattern:  /getFileMessageHtml
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:getFileMessageHtml" }
+
+checkWaveBindToProject:
+    pattern:  /checkWaveBindToProject
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:checkWaveBindToProject" }
+
+recapGetAolquestionnaire:
+    pattern:  /recapGetAolquestionnaire
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:recapGetAolquestionnaire" }
+
+showposlist:
+    pattern:  /showposlist
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:showposlist" }
+
+recapGetCountry:
+    pattern:  /recapGetCountry
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:recapGetCountry" }
+
+downloadPOS:
+    pattern:  /downloadPOS/{wid}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:downloadPOS", wid:'' }
+
+checkProjectName:
+    pattern:  /checkProjectName
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:checkProjectName" }

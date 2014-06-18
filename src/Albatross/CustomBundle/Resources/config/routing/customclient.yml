@@ -1,0 +1,38 @@
+customclient:
+    pattern:  /
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:index" }
+
+customclient_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:show" }
+
+customclient_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:new" }
+
+customclient_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:create" }
+    requirements: { _method: post }
+
+customclient_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:edit" }
+
+customclient_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:update" }
+    requirements: { _method: post|put }
+
+customclient_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:delete" }
+    requirements: { _method: post|delete }
+
+checkClientName:
+    pattern:  /checkClientName
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:checkClientName" }
+    
+checkProjectBindToClient:
+    pattern:  /checkProjectBindToClient
+    defaults: { _controller: "AlbatrossCustomBundle:Customclient:checkProjectBindToClient" }

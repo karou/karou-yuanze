@@ -1,0 +1,95 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Poslist list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Store_id</th>
+                <th>Location_name</th>
+                <th>Number_of_visits</th>
+                <th>Store_name</th>
+                <th>Address</th>
+                <th>Address_2</th>
+                <th>City</th>
+                <th>County</th>
+                <th>State_region</th>
+                <th>Postal_code</th>
+                <th>Country</th>
+                <th>Phone</th>
+                <th>Fax</th>
+                <th>Location_hours</th>
+                <th>Export_email</th>
+                <th>Export_email_name</th>
+                <th>Export_language</th>
+                <th>Location_status</th>
+                <th>Location_photo_url</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Date_geocode_acquired</th>
+                <th>Geocode_source</th>
+                <th>Additional_comments</th>
+                <th>Summary_label</th>
+                <th>Summary_content</th>
+                <th>Summary_display</th>
+                <th>Region</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('poslist_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{{ entity.storeid }}</td>
+                <td>{{ entity.locationname }}</td>
+                <td>{{ entity.numberofvisits }}</td>
+                <td>{{ entity.storename }}</td>
+                <td>{{ entity.address }}</td>
+                <td>{{ entity.address2 }}</td>
+                <td>{{ entity.city }}</td>
+                <td>{{ entity.county }}</td>
+                <td>{{ entity.stateregion }}</td>
+                <td>{{ entity.postalcode }}</td>
+                <td>{{ entity.country }}</td>
+                <td>{{ entity.phone }}</td>
+                <td>{{ entity.fax }}</td>
+                <td>{{ entity.locationhours }}</td>
+                <td>{{ entity.exportemail }}</td>
+                <td>{{ entity.exportemailname }}</td>
+                <td>{{ entity.exportlanguage }}</td>
+                <td>{{ entity.locationstatus }}</td>
+                <td>{{ entity.locationphotourl }}</td>
+                <td>{{ entity.latitude }}</td>
+                <td>{{ entity.longitude }}</td>
+                <td>{{ entity.dategeocodeacquired }}</td>
+                <td>{{ entity.geocodesource }}</td>
+                <td>{{ entity.additionalcomments }}</td>
+                <td>{{ entity.summarylabel }}</td>
+                <td>{{ entity.summarycontent }}</td>
+                <td>{{ entity.summarydisplay }}</td>
+                <td>{{ entity.region }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('poslist_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('poslist_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('poslist_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

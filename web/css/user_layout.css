@@ -1,0 +1,196 @@
+/* 
+    Document   : user_layout
+    Created on : Jun 4, 2013, 1:29:05 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+ul, li {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+#container {
+    margin: 0 auto;
+    width: 960px;
+    min-height: 650px;
+}
+
+.clear{ clear:both; float:none;}
+
+/*nav*/
+nav {
+    width: 180px;
+    min-height: 360px;
+    float: left;
+}
+
+.nav_cal {
+    height: 70px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.nav_cal_cur {
+    height: 70px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.nav_cal a {
+    border: 2px rgb(199, 196, 190) solid;
+    border-radius: 100px;
+    
+    color: white;
+    
+    background: #B3DAF9;
+}
+
+.nav_cal_cur a {
+    border: 2px #B3DAF9 solid;
+    border-radius: 100px;
+    
+    color: #000000;
+    
+    font-style: italic;
+    
+    background: #F4F3F2;
+}
+
+.nav_cal a, .nav_cal_cur a {
+    line-height: 72px;
+    
+    font-weight: bold;
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+    text-decoration: none;
+    
+    margin-left: 55px;
+    display:block;
+    width:68px;
+    height:68px;
+}
+
+.nav_cal a:hover, .nav_cal_cur a:hover {
+    color: #ff0000;
+    
+    border: 2px #7F7C77 solid;
+}
+
+#bigleft {
+    float:left;
+    width: 738px;
+}
+/* content */
+#main {
+    width: 738px;
+    min-height: 800px;
+    float: left;
+    border: 1px rgb(199, 196, 190) solid;
+    
+    padding: 5px 20px 5px 20px;
+    
+    margin-bottom: 10px;
+}
+
+/* footer */
+footer {
+    border-top: 3px solid #3757BC;
+    color: #363636;
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+.desc {
+    color: #3757BC;
+    font-size: 13px;
+}
+
+footer > .logo {
+    float: left;
+    height: 36px;
+    width: 57px;
+}
+
+footer > .slogan {
+    color: black;
+    float: left;
+    font-size: 12px;
+    line-height: 16px;
+    margin-left: 35px;
+    margin-top: 0px;
+    text-indent: -16px;
+    width: 406px;
+}
+
+footer > .copyright {
+    float: right;
+    text-align: right;
+    width: 250px;
+}
+
+root { 
+    display: block;
+}
+
+#albatross_dailybundle_rulestype_region, #albatross_dailybundle_rulestype_surveyKeyword, #albatross_dailybundle_rulestype_payrollCurr, #albatross_dailybundle_rulestype_city, #albatross_dailybundle_rulestype_billingRate {
+    background-color: #FFFFFF;
+    background-image: linear-gradient(#EEEEEE 1%, #FFFFFF 15%);
+    border: 1px solid #AAAAAA;
+    cursor: text;
+    height: 28px;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
+    position: relative;
+    width: 652.983px;
+}
+
+#delete_rule, #edit_rule {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+#delete_rule:hover, #edit_rule:hover {
+    color: red;
+}
+.button {
+    border:none; 
+    background: #F4F3F2; 
+    border: 1px #069 solid; 
+    height: 25px;
+}
+.button:hover {
+    background: #0085a8;
+}
+.user_list {
+    width: 100%;
+    font-family: 'Calibri','arial';
+    font-size: 14px;
+}
+
+.user_list tr td {
+    border: 1px #0085a8 solid;
+    padding-left: 10px;
+}
+.user_list a {
+    font-weight: bold;
+    text-decoration: none;
+}
+.deleted {
+    color: #AAAAAA;
+    font-style: italic;
+}
+.disable-button,.disable-button:visited {
+    color: #0085a8;
+}
+.enable-button, .enable-button:visited {
+    color: darkolivegreen;
+}
+.edit-button, .edit-button:visited {
+    color: #0000ee;
+}
+.disable-button:hover, .enable-button:hover, .edit-button:hover {
+    color: #ff0000;
+}

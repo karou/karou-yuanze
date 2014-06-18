@@ -1,0 +1,3 @@
+forecast_homepage:
+    pattern:  /forecast
+    defaults: { _controller: ForecastBundle:Default:index }

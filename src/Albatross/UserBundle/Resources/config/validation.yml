@@ -1,0 +1,9 @@
+Albatross\UserBundle\Entity\User:
+    properties:
+        email:
+            - Email:
+                message: The email "{{ value }}" is not a valid email.
+                checkMX: true
+        file:
+            - File:
+                maxSize: 6000000

@@ -1,0 +1,116 @@
+# src/Albatross/UserBundle/Resources/config/doctrine/User.orm.yml
+
+Albatross\UserBundle\Entity\User:
+  type: entity
+  table: user
+  uniqueConstraints:
+    username_uniq:
+      columns: username
+    email_uniq:
+      columns: email
+  oneToMany:
+    recap:
+      targetEntity: Albatross\CustomBundle\Entity\Recap
+      mappedBy: user
+    log:
+      targetEntity: Log
+      mappedBy: user
+  manyToMany:
+    customproject:
+      targetEntity: Albatross\CustomBundle\Entity\Customproject
+      inversedBy: user
+      nullable: true
+    customclient:
+      targetEntity: Albatross\CustomBundle\Entity\Customclient
+      inversedBy: user
+      nullable: true
+  manyToOne:
+    identity:
+      targetEntity: Identity
+      inversedBy: user
+      nullable: true
+    position:
+      targetEntity: Position
+      inversedBy: user
+      nullable: true
+  id:
+    id:
+      type: integer
+      generator: { strategy: AUTO }
+  fields:
+    username:
+      type: string
+      length: 64
+    fullname:
+      type: string
+      length: 255
+      nullable: true
+    title:
+      type: string
+      length: 255
+      nullable: true
+    skype:
+      type: string
+      length: 255
+      nullable: true
+    mobile:
+      type: string
+      length: 255
+      nullable: true
+    office_phone:
+      type: string
+      length: 255
+      nullable: true
+    office_address:
+      type: string
+      length: 255
+      nullable: true
+    country:
+      type: string
+      length: 255
+      nullable: true
+    password:
+      type: string
+      length: 64
+    email:
+      type: string
+      length: 255
+    pic:
+      type: text
+      nullable: true
+    aol_username:
+      type: string
+      length: 64
+      nullable: true
+    aol_password:
+      type: string
+      length: 64
+      nullable: true
+    ace_username:
+      type: string
+      length: 64
+      nullable: true
+    ace_password:
+      type: string
+      length: 64
+      nullable: true
+    crm_username:
+      type: string
+      length: 64
+      nullable: true
+    crm_password:
+      type: string
+      length: 64
+      nullable: true
+    update_at:
+      type: datetime
+      nullable: true
+    type:
+      type: bigint
+      nullable: true
+    status:
+      type: string
+      length: 64
+  lifecycleCallbacks: 
+    prePersist: [ setCreatedAtValue ]
+    preUpdate: [ setUpdatedAtValue ]

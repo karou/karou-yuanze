@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\Customfield" table="customfield">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="materialName" type="bigint" column="material_name" nullable="true"/>
+    <field name="path" type="string" column="path" length="255" nullable="true"/>
+    <field name="fieldtype" type="string" column="fieldtype" length="255" nullable="false"/>
+    <field name="reportType" type="string" column="report_type" length="255" nullable="true"/>
+    <field name="reportExecutive" type="boolean" column="report_executive" nullable="false"/>
+    <field name="reportZone" type="string" column="report_zone" length="255" nullable="true"/>
+    <field name="mainBrief" type="boolean" column="main_brief" nullable="false"/>
+    <field name="briefTranslation" type="string" column="brief_translation" length="255" nullable="true"/>
+    <field name="submittime" type="string" column="submittime" length="255" nullable="false"/>
+    <field name="mmBrand" type="string" column="mm_brand" length="255" nullable="true"/>
+    <field name="mmDate" type="string" column="mm_date" length="255" nullable="true"/>
+    <field name="mmAddress" type="string" column="mm_address" length="255" nullable="true"/>
+    <field name="mmPurpose" type="string" column="mm_purpose" length="255" nullable="true"/>
+    <field name="mmNextstep" type="string" column="mm_nextstep" length="255" nullable="true"/>
+    <field name="mmAgendaOfTheMeeting" type="text" column="mm_agenda_of_the_meeting" nullable="true"/>
+    <field name="mmClientsFeedback" type="text" column="mm_clients_feedback" nullable="true"/>
+    <field name="mmComments" type="text" column="mm_comments" nullable="true"/>
+    <field name="clientConfirmation" type="boolean" column="client_confirmation" nullable="true"/>
+    <field name="pmConfirmation" type="boolean" column="pm_confirmation" nullable="true"/>
+    <field name="uploadWaitingClonage" type="boolean" column="upload_waiting_clonage" nullable="true"/>
+    <field name="proofreading" type="boolean" column="proofreading" nullable="true"/>
+    <field name="clientSignature" type="string" column="client_signature" length="255" nullable="true"/>
+    <field name="pmSignature" type="string" column="pm_signature" length="255" nullable="true"/>
+    <field name="uploadWaitingClonageSignature" type="string" column="upload_waiting_clonage_signature" length="255" nullable="true"/>
+    <field name="proofreadingSignature" type="string" column="proofreading_signature" length="255" nullable="true"/>
+    <field name="choosenType" type="bigint" column="choosen_type" nullable="true"/>
+    <field name="questionStatus" type="bigint" column="question_status" nullable="true"/>
+    <field name="path2" type="string" column="path_2" length="255" nullable="true"/>
+    <field name="path3" type="string" column="path_3" length="255" nullable="true"/>
+    <field name="path4" type="string" column="path_4" length="255" nullable="true"/>
+    <field name="clientConfirmationTime" type="string" column="client_confirmation_time" length="255" nullable="true"/>
+    <field name="questionFile1Label" type="string" column="question_file1_label" length="255" nullable="true"/>
+    <field name="questionFile2Label" type="string" column="question_file2_label" length="255" nullable="true"/>
+    <field name="questionFile3Label" type="string" column="question_file3_label" length="255" nullable="true"/>
+    <field name="questionFile4Label" type="string" column="question_file4_label" length="255" nullable="true"/>
+    <field name="qualityControl" type="boolean" column="quality_control" nullable="true"/>
+    <field name="testing" type="boolean" column="testing" nullable="true"/>
+    <field name="qualityControlSignature" type="string" column="quality_control_signature" length="255" nullable="true"/>
+    <field name="testingSignature" type="string" column="testing_signature" length="255" nullable="true"/>
+    <field name="questionEndTime" type="string" column="question_end_time" length="255" nullable="true"/>
+    <many-to-one field="user" target-entity="User">
+      <join-columns>
+        <join-column name="user_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="customwave" target-entity="Customwave">
+      <join-columns>
+        <join-column name="customwave_id" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-many field="country" target-entity="Country" inversed-by="customfield">
+      <join-table name="customfield_country">
+        <join-columns>
+          <join-column name="customfield_id" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="country_id" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

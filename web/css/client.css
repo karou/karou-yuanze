@@ -1,0 +1,87 @@
+/* 
+    Document   : client
+    Created on : Jul 25, 2013, 10:35:31 AM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+content {
+    
+}
+
+/*  client list table  */
+#client_list { 
+    border: 1px #7F7C77 solid;
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+    
+    font-size: 12px;
+    font-family: 'Trebuchet MS','arial';
+}
+
+#client_list thead tr th {
+    border-bottom: 3px #000100 solid;
+    height: 30px;
+    
+    font-size: 15px;
+    color: white;
+    background-color: #6595D6;
+}
+#client_list tbody tr td {
+    border: 1px #7F7C77 solid;
+    height: 20px;
+    line-height: 20px;
+}
+.pagination {
+    font-size: 12px;
+    font-family: 'Trebuchet MS','arial';
+}
+
+.sync_client {
+    background: none repeat scroll 0 0 #F4F3F2;
+    border: 1px solid #C7C4BE;
+    border-radius: 3px 3px 3px 3px;
+    cursor: pointer;
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+    height: 30px;
+    margin-bottom: 5px;
+    margin-right:5px;
+    float:left;
+}
+
+#progressbar {
+    margin: 0 auto;
+    margin-top: 295px;
+    margin-bottom: 10px;
+    /*padding: 2px 0 2px 0;*/
+    width:748px; 
+    height:12px; 
+    background: cornsilk;
+    border: 2px #7F7C77 solid;
+    border-radius: 4px;
+}
+
+#loading {
+    background: #B3DAF9;
+    height: 12px;
+    border-radius: 0 1px 1px 0;
+}
+
+#load_window{
+    position: fixed; 
+    left:0px; 
+    top:0px; 
+    background: rgba(160,160,160,0.6)!important; 
+    height:100%; width:100%;
+    text-align: center;
+    color: cornsilk;
+    font-family: 'Trebuchet MS','arial';
+    font-size: 25px;
+    font-weight: bold;
+}

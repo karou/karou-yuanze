@@ -1,0 +1,21 @@
+Albatross\CustomBundle\Entity\Clientgroup:
+  type: entity
+  table: clientgroup
+  uniqueConstraints:
+    name_uniq:
+      columns: name
+  oneToMany:
+    customclient:
+      targetEntity: Customclient
+      mappedBy: clientgroup
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+  lifecycleCallbacks: {}

@@ -1,0 +1,53 @@
+<div class="{{ h_current }}">
+    <a href="{{ path('albatross_user_homepage') }}" >
+        HOME
+    </a>
+</div>
+{% if role_guest != 1 %}
+{% if role_client != 1 %}
+<div class="{{ d_current }}">
+    <a href="{{ path('daily') }}" style="line-height: 12px; padding-top: 23px; height: 45px">
+        DAILY CHECK
+    </a>
+</div>
+<div class="{{ custom_project_status_current }}">
+    <a href="{{ path('projectStatus') }}">
+        OPERATIONS
+    </a>
+</div>
+<div class="{{ forecast_current }}">
+    <a href="{{ path('forecast') }}">
+        FORECAST
+    </a>
+</div>
+{% endif %}
+<div class="{{ custom_project_current }}">
+    <a href="{{ path('customproject') }}">
+        PROJECTS
+    </a>
+</div>
+{% if role_client != 1 %}
+<div class="{{ i_current }}">
+    <a href="{{ path('ioflist') }}">
+        IOF LIST
+    </a>
+</div>
+<div class="{{ f_current }}">
+    <a href="{{ path('section_list') }}">
+        FILE LIST
+    </a>
+</div>
+{% endif %}
+{% if is_granted('ROLE_ADMIN') %}
+<div class="{{ s_current }}">
+    <a href="{{ path('project') }}" >
+        AOL & ACE
+    </a>
+</div>
+{% endif %}
+<div class="{{ e_current }}">
+    <a href="{{ path('user_profile') }}" >
+        PROFILE
+    </a>
+</div>
+{% endif %}

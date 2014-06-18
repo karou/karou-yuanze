@@ -1,0 +1,46 @@
+Albatross\CustomBundle\Entity\Recap:
+  type: entity
+  table: recap
+  manyToOne:
+    customwave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+      inversedBy: recap
+    user:
+      targetEntity: Albatross\UserBundle\Entity\User
+      inversedBy: recap
+  manyToMany:
+    country:
+      targetEntity: Albatross\AceBundle\Entity\Country
+      inversedBy: recap
+      nullable: true
+    aolquestionnaire:
+      targetEntity: Aolquestionnaire
+      mappedBy: recap
+      nullable: true
+  oneToOne:
+    actual:
+      targetEntity: Albatross\CustomBundle\Entity\SurveyNumber
+      nullable: true
+      cascade: ["persist"]
+    planned:
+      targetEntity: Albatross\CustomBundle\Entity\SurveyNumber
+      nullable: true
+      cascade: ["persist"]
+    infomations:
+      targetEntity: Albatross\CustomBundle\Entity\Infomation
+      cascade: ["persist"]
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+    countryType:
+      type: boolean
+    submittime:
+      type: string
+      length: 255
+  lifecycleCallbacks: {}

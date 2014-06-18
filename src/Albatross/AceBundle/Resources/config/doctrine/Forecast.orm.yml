@@ -1,0 +1,44 @@
+Albatross\AceBundle\Entity\Forecast:
+  type: entity
+  table: forecast
+  manyToOne:
+    task:
+      targetEntity: Task
+      inversedBy: forecast
+    user:
+      targetEntity: Albatross\UserBundle\Entity\User
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    fwstartdate:
+      column: fw_start_date
+      type: date
+      nullable: true
+    fwenddate:
+      column: fw_end_date
+      type: date
+      nullable: true
+    reportduedate:
+      column: report_due_date
+      type: date
+      nullable: true
+    scope:
+      type: string
+      length: 255
+      nullable: true
+    editor:
+      type: bigint
+    edittime:
+      type: datetime
+    reportduetext:
+      type: string
+      length: 255
+      nullable: true
+    reporttype:
+      column: report_type
+      type: boolean
+      default: 0
+  lifecycleCallbacks: {}

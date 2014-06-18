@@ -1,0 +1,33 @@
+Albatross\CustomBundle\Entity\Customproject:
+  type: entity
+  table: customproject
+  manyToOne:
+    customclient:
+      targetEntity: Customclient
+      inversedBy: customproject
+  oneToMany:
+    customwave:
+      targetEntity: Customwave
+      mappedBy: customproject
+      cascade: ["remove"]
+      orderBy: { 'year': 'ASC', 'month': 'ASC', 'wavenum': 'ASC' }
+      nullable: true
+  manyToMany:
+    user:
+      targetEntity: Albatross\UserBundle\Entity\User
+      mappedBy: customproject
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+    scope:
+      type: bigint
+    type:
+      type: bigint
+  lifecycleCallbacks: {}

@@ -1,0 +1,24 @@
+Albatross\UserBundle\Entity\Position:
+  type: entity
+  table: position
+  uniqueConstraints:
+    name_uniq:
+      columns: name
+  oneToMany:
+    user:
+      targetEntity: User
+      mappedBy: position
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: '32'
+    parameters:
+      type: text
+      nullable: true
+  lifecycleCallbacks: {  }

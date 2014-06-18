@@ -1,0 +1,30 @@
+clientgroup:
+    pattern:  /
+    defaults: { _controller: "AlbatrossCustomBundle:Clientgroup:index" }
+
+clientgroup_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossCustomBundle:Clientgroup:show" }
+
+clientgroup_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossCustomBundle:Clientgroup:new" }
+
+clientgroup_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossCustomBundle:Clientgroup:create" }
+    requirements: { _method: post }
+
+clientgroup_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "AlbatrossCustomBundle:Clientgroup:edit" }
+
+clientgroup_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossCustomBundle:Clientgroup:update" }
+    requirements: { _method: post|put }
+
+clientgroup_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossCustomBundle:Clientgroup:delete" }
+    requirements: { _method: post|delete }

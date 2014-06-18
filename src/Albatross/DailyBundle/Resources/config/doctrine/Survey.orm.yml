@@ -1,0 +1,23 @@
+# src/Albatross/DailyBundle/Resources/config/doctrine/Survey.orm.yml
+Albatross\DailyBundle\Entity\Survey:
+  type: entity
+  table: survey
+  uniqueConstraints:
+    aol_id_uniq:
+      columns: aol_id
+  manyToOne:
+    client:
+      targetEntity: Client
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    surveyName:
+      type: string
+      length: 255
+      column: survey_name
+    aolId:
+      type: bigint
+      column: aol_id
+  lifecycleCallbacks: { }

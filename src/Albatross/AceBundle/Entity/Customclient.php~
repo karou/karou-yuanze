@@ -1,0 +1,63 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Customclient
+ *
+ * @ORM\Table(name="customclient")
+ * @ORM\Entity
+ */
+class Customclient
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="logo", type="string", length=255, nullable=true)
+     */
+    private $logo;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Clientgroup
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Clientgroup")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="clientgroup_id", referencedColumnName="id")
+     * })
+     */
+    private $clientgroup;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Operationquestionnaire", mappedBy="customclient")
+     */
+    private $operationquestionnaire;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->operationquestionnaire = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

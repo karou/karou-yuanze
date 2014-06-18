@@ -1,0 +1,56 @@
+Albatross\AceBundle\Entity\Project:
+  type: entity
+  table: project
+  uniqueConstraints:
+    ace_id_uniq:
+      columns: ace_id
+  oneToMany:
+    tasks:
+      targetEntity: Task
+      mappedBy: project
+      cascade: ["remove"]
+    attachinfo:
+      targetEntity: Attachinfo
+      mappedBy: project
+      cascade: ["remove"]
+    operationproject:
+      targetEntity: Albatross\OperationBundle\Entity\OperationProject
+      mappedBy: project
+      cascade: ["remove"]
+  manyToOne:
+    customwave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+      inversedBy: project
+      nullable: true
+      cascade: ["persist"]
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+    number:
+      type: bigint
+    description:
+      type: text
+    startDate:
+      type: datetime
+      column: start_date
+      nullable: true
+    endDate:
+      type: datetime
+      column: end_date
+      nullable: true
+    createdDate:
+      type: datetime
+      column: created_date
+      nullable: true
+    percent:
+      type: float
+    aceId:
+      type: bigint
+      column: ace_id
+  lifecycleCallbacks: {  }

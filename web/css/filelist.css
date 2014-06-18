@@ -1,0 +1,114 @@
+/* 
+    Document   : filelist
+    Created on : Aug 14, 2013, 6:26:04 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#other_file_list, .pre_file_list {
+    width: 100%;
+    border: 1px solid #7F7C77;
+    border-collapse: collapse;
+    margin-top: 5px;
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+    border-collapse: collapse;
+}
+
+#other_file_list tr th {
+    border: 1px solid #000;
+    height: 25px;
+    background: #8DB4E2;
+    font-weight: bold;
+    padding: 2px;
+}
+
+#other_file_list tr td, .pre_file_list tr td {
+    border: 1px solid #000;
+    height: 25px;
+}
+#other_file_list tr td a {
+    text-decoration: none;
+    color: #000;
+}
+#other_file_list tr td a:hover {
+    color: #04B3A2;
+}
+#other_file_form, #pre_file_form {
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+}
+
+.pre_file_list tr th {
+    height: 25px;
+    background: lightgray;
+    font-weight: bold;
+    border: 1px solid #000;
+}
+
+.filelist_action_button {
+    width: 100%;
+    float: left;
+}
+
+#edit_label_form {
+    border-style: none;
+    background: #C7C4BE;
+    height: 26px;
+    width: 470px;
+    margin: 0;
+    padding: 0;
+}
+#iofview_cover {
+    position: fixed; 
+    left:0px; 
+    top:0px; 
+    height:100%; 
+    width:100%;
+    background: rgba(160,160,160,0.6)!important; 
+}
+
+#comment_box {
+    border: 2px #B3DAF9 solid;
+    background: #EEEEEE;
+    width: 300px;
+    min-height: 20px;
+    padding: 10px;
+}
+
+.sub-title {
+    background: lightgray;
+    text-align: center;
+    font-weight: bold;
+}
+
+.download_button {
+    background: none repeat scroll 0 0 #E77E23;
+    border: 1px solid #E77E23;
+    height: 25px;
+    width: 100%;
+}
+
+.update_button {
+    background: none repeat scroll 0 0 #27AE61;
+    border: 1px solid #27AE61;
+    height: 25px;
+    width: 100%;
+}
+.delete_button {
+    background: none repeat scroll 0 0 rgb(175, 94, 156);
+    border: 1px solid rgb(175, 94, 156);
+    height: 25px;
+    width: 100%;
+}
+.edit_button {
+    background: none repeat scroll 0 0 #3598DC;
+    border: 1px solid #3598DC;
+    height: 25px;
+    width: 100%;
+}

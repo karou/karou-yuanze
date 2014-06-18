@@ -1,0 +1,68 @@
+<table class="pos_list">
+    <thead>
+        <tr>
+            <th>Store ID</th>
+            <th>Location Name</th>
+            <th>Number of visits</th>
+            <th>Store name</th>
+            <th>Address</th>
+            <th>Address 2</th>
+            <th>City</th>
+            <th>County</th>
+            <th>State/Region</th>
+            <th>Postal Code</th>
+            <th>Country</th>
+            <th>Phone</th>
+            <th>Fax</th>
+            <th>Location Hours</th>
+            <th>Export Email</th>
+            <th>Export Email Name</th>
+            <th>Export Language</th>
+            <th>Location Status</th>
+            <th>Location Photo URL</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Date Geocode Acquired</th>
+            <th>Geocode Source</th>
+            <th>Additional Comments</th>
+            <th>Summary Label</th>
+            <th>Summary Content</th>
+            <th>Summary Display</th>
+            <th>Region</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{entity.store_id}}</td>
+            <td>{{entity.location_name}}</td>
+            <td>{{entity.number_of_visits}}</td>
+            <td>{{entity.store_name}}</td>
+            <td>{{entity.address}}</td>
+            <td>{{entity.address_2}}</td>
+            <td>{{entity.city}}</td>
+            <td>{{entity.county}}</td>
+            <td>{{entity.state_region}}</td>
+            <td>{{entity.postal_code}}</td>
+            <td>{{entity.countrys}}</td>
+            <td>{{entity.phone}}</td>
+            <td>{{entity.fax}}</td>
+            <td>{{entity.location_hours}}</td>
+            <td>{{entity.export_email}}</td>
+            <td>{{entity.export_email_name}}</td>
+            <td>{{entity.export_language}}</td>
+            <td>{{entity.location_status}}</td>
+            <td>{{entity.location_photo_url}}</td>
+            <td>{{entity.latitude}}</td>
+            <td>{{entity.longitude}}</td>
+            <td>{{entity.date_geocode_acquired}}</td>
+            <td>{{entity.geocode_source}}</td>
+            <td>{{entity.additional_comments}}</td>
+            <td>{{entity.summary_label}}</td>
+            <td>{{entity.summary_content}}</td>
+            <td>{{entity.summary_display}}</td>
+            <td>{{entity.region}}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

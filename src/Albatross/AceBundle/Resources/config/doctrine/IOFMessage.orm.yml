@@ -1,0 +1,27 @@
+Albatross\AceBundle\Entity\IOFMessage:
+  type: entity
+  table: iofmessage
+  manyToOne:
+    attachments:
+      targetEntity: Attachments
+      inversedBy: iofmessage
+  oneToMany:
+    ioffile:
+      targetEntity: IOFFile
+      mappedBy: iofmessage
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    message:
+      type: text
+      nullable: true
+    formindex:
+      type: string
+      length: 20
+    formindex2:
+      type: string
+      length: 20
+  lifecycleCallbacks: {  }

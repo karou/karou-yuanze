@@ -1,0 +1,45 @@
+{% block javascripts %}
+<script src="{{ asset('js/jquery.min.js')}}"></script>
+<script type="text/javascript">
+    $(function() {
+    });
+    function cancelPost(){
+        $('#form_index').val('');
+        $('#poslist_upload').hide();
+    }
+</script>
+{% endblock %}
+<form action="{{ path('saveupload', {'wid':wid}) }}" id="pos-upload-form" method="post" {{ form_enctype(form) }}>
+<table id="pos-table">
+<tr>
+    <th  colspan="2" id="pos-title">Pos File Upload
+        <span id="close_button" title="close" onclick="cancelPost();" style=" position: absolute; right:0;">
+            <img src="{{ asset('/images/close.png')}}" height="30px" width="30px" style="margin-right: 5px;">
+        </span>
+    </th>
+</tr>
+<tr>
+    <th>Project Name</th>
+    <td>{{pname}}</td>
+</tr>
+<tr>
+    <th>Wave Name</th>
+    <td>{{wname}}</td>
+</tr>
+<tr>
+    <th>POS File Upload</th>
+    <td>
+        {{ form_widget(form.file, {attr: {'style': 'display:none','onchange' : "$('#albatross_custombundle_poslisttype_path').val($(this).val());"}}) }}
+        {{ form_widget(form.path, {attr: {'onclick' : "$('#albatross_custombundle_poslisttype_file').click()"}}) }}
+    </td>
+</tr>
+<tr>
+    <th colspan="2"><button type="button" onclick="validatePos();">Submit</button></th>
+</tr>
+<tr>
+    <td colspan="2">
+    <font style="font-size:11px; color: green;">Have to convert Excel file to CSV(comma) file before upload !!!</font>
+    </td>
+</tr>
+</table>
+</form>

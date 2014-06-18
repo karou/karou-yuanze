@@ -1,0 +1,27 @@
+
+.dataTables_wrapper {
+	position: relative;
+	clear: both;
+	zoom: 1; /* Feeling sorry for IE */
+}
+
+.dataTables_processing {
+	position: absolute;
+	top: -20px;
+	left: 50%;
+	width: 250px;
+	height: 30px;
+	margin-left: -125px;
+	margin-top: 10px;
+	/*padding: 14px 0 2px 0;*/
+	border: 2px solid #006200;
+	text-align: center;
+	color: #999;
+	font-size: 14px;
+	background-color: #019700;
+	line-height:27px;
+	color:#FFFFFF;
+	font-weight:bold;
+}
+
+

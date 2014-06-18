@@ -1,0 +1,125 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% block title %}
+Project New
+{% endblock %}
+{% block stylesheets %}
+    <link href="{{ asset('/css/new_edit_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $(function() {
+        $('#creat_button').attr('disabled', true);
+        $('#albatross_custombundle_customprojecttype_customclient').prepend('<option value=""></option>');
+        $('#albatross_custombundle_customprojecttype_customclient').val('');
+        $('#albatross_custombundle_customprojecttype_type').prepend('<option value=""></option>');
+        $('#albatross_custombundle_customprojecttype_type').val('');
+        $('#albatross_custombundle_customprojecttype_scope').prepend('<option value=""></option>');
+        $('#albatross_custombundle_customprojecttype_scope').val('');
+
+        $('#albatross_custombundle_customprojecttype_customclient').change(function(){
+            checkProjectInformation();
+        });
+        $('#albatross_custombundle_customprojecttype_type').change(function(){
+            checkProjectInformation();
+        });
+        $('#albatross_custombundle_customprojecttype_scope').change(function(){
+            checkProjectInformation();
+        });
+    });
+
+    function checkProjectInformation(){
+        var checkPoint = 0;
+        if($('#albatross_custombundle_customprojecttype_customclient').val() === ''){
+            checkPoint = 1;
+            $('#client_error_message').html('<font color="red">Please Select a Client</font>');
+            $('#creat_button').attr('disabled', true);
+        }else{
+            $('#client_error_message').html('');
+        }
+        if($('#albatross_custombundle_customprojecttype_type').val() === ''){
+            checkPoint = 1;
+            $('#type_error_message').html('<font color="red">Please Select a Type</font>');
+            $('#creat_button').attr('disabled', true);
+        }else{
+            $('#type_error_message').html('');
+        }
+        if($('#albatross_custombundle_customprojecttype_scope').val() === ''){
+            checkPoint = 1;
+            $('#scope_error_message').html('<font color="red">Please Select a Scope</font>');
+            $('#creat_button').attr('disabled', true);
+        }else{
+            $('#scope_error_message').html('');
+        }
+
+        if(checkPoint === 0){
+            var data1 = $('#albatross_custombundle_customprojecttype_customclient').find('option:selected').text();
+            var data2 = $('#albatross_custombundle_customprojecttype_type').find('option:selected').text();
+            var data3 = $('#albatross_custombundle_customprojecttype_scope').find('option:selected').text();
+            var data = '{"client":"'+data1+'", "type":"'+data2+'", "scope":"'+data3+'"}';
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('checkProjectName') }}",
+                data: data,
+                success: function(result) {
+                    if(result === '1'){
+                        $('#creat_button').attr('disabled', false);
+                        $('#error_message').html('<font color="green">You can use this Project name</font>');
+                    } else {
+                        $('#creat_button').attr('disabled', true);
+                        $('#error_message').html('<font color="red">This Project name already exist</font>');
+                    }
+            }});
+        }
+    }
+</script>
+{% endblock %}
+{% block content -%}
+    <h1>Project creation</h1>
+
+    <form action="{{ path('customproject_create') }}" method="post" {{ form_enctype(form) }}>
+        <table id="create_edit_client_table">
+            <tr>
+                <th>
+                    {{ form_label(form.customclient) }}
+                </th>
+                <td>
+                    {{ form_widget(form.customclient) }}
+                </td>
+                <td id="client_error_message"></td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.type) }}
+                </th>
+                <td>
+                    {{ form_widget(form.type) }}
+                </td>
+                <td id="type_error_message"></td>
+            </tr>
+            <tr>
+                <th>
+                    {{ form_label(form.scope) }}
+                </th>
+                <td>
+                    {{ form_widget(form.scope) }}
+                </td>
+                <td id="scope_error_message"></td>
+            </tr>
+            <tr>
+                <td colspan="3" id="error_message" style="height:21px;"></td>
+            </tr>
+        </table>
+        <p>
+            <button type="submit" id="creat_button">Create</button>
+        </p>
+    </form>
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('customproject') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

@@ -1,0 +1,34 @@
+Albatross\CustomBundle\Entity\Infomation:
+  type: entity
+  table: infomation
+  oneToOne:
+    recap:
+      targetEntity: Albatross\CustomBundle\Entity\Recap
+      cascade: ["persist"]
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    new_pos_in_Wave:
+      type: string
+      length: 255
+      nullable: true
+    delete_pos_in_Wave:
+      type: string
+      length: 255
+      nullable: true
+    invalids_to_be_invoiced:
+      type: string
+      length: 255
+      nullable: true
+    misfires_to_be_invoiced:
+      type: string
+      length: 255
+      nullable: true
+    purchases_made:
+      type: string
+      length: 255
+      nullable: true
+  lifecycleCallbacks: {}

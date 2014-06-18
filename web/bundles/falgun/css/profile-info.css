@@ -1,0 +1,251 @@
+/* 
+    Document   : profile-info
+    Created on : 2014-4-1, 17:26:56
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root {
+    display: block;
+}
+
+.btn-profile-info-edit {
+    height: 29px;
+    background: none repeat scroll 0 0 #0093A8;
+    color: #EEE;
+    line-height: 14px;
+}
+
+.btn-profile-info-edit:hover {
+    background: none repeat scroll 0 0 #066b79;
+}
+
+.btn-profile-info-edit:hover, .btn-profile-info-edit:active {
+    outline: 0 none;
+    transition: all 0.4s ease-in-out 0s;
+}
+
+.left-container-profile {
+    width: 100%;
+
+}
+
+.right-container-profile {
+    width: 100%;
+}
+
+.content-container-table {
+    width: 100%;
+    vertical-align: top;
+    margin-bottom: 20px;   
+}
+
+.content-container-table-left-td {
+    padding-right: 20px;
+    width: 240px;
+    vertical-align: top;
+}
+
+.content-container-table-right-td {
+    vertical-align: top;
+}
+
+.clear-both {
+    clear: both;
+}
+
+.proj-list-profile>ul {
+    display: inline-block;
+    margin-left: 0;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.proj-list-profile>ul>li {
+    list-style: none;
+    line-height: 30px;
+    border-bottom: 1px #DDD solid;
+}
+
+.proj-list-profile-title {
+    font-size: 24px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.proj-list-profile-content:hover {
+    color: #0088CC;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.profile-info-box {
+    height: 30px;
+    width: 120px;
+    padding-top: 10px;
+    text-align: center;
+    background: #DDD;
+    font-size: 12px;
+    font-weight: bold;
+    float: left;
+}
+
+.right-container-profile-content {
+    border-top: 4px #DDD solid;
+    border-left: 1px #DDD solid;
+    border-bottom: 1px #DDD solid;
+    border-right: 1px #DDD solid;
+    position: relative;
+}
+
+.site-name-table,
+.information-table, 
+.profile-info-comments-upload {
+    width: 96%;
+    margin: 20px auto 10px auto;
+}
+
+.site-name-table td:nth-child(2){
+    width: 260px;
+}
+
+.site-name-table tr th , 
+.information-table tr th{
+    text-align: left;
+}
+
+.site-name-table tr td, 
+.information-table tr td {
+    height: 25px;
+    vertical-align: bottom;
+}
+
+.profile-info-td-bold {
+    font-weight: bold;
+    font-size: 12px;
+    width: 20%;
+}
+
+.btn-profile-password-edit {
+    line-height: 20px;
+    padding: 0 10px 0 10px;
+    height: 22px;
+    color: #EEE;
+    background: none repeat scroll 0 0 #0093A8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    width: 170px;
+}
+
+.btn-profile-password-edit:hover {
+    background: none repeat scroll 0 0 #066B79;
+    transition: all 0.4s ease-in-out 0s;
+}
+
+.profile_edit_form {
+    height: 20px;
+    margin: 0;
+}
+
+#project-action-button {
+    float: right;
+}
+
+.editableform-loading-ajax {
+    background: url("../images/loading.gif") no-repeat scroll center center rgba(0, 0, 0, 0);
+    height: 20px;
+    width: 100px;
+    line-height: 20px;
+}
+
+#profile-cover {
+    display: none;
+}
+
+#profile-error-message-1,
+#profile-error-message-2{
+    display: none;
+}
+
+.editable-info {
+    display: none;
+}
+
+.profile-error-container {
+    background-color: #F9E5E5;
+    border: 1px solid #BD2E2E;
+    margin-bottom: 20px;
+    padding: 5px;
+}
+
+.profile-error-container h4 {
+    font-size: 14px;
+    font-weight: normal;
+    margin: 10px !important;
+}
+
+#profile-edit-pic-button{
+    display: none;
+    background: none repeat scroll 0 0 #0093A8;
+    height: 35px;
+    width: 35px;
+    color: #FFFFFF;
+    position: absolute;
+    right: 4px;
+    top: 4px;
+    font-size: 16px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+}
+
+#profile-edit-pic-button:hover {
+    outline: 0 none;
+    transition: all 0.4s ease-in-out 0s;
+    background: none repeat scroll 0 0 #066b79;
+}
+
+#profile-user-pic {
+    position: relative;
+}
+
+#profile-pic-cover {
+    display: none;
+    background: rgba(0, 0, 0, 0.3)!important;
+    position: absolute;
+    height: 240px;
+    width: 240px;
+}
+/*password form style*/
+#password_form {
+    display: none;
+    float: right;
+    position: absolute;
+    right: 50px;
+    top: 10px;
+    width: auto;
+    background: #FFFFFF;
+    padding: 20px;
+    
+    border: 1px #000000 solid;
+    border-radius: 0 10px 10px;
+    box-shadow: 0 3px 5px 0 #111111;
+}
+.passwordEditButtonClicked {
+    background: none repeat scroll 0 0 #E88A05;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    color: #EEEEEE;
+    height: 22px;
+    line-height: 20px;
+    padding: 0 10px;
+    width: 170px;
+}
+.profile-submit-button {
+    height: 29px;
+    line-height: 14px;
+}
+.passwordEditButtonClicked:hover {
+    background: none repeat scroll 0 0 #E88A05;
+    transition: all 0.4s ease-in-out 0s;
+    cursor: auto;
+}

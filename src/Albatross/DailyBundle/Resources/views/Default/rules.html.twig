@@ -1,0 +1,106 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+OP Check Rules List
+{% endblock %}
+{% block javascripts %}
+<script>
+function deleteRule(url) {
+    var result = confirm("Are you sure Delete the Rules?");
+    if (result) {
+        location.href =url;
+    } else {
+        return false;
+    }
+}
+</script>
+{% endblock %}
+{% block stylesheets %}
+<link href="{{ asset('/css/project.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block content -%}
+    <h1>OP Check Rules List</h1>
+    <h2><a href="{{ path('rules_new') }}">Add a new rule</a></h2>
+    <table class="records_list" style="border: 1px solid #000; text-align: center;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #000;">ID</th>
+                <th style="border: 1px solid #000;">Status</th>
+                <th style="border: 1px solid #000;">Clients</th>
+                <th style="border: 1px solid #000;">BU</th>
+                <th style="border: 1px solid #000;">Country</th>
+                <th style="border: 1px solid #000;">City</th>
+                <th style="border: 1px solid #000;">Survey Keyword</th>
+                <th style="border: 1px solid #000;">Region</th>
+                <th style="border: 1px solid #000;">Payrollcurr</th>
+                <th style="border: 1px solid #000;">BillingRate</th>
+                <th style="border: 1px solid #000;">Exclude</th>
+                <th style="border: 1px solid #000;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for k,entity in entities %}
+            <tr{% if k%2 == 1 %} class="active"{% endif %}>
+                <td style="border: 1px solid #000;">{{ entity.id }}</td>
+                <td style="border: 1px solid #000;">
+                    <ul>
+                        {% for s in entity.status %}
+                        <li>
+                            {{ s.status }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td style="border: 1px solid #000;">
+                    <ul style="overflow: auto; max-height: 180px;">
+                        {% for c in entity.clients %}
+                        <li>
+                            {{ c.clientName }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td style="border: 1px solid #000;">{% if entity.bu %}{{ entity.bu.code }}{% endif %}</td>
+                <td style="border: 1px solid #000;">
+                    <ul>
+                        {% for c in entity.countries %}
+                        <li>
+                            {{ c.name }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td style="border: 1px solid #000;">{{ entity.city }}</td>
+                <td style="border: 1px solid #000;">
+                    <ul>
+                        {% for k1,sn in survey %}
+                            {% if k1 == k %}
+                            {% for s in sn %}
+                                <li>
+                                    {{ s }}
+                                </li>
+                                {%endfor%}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </td>
+                <td style="border: 1px solid #000;">{{ entity.region }}</td>
+                <td style="border: 1px solid #000;">{{ entity.payrollcurr }}</td>
+                <td style="border: 1px solid #000;">{{ entity.billingrate }}</td>
+                <td style="border: 1px solid #000;">{{ entity.exclude }}</td>
+                <td style="border: 1px solid #000;">
+                <ul>
+                    <li>
+                        <a id="edit_rule" href="{{ path('rules_edit', { 'id': entity.id }) }}">Edit</a>
+                    </li>
+                    <li>
+                        <a id="delete_rule" onclick="deleteRule('{{ path('rules_delete', { 'id': entity.id }) }}')">Delete</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock %}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\User" table="user">
+    <id name="id" type="integer" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="username" type="string" column="username" length="64" nullable="false"/>
+    <field name="password" type="string" column="password" length="64" nullable="false"/>
+    <field name="email" type="string" column="email" length="255" nullable="false"/>
+    <field name="updateAt" type="datetime" column="update_at" nullable="true"/>
+    <field name="pic" type="text" column="pic" nullable="true"/>
+    <field name="aolUsername" type="string" column="aol_username" length="64" nullable="true"/>
+    <field name="aolPassword" type="string" column="aol_password" length="64" nullable="true"/>
+    <field name="aceUsername" type="string" column="ace_username" length="64" nullable="true"/>
+    <field name="acePassword" type="string" column="ace_password" length="64" nullable="true"/>
+    <field name="fullname" type="string" column="fullname" length="255" nullable="true"/>
+    <field name="title" type="string" column="title" length="255" nullable="true"/>
+    <field name="skype" type="string" column="skype" length="255" nullable="true"/>
+    <field name="mobile" type="string" column="mobile" length="255" nullable="true"/>
+    <field name="officePhone" type="string" column="office_phone" length="255" nullable="true"/>
+    <field name="officeAddress" type="string" column="office_address" length="255" nullable="true"/>
+    <field name="country" type="string" column="country" length="255" nullable="true"/>
+    <field name="crmUsername" type="string" column="crm_username" length="64" nullable="true"/>
+    <field name="crmPassword" type="string" column="crm_password" length="64" nullable="true"/>
+    <field name="type" type="bigint" column="type" nullable="true"/>
+    <field name="identityId" type="bigint" column="identity_id" nullable="true"/>
+    <field name="positionId" type="bigint" column="position_id" nullable="true"/>
+    <field name="status" type="string" column="status" length="64" nullable="false"/>
+  </entity>
+</doctrine-mapping>

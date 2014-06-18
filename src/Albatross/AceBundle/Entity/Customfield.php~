@@ -1,0 +1,347 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Customfield
+ *
+ * @ORM\Table(name="customfield")
+ * @ORM\Entity
+ */
+class Customfield
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="material_name", type="bigint", nullable=true)
+     */
+    private $materialName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path", type="string", length=255, nullable=true)
+     */
+    private $path;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fieldtype", type="string", length=255, nullable=false)
+     */
+    private $fieldtype;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="report_type", type="string", length=255, nullable=true)
+     */
+    private $reportType;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="report_executive", type="boolean", nullable=false)
+     */
+    private $reportExecutive;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="report_zone", type="string", length=255, nullable=true)
+     */
+    private $reportZone;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="main_brief", type="boolean", nullable=false)
+     */
+    private $mainBrief;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="brief_translation", type="string", length=255, nullable=true)
+     */
+    private $briefTranslation;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="submittime", type="string", length=255, nullable=false)
+     */
+    private $submittime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_brand", type="string", length=255, nullable=true)
+     */
+    private $mmBrand;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_date", type="string", length=255, nullable=true)
+     */
+    private $mmDate;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_address", type="string", length=255, nullable=true)
+     */
+    private $mmAddress;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_purpose", type="string", length=255, nullable=true)
+     */
+    private $mmPurpose;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_nextstep", type="string", length=255, nullable=true)
+     */
+    private $mmNextstep;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_agenda_of_the_meeting", type="text", nullable=true)
+     */
+    private $mmAgendaOfTheMeeting;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_clients_feedback", type="text", nullable=true)
+     */
+    private $mmClientsFeedback;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mm_comments", type="text", nullable=true)
+     */
+    private $mmComments;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="client_confirmation", type="boolean", nullable=true)
+     */
+    private $clientConfirmation;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="pm_confirmation", type="boolean", nullable=true)
+     */
+    private $pmConfirmation;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="upload_waiting_clonage", type="boolean", nullable=true)
+     */
+    private $uploadWaitingClonage;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="proofreading", type="boolean", nullable=true)
+     */
+    private $proofreading;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="client_signature", type="string", length=255, nullable=true)
+     */
+    private $clientSignature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="pm_signature", type="string", length=255, nullable=true)
+     */
+    private $pmSignature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="upload_waiting_clonage_signature", type="string", length=255, nullable=true)
+     */
+    private $uploadWaitingClonageSignature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="proofreading_signature", type="string", length=255, nullable=true)
+     */
+    private $proofreadingSignature;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="choosen_type", type="bigint", nullable=true)
+     */
+    private $choosenType;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="question_status", type="bigint", nullable=true)
+     */
+    private $questionStatus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path_2", type="string", length=255, nullable=true)
+     */
+    private $path2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path_3", type="string", length=255, nullable=true)
+     */
+    private $path3;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="path_4", type="string", length=255, nullable=true)
+     */
+    private $path4;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="client_confirmation_time", type="string", length=255, nullable=true)
+     */
+    private $clientConfirmationTime;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question_file1_label", type="string", length=255, nullable=true)
+     */
+    private $questionFile1Label;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question_file2_label", type="string", length=255, nullable=true)
+     */
+    private $questionFile2Label;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question_file3_label", type="string", length=255, nullable=true)
+     */
+    private $questionFile3Label;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question_file4_label", type="string", length=255, nullable=true)
+     */
+    private $questionFile4Label;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="quality_control", type="boolean", nullable=true)
+     */
+    private $qualityControl;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="testing", type="boolean", nullable=true)
+     */
+    private $testing;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="quality_control_signature", type="string", length=255, nullable=true)
+     */
+    private $qualityControlSignature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="testing_signature", type="string", length=255, nullable=true)
+     */
+    private $testingSignature;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="question_end_time", type="string", length=255, nullable=true)
+     */
+    private $questionEndTime;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\User")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * })
+     */
+    private $user;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Customwave
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customwave")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customwave_id", referencedColumnName="id")
+     * })
+     */
+    private $customwave;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Country", inversedBy="customfield")
+     * @ORM\JoinTable(name="customfield_country",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="customfield_id", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     *   }
+     * )
+     */
+    private $country;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->country = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

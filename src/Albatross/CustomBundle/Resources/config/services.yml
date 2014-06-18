@@ -1,0 +1,7 @@
+parameters:
+#    albatross_custom.example.class: Albatross\CustomBundle\Example
+
+services:
+#    albatross_custom.example:
+#        class: %albatross_custom.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,188 @@
+/* 
+    Document   : forecast
+    Created on : Aug 28, 2013, 4:04:52 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+navbig {
+    height: 40px;
+}
+
+navbig ul li{
+    min-width: 50px;
+    float: left;
+        
+    border-left: 1px solid #C7C4BE;
+    border-radius: 5px 5px 0 0;
+    border-right: 1px solid #C7C4BE;
+    border-top: 1px solid #C7C4BE;
+    
+    background: none repeat scroll 0 0 #F4F3F2;
+    
+    padding-top: 2px;
+    padding-bottom: 2px;
+    
+}
+
+navbig ul li a:hover{
+    color: #FF0000;
+    font-size: 12px;
+}
+
+navbig ul li:hover{
+    background: #B3DAF9;
+}
+
+navbig ul li a{
+    color: #000;
+    display: block;
+    padding-left: 15px;
+    padding-right: 15px;
+    text-decoration: none;
+    
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+}
+
+.nav_big_cal_cur {
+    background: #B3DAF9;
+    display: block;
+}
+#forecastList {
+    border: 1px solid #7F7C77;
+    border-collapse: collapse;
+    font-family: 'Trebuchet MS','arial';
+    font-size: 12px;
+    margin-top: 5px;
+    width: 100%;
+    /*table-layout: initial;*/
+}
+#forecastList tr th {
+    background: none repeat scroll 0 0 #6595D6;
+    color: #FFFFFF;
+    font-weight: bold;
+    line-height: 24px;
+    border: 1px solid white;
+}
+#forecastList tr td{
+    line-height: 24px;
+}
+#result_list_table td{
+    border: 1px solid #6595D6;
+}
+#bigpage{
+    width: 97%;
+    min-height: 640px;
+    background: #B3DAF9;
+    
+    border: 1px rgb(199, 196, 190) solid;
+    
+    padding: 5px 20px 5px 20px;
+    
+    margin-bottom: 10px;
+}
+header{
+    width: 960px;
+    margin: 0 auto;
+}
+footer{
+    width: 960px;
+    margin: 0 auto;
+}
+#searchBar {
+    font-size: 12px;
+}
+#ui-datepicker-div{
+    font-size: 12px;
+}
+#table_tail,#table_header {
+    /*display: table;*/
+    margin-left: -1px;
+    padding:0;
+    display: none;
+}
+#table_tail_2, #table_tail_1 {
+    margin-left: -1px;
+    padding:0;
+    font-weight: bold;
+}
+#table_tail {
+    position: fixed; 
+    background: #ffcc00;
+    bottom: 0;
+    border-color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+#table_tail_1 {
+    position: fixed; 
+    background: #ffcc00;
+    bottom: 27px;
+    border-color: white;
+    font-size: 10px;
+}
+#table_tail_2 {
+    position: fixed; 
+    background: #ffaa00;
+    bottom: 0;
+    border-color: white;
+    font-size: 10px;
+}
+.table_tail_td {
+    border:1px solid #6595D6;
+}
+#forecast_edit_form_box {
+    font-size:12px;
+    font-family: 'Trebuchet MS','arial';
+    background: white;
+    border: 2px #6595D6 solid;
+    padding: 5px;
+}
+.contract_number {
+    width: 80px;
+}
+#searchBarTable tr td {
+    height: 35px;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    #forecastList tr th{
+        border: 2px solid white;
+    } 
+    .table_tail_td{
+        border: 2px solid #6595D6;
+    }
+}
+.project_editable {
+    color: #04B3A2;
+    font-weight: bold;
+    cursor: pointer;
+}
+#albatross_acebundle_forecastsearchtype_step {
+    height: 51px;
+}
+
+#albatross_acebundle_forecastsearchtype_f_month {
+    height: 64px;
+}
+
+.change-date-report {
+    height: 12px;
+    width: 12px;
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -115px -84px rgba(0, 0, 0, 0);
+    float: right;
+    margin-left: 10px;
+    margin-top: 4px;
+    cursor: pointer;
+}
+.change-date-report:hover {
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -68px -84px rgba(0, 0, 0, 0);
+}
+.filter-gray {
+    color: gray;
+}

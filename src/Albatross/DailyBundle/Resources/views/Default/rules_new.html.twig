@@ -1,0 +1,92 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+OP Check - New Rules
+{% endblock %}
+
+{% block stylesheets %}
+<link href="{{ asset('/css/project.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/chosen.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
+<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script>
+    $(function() {
+        $(".chz").chosen({width: "100%"});
+        $(".chz_single").chosen({width: "100%", allow_single_deselect: true});
+    });
+</script>
+{% endblock %}
+
+{% block content -%}
+    <h1>Rules creation</h1>
+
+    <form action="{{ path('rules_new') }}" method="post" {{ form_enctype(form) }}>
+        <table style="width: 100%">
+            <tr>
+                <td>{{ form_label(form.status) }}</td>
+                <td style="width: 90%">{{ form_widget(form.status) }}</td>
+                <td>{{ form_errors(form.status) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.clients) }}</td>
+                <td>{{ form_widget(form.clients) }}</td>
+                <td>{{ form_errors(form.clients) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.bu) }}</td>
+                <td>{{ form_widget(form.bu) }}</td>
+                <td>{{ form_errors(form.bu) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.countries) }}</td>
+                <td>{{ form_widget(form.countries) }}</td>
+                <td>{{ form_errors(form.countries) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.city) }}</td>
+                <td>{{ form_widget(form.city) }}</td>
+                <td>{{ form_errors(form.city) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.surveyKeyword) }}</td>
+                <td>{{ form_widget(form.surveyKeyword) }}</td>
+                <td>{{ form_errors(form.surveyKeyword) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.region) }}</td>
+                <td>{{ form_widget(form.region) }}</td>
+                <td>{{ form_errors(form.region) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.payrollCurr) }}</td>
+                <td>{{ form_widget(form.payrollCurr) }}</td>
+                <td>{{ form_errors(form.payrollCurr) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.billingRate) }}</td>
+                <td>{{ form_widget(form.billingRate) }}</td>
+                <td>{{ form_errors(form.billingRate) }}</td>
+            </tr>
+            <tr>
+                <td>{{ form_label(form.exclude) }}</td>
+                <td>{{ form_widget(form.exclude) }}</td>
+                <td>{{ form_errors(form.exclude) }}</td>
+            </tr>
+        </table>
+        {{ form_rest(form) }}
+            <p>
+                <button type="submit">Create</button>
+            </p>
+        </form>
+
+        <ul class="record_actions">
+            <li>
+                <a href="{{ path('rules') }}">
+                    Back to the list
+                </a>
+            </li>
+        </ul>
+{% endblock %}

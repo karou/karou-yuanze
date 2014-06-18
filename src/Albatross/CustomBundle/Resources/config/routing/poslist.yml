@@ -1,0 +1,32 @@
+poslist:
+    pattern:  /
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:index" }
+
+poslist_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:show" }
+
+poslist_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:new" }
+
+poslist_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:create" }
+    requirements: { _method: post }
+
+poslist_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:edit" }
+
+poslist_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:update" }
+    requirements: { _method: post|put }
+
+poslist_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "AlbatrossCustomBundle:Poslist:delete" }
+    requirements: { _method: post|delete }
+    
+

@@ -1,0 +1,3 @@
+albatross_core_homepage:
+    pattern:  /
+    defaults: { _controller: AlbatrossCoreBundle:Default:index }

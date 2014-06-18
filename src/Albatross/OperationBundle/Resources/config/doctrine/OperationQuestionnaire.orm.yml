@@ -1,0 +1,70 @@
+Albatross\OperationBundle\Entity\OperationQuestionnaire:
+  type: entity
+  table: operationquestionnaire
+  oneToOne:
+    campaign:
+      targetEntity: Albatross\AceBundle\Entity\Campaign
+  manyToOne:
+    questionnaire:
+      targetEntity: Albatross\AceBundle\Entity\Questionnaire
+      inversedBy: operationquestionnaire
+  manyToMany:
+    bu:
+      targetEntity: Albatross\AceBundle\Entity\Bu
+      inversedBy: operationquestionnaire
+    country:
+      targetEntity: Albatross\AceBundle\Entity\Country
+      inversedBy: operationquestionnaire
+    customclient:
+      targetEntity: Albatross\CustomBundle\Entity\Customclient
+      inversedBy: operationquestionnaire
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    fwsdate:
+      type: string
+      length: 20
+      nullable: true
+    fwedate:
+      type: string
+      length: 20
+      nullable: true
+    reportdate:
+      type: string
+      length: 20
+      nullable: true
+    survey_num:
+      type: bigint
+    assigned_num:
+      type: bigint
+    fw_num:
+      type: bigint
+    editing_num:
+      type: bigint
+    first_visit_date:
+      type: string
+      length: 20
+    last_visit_date:
+      type: string
+      length: 20
+    info_type:
+      type: integer
+      nullable: true
+    modified_date:
+      type: string
+      length: 20
+    qid:
+      type: integer
+      nullable: true
+    campid:
+      type: integer
+      nullable: true
+    questionnaire_name:
+      type: string
+      length: 255
+      nullable: ture
+  lifecycleCallbacks: {  }

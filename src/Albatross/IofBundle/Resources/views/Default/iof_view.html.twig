@@ -1,0 +1,190 @@
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
+
+{% block title 'IOF List' %}
+
+{% block breadcrumb %}
+	<li class="active">IOF List</li>
+{% endblock %}
+
+{% block pageHeading 'IOF List' %}
+
+{% block body %}
+
+<!--BODY STARTS-->
+	
+<div class="row-fluid">
+ 
+  <div class="span12">
+	
+	<!--Tab panel starts-->
+	<div class="tab-widget">
+	  <ul class="nav nav-tabs" id="myTab2">
+		<li class="active"><a href="#form1">Form 1</a></li>
+		<li class><a href="#form2">Form 2</a></li>
+		<li class><a href="#form3">Form 3</a></li>
+		<li class><a href="#newForm">New Form+</a></li>
+	  </ul>
+	  <div class="tab-content">
+		<div class="tab-pane active" id="form1">
+		  	<div class="span2">
+				<div class="tab_inner">
+					<div class="iof_image">IOF</div>
+				</div>
+			</div>
+			<div class="span10">
+				
+				<div class="tab_inner-right profile-info">
+					
+					<ul class="profile-intro">
+						<li>
+						  <label>Editor:</label>
+						  jhon 
+						</li>
+						<li>
+						  <label>Project Manager:</label>
+						  Lee 
+						</li>
+						<li>
+						  <label>Business Unit:</label>
+						  China 
+						</li>
+						<li>
+						  <label>ACE Project:</label>
+						  CN-COSMETICS-LVMH-SEPHORA-WHOLESALE-R-2013-09(150)
+						</li>
+						<li>
+						  <label>Username:</label>
+						  jquest
+						</li>
+						<li>
+						  <label>FW project:</label>
+						  <i>2013-09-01</i> to <li>2013-09-30</li></li>
+						<li>
+						  <label>Report Due</label>
+						  2013-11-20
+						</li>
+						<li>
+						  <label>Scope</label>
+						  148
+						</li>
+						<li>
+						  <label>Comment</label>
+						  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+						</li>
+						<li>
+							<a href="">Edit Form</a>
+						</li>
+					  </ul>
+					  
+					  <p>&nbsp;</p>
+					  <h4>Message <a href="javascript:;" class="edit_message_btn">Edit Message | <i class="icon-pencil"></i></a></h4>
+					  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate</p>
+					  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate</p>
+					  <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate</p>
+					  
+					  <p>&nbsp;</p>
+					  <h4>Files</h4>
+					  <form class="form-horizontal">
+						  <div class="span4">
+							<div class="control-group">
+							  <label class="control-label" style="text-align:left;width:auto;">Label:</label>
+							  <div class="controls" style="margin-left:50px;">
+								<input type="text" name="label" />
+							  </div>
+							</div>
+						  </div>
+						  <div class="span5">
+							<div class="control-group">
+							  <label class="control-label" style="text-align:left;width:auto;">File:</label>
+							  <div class="controls" style="margin-left:50px;">
+								<div data-provides="fileupload" class="fileupload fileupload-new">
+								  <div class="input-append">
+									<div class="uneditable-input span3"> <i class="icon-file fileupload-exists"></i><span class="fileupload-preview"></span> </div>
+									<span class="btn btn-file"><span class="fileupload-new">Browse..</span><span class="fileupload-exists">Change</span>
+									<input type="file">
+									</span><a data-dismiss="fileupload" class="btn fileupload-exists" href="#">Remove</a> </div>
+								</div>
+							  </div>
+							</div>
+						  </div>
+						  <div class="span3"> 
+						  	<a class="btn btn-info" href="javascript:"><i class="icon-upload-alt"></i> Upload</a> 
+							<a class="btn btn-danger" href="javascript:">Cancel</a> 
+						  </div>
+					</form>
+					  <table class="responsive table table-striped table-bordered" id="data-table">
+						<thead>
+						  <tr>
+							<th> Label </th>
+							<th> Upload Date </th>
+							<th> Actions </th>
+						  </tr>
+						</thead>
+						<tbody>
+						
+						  <tr>
+							<td><a href="javascript:;">IOF-CN-LVMH-Sephora-Wholesale-R-September wave 2013</a></td>
+							<td>2013-11-20</td>
+							<td><a href="javascript:;">jqin</a></td>
+						  </tr>
+						  
+						  
+							
+						</tbody>
+					  </table>
+				</div>
+				
+			</div>
+		</div>
+		<div class="tab-pane" id="form2">
+			<div class="tab_inner">
+				<p>2 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+				Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate...</p>
+			</div>
+		</div>
+		<div class="tab-pane" id="form3">
+		  	<div class="tab_inner">
+				<p>3 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+				Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate...</p>
+			</div>
+		</div>
+		<div class="tab-pane" id="newForm">
+		  	<div class="tab_inner">
+				<p>4 Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. 
+				Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate...</p>
+			</div>
+		</div>
+	  </div>
+	</div>
+	<!--Tab panel ends-->
+  </div>
+ 
+</div>
+
+
+<!--BODY ENDS-->
+
+<script type="text/javascript">
+
+$(function () {
+	
+	/*====Data Table====*/
+	$('#data-table').dataTable({
+		"sDom": "",//"<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>"
+			/*"oTableTools": {
+			"aButtons": [
+				"copy",
+				"print",
+				{
+					"sExtends":    "collection",
+					"sButtonText": 'Save <span class="caret" />',
+					"aButtons":    [ "csv", "xls", "pdf" ]
+				}
+			]
+		}*/
+	});
+
+});
+</script>
+
+{% endblock %}

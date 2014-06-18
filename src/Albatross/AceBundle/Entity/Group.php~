@@ -1,0 +1,46 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Group
+ *
+ * @ORM\Table(name="group")
+ * @ORM\Entity
+ */
+class Group
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="myorder", type="bigint", nullable=false)
+     */
+    private $myorder;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ace_id", type="bigint", nullable=false)
+     */
+    private $aceId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+
+}

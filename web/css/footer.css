@@ -1,0 +1,46 @@
+/* 
+    Document   : footer
+    Created on : Jun 13, 2013, 12:12:05 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+/* footer */
+footer {
+    border-top: 3px solid #3757BC;
+    color: #363636;
+    font-size: 12px;
+    padding-top: 5px;
+}
+
+.desc {
+    color: #3757BC;
+    font-size: 13px;
+}
+
+footer > .logo {
+    float: left;
+    height: 36px;
+    width: 57px;
+}
+
+footer > .slogan {
+    color: black;
+    float: left;
+    font-size: 12px;
+    line-height: 16px;
+    margin-left: 35px;
+    margin-top: 0px;
+    text-indent: -16px;
+    width: 406px;
+}
+
+footer > .copyright {
+    float: right;
+    text-align: right;
+    width: 250px;
+}
+root { 
+    display: block;
+}
+

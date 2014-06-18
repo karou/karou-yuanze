@@ -1,0 +1,44 @@
+Albatross\AceBundle\Entity\Country:
+  type: entity
+  table: country
+  uniqueConstraints:
+    code_uniq:
+        columns: code
+  manyToOne:
+    bu:
+      targetEntity: Bu
+      inversedBy: country
+  manyToMany:
+    recap:
+      targetEntity: Albatross\CustomBundle\Entity\Recap
+      mappedBy: country
+    customfield:
+      targetEntity: Albatross\CustomBundle\Entity\Customfield
+      mappedBy: country
+    operationquestionnaire:
+      targetEntity: Albatross\OperationBundle\Entity\OperationQuestionnaire
+      mappedBy: country
+    operationproject:
+      targetEntity: Albatross\OperationBundle\Entity\OperationProject
+      mappedBy: country
+  oneToMany:
+    poslistdata:
+      targetEntity: Albatross\CustomBundle\Entity\Poslistdata
+      mappedBy: country
+    location:
+      targetEntity: Albatross\AceBundle\Entity\Location
+      mappedBy: country
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+      nullable: true
+    code:
+      type: string
+      length: 255
+  lifecycleCallbacks: {  }

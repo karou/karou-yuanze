@@ -1,0 +1,174 @@
+Albatross\CustomBundle\Entity\Customfield:
+  type: entity
+  table: customfield
+  manyToOne:
+    customwave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+      inversedBy: customfield
+    user:
+      targetEntity: Albatross\UserBundle\Entity\User
+  manyToMany:
+    country:
+      targetEntity: Albatross\AceBundle\Entity\Country
+      inversedBy: customfield
+      nullable: true
+  oneToMany:
+    attendees:
+      targetEntity: Attendees
+      mappedBy: customfield
+      nullable: true
+      cascade: ["persist", "remove"]
+    aolquestionnaire:
+      targetEntity: Aolquestionnaire
+      mappedBy: customfield
+      nullable: true
+      cascade: ["persist", "remove"]
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    material_name:
+      type: bigint
+      nullable: true
+    path:
+      type: string
+      length: 255
+      nullable: true
+    path_2:
+      type: string
+      length: 255
+      nullable: true
+    path_3:
+      type: string
+      length: 255
+      nullable: true
+    path_4:
+      type: string
+      length: 255
+      nullable: true
+    fieldtype:
+      type: string
+      length: 255
+    report_type:
+      type: string
+      length: 255
+      nullable: true
+    report_executive:
+      type: boolean
+    report_zone:
+      type: string
+      length: 255
+      nullable: true
+    main_brief:
+      type: boolean
+    brief_translation:
+      type: string
+      length: 255
+      nullable: true
+    submittime:
+      type: string
+      length: 255
+    mm_brand:
+      type: string
+      length: 255
+      nullable: true
+    mm_date:
+      type: string
+      length: 255
+      nullable: true
+    mm_address:
+      type: string
+      length: 255
+      nullable: true
+    mm_purpose:
+      type: string
+      length: 255
+      nullable: true
+    mm_nextstep:
+      type: string
+      length: 255
+      nullable: true
+    mm_agenda_of_the_meeting:
+      type: text
+      nullable: true
+    mm_clients_feedback:
+      type: text
+      nullable: true
+    mm_comments:
+      type: text
+      nullable: true    
+    client_confirmation:
+      type: boolean
+      nullable: true
+    client_confirmation_time:
+      type: string
+      length: 255
+      nullable: true
+    pm_confirmation:
+      type: boolean
+      nullable: true
+    upload_waiting_clonage:
+      type: boolean
+      nullable: true
+    proofreading:
+      type: boolean
+      nullable: true
+    client_signature:
+      type: string
+      length: 255
+      nullable: true
+    pm_signature:
+      type: string
+      length: 255
+      nullable: true
+    upload_waiting_clonage_signature:
+      type: string
+      length: 255
+      nullable: true
+    proofreading_signature:
+      type: string
+      length: 255
+      nullable: true
+    choosen_type:
+      type: bigint
+      nullable: true
+    question_status:
+      type: bigint
+      nullable: true
+    question_file1_label:
+      type: string
+      length: 255
+      nullable: true
+    question_file2_label:
+      type: string
+      length: 255
+      nullable: true
+    question_file3_label:
+      type: string
+      length: 255
+      nullable: true
+    question_file4_label:
+      type: string
+      length: 255
+      nullable: true
+    quality_control:
+      type: boolean
+      nullable: true
+    testing:
+      type: boolean
+      nullable: true
+    quality_control_signature:
+      type: string
+      length: 255
+      nullable: true
+    testing_signature:
+      type: string
+      length: 255
+      nullable: true
+    question_end_time:
+      type: string
+      length: 255
+      nullable: true
+  lifecycleCallbacks: {}

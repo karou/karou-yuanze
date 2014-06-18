@@ -1,0 +1,90 @@
+parameters:
+    database_driver:   pdo_mysql
+    database_host:     127.0.0.1
+    database_port:     ~
+    database_name:     albatross_platform
+    database_user:     root
+    database_password: Automation42!
+
+    mailer_transport:  smtp
+    mailer_host:       127.0.0.1
+    mailer_user:       ~
+    mailer_password:   ~
+
+    locale:            en
+    secret:            ThisTokenIsNotSoSecretChangeIt
+    identity_alias:    779C846975FC4807A1EA64C09C8E0C203C32187F8F15460CB5687043C13137A1E7B2C05A2A4048918FB45C7EAFEB4C9DB35564AA929448BC8CB62F6289957F34
+    valuelist:
+      attachments:
+        status:
+          waiting: waiting
+          approved: approved
+          update-waiting: update-waiting
+          updated: updated
+          old: old
+        type: [IOF, contract, invoice, other]
+      scope:
+        1: AU
+        2: CN
+        3: HK
+        4: IN
+        5: JP
+        6: KR
+        7: LA
+        8: ME
+        9: NE
+        10: RU
+        11: SG
+        12: SW
+        13: TH
+        14: TW
+        15: UK
+        16: US
+        17: WW
+        18: APAC
+        19: EU
+      type:
+        1: Wholesale
+        2: Retail
+        3: Discount check
+        4: FGD
+        5: Exit Interview
+        6: Aftersales
+        7: Price Check
+        8: Grey Market
+        9: Benchmark
+        10: Outlet
+        11: Competitor
+        12: Call
+        13: Mini boutique
+        14: Franchise
+        15: CS-COACHING-FORM
+        16: Delivery Check
+        17: Market Research
+        18: BEAUTY
+        19: BPC
+      language:
+        1: English
+        2: French
+        3: German
+        4: Spanish
+        5: Portuguese
+        6: Italian
+        7: Russian
+        8: Japanese
+        9: Korean
+        10: Mandarin
+        11: Cantonese
+      questionnaire:
+        1: waiting client confirmation
+        2: waiting project manager confirmation
+        3: waiting proofreading
+        5: waiting for Quality Control 
+        6: waiting for testing
+        7: tested
+        8: waiting upload
+        9: waiting clonage
+      brandmaterial:
+        1: Staff list
+        2: Shopper profile
+        3: Brand Guidelines

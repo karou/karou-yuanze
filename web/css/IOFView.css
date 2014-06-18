@@ -1,0 +1,146 @@
+/* 
+    Document   : IOFView
+    Created on : Jan 7, 2014, 10:15:52 AM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#iof-view-big-table {
+    width: 100%;
+    font-family: 'Calibri','arial';
+    border-collapse: collapse;
+    font-size: 14px;
+    border: 1px #006699 solid;
+}
+#iof-view-big-table td{
+    /*border: 1px #006699 solid;*/
+    padding-left: 10px;
+}
+.gab-td {
+    width: 5%;
+}
+
+.wave-name-th {
+    /*background: #006699;*/
+    background: rgba(0, 82, 156, 1);
+    height: 35px;
+    color: snow;
+    font-size: 20px;
+}
+.wave-name-th a {
+    text-decoration: none;
+    color: snow;
+}
+.bu-ace-tr-title th {
+    background: rgba(0, 82, 156, 0.8);
+    color:  #F2F2F2;
+}
+.iof-view-info-title {
+    /*background: #E77E23;*/
+    background: rgba(0, 82, 156, 0.6);
+}
+
+.iof-view-label{
+    width: 40%;
+    overflow: hidden;
+    word-break: break-all;
+}
+.file-message-th {
+    /*background: #3598DC;*/
+    
+    background: rgba(0, 82, 156, 0.4);
+}
+.iof-view-label-title, .iof-view-dowload-title, .iof-view-message-title {
+    /*background: #27AE61;*/
+    
+    background: rgba(0, 82, 156, 0.2);
+}
+.iof-view-label-title {
+    width: 80%;
+}
+.iof-view-dowload-title {
+    width: 20%;
+}
+
+.iof-view-message-title span {
+    float: right;
+    margin-right: 20px;
+    height: 12px;
+    width: 12px;
+    cursor: pointer;
+}
+.hideMessageView {
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -50px -128px rgba(0, 0, 0, 0);
+}
+.showMessageView {
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -50px -80px rgba(0, 0, 0, 0);
+}
+.iof-view-message {
+    overflow: hidden;
+    word-break: break-all;
+}
+.download_button {
+    /*background: none repeat scroll 0 0 #27AE61;*/
+    background: rgba(231, 126, 35, 0.6);
+    border: 1px solid rgba(231, 126, 35, 0.8);
+    cursor: pointer;
+    width: 70px;
+    height: 20px;
+}
+.iof-action-table {
+    border-collapse: collapse;
+}
+.download_button-img {
+    background: url("/images/ui-icons_222222_256x240.png") no-repeat scroll -228px -51px rgba(0, 0, 0, 0);
+    float: left;
+    height: 10px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-right: 5px;
+    width: 10px;
+}
+#iof-action {
+    float: right;
+    cursor: pointer;
+    margin-right: 10px;
+    margin-top: 7px;    
+}
+#iof-action-table {
+    background: snow;
+    display: none;
+    position: absolute;
+    width: 100px;
+    color: #000;
+    font-weight: normal;
+    font-size: 14px;
+}
+#iof-action-table td{
+    border: 1px #006666 solid;
+}
+#iof-action-table td:hover{
+    background: #006666;
+    color: snow;
+}
+#user-name {
+    margin-left: 20px;
+    color: #b2b2b2;
+    font-size: 14px;
+}
+#delete-iof {
+    background: #AF5E9C;
+}
+#update-iof {
+    background: #27AE61;
+}
+#edit-iof {
+    background: #3598DC;
+}
+.iof-view-info-table {
+    width: 100%;
+    border-collapse: collapse;
+}

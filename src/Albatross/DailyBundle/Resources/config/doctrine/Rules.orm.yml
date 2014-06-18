@@ -1,0 +1,81 @@
+# src/Albatross/DailyBundle/Resources/config/doctrine/Client.orm.yml
+Albatross\DailyBundle\Entity\Rules:
+  type: entity
+  table: rules
+  manyToMany:
+    status:
+      targetEntity: Status
+      joinTable:
+        name: rules_status
+        joinColumns:
+          rules_id:
+            referenceColumnName: id
+        inverseJoinColumns:
+          status_id:
+            referenceColumnName: id
+    clients:
+      targetEntity: Client
+      joinTable:
+        name: rules_clients
+        joinColumns:
+          rules_id:
+            referenceColumnName: id
+        inverseJoinColumns:
+          client_id:
+            referenceColumnName: id
+      nullable: true
+    countries:
+      targetEntity: Albatross\AceBundle\Entity\Country
+      joinTable:
+        name: rules_countries
+        joinColumns:
+          rules_id:
+            referenceColumnName: id
+        inverseJoinColumns:
+          country_id:
+            referenceColumnName: id
+      nullable: true
+    surveys:
+      targetEntity: Survey
+      joinTable:
+        name: rules_Survey
+        joinColumns:
+          rules_id:
+            referenceColumnName: id
+        inverseJoinColumns:
+          survey_id:
+            referenceColumnName: id
+      nullable: true
+  manyToOne:
+    bu:
+      targetEntity: Albatross\AceBundle\Entity\Bu
+      nullable: true
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    exclude:
+      type: boolean
+      column: state
+    region:
+      type: string
+      length: 255
+      nullable: true
+    city:
+      type: string
+      length: 255
+      nullable: true
+    payrollCurr:
+      type: string
+      length: 255
+      nullable: true
+    surveyKeyword:
+      type: string
+      length: 255
+      column: survey_keyword
+      nullable: true
+    billingRate:
+      type: bigint
+      nullable: true
+  lifecycleCallbacks: { }

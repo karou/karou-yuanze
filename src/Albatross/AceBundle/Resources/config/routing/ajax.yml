@@ -1,0 +1,39 @@
+ajax:
+    pattern:  /
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:ajax" }
+
+ajax_change_bu:
+    pattern:  /change-bu
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:changeBU" }
+
+ajax_delete_attachment:
+    pattern:  /delete-attachment
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:deleteAttachment" }
+    
+ajax_get_file_data:
+    pattern:  /get-file-data
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:getFileData" }
+    
+ajax_get_project_data:
+    pattern:  /get-project-data/{client}/{type}/{bu}
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:getProjectData", client:'', type:'', bu:''}
+      
+ajax_get_sub_file_data:
+    pattern:  /get-sub-file-data
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:getSubFileData" }
+        
+ajax_get_sub_section_file_data:
+    pattern:  /get-sub-section-file-data
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:getSubSectionFileData" }
+        
+ajax_get_sub_section_list:
+    pattern:  /get-sub-section-list
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:getSubSectionList" }
+        
+ajax_iof_list_ajax:
+    pattern:  /iof-list-ajax
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:iof_list_ajax" }
+        
+ajax_refresh_per_table:
+    pattern:  /refresh-per-table
+    defaults: { _controller: "AlbatrossAceBundle:Ajax:refreshPerTable" }

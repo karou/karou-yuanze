@@ -1,0 +1,52 @@
+Albatross\AceBundle\Entity\Attachinfo:
+  type: entity
+  table: attachinfo
+  manyToOne:
+    attachments:
+      targetEntity: Attachments
+      inversedBy: attachinfo
+    bu:
+      targetEntity: Bu
+    project:
+      targetEntity: Project
+      nullable: true
+      inversedBy: attachinfo
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    scope:
+      column: scope
+      type: bigint
+      nullable: true
+    fwstartdate:
+      column: fw_start_date
+      type: date
+      nullable: true
+    fwenddate:
+      column: fw_end_date
+      type: date
+      nullable: true
+    reportduedate:
+      column: report_due_date
+      type: date
+      nullable: true
+    comment:
+      type: string
+      length: 255
+      nullable: true
+    formindex:
+      type: string
+      length: 20
+    reportduedatetext:
+      column: report_due_date_text
+      type: string
+      length: 255
+      nullable: true
+    reporttype:
+      column: report_type
+      type: boolean
+      default: 0
+  lifecycleCallbacks: {}

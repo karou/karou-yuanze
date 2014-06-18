@@ -1,0 +1,21 @@
+Albatross\AceBundle\Entity\Group:
+  type: entity
+  table: group
+  uniqueConstraints:
+    ace_id_uniq:
+      columns: ace_id
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+    myorder:
+      type: bigint
+    aceId:
+      type: bigint
+      column: ace_id
+  lifecycleCallbacks: {  }

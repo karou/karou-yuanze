@@ -1,0 +1,88 @@
+{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+
+{% block title %}
+User Action
+{% endblock %}
+{% block stylesheets %}
+<link href="{{ asset('/css/project.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block javascripts %}
+<script src="{{ asset('js/jquery-ui.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#albatross_userbundle_logsearchtype_logsearch_from').datepicker();
+        $('#albatross_userbundle_logsearchtype_logsearch_to').datepicker();
+        
+        $('#download-excel').click(function(){
+            $('#albatross_userbundle_logsearchtype_search_down').val('1');
+            $('#user-log-form').submit();
+        });
+        $('#search-submit').click(function(){
+            $('#albatross_userbundle_logsearchtype_search_down').val('0');
+            $('#user-log-form').submit();
+        });
+    });
+</script>
+{% endblock %}
+{% block content -%}
+<form action="{{ path('log') }}" method="POST" id="user-log-form">
+    <table>
+        <tr>
+            <th colspan="2">SEARCH USER LOG</th>
+        </tr>
+        <tr>
+            <td>From</td>
+            <td>{{form_widget(logSearchForm.logsearch_from)}}</td>
+        </tr>
+        <tr>
+            <td>To</td>
+            <td>{{form_widget(logSearchForm.logsearch_to)}}</td>
+        </tr>
+        <tr>
+            <td><input type="button" id="search-submit" name="submit-button" value="Search" /></td>
+            <td>
+                <input type="button" id="download-excel"  name="download" value="Download Excel File" />
+            </td>
+            {{form_widget(logSearchForm.search_down)}}
+        </tr>
+    </table>
+</form>
+<table id="log-table">
+    <thead>
+        <tr>
+            <th>Group</th>
+            <th>Number of Login</th>
+            <th>Number of pages visited Operations</th>
+            <th>Number of pages visited Daily Check</th>
+            <th>Number of pages visited Project</th>
+            <th>Number of pages visited Forecast</th>
+            <th>Num of actions on Forecast</th>
+            <th>Num of actions on Projects</th>
+            <th>Total Time loged in</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for k,log in final %}
+            <tr class="long-tr-group">
+                <td>{{k}}</td>
+                <td colspan="8"></td>
+            </tr>
+            {% for k2,log2 in log %}
+                <tr>
+                    <td>{{k2}}</td>
+                    <td>{{log2['login_num']}}</td>
+                    <td>{{log2['operations_num']}}</td>
+                    <td>{{log2['daily_num']}}</td>
+                    <td>{{log2['project_num']}}</td>
+                    <td>{{log2['forecast_num']}}</td>
+                    <td>{{log2['forecast_action']}}</td>
+                    <td>{{log2['project_action']}}</td>
+                    <td>{{log2['time']}}</td>
+                </tr>
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

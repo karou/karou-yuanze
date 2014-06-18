@@ -1,0 +1,103 @@
+/* 
+    Document   : menu
+    Created on : Jun 14, 2013, 1:57:14 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+menu {
+    width: 738px;
+    padding:0;
+    margin: 0px;
+    margin-bottom: 31px;
+    
+    float: right;
+}
+
+menu > #menu_bar {
+    min-height: 30px;
+    font-family: 'Trebuchet MS','arial';
+    
+    position: absolute;
+}
+
+.menu_cal_cur {
+    background: #C7C4BE;
+}
+
+.menu_cal {
+    background: rgb(179, 218, 249);
+}
+.menu_cal, .menu_cal_cur {
+    float: left;
+    /*min-width: 130px;*/
+    
+    display: block;
+    
+    margin-right: 5px;
+    
+    font-size: 12px;
+    font-weight: bold;
+    
+    text-align: center;
+    line-height: 30px;
+    
+    border-left: 1px rgb(199, 196, 190) solid;
+    border-top: 1px rgb(199, 196, 190) solid;
+    border-right: 1px rgb(199, 196, 190) solid;
+    
+    border-radius: 5px 5px 0 0;
+}
+
+menu > #menu_bar ul li ul li{
+    background: #646464;
+    border-top: 1px rgb(179, 218, 249) solid;
+    font-weight: normal;
+}
+
+menu > #menu_bar ul li a:hover{ 
+    color: #ff0000;
+    font-weight: bold;
+}
+
+menu > #menu_bar ul li ul li a{ 
+    color: #ffffff;
+}
+
+menu > #menu_bar ul li ul li a:hover{ 
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.menu_cal a {
+    color: #000;
+    text-decoration: none;
+    height: 30px;
+    /*width: 130px;*/
+    padding-left: 15px;
+    padding-right: 15px;
+    display: block;
+}
+
+.menu_cal_cur a {
+    color: #fff;
+    text-decoration: none;
+    height: 30px;
+    /*width: 130px;*/
+    padding-left: 15px;
+    padding-right: 15px;
+    display: block;
+}
+
+menu > #menu_bar ul li ul { 
+    display:none;
+    min-width: 30px;
+}
+
+menu > #menu_bar ul li:hover ul { display:block;}
+
+root { 
+    display: block;
+}
+

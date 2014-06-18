@@ -1,0 +1,56 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Customproject
+ *
+ * @ORM\Table(name="customproject")
+ * @ORM\Entity
+ */
+class Customproject
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=false)
+     */
+    private $name;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="scope", type="bigint", nullable=false)
+     */
+    private $scope;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="bigint", nullable=false)
+     */
+    private $type;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Customclient
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customclient")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="customclient_id", referencedColumnName="id")
+     * })
+     */
+    private $customclient;
+
+
+}

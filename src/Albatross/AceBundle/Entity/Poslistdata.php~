@@ -1,0 +1,241 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Poslistdata
+ *
+ * @ORM\Table(name="poslistdata")
+ * @ORM\Entity
+ */
+class Poslistdata
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="store_id", type="string", length=255, nullable=true)
+     */
+    private $storeId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="location_name", type="string", length=255, nullable=true)
+     */
+    private $locationName;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="number_of_visits", type="bigint", nullable=true)
+     */
+    private $numberOfVisits;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="store_name", type="string", length=255, nullable=true)
+     */
+    private $storeName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address", type="string", length=255, nullable=true)
+     */
+    private $address;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="address_2", type="string", length=255, nullable=true)
+     */
+    private $address2;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="city", type="string", length=255, nullable=true)
+     */
+    private $city;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="county", type="string", length=255, nullable=true)
+     */
+    private $county;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="state_region", type="string", length=255, nullable=true)
+     */
+    private $stateRegion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)
+     */
+    private $postalCode;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="countrys", type="string", length=255, nullable=true)
+     */
+    private $countrys;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="phone", type="string", length=255, nullable=true)
+     */
+    private $phone;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fax", type="string", length=255, nullable=true)
+     */
+    private $fax;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="location_hours", type="string", length=255, nullable=true)
+     */
+    private $locationHours;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="export_email", type="string", length=255, nullable=true)
+     */
+    private $exportEmail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="export_email_name", type="string", length=255, nullable=true)
+     */
+    private $exportEmailName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="export_language", type="string", length=255, nullable=true)
+     */
+    private $exportLanguage;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="location_status", type="string", length=255, nullable=true)
+     */
+    private $locationStatus;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="location_photo_url", type="string", length=255, nullable=true)
+     */
+    private $locationPhotoUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="latitude", type="string", length=255, nullable=true)
+     */
+    private $latitude;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="longitude", type="string", length=255, nullable=true)
+     */
+    private $longitude;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="date_geocode_acquired", type="string", length=255, nullable=true)
+     */
+    private $dateGeocodeAcquired;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="geocode_source", type="string", length=255, nullable=true)
+     */
+    private $geocodeSource;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="additional_comments", type="string", length=255, nullable=true)
+     */
+    private $additionalComments;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="summary_label", type="string", length=255, nullable=true)
+     */
+    private $summaryLabel;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="summary_content", type="string", length=255, nullable=true)
+     */
+    private $summaryContent;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="summary_display", type="string", length=255, nullable=true)
+     */
+    private $summaryDisplay;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="region", type="string", length=255, nullable=true)
+     */
+    private $region;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Country
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Country")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="country_id", referencedColumnName="id")
+     * })
+     */
+    private $country;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Poslist
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Poslist")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="poslist_id", referencedColumnName="id")
+     * })
+     */
+    private $poslist;
+
+
+}

@@ -1,0 +1,326 @@
+/* 
+    Document   : projectStatus
+    Created on : Dec 4, 2013, 1:48:27 PM
+    Author     : jyuanze
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+}
+
+#search-box {
+    width: 100%;
+    height: 390px;
+    font-family: 'Calibri','arial';
+    margin-top: 5px;
+    margin-bottom: 12px;
+}
+
+#questionnaire-search-form-box {
+    float: left;
+    height: 100%;
+    width: 80%;
+}
+
+#aceproject-search-form-box {
+    float: right;
+    height: 100%;
+    width: 20%;
+}
+
+#questionnaire-cover-box {
+    display: none;
+    padding-top: 122px;
+    color: whitesmoke;
+    text-align: center;
+    line-height: 30px;
+    font-size: 22px;
+}
+
+#aceproject-cover-box {
+    padding-top: 122px;
+    color: whitesmoke;
+    text-align: center;
+    line-height: 30px;
+    font-size: 22px;
+}
+.offstyle-ace{
+    background: #8f44ad;
+    cursor: pointer;
+}
+.offstyle-aol{
+    background: #2a80b9;
+    cursor: pointer;
+}
+.offstyle-ace:hover, .onstyle-ace {
+    background: #9c59b8;
+}
+.offstyle-aol:hover, .onstyle-aol {
+    background: #3598dc;
+}
+.select-box {
+    display: none;
+    position: absolute;
+    width: 612px;
+    height: 200px;
+    background: #ECF0F1;
+    border: 2px #006666 solid;
+    border-radius: 0 13px 13px;
+    overflow-x: scroll;
+}
+.campaignSelection {
+  position: relative;
+  display: block;
+  overflow: hidden;
+  height: 25px;
+  border: 1px solid #aaa;
+  background-color: #fff;
+  background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(20%, #ffffff), color-stop(50%, #f6f6f6), color-stop(52%, #eeeeee), color-stop(100%, #f4f4f4));
+  background: -webkit-linear-gradient(top, #ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+  background: -moz-linear-gradient(top, #ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+  background: -o-linear-gradient(top, #ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+  background: linear-gradient(top, #ffffff 20%, #f6f6f6 50%, #eeeeee 52%, #f4f4f4 100%);
+  background-clip: padding-box;
+  color: #444;
+  text-decoration: none;
+  white-space: nowrap;
+  line-height: 26px;
+  width: 130px;
+}
+.selected-style {
+    width: 70%;
+    padding-left: 5px;
+    background: #eeece1;
+    font-style: italic;
+    color: gray;
+}
+.search-title {
+    width: 20%;
+    background: #dce6f1;
+    color: #1f497d;
+    font-weight: bold;
+    padding-left: 10px;
+}
+.button-td {
+    width: 8%;
+}
+.button {
+    width: 100%;
+}
+.button-action {
+    border: 1px solid #006699;
+    height: 25px;
+    margin-top: 5px;
+}
+#aceproject-search-table {
+    width: 100%;
+    font-size: 12px;
+}
+#aceproject-search-table tr td{
+    /*border: 1px #16365c solid;*/
+    height: 25px;
+}
+#albatross_custombundle_projectstatusaoltype_brand {
+    width: 600px;
+}
+.submit-button {
+    font-weight: bold;
+    height: 35px;
+    background: #27AE61;
+    border:1px #1f497d solid;
+    width: 100%;
+}
+.submit-button:hover {
+    background: #E77E23;
+}
+#result-box {
+    width: 100%;
+}
+.result-table {
+    width: 100%;
+    font-size: 12px;
+    margin-top: 10px;
+    border-collapse:  separate;
+    border-top: 2px #1f497d solid;
+}
+.questionnaire-result td {
+    background: whitesmoke;
+    height: 32px;
+}
+#status-q-title th {
+    /*background: #E77E23;*/
+    background: #3598DC;
+    height: 27px;
+}
+#status-ace-title th {
+    /*background: #E77E23;*/
+    background: #9C59B8;
+    height: 27px;
+}
+.bu-table-container{
+    border-top: 2px #3598DC solid;
+    /*background: #27AE61;*/
+    /*background: #3598DC;*/
+}
+.italic-style {
+    font-style: italic;
+    color: gray;
+}
+.result-name {
+    border-left: 10px;
+    cursor: pointer;
+}
+.result-name:hover {
+    background: #BEC3C7;
+}
+.bu-result, .c-result {
+    /*width: 90%;*/
+    float: right;
+    margin-right: -3px;
+}
+.bu-result {
+    border-left: 2px #3598DC solid;
+}
+.c-result {
+    /*border-left: 2px #27AE61 solid;*/
+    border-left: 2px #3598DC solid;
+}
+.bu-pointer {
+    width: 10%;
+    float: right;
+    border-collapse:collapse;
+}
+.bu-table-container {
+    text-align: right;
+}
+.bu-table-container table tr th {
+    color: #fff;
+}
+.result-num {
+    width: 81px;
+}
+.result-date {
+    width: 95px;
+}
+.bu-name-td {
+    width: 300px;
+    cursor: pointer;
+}
+.c-name-td {
+    width: 200px;
+}
+.bu-result-tr td {
+    /*width: 90%;*/
+    height: 20px;
+    /*background: #3598DC;*/
+    background: #E77E23;
+    text-align: center;
+    /*color: #4F4F4F;*/
+}
+.bu-pointer tr td {
+    height: 10px;
+}
+.pointer-both {
+    /*border-bottom: 2px #fff solid;*/
+    border-left: 2px #B3DAF9 solid;
+    border-bottom: 2px #B3DAF9 solid;
+    width: 20px;
+}
+.pointer-one {
+    /*border-bottom: 2px #fff solid;*/
+    border-left: 2px #B3DAF9 solid;
+    width: 20px;
+}
+.c-result-tr td {
+    height: 20px;
+    background: #27AE61;
+    text-align: center;
+    color: #FFF;
+}
+#questionnairename, #firstDate, #num, #assigned, #done, #validationPercent, #fwsdate, #fwedate, #reportdate, #scope {
+    cursor: pointer;
+}
+#questionnairename:hover, #firstDate:hover, #num:hover, #assigned:hover, #done:hover, #validationPercent:hover, #fwsdate:hover, #fwedate:hover, #reportdate:hover, #scope:hover {
+    color: white;
+}
+#count-box {
+    height: 65px;
+    width: 20px;
+    position: fixed;
+    left: 0;
+    top: 30%;
+    border: 3px #fff solid;
+    border-radius: 0 4px 4px 0;
+    background: #5069AC;
+    box-shadow: 5px 5px 7px #111;
+    -moz-box-shadow: 5px 5px 7px #111;
+    -webkit-box-shadow: 5px 5px 7px #111;
+    -webkit-border-bottom-right-radius: 15px;
+}
+#count-table {
+    font-size: 14px;
+    font-family: 'Calibri','arial';
+}
+#count-table td {
+    height: 25px;
+}
+#count-table th {
+    text-align: right;
+}
+#total-title, #ace-title, #aol-title {
+    color: #fff;
+}
+
+#total, #ace, #aol {
+    font-size: 18px;
+    font-style: italic;
+    text-align: right;
+}
+#refresh-operation-button {
+    width: 100%;
+    height: 100%;
+    background: #E77E23;
+    border: #444;
+    cursor: pointer;
+    border-radius: 2px;
+}
+#refresh-operation-button:hover {
+    background: #9c59b8;
+}
+#refresh-operation-button2 {
+    width: 100%;
+    height: 100%;
+    background: #27AE61;
+    border: #444;
+    cursor: pointer;
+    border-radius: 2px;
+}
+#refresh-operation-button2:hover {
+    background: #3598DC;
+}
+#cover-box {
+    background: rgba(160, 160, 160, 0.6);
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    display: none;
+}
+#bar-box {
+    width: 800px;
+    height: 10px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    position: fixed;
+    top: 35%;
+    background: seashell;
+}
+#loading-bar {
+    height: 100%;
+    width: 0px;
+    background: #9C59B8;
+}

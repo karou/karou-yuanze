@@ -1,0 +1,40 @@
+customwave:
+    pattern:  /
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:index" }
+
+customwave_show:
+    pattern:  /show/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:show", id:'' }
+
+customwave_new:
+    pattern:  /new
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:new" }
+
+customwave_create:
+    pattern:  /create
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:create" }
+    requirements: { _method: post }
+
+customwave_edit:
+    pattern:  /edit/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:edit", id:'' }
+    
+customwave_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:update" }
+    requirements: { _method: post|put }
+
+customwave_delete:
+    pattern:  /delete/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:delete", id:'' }
+    requirements: { _method: post|delete }
+customwave_confirm_delete:
+    pattern:  /delete_confirm/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:deleteWaveWithProject", id:'' }
+    requirements: { _method: post|delete }
+getcpbycc:
+    pattern:  /getcpbycc
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:getcpbycc" }
+getCampaignArr:
+    pattern:  /getCampaignArr
+    defaults: { _controller: "AlbatrossCustomBundle:Customwave:getCampaignArr" }

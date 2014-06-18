@@ -1,0 +1,65 @@
+{% block stylesheets %}
+    <link href="{{ asset('/css/custom_style.css') }}" rel="stylesheet" type="text/css" />
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    function editWave(id){
+        $('#window-cover').show();
+        $('#wave_control_box').animate({maxHeight:"0px"}, "slow", "linear", function(){$('#wave_control_box').hide();});
+        $.ajax({
+            type: "POST",
+            url: "{{ path('customwave_edit') }}/"+id,
+            success: function(result) {
+                $('#wave_control_box').html(result);
+                $('#window-cover').hide();
+                $('#wave_control_box').fadeIn();
+                $('#wave_control_box').animate({maxHeight:"90%"});
+            }});
+    }
+</script>
+{% endblock %}
+{% block content -%}
+    <span id="close_button" title="close" onclick="cancelWaveshow();" style="margin: 5px; position: absolute; right:0;"><img src="{{ asset('/images/close.png')}}" height="30px" width="30px"></span>
+    <table class="customwave_show">
+        <tbody>
+            <tr>
+                <th colspan="4" style="height: 35px; font-size: 20px; color: #fff; background-color: #3875D7;">Wave Information</th>
+            </tr>
+            <tr>
+                <th style="background: none; color: black; border-bottom: 1px dotted #3875D7;">Id</th>
+                <td>{{ entity.id }}</td>
+                <th style="background: none; color: black; border-bottom: 1px dotted #3875D7;">Name</th>
+                <td>{{ entity.name }}</td>
+            </tr>
+            <tr>
+                <th style="background: none; color: black; border-bottom: 1px dotted #3875D7;">Client</th>
+                <td>{{ entity.customproject.customclient.name }}</td>
+                <th style="background: none; color: black; border-bottom: 1px dotted #3875D7;">Project</th>
+                <td>{{ entity.customproject.name }}</td>
+            </tr>
+            <tr>
+                <th style="background: none; color: black; border-bottom: 1px dotted #3875D7;">ACE Project</th>
+                <td colspan="3">
+                    {% for proj in entity.project %}
+                    {{ proj.name }}<br/>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th style="background: none; color: black; border-bottom: 1px dotted #3875D7;">
+                    AOL Questionnaire
+                </th>
+                <td colspan="3">
+                    {% for s in survey_result %}
+                        {{ s.questionnaire.name }} -- {{ s.name }}<br/>
+                    {% endfor %}
+                </td>
+            </tr>
+            <tr>
+                <th colspan="4">
+                    <input type="button" value="Edit" onclick="editWave('{{ entity.id }}');" />
+                </th>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,95 @@
+<?php
+
+namespace Albatross\AceBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Country
+ *
+ * @ORM\Table(name="country")
+ * @ORM\Entity
+ */
+class Country
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="name", type="string", length=255, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="code", type="string", length=255, nullable=false)
+     */
+    private $code;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="bigint")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @var \Albatross\AceBundle\Entity\Bu
+     *
+     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Bu")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="Bu_id", referencedColumnName="id")
+     * })
+     */
+    private $bu;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Rules", mappedBy="country")
+     */
+    private $rules;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Recap", mappedBy="country")
+     */
+    private $recap;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Operationquestionnaire", mappedBy="country")
+     */
+    private $operationquestionnaire;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Operationproject", mappedBy="country")
+     */
+    private $operationproject;
+
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Albatross\AceBundle\Entity\Customfield", mappedBy="country")
+     */
+    private $customfield;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->rules = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->recap = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->operationquestionnaire = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->operationproject = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->customfield = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+}

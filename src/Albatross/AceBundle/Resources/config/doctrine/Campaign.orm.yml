@@ -1,0 +1,30 @@
+Albatross\AceBundle\Entity\Campaign:
+  type: entity
+  table: campaign
+  uniqueConstraints:
+    name_uniq:
+        columns: [name, questionnaire_id]
+  repositoryClass: 
+    Albatross\AceBundle\Entity\CampaignRepository
+  oneToMany:
+    aolsurvey:
+      targetEntity: Albatross\AceBundle\Entity\Aolsurvey
+      mappedBy: campaign
+  manyToOne:
+    questionnaire:
+      targetEntity: Albatross\AceBundle\Entity\Questionnaire
+      inversedBy: campaign
+  manyToMany:
+    customwave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+  lifecycleCallbacks: {}

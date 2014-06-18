@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Albatross\AceBundle\Entity\SurveyNumber" table="survey_number">
+    <id name="id" type="bigint" column="id">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="recapId" type="bigint" column="recap_id" nullable="true"/>
+    <field name="pos" type="string" column="pos" length="255" nullable="true"/>
+    <field name="surveys" type="string" column="surveys" length="255" nullable="true"/>
+    <field name="misfire" type="string" column="misfire" length="255" nullable="true"/>
+    <field name="invalid" type="string" column="invalid" length="255" nullable="true"/>
+    <field name="scenarios" type="text" column="scenarios" nullable="true"/>
+    <field name="type" type="string" column="type" length="64" nullable="false"/>
+  </entity>
+</doctrine-mapping>

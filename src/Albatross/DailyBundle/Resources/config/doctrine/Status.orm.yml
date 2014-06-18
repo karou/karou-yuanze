@@ -1,0 +1,27 @@
+# src/Albatross/DailyBundle/Resources/config/doctrine/Status.orm.yml
+Albatross\DailyBundle\Entity\Status:
+  type: entity
+  table: status
+  uniqueConstraints:
+    status_uniq:
+      columns: status
+  id:
+    id:
+      type: bigint
+      generator: { strategy: AUTO }
+  fields:
+    status:
+      type: string
+      length: 255
+      column: status
+    editable:
+      type: boolean
+      coulum: editable
+    weight:
+      type: bigint
+      colum: weight
+      nullable: true
+    today:
+      type: boolean
+      coulum: today
+  lifecycleCallbacks: { }

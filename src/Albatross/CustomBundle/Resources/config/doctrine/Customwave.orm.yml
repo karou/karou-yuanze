@@ -1,0 +1,63 @@
+Albatross\CustomBundle\Entity\Customwave:
+  type: entity
+  table: customwave
+  manyToOne:
+    customproject:
+      targetEntity: Customproject
+      inversedBy: customwave
+  oneToOne:
+    attachments:
+      targetEntity: Albatross\AceBundle\Entity\Attachments
+      mappedBy: customwave
+      cascade: ["remove"]
+    poslist:
+      targetEntity: Albatross\CustomBundle\Entity\Poslist
+      mappedBy: customwave
+      cascade: ["remove"]
+  oneToMany:
+    recap:
+      targetEntity: Albatross\CustomBundle\Entity\Recap
+      mappedBy: customwave
+      cascade: ["remove"]
+    customfield:
+      targetEntity: Albatross\CustomBundle\Entity\Customfield
+      mappedBy: customwave
+      cascade: ["remove"]
+    project:
+      targetEntity: Albatross\AceBundle\Entity\Project
+      mappedBy: customwave
+      cascade: ["persist"]
+  manyToMany:
+    questionnaire:
+      targetEntity: Albatross\AceBundle\Entity\Questionnaire
+      nullable: true
+    campaign:
+      targetEntity: Albatross\AceBundle\Entity\Campaign
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    name:
+      type: string
+      length: 255
+    wavenum:
+      type: bigint
+    bis:
+      type: string
+      length: 20
+      nullable: true
+    year:
+      type: string
+      length: 20
+      nullable: true
+    month:
+      type: bigint
+      nullable: true
+    totalnum:
+      type: bigint
+      nullable: true
+  lifecycleCallbacks: 
+      preRemove: [preRemove]
