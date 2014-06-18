@@ -529,4 +529,295 @@ class Customwave
     {
         return $this->totalnum;
     }
+    /**
+     * @var \Albatross\CustomBundle\Entity\KickOffMeetingRecap
+     */
+    private $meeting_recap;
+
+
+    /**
+     * Set meeting_recap
+     *
+     * @param \Albatross\CustomBundle\Entity\KickOffMeetingRecap $meetingRecap
+     * @return Customwave
+     */
+    public function setMeetingRecap(\Albatross\CustomBundle\Entity\KickOffMeetingRecap $meetingRecap = null)
+    {
+        $this->meeting_recap = $meetingRecap;
+
+        return $this;
+    }
+
+    /**
+     * Get meeting_recap
+     *
+     * @return \Albatross\CustomBundle\Entity\KickOffMeetingRecap 
+     */
+    public function getMeetingRecap()
+    {
+        return $this->meeting_recap;
+    }
+    /**
+     * @var \Albatross\UserBundle\Entity\User
+     */
+    private $user;
+
+
+    /**
+     * Set user
+     *
+     * @param \Albatross\UserBundle\Entity\User $user
+     * @return Customwave
+     */
+    public function setUser(\Albatross\UserBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Albatross\UserBundle\Entity\User 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    /**
+     * @var boolean
+     */
+    private $last_start;
+
+
+    /**
+     * Set last_start
+     *
+     * @param boolean $lastStart
+     * @return Customwave
+     */
+    public function setLastStart($lastStart)
+    {
+        $this->last_start = $lastStart;
+
+        return $this;
+    }
+
+    /**
+     * Get last_start
+     *
+     * @return boolean 
+     */
+    public function getLastStart()
+    {
+        return $this->last_start;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $invoice;
+
+
+    /**
+     * Add invoice
+     *
+     * @param \Albatross\CustomBundle\Entity\Invoice $invoice
+     * @return Customwave
+     */
+    public function addInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice)
+    {
+        $this->invoice[] = $invoice;
+
+        return $this;
+    }
+
+    /**
+     * Remove invoice
+     *
+     * @param \Albatross\CustomBundle\Entity\Invoice $invoice
+     */
+    public function removeInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice)
+    {
+        $this->invoice->removeElement($invoice);
+    }
+
+    /**
+     * Get invoice
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getInvoice()
+    {
+        return $this->invoice;
+    }
+    /**
+     * @var \Albatross\UserBundle\Entity\User
+     */
+    private $project_manager;
+
+
+    /**
+     * Set project_manager
+     *
+     * @param \Albatross\UserBundle\Entity\User $projectManager
+     * @return Customwave
+     */
+    public function setProjectManager(\Albatross\UserBundle\Entity\User $projectManager = null)
+    {
+        $this->project_manager = $projectManager;
+
+        return $this;
+    }
+
+    /**
+     * Get project_manager
+     *
+     * @return \Albatross\UserBundle\Entity\User 
+     */
+    public function getProjectManager()
+    {
+        return $this->project_manager;
+    }
+    /**
+     * @var \DateTime
+     */
+    private $delivery_date;
+
+    /**
+     * @var integer
+     */
+    private $fieldwork_percent;
+
+    /**
+     * @var integer
+     */
+    private $editing_percent;
+
+
+    /**
+     * Set delivery_date
+     *
+     * @param \DateTime $deliveryDate
+     * @return Customwave
+     */
+    public function setDeliveryDate($deliveryDate)
+    {
+        $this->delivery_date = $deliveryDate;
+
+        return $this;
+    }
+
+    /**
+     * Get delivery_date
+     *
+     * @return \DateTime 
+     */
+    public function getDeliveryDate()
+    {
+        return $this->delivery_date;
+    }
+
+    /**
+     * Set fieldwork_percent
+     *
+     * @param integer $fieldworkPercent
+     * @return Customwave
+     */
+    public function setFieldworkPercent($fieldworkPercent)
+    {
+        $this->fieldwork_percent = $fieldworkPercent;
+
+        return $this;
+    }
+
+    /**
+     * Get fieldwork_percent
+     *
+     * @return integer 
+     */
+    public function getFieldworkPercent()
+    {
+        return $this->fieldwork_percent;
+    }
+
+    /**
+     * Set editing_percent
+     *
+     * @param integer $editingPercent
+     * @return Customwave
+     */
+    public function setEditingPercent($editingPercent)
+    {
+        $this->editing_percent = $editingPercent;
+
+        return $this;
+    }
+
+    /**
+     * Get editing_percent
+     *
+     * @return integer 
+     */
+    public function getEditingPercent()
+    {
+        return $this->editing_percent;
+    }
+
+    /**
+     * @var string
+     */
+    private $wave_step;
+
+
+    /**
+     * Set wave_step
+     *
+     * @param string $waveStep
+     * @return Customwave
+     */
+    public function setWaveStep($waveStep)
+    {
+        $this->wave_step = $waveStep;
+
+        return $this;
+    }
+
+    /**
+     * Get wave_step
+     *
+     * @return string 
+     */
+    public function getWaveStep()
+    {
+        return $this->wave_step;
+    }
+    /**
+     * @var integer
+     */
+    private $assign_percent;
+
+
+    /**
+     * Set assign_percent
+     *
+     * @param integer $assignPercent
+     * @return Customwave
+     */
+    public function setAssignPercent($assignPercent)
+    {
+        $this->assign_percent = $assignPercent;
+
+        return $this;
+    }
+
+    /**
+     * Get assign_percent
+     *
+     * @return integer 
+     */
+    public function getAssignPercent()
+    {
+        return $this->assign_percent;
+    }
 }

@@ -59,5 +59,21 @@ Albatross\CustomBundle\Entity\Customwave:
     totalnum:
       type: bigint
       nullable: true
+    delivery_date:
+      type: string
+      length: 255
+      nullable: true
+    assign_percent:
+      type: bigint
+      nullable: ture
+    fieldwork_percent:
+      type: bigint
+      nullable: true
+    editing_percent:
+      type: bigint
+      nullable: true
+    wave_step:
+      type: string
+      length: 20
   lifecycleCallbacks: 
       preRemove: [preRemove]
