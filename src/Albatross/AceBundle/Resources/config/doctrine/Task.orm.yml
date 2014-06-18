@@ -80,7 +80,7 @@ Albatross\AceBundle\Entity\Task:
       type: string
       length: 255
       nullable: true
-    projectnumber:
+    projectNumber:
       type: string
       column: project_number
       length: 255

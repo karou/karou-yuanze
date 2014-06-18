@@ -9,12 +9,12 @@
     {% block pageHeading userInfo.fullname %}
 
         {% block javascripts %}
-            <script src="js/profile.js"></script>
+            <script src="{{ asset('bundles/falgun/') }}js/profile.js"></script>
         {% endblock %}
         {% block body %}
 
             <!--BODY STARTS-->
-            <link rel="stylesheet" href="css/profile-info.css">
+            <link rel="stylesheet" href="{{ asset('bundles/falgun/') }}css/profile-info.css">
             <div class="row-fluid">
                 <div class="span-12">
                     <table class="content-container-table">
@@ -302,7 +302,7 @@
                                                         <div class="item-block clearfix">
                                                             <div class="item-thumb pull-left">
                                                                 <ul>
-                                                                    <li class="item-pic"><img src="images/item-pic.png" width="34" height="34" alt="anchor"></li>
+                                                                    <li class="item-pic"><img src="{{ asset('bundles/falgun/') }}images/item-pic.png" width="34" height="34" alt="anchor"></li>
                                                                 </ul>
                                                             </div>
                                                             <div class="item-intro pull-left" style="width:50%;">
@@ -327,7 +327,7 @@
                                                         <div class="item-block clearfix">
                                                             <div class="item-thumb pull-left">
                                                                 <ul>
-                                                                    <li class="item-pic"><img src="images/user-icon.png" width="34" height="34" alt="anchor"></li>
+                                                                    <li class="item-pic"><img src="{{ asset('bundles/falgun/') }}images/user-icon.png" width="34" height="34" alt="anchor"></li>
                                                                 </ul>
                                                             </div>
                                                             <div class="item-intro pull-left" style="width:85%;">

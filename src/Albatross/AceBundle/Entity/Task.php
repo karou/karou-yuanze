@@ -420,7 +420,7 @@ class Task
     /**
      * @var string
      */
-    private $projectnumber;
+    private $projectNumber;
 
 
     /**
