@@ -29,40 +29,40 @@
         <link href='{{ asset('bundles/falgun/css/dosis.css') }}' rel='stylesheet' type='text/css'>
         <link rel="shortcut icon" href="{{ asset('bundles/falgun/ico/favicon.ico') }}">
         <style>
-                html, *{outline:none;}
-                .wave-content-list{margin:5px 0px 5px 0px;}
-                .wave-content-list label.pull-left{width:150px;}
-                .submit-dropdown i{color:#fff;padding:3px 2px 3px 1px;display:inline-block;margin-right:10px;}
-            </style>
-            <script src="{{ asset('bundles/falgun/js/jquery.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery-ui-1.8.16.custom.min.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/bootstrap.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/accordion.nav.js') }}"></script>
+            html, *{outline:none;}
+            .wave-content-list{margin:5px 0px 5px 0px;}
+            .wave-content-list label.pull-left{width:150px;}
+            .submit-dropdown i{color:#fff;padding:3px 2px 3px 1px;display:inline-block;margin-right:10px;}
+        </style>
+        <script src="{{ asset('bundles/falgun/js/jquery.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery-ui-1.8.16.custom.min.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/bootstrap.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/accordion.nav.js') }}"></script>
 
-            <script src="{{ asset('bundles/falgun/js/chosen.jquery.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/chosen.jquery.js') }}"></script>
 
-            <script src="{{ asset('bundles/falgun/js/bootstrap-datetimepicker.min.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/date.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/bootstrap-datetimepicker.min.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/date.js') }}"></script>
 
-            <script src="{{ asset('bundles/falgun/js/jquery.flot.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.flot.selection.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/excanvas.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.flot.pie.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.flot.stack.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.flot.time.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.flot.tooltip.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.flot.resize.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.collapsible.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.peity.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/responsive-tables.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.tablecloth.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/jquery.dataTables.min.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/ZeroClipboard.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/dataTables.bootstrap.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/TableTools.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/custom.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/functions.js') }}"></script>
-            <script src="{{ asset('bundles/falgun/js/tiny_mce/jquery.tinymce.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.flot.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.flot.selection.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/excanvas.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.flot.pie.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.flot.stack.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.flot.time.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.flot.tooltip.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.flot.resize.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.collapsible.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.peity.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/responsive-tables.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.tablecloth.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/jquery.dataTables.min.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/ZeroClipboard.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/dataTables.bootstrap.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/TableTools.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/custom.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/functions.js') }}"></script>
+        <script src="{{ asset('bundles/falgun/js/tiny_mce/jquery.tinymce.js') }}"></script>
 
         </head>
 {% block javascripts %}
@@ -92,7 +92,10 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void();"> <i class=" icon-bar-chart"></i>Filter By<b class="icon-angle-down"></b> </a>
+                                    <li class="dropdown">
+                                        <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void();"> 
+                                            <i class=" icon-bar-chart"></i>Filter By<b class="icon-angle-down"></b> 
+                                        </a>
                                         <div class="dropdown-menu">
                                             <ul>
                                                 <li><a href="javascript:;" onclick="changeBu('');">All</a></li>

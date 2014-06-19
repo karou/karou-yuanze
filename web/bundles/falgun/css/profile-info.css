@@ -73,13 +73,19 @@ root {
     font-weight: bold;
     padding-bottom: 10px;
 }
+.proj-list-profile-content a {
+    text-decoration:none;
+    color: #444;
+}
+.proj-list-profile-content a:hover {
+    color: #0088CC;
+    cursor: pointer;
+}
 
 .proj-list-profile-content:hover {
-    color: #0088CC;
     padding-top: 5px;
     padding-bottom: 5px;
 }
-
 .profile-info-box {
     height: 30px;
     width: 120px;
