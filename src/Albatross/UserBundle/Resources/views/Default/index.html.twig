@@ -2,422 +2,408 @@
 
 {% block body %}
 
-<!--BODY STARTS-->
-	
-<div class="row-fluid">
-  <div class="span8">
-	<div class="content-widgets blue-white">
-	  <div class="widget-head">
-		<h3>Forecast</h3>
-	  </div>
-	  <div class="widget-container">
-		<div id="visitors-chart">
-		  <div id="visitors-container" style="width: 100%;height:400px; text-align: center; margin:0 auto;"> </div>
-		</div>
-	  </div>
-	</div>
-  </div>
-  <div class="span4">
-	<div class="content-widgets blue-white">
-	  <div class="widget-head">
-		<h3>Daily</h3>
-	  </div>
-	  <div class="widget-container">
-		<div id="pie-chart-donut" class="pie-chart">
-		  <div id="legendPlaceholder"> </div>
-		  <div id="pie-donutContainer" style="width: 100%;height:180px; text-align: left;"> </div>
-		</div>
-		<div id="pie-chart-donut1" class="pie-chart">
-		  <div id="legendPlaceholder1"> </div>
-		  <div id="pie-donutContainer1" style="width: 100%;height:180px; text-align: left;"> </div>
-		</div>
-	  </div>
-	</div>
-  </div>
-</div>
-<div class="row-fluid">
-  <!--Widget container starts-->
-  <div class="inner-widgets">
-	<div class="widget-title">Forecast in Total <span class="icon-dashboard"></span></div>
-	<div class="widget-body">
-	  <div class="activities_chart"> <span class="activities_chart">{{forecast1[0].fcast}},{{forecast1[1].fcast}},{{forecast1[2].fcast}},{{forecast1[3].fcast}},{{forecast1[4].fcast}},{{forecast1[5].fcast}},{{forecast1[6].fcast}},{{forecast1[7].fcast}},{{forecast1[8].fcast}},{{forecast1[9].fcast}},{{forecast1[10].fcast}},{{forecast1[11].fcast}}</span> </div>
-	  <div class="bottom-text"> Total: {{forecast1[0].fcast+forecast1[1].fcast+forecast1[2].fcast+forecast1[3].fcast+forecast1[4].fcast+forecast1[5].fcast+forecast1[6].fcast+forecast1[7].fcast+forecast1[8].fcast+forecast1[9].fcast+forecast1[10].fcast+forecast1[11].fcast}} </div>
-	</div>
-  </div>
-  <div class="inner-widgets">
-	<div class="widget-title">Assigned Surveys <span class="icon-dashboard"></span></div>
-	<div class="widget-body">
-	  <div class="activities_chart">
-	  	<span class="activities_chart">
-			{% set sumAssSurveys = 0 %}
-			{% for sur in assSurveys %}
-				{{ sur.surveys }},
-				{% set sumAssSurveys = sumAssSurveys + sur.surveys %}
-			{% endfor %}
-		</span>
-	  </div>
-	  <div class="bottom-text"> Total: {{sumAssSurveys}} </div>
-	</div>
-  </div>
-  <div class="inner-widgets">
-	<div class="widget-title">Submitted Surveys <span class="icon-dashboard"></span></div>
-	<div class="widget-body">
-	  <div class="activities_chart">
-	  	<span class="activities_chart">
-			{% set sumSubSurveys = 0 %}
-			{% for ssur in subSurveys %}
-				{{ ssur.surveys }},
-				{% set sumSubSurveys = sumSubSurveys + ssur.surveys %}
-			{% endfor %}
-		</span>
-	  </div>
-	  <div class="bottom-text"> Total: {{sumSubSurveys}} </div>
-	</div>
-  </div>
-  <div class="inner-widgets">
-	<div class="widget-title">Validated Surveys <span class="icon-dashboard"></span></div>
-	<div class="widget-body">
-	  <div class="activities_chart"> 
-	  	<span class="activities_chart">
-			{% set sumValSurveys = 0 %}
-			{% for vsur in valSurveys %}
-				{{ vsur.surveys }},
-				{% set sumValSurveys = sumValSurveys + vsur.surveys %}
-			{% endfor %}
-		</span> 
-	  </div>
-	  <div class="bottom-text"> Total: {{sumValSurveys}} </div>
-	</div>
-  </div>
-  <div class="inner-widgets last-widget">
-	<div class="widget-title">Pending Validation <span class="icon-dashboard"></span></div>
-	<div class="widget-body">
-	  <div class="pending_validation_chart">
-	  	<span class="pending_validation_chart">
-			{% set sumPenSurveys = 0 %}
-			{% for psur in penSurveys %}
-				{{ psur.surveys }},
-				{% set sumPenSurveys = sumPenSurveys + psur.surveys %}
-			{% endfor %}
-		</span>
-	  </div>
-	  <div class="bottom-text"> Total: {{sumPenSurveys}} </div>
-	</div>
-  </div>
-  <!--Widget container ends-->
-</div>
-<div class="row-fluid">
-  <div class="span8">
-	<div class="primary-head"> <br />
-	  <h3 class="page-header">AOL Questionnaries Pending Confirmation</h3>
-	</div>
-	 <table class="responsive table table-striped table-bordered" id="data-table">
-		<thead>
-		  <tr>
-			<th> No. </th>
-			<th> Client </th>
-			<th> Wave </th>
-			<th> Submit Time </th>
-			<th> Pending Confirmation </th>
-		  </tr>
-		</thead>
-		<tbody>
-		
-			{% for pen in pendingQuesData %}
-			  <tr>
-				<td>{{pen[0]}}</td>
-				<td>{{pen[1]|raw}}</td>
-				<td>{{pen[2]|raw}}</td>
-				<td>{{pen[3]}}</td>
-				<td align="center" style="text-align:left !important;">{{pen[4]|raw}}</td>
-			  </tr>
-			{% endfor %}
-		  
-		   
-		</tbody>
-		<tfoot>
-		  <tr>
-			<th> No. </th>
-			<th> Client </th>
-			<th> Wave </th>
-			<th> Submit Time </th>
-			<th> Pending Confirmation </th>
-		  </tr>
-		</tfoot>
-	  </table>
-  </div>
-  <div class="span4">
-	<div class="primary-head"> <br />
-	  <h3 class="page-header">Comments & Uploads</h3>
-	</div>
-	<div class="tab-widget">
-	  <ul class="nav nav-tabs" id="myTab2">
-		<li class="active"><a href="#tab-upload"><i class="icon-cloud-upload"></i>Uploads</a></li>
-		<li class><a href="#tab-comment"><i class="icon-comments"></i>Comments</a></li>
-	  </ul>
-	  <div class="tab-content">
-		<div class="tab-pane active" id="tab-upload">
-		  <div class="comment-items">
-			
-			{% for i in 0..4 %}
-			<div class="item-block clearfix">
-			  <div class="item-thumb pull-left">
-				<ul>
-				  <li class="item-pic"><img src="images/item-pic.png" width="34" height="34" alt="anchor"></li>
-				</ul>
-			  </div>
-			  <div class="item-intro pull-left" style="width:50%;"> <a href="#">IOF-FR-CHRISTOFLE-RETAIL-R-September wave 2013</a>
-				<div class="item-meta">
-				  <ul>
-					<li><strong>Type:</strong> IOF File</li>
-					<li><strong>Uploaded:</strong> 2013-08-21</li>
-				  </ul>
-				</div>
-			  </div>
-			  <div class="pull-right">
-				<button class="btn btn-primary" type="button"><i class="icon-upload-alt"></i> Download</button>
-			  </div>
-			</div>
-			{% endfor %}
-			
-		  </div>
-		</div>
-		<div class="tab-pane" id="tab-comment">
-		  <div class="comment-items">
-			{% for i in 0..4 %}
-			<div class="item-block clearfix">
-			  <div class="item-thumb pull-left">
-				<ul>
-				  <li class="item-pic"><img src="images/user-icon.png" width="34" height="34" alt="anchor"></li>
-				</ul>
-			  </div>
-			  <div class="item-intro pull-left" style="width:85%;">
-				<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-				<div class="item-meta">
-				  <ul>
-					<li>@ibouguet</li>
-					<li>Project: <a href="#">Christofle_Retail_SW</a></li>
-					<li>1 Min ago</li>
-				  </ul>
-				</div>
-			  </div>
-			</div>
-			{% endfor %}
-			
-			<div class="chat-input">
-			  <textarea class="chat-inputbox"></textarea>
-			  <button class="btn btn-primary" type="button"><i class="icon-ok"></i> Send</button>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	</div>
-	
-	
-  </div>
-</div>
+    <!--BODY STARTS-->
 
-<!--BODY ENDS-->
+    <div class="row-fluid">
+        <div class="span8">
+            <div class="content-widgets blue-white">
+                <div class="widget-head">
+                    <h3>Forecast</h3>
+                </div>
+                <div class="widget-container">
+                    <div id="visitors-chart">
+                        <div id="visitors-container" style="width: 100%;height:400px; text-align: center; margin:0 auto;"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="span4">
+            <div class="content-widgets blue-white">
+                <div class="widget-head">
+                    <h3>Daily</h3>
+                </div>
+                <div class="widget-container">
+                    <div id="pie-chart-donut" class="pie-chart">
+                        <div id="legendPlaceholder"> </div>
+                        <div id="pie-donutContainer" style="width: 100%;height:180px; text-align: left;"> </div>
+                    </div>
+                    <div id="pie-chart-donut1" class="pie-chart">
+                        <div id="legendPlaceholder1"> </div>
+                        <div id="pie-donutContainer1" style="width: 100%;height:180px; text-align: left;"> </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <!--Widget container starts-->
+        <div class="inner-widgets">
+            <div class="widget-title">Forecast in Total <span class="icon-dashboard"></span></div>
+            <div class="widget-body">
+                <div class="activities_chart"> <span class="activities_chart">{{forecast1[0].fcast}},{{forecast1[1].fcast}},{{forecast1[2].fcast}},{{forecast1[3].fcast}},{{forecast1[4].fcast}},{{forecast1[5].fcast}},{{forecast1[6].fcast}},{{forecast1[7].fcast}},{{forecast1[8].fcast}},{{forecast1[9].fcast}},{{forecast1[10].fcast}},{{forecast1[11].fcast}}</span> </div>
+                <div class="bottom-text"> Total: {{forecast1[0].fcast+forecast1[1].fcast+forecast1[2].fcast+forecast1[3].fcast+forecast1[4].fcast+forecast1[5].fcast+forecast1[6].fcast+forecast1[7].fcast+forecast1[8].fcast+forecast1[9].fcast+forecast1[10].fcast+forecast1[11].fcast}} </div>
+            </div>
+        </div>
+        <div class="inner-widgets">
+            <div class="widget-title">Assigned Surveys <span class="icon-dashboard"></span></div>
+            <div class="widget-body">
+                <div class="activities_chart">
+                    <span class="activities_chart">
+                        {% set sumAssSurveys = 0 %}
+                        {% for sur in assSurveys %}
+                            {{ sur.surveys }},
+                            {% set sumAssSurveys = sumAssSurveys + sur.surveys %}
+                        {% endfor %}
+                    </span>
+                </div>
+                <div class="bottom-text"> Total: {{sumAssSurveys}} </div>
+            </div>
+        </div>
+        <div class="inner-widgets">
+            <div class="widget-title">Submitted Surveys <span class="icon-dashboard"></span></div>
+            <div class="widget-body">
+                <div class="activities_chart">
+                    <span class="activities_chart">
+                        {% set sumSubSurveys = 0 %}
+                        {% for ssur in subSurveys %}
+                            {{ ssur.surveys }},
+                            {% set sumSubSurveys = sumSubSurveys + ssur.surveys %}
+                        {% endfor %}
+                    </span>
+                </div>
+                <div class="bottom-text"> Total: {{sumSubSurveys}} </div>
+            </div>
+        </div>
+        <div class="inner-widgets">
+            <div class="widget-title">Validated Surveys <span class="icon-dashboard"></span></div>
+            <div class="widget-body">
+                <div class="activities_chart"> 
+                    <span class="activities_chart">
+                        {% set sumValSurveys = 0 %}
+                        {% for vsur in valSurveys %}
+                            {{ vsur.surveys }},
+                            {% set sumValSurveys = sumValSurveys + vsur.surveys %}
+                        {% endfor %}
+                    </span> 
+                </div>
+                <div class="bottom-text"> Total: {{sumValSurveys}} </div>
+            </div>
+        </div>
+        <div class="inner-widgets last-widget">
+            <div class="widget-title">Pending Validation <span class="icon-dashboard"></span></div>
+            <div class="widget-body">
+                <div class="pending_validation_chart">
+                    <span class="pending_validation_chart">
+                        {% set sumPenSurveys = 0 %}
+                        {% for psur in penSurveys %}
+                            {{ psur.surveys }},
+                            {% set sumPenSurveys = sumPenSurveys + psur.surveys %}
+                        {% endfor %}
+                    </span>
+                </div>
+                <div class="bottom-text"> Total: {{sumPenSurveys}} </div>
+            </div>
+        </div>
+        <!--Widget container ends-->
+    </div>
+    <div class="row-fluid">
+        <div class="span8">
+            <div class="primary-head"> <br />
+                <h3 class="page-header">AOL Questionnaries Pending Confirmation</h3>
+            </div>
+            <table class="responsive table table-striped table-bordered" id="data-table">
+                <thead>
+                    <tr>
+                        <th> No. </th>
+                        <th> Client </th>
+                        <th> Wave </th>
+                        <th> Submit Time </th>
+                        <th> Pending Confirmation </th>
+                    </tr>
+                </thead>
+                <tbody>
 
-<script type="text/javascript">
+                    {% for pen in pendingQuesData %}
+                        <tr>
+                            <td>{{pen[0]}}</td>
+                            <td>{{pen[1]|raw}}</td>
+                            <td>{{pen[2]|raw}}</td>
+                            <td>{{pen[3]}}</td>
+                            <td align="center" style="text-align:left !important;">{{pen[4]|raw}}</td>
+                        </tr>
+                    {% endfor %}
 
-/*===============================================
-FLOT BAR CHART
-==================================================*/
 
-var currYear = [[{{forecast1[0].month}},{{(forecast1[0].fcast>0)?forecast1[0].fcast:1}}],
-				[{{forecast1[1].month}},{{(forecast1[1].fcast>0)?forecast1[1].fcast:1}}],
-				[{{forecast1[2].month}},{{(forecast1[2].fcast>0)?forecast1[2].fcast:1}}],
-				[{{forecast1[3].month}},{{(forecast1[3].fcast>0)?forecast1[3].fcast:1}}],
-				[{{forecast1[4].month}},{{(forecast1[4].fcast>0)?forecast1[4].fcast:1}}], 
-				[{{forecast1[5].month}},{{(forecast1[5].fcast>0)?forecast1[5].fcast:1}}], 
-				[{{forecast1[6].month}},{{(forecast1[6].fcast>0)?forecast1[6].fcast:1}}], 
-				[{{forecast1[7].month}},{{(forecast1[7].fcast>0)?forecast1[7].fcast:1}}], 
-				[{{forecast1[8].month}},{{(forecast1[8].fcast>0)?forecast1[8].fcast:1}}],
-				[{{forecast1[9].month}},{{(forecast1[9].fcast>0)?forecast1[9].fcast:1}}], 
-				[{{forecast1[10].month}},{{(forecast1[10].fcast>0)?forecast1[10].fcast:1}}],
-				[{{forecast1[11].month}},{{(forecast1[11].fcast>0)?forecast1[11].fcast:1}}], 
-				[{{forecast1[12].month}},{{(forecast1[12].fcast>0)?forecast1[12].fcast:1}}]];
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th> No. </th>
+                        <th> Client </th>
+                        <th> Wave </th>
+                        <th> Submit Time </th>
+                        <th> Pending Confirmation </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="span4">
+            <div class="primary-head"> <br />
+                <h3 class="page-header">Comments & Uploads</h3>
+            </div>
+            <div class="tab-widget">
+                <ul class="nav nav-tabs" id="myTab2">
+                    <li class="active"><a href="#tab-upload"><i class="icon-cloud-upload"></i>Uploads</a></li>
+                    <li class><a href="#tab-comment"><i class="icon-comments"></i>Comments</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="tab-upload">
+                        <div class="comment-items">
 
-var prevYear = [[{{forecast1[0].month}},{{(forecast2[0].fcast>0)?forecast2[0].fcast:1}}],
-				[{{forecast1[1].month}},{{(forecast2[1].fcast>0)?forecast2[1].fcast:1}}],
-				[{{forecast1[2].month}},{{(forecast2[2].fcast>0)?forecast2[2].fcast:1}}],
-				[{{forecast1[3].month}},{{(forecast2[3].fcast>0)?forecast2[3].fcast:1}}],
-				[{{forecast1[4].month}},{{(forecast2[4].fcast>0)?forecast2[4].fcast:1}}], 
-				[{{forecast1[5].month}},{{(forecast2[5].fcast>0)?forecast2[5].fcast:1}}], 
-				[{{forecast1[6].month}},{{(forecast2[6].fcast>0)?forecast2[6].fcast:1}}], 
-				[{{forecast1[7].month}},{{(forecast2[7].fcast>0)?forecast2[7].fcast:1}}], 
-				[{{forecast1[8].month}},{{(forecast2[8].fcast>0)?forecast2[8].fcast:1}}],
-				[{{forecast1[9].month}},{{(forecast2[9].fcast>0)?forecast2[9].fcast:1}}], 
-				[{{forecast1[10].month}},{{(forecast2[10].fcast>0)?forecast2[10].fcast:1}}], 
-				[{{forecast1[11].month}},{{(forecast2[11].fcast>0)?forecast2[11].fcast:1}}],
-				[{{forecast1[12].month}},{{(forecast2[12].fcast>0)?forecast2[12].fcast:1}}]];
-					
-$(function () {
-	$.plot($("#visitors-chart #visitors-container"), [{
-		data: currYear,
-		label: "This Year",
-		lines: {
-			fill: true
-		}
-	}, {
-		data: prevYear,
-		label: "Last Year",
-		points: {
-			show: true
-		},
-		lines: {
-			show: true
-		},
-		yaxis: 2
-	}
-	],
-	{
-		series: {
-			lines: {
-				show: true,
-				fill: false
-			},
-			points: {
-				show: true,
-				lineWidth: 2,
-				fill: true,
-				fillColor: "#ffffff",
-				symbol: "circle",
-				radius: 5,
-			},
-			shadowSize: 0,
-		},
-		grid: {
-			hoverable: true,
-			clickable: true,
-			tickColor: "#f9f9f9",
-			borderWidth: 1
-		},
-		colors: ["#b086c3", "#ea701b"],
-		tooltip: true,
-		tooltipOpts: {
-			  shifts: { 
-				  x: -100                     //10
-			  },
-			defaultTheme: false
-		},
-		xaxis: {
-			mode: "time",
-			timeformat: "%0m/%0d %0H:%0M"
-		},
-		yaxes: [{
-			/* First y axis */
-		}, {
-			/* Second y axis */
-			position: "right" /* left or right */
-		}]
-	}
-	);
-});
+                            {% for i in 0..4 %}
+                                <div class="item-block clearfix">
+                                    <div class="item-thumb pull-left">
+                                        <ul>
+                                            <li class="item-pic"><img src="images/item-pic.png" width="34" height="34" alt="anchor"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="item-intro pull-left" style="width:50%;"> <a href="#">IOF-FR-CHRISTOFLE-RETAIL-R-September wave 2013</a>
+                                        <div class="item-meta">
+                                            <ul>
+                                                <li><strong>Type:</strong> IOF File</li>
+                                                <li><strong>Uploaded:</strong> 2013-08-21</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pull-right">
+                                        <button class="btn btn-primary" type="button"><i class="icon-upload-alt"></i> Download</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
 
-/*===============================================
-FLOT PIE CHART
-==================================================*/
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab-comment">
+                        <div class="comment-items">
+                            {% for i in 0..4 %}
+                                <div class="item-block clearfix">
+                                    <div class="item-thumb pull-left">
+                                        <ul>
+                                            <li class="item-pic"><img src="images/user-icon.png" width="34" height="34" alt="anchor"></li>
+                                        </ul>
+                                    </div>
+                                    <div class="item-intro pull-left" style="width:85%;">
+                                        <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                                        <div class="item-meta">
+                                            <ul>
+                                                <li>@ibouguet</li>
+                                                <li>Project: <a href="#">Christofle_Retail_SW</a></li>
+                                                <li>1 Min ago</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	$(function () {
-		var data = [{
-			label: "Today's Forecast, %",
-			data: {{todayForecastVal}}
-		}, {
-			label: "",
-			data: {{100-todayForecastVal}}
-		}];
-		var options = {
-			series: {
-				pie: {
-					show: true,
-					innerRadius: 0.5,
-			show: true
-				}
-			},
-			legend: {
-				show: true
-			},
-			grid: {
-				hoverable: true,
-				clickable: true
-			},
-			 colors: ["#1387b0", "#ccc"],
-			tooltip: true,
-			tooltipOpts: {
-				shifts: { 
-					  x: -100                     //10
-				  },
-				defaultTheme: false
-			}
-		};
-		$.plot($("#pie-chart-donut #pie-donutContainer"), data, options);
-	});
-	
-	$(function () {
-		var data = [{
-			label: "Today's Forecast <br/>for Previous Year %",
-			data: {{todayPrevForecastVal}}
-		}, {
-			label: "",
-			data: {{100-todayPrevForecastVal}}
-		}];
-		var options = {
-			series: {
-				pie: {
-					show: true,
-					innerRadius: 0.5,
-			show: true
-				}
-			},
-			legend: {
-				show: true
-			},
-			grid: {
-				hoverable: true,
-				clickable: true
-			},
-			 colors: ["#dd461b", "#ccc"],
-			tooltip: true,
-			tooltipOpts: {
-				shifts: { 
-					  x: -100                     //10
-				  },
-				defaultTheme: false
-			}
-		};
-		$.plot($("#pie-chart-donut1 #pie-donutContainer1"), data, options);
-		
-		 $(".activities_chart").peity("bar",{
-		   width: 100,
-		   height:30,
-		   colour: "#007e00"
-		  });
-		  
-		  $(".pending_validation_chart").peity("bar",{
-		   width: 100,
-		   height:30,
-		   colour: "#e88a04"
-		  });
-	});
-	
-	 $(function () {
-		$('#data-table').dataTable({
-			"sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>"
-				/*"oTableTools": {
-				"aButtons": [
-					"copy",
-					"print",
-					{
-						"sExtends":    "collection",
-						"sButtonText": 'Save <span class="caret" />',
-						"aButtons":    [ "csv", "xls", "pdf" ]
-					}
-				]
-			}*/
-		});
-	});
-</script>
+    <!--BODY ENDS-->
+
+    <script type="text/javascript">
+
+        /*===============================================
+         FLOT BAR CHART
+         ==================================================*/
+
+        var currYear = [[{{forecast1[0].month}},{{(forecast1[0].fcast>0)?forecast1[0].fcast:1}} ],
+            [{{forecast1[1].month}},{{(forecast1[1].fcast>0)?forecast1[1].fcast:1}}     ],
+            [{{forecast1[2].month}},{{(forecast1[2].fcast>0)?forecast1[2].fcast:1}}     ],
+            [{{forecast1[3].month}},{{(forecast1[3].fcast>0)?forecast1[3].fcast:1}}     ],
+            [{{forecast1[4].month}},{{(forecast1[4].fcast>0)?forecast1[4].fcast:1}}     ],
+            [{{forecast1[5].month}},{{(forecast1[5].fcast>0)?forecast1[5].fcast:1}}     ],
+            [{{forecast1[6].month}},{{(forecast1[6].fcast>0)?forecast1[6].fcast:1}}     ],
+            [{{forecast1[7].month}},{{(forecast1[7].fcast>0)?forecast1[7].fcast:1}}     ],
+            [{{forecast1[8].month}},{{(forecast1[8].fcast>0)?forecast1[8].fcast:1}}     ],
+            [{{forecast1[9].month}},{{(forecast1[9].fcast>0)?forecast1[9].fcast:1}}     ],
+            [{{forecast1[10].month}},{{(forecast1[10].fcast>0)?forecast1[10].fcast:1}}     ],
+            [{{forecast1[11].month}},{{(forecast1[11].fcast>0)?forecast1[11].fcast:1}}     ],
+                [{{forecast1[12].month}},{{(forecast1[12].fcast>0)?forecast1[12].fcast:1}} ]];
+                var prevYear = [[{{forecast1[0].month}},{{(forecast2[0].fcast>0)?forecast2[0].fcast:1}} ],
+                    [{{forecast1[1].month}},{{(forecast2[1].fcast>0)?forecast2[1].fcast:1}}     ],
+                    [{{forecast1[2].month}},{{(forecast2[2].fcast>0)?forecast2[2].fcast:1}}     ],
+                    [{{forecast1[3].month}},{{(forecast2[3].fcast>0)?forecast2[3].fcast:1}}     ],
+                    [{{forecast1[4].month}},{{(forecast2[4].fcast>0)?forecast2[4].fcast:1}}     ],
+                    [{{forecast1[5].month}},{{(forecast2[5].fcast>0)?forecast2[5].fcast:1}}     ],
+                    [{{forecast1[6].month}},{{(forecast2[6].fcast>0)?forecast2[6].fcast:1}}     ],
+                    [{{forecast1[7].month}},{{(forecast2[7].fcast>0)?forecast2[7].fcast:1}}     ],
+                    [{{forecast1[8].month}},{{(forecast2[8].fcast>0)?forecast2[8].fcast:1}}     ],
+                    [{{forecast1[9].month}},{{(forecast2[9].fcast>0)?forecast2[9].fcast:1}}     ],
+                    [{{forecast1[10].month}},{{(forecast2[10].fcast>0)?forecast2[10].fcast:1}}     ],
+                    [{{forecast1[11].month}},{{(forecast2[11].fcast>0)?forecast2[11].fcast:1}}     ],
+                        [{{forecast1[12].month}},{{(forecast2[12].fcast>0)?forecast2[12].fcast:1}} ]];
+                $(function () {
+                $.plot($("#visitors-chart #visitors-container"), [{
+                data: currYear,
+                        label: "This Year",
+                        lines: {
+                        fill: true
+                        }
+                }, {
+                data: prevYear,
+                        label: "Last Year",
+                        points: {
+                        show: true
+                        },
+                        lines: {
+                        show: true
+                        },
+                        yaxis: 2
+                }
+                ],
+                {
+                series: {
+                lines: {
+                show: true,
+                        fill: false
+                },
+                        points: {
+                        show: true,
+                                lineWidth: 2,
+                                fill: true,
+                                fillColor: "#ffffff",
+                                symbol: "circle",
+                                radius: 5,
+                        },
+                        shadowSize: 0,
+                },
+                        grid: {
+                        hoverable: true,
+                                clickable: true,
+                                tickColor: "#f9f9f9",
+                                borderWidth: 1
+                        },
+                        colors: ["#b086c3", "#ea701b"],
+                        tooltip: true,
+                        tooltipOpts: {
+                        shifts: {
+                        x: - 100                     //10
+                        },
+                                defaultTheme: false
+                        },
+                        xaxis: {
+                        mode: "time",
+                                timeformat: "%0m/%0d %0H:%0M"
+                        },
+                        yaxes: [{
+                        /* First y axis */
+                        }, {
+                        /* Second y axis */
+                        position: "right" /* left or right */
+                        }]
+                }
+                );
+                        });
+                /*===============================================
+                 FLOT PIE CHART
+                 ==================================================*/
+
+                $(function () {
+                var data = [{
+            label: "Today's Forecast, %    ",
+                        data:{{todayForecastVal}}
+                }, {
+            label: "    ",
+                        data:{{100-todayForecastVal}}
+                }];
+                        var options = {
+                        series: {
+                        pie: {
+                        show: true,
+                                innerRadius: 0.5,
+                                show: true
+                        }
+                        },
+                                legend: {
+                                show: true
+                                },
+                                grid: {
+                                hoverable: true,
+                                        clickable: true
+                                },
+                                colors: ["#1387b0", "#ccc"],
+                                tooltip: true,
+                                tooltipOpts: {
+                                shifts: {
+                                x: - 100                     //10
+                                },
+                                        defaultTheme: false
+                                }
+                        };
+                        $.plot($("#pie-chart-donut #pie-donutContainer"), data, options);
+                });
+                $(function () {
+                var data = [{
+            label: "Today's Forecast <br/>for Previous Year %    ",
+                        data:{{todayPrevForecastVal}}
+                }, {
+            label: "    ",
+                        data:{{100-todayPrevForecastVal}}
+                }];
+                        var options = {
+                        series: {
+                        pie: {
+                        show: true,
+                                innerRadius: 0.5,
+                                show: true
+                        }
+                        },
+                                legend: {
+                                show: true
+                                },
+                                grid: {
+                                hoverable: true,
+                                        clickable: true
+                                },
+                                colors: ["#dd461b", "#ccc"],
+                                tooltip: true,
+                                tooltipOpts: {
+                                shifts: {
+                                x: - 100                     //10
+                                },
+                                        defaultTheme: false
+                                }
+                        };
+                        $.plot($("#pie-chart-donut1 #pie-donutContainer1"), data, options);
+                        $(".activities_chart").peity("bar", {
+                width: 100,
+                        height:30,
+                        colour: "#007e00"
+                });
+                        $(".pending_validation_chart").peity("bar", {
+                width: 100,
+                        height:30,
+                        colour: "#e88a04"
+                });
+                });
+                $(function () {
+                $('#data-table').dataTable({
+                "sDom": "<'row-fluid'<'span6'l><'span6'f>r>t<'row-fluid'<'span6'i><'span6'p>>"
+                        /*"oTableTools": {
+                         "aButtons": [
+                         "copy",
+                         "print",
+                         {
+                         "sExtends":    "collection",
+                         "sButtonText": 'Save <span class="caret" />',
+                         "aButtons":    [ "csv", "xls", "pdf" ]
+                         }
+                         ]
+                         }*/
+                });
+                });
+    </script>
 
 {% endblock %}
