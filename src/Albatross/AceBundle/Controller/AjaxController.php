@@ -535,8 +535,7 @@ class AjaxController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         $connection = $em->getConnection();
-var_dump($_REQUEST);
-exit();
+
         ///////Code for project listing////////
         $aColumns = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date', 'actions', 'progress');
         $aColumnSort = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
