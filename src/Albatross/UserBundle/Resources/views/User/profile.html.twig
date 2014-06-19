@@ -36,33 +36,11 @@
                                             <li class="proj-list-profile-title">
                                                 Projects
                                             </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
-                                            <li class="proj-list-profile-content">
-                                                Burberry_Retail_WW
-                                            </li>
+                                            {% for project in userInfo.customproject %}
+                                                <li class="proj-list-profile-content">
+                                                    {{ project.name }}
+                                                </li>
+                                            {% endfor %}
                                         </ul>
                                     </div>
                                     <div class="clear-both"></div>
