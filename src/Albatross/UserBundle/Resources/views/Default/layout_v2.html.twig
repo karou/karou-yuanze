@@ -38,7 +38,7 @@
         <script src="{{ asset('bundles/falgun/js/jquery-ui-1.8.16.custom.min.js') }}"></script>
         <script src="{{ asset('bundles/falgun/js/bootstrap.js') }}"></script>
         <script src="{{ asset('bundles/falgun/js/accordion.nav.js') }}"></script>
-
+        <script src="{{ asset('js/global.js')}}"></script>
         <script src="{{ asset('bundles/falgun/js/chosen.jquery.js') }}"></script>
 
         <script src="{{ asset('bundles/falgun/js/bootstrap-datetimepicker.min.js') }}"></script>
@@ -83,18 +83,13 @@
                                     <li class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void();"> <img src="{{ asset('bundles/falgun/images/logo.png') }}" style="height:30px;" /><b class="icon-angle-down"></b> </a>
                                         <div class="dropdown-menu">
                                             <ul>
-                                                <li><a href="#">Albatross Forum</a></li>
-                                                <li><a href="#">Training Center</a></li>
-                                                <li><a href="#">ACE</a></li>
-                                                <li><a href="#">AOL</a></li>
-                                                <li><a href="#">CRM</a></li>
-                                                <li><a href="#">Roleplay Center</a></li>
+                                            {{ render(controller('AlbatrossUserBundle:Default:link')) }}
                                             </ul>
                                         </div>
                                     </li>
                                     <li class="dropdown">
                                         <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void();"> 
-                                            <i class=" icon-bar-chart"></i>Filter By<b class="icon-angle-down"></b> 
+                                            <i class=" icon-bar-chart"></i>Filter By<b class="icon-angle-down"></b>
                                         </a>
                                         <div class="dropdown-menu">
                                             <ul>
