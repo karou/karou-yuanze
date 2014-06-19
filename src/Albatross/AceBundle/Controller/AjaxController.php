@@ -535,11 +535,11 @@ class AjaxController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         $connection = $em->getConnection();
-
+//exit();
         ///////Code for project listing////////
-        $aColumns = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date', 'actions', 'progress');
-        $aColumnSort = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
-        $aColumnSearch = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
+        $aColumns = array('c.name', 'ka.fullname','pm.fullname', 'cw.year, cw.month, cw.wavenum', 'cw.delivery_date', 'actions', 'progress');
+//        $aColumnSort = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
+//        $aColumnSearch = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
 
         $sIndexColumn = "a.id";
 
@@ -605,11 +605,10 @@ class AjaxController extends Controller {
         }
 
         if ($sOrder == '')
-            $sOrder = ' order by c.id asc,cw.id desc ';
-        else
-            $sOrder .= ',cw.id desc ';
+            $sOrder = ' order by c.name asc';
 
-        $sqlCount = 'select c.id from customproject c left join customwave cw on (c.id=cw.customproject_id) left join customfield cu on (cw.id=cu.customwave_id and cu.fieldtype="report") where 1 ' . $sWhere . $and . ' group by c.id ' . $sOrder;
+//        $sqlCount = 'select c.id from customproject c left join customwave cw on (c.id=cw.customproject_id) left join customfield cu on (cw.id=cu.customwave_id and cu.fieldtype="report") where 1 ' . $sWhere . $and . ' group by c.id ' . $sOrder;
+        $sqlCount = 'select c.id from customproject c left join customwave cw on (c.id=cw.customproject_id and cw.last_start = 1) left join user ka on (cw.user_id = ka.id) left join user pm on (cw.project_manager_id = pm.id) left join customfield cu on (cw.id=cu.customwave_id and cu.fieldtype="report") where 1 ' . $sWhere . $and . ' group by c.id ' . $sOrder;
 
         $sql = 'select c.*,cw.wavenum,cu.submittime,cw.id as custwave_id, cw.name as customwave_name, cw.delivery_date as delivery, cw.fieldwork_percent as fw, cw.editing_percent as edit, ka.fullname as report_ka, pm.fullname as project_manager from customproject c left join customwave cw on (c.id=cw.customproject_id and cw.last_start = 1) left join user ka on (cw.user_id = ka.id) left join user pm on (cw.project_manager_id = pm.id) left join customfield cu on (cw.id=cu.customwave_id and cu.fieldtype="report") where 1 ' . $sWhere . $and . ' group by c.id ' . $sOrder . ' ' . $sLimit;
 
