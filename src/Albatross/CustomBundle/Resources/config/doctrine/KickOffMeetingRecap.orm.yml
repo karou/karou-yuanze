@@ -1,0 +1,70 @@
+Albatross\CustomBundle\Entity\KickOffMeetingRecap:
+  type: entity
+  table: meeting_recap
+  oneToOne:
+    customwave:
+      targetEntity: Customwave
+      inversedBy: meeting_recap
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    pm_attendee:
+      type: string
+      length: 255
+      nullable: true
+    op_attendee:
+      type: string
+      length: 255
+      nullable: true
+    va_attendee:
+      type: string
+      length: 255
+      nullable: true
+    qc_attendee:
+      type: string
+      length: 255
+      nullable: true
+    report_attendee:
+      type: string
+      length: 255
+      nullable: true
+    text_1:
+      type: text
+      nullable: true
+    text_2:
+      type: text
+      nullable: true
+    text_3:
+      type: text
+      nullable: true
+    text_4:
+      type: text
+      nullable: true
+    text_5:
+      type: text
+      nullable: true
+    text_6:
+      type: text
+      nullable: true
+    text_7:
+      type: text
+      nullable: true
+    text_8:
+      type: text
+      nullable: true
+    text_9:
+      type: text
+      nullable: true
+    text_10:
+      type: text
+      nullable: true
+    text_11:
+      type: text
+      nullable: true
+    text_12:
+      type: text
+      nullable: true
+  lifecycleCallbacks: {}

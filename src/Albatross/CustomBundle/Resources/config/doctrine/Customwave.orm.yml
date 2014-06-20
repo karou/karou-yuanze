@@ -5,6 +5,13 @@ Albatross\CustomBundle\Entity\Customwave:
     customproject:
       targetEntity: Customproject
       inversedBy: customwave
+    user:
+      targetEntity: Albatross\UserBundle\Entity\User
+      inversedBy: customwave
+      nullable: true
+    project_manager:
+      targetEntity: Albatross\UserBundle\Entity\User
+      nullable: true
   oneToOne:
     attachments:
       targetEntity: Albatross\AceBundle\Entity\Attachments

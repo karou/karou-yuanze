@@ -1377,7 +1377,7 @@ class DefaultController extends Controller {
             foreach ($aceNumberEntityArr as $acenumEntity) {
                 $aceNumberArr[] = $acenumEntity->getId();
             }
-            $qb->andWhere('task.number > 100 AND task.number < 117 AND task.projectnumber IN (:projNumArr)');
+            $qb->andWhere('task.number > 100 AND task.number < 117 AND task.projectNumber IN (:projNumArr)');
             $qb->setParameter('projNumArr', $aceNumberArr);
         }
         if (!empty($buEntityArr)) {

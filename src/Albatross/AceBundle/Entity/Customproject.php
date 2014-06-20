@@ -6,53 +6,39 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Customproject
- *
- * @ORM\Table(name="customproject")
- * @ORM\Entity
  */
 class Customproject
 {
     /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     */
-    private $name;
-
-    /**
      * @var integer
-     *
-     * @ORM\Column(name="scope", type="bigint", nullable=false)
-     */
-    private $scope;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="type", type="bigint", nullable=false)
-     */
-    private $type;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="bigint")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
 
     /**
-     * @var \Albatross\AceBundle\Entity\Customclient
-     *
-     * @ORM\ManyToOne(targetEntity="Albatross\AceBundle\Entity\Customclient")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="customclient_id", referencedColumnName="id")
-     * })
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var \Albatross\CustomBundle\Entity\Customproject
+     */
+    private $customproject;
+
+    /**
+     * @var \Albatross\CustomBundle\Entity\Customclient
      */
     private $customclient;
 
 
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set name
@@ -76,6 +62,40 @@ class Customproject
     {
         return $this->name;
     }
+
+
+    /**
+     * Set customclient
+     *
+     * @param \Albatross\CustomBundle\Entity\Customclient $customclient
+     * @return Customproject
+     */
+    public function setCustomclient(\Albatross\CustomBundle\Entity\Customclient $customclient = null)
+    {
+        $this->customclient = $customclient;
+
+        return $this;
+    }
+
+    /**
+     * Get customclient
+     *
+     * @return \Albatross\CustomBundle\Entity\Customclient 
+     */
+    public function getCustomclient()
+    {
+        return $this->customclient;
+    }
+    /**
+     * @var integer
+     */
+    private $scope;
+
+    /**
+     * @var integer
+     */
+    private $type;
+
 
     /**
      * Set scope
@@ -123,36 +143,115 @@ class Customproject
         return $this->type;
     }
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
 
     /**
-     * Set customclient
+     * @var \Albatross\CustomBundle\Entity\Customwave
+     */
+    private $customwave;
+
+
+    /**
+     * Set customwave
      *
-     * @param \Albatross\AceBundle\Entity\Customclient $customclient
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
      * @return Customproject
      */
-    public function setCustomclient(\Albatross\AceBundle\Entity\Customclient $customclient = null)
+    public function setCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave = null)
     {
-        $this->customclient = $customclient;
+        $this->customwave = $customwave;
 
         return $this;
     }
 
     /**
-     * Get customclient
+     * Get customwave
      *
-     * @return \Albatross\AceBundle\Entity\Customclient 
+     * @return \Albatross\CustomBundle\Entity\Customwave 
      */
-    public function getCustomclient()
+    public function getCustomwave()
     {
-        return $this->customclient;
+        return $this->customwave;
+    }
+
+    public function __toString() {
+        return $this->name;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->customwave = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add customwave
+     *
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
+     * @return Customproject
+     */
+    public function addCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave)
+    {
+        $this->customwave[] = $customwave;
+
+        return $this;
+    }
+
+    /**
+     * Remove customwave
+     *
+     * @param \Albatross\CustomBundle\Entity\Customwave $customwave
+     */
+    public function removeCustomwave(\Albatross\CustomBundle\Entity\Customwave $customwave)
+    {
+        $this->customwave->removeElement($customwave);
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $user;
+
+
+    /**
+     * Add user
+     *
+     * @param \Albatross\UserBundle\Entity\User $user
+     * @return Customproject
+     */
+    public function addUser(\Albatross\UserBundle\Entity\User $user)
+    {
+        $this->user[] = $user;
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param \Albatross\UserBundle\Entity\User $user
+     */
+    public function removeUser(\Albatross\UserBundle\Entity\User $user)
+    {
+        $this->user->removeElement($user);
+    }
+
+    /**
+     * Get user
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+    
+    private $reportDeliverySchedule;
+    
+    public function setReportDeliverySchedule($value) {
+        $this->reportDeliverySchedule = $value;
+    }
+    
+    public function getReportDeliverySchedule() {
+        return $this->reportDeliverySchedule;
     }
 }
