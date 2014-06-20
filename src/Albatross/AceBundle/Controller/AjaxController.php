@@ -538,7 +538,6 @@ class AjaxController extends Controller {
         $em = $this->getDoctrine()->getManager();
 
         $connection = $em->getConnection();
-//exit();
         ///////Code for project listing////////
         $aColumns = array('c.name', 'ka.fullname','pm.fullname', 'cw.year, cw.month, cw.wavenum', 'cw.delivery_date', 'actions', 'progress');
 //        $aColumnSort = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
@@ -663,7 +662,7 @@ class AjaxController extends Controller {
             $row[] = '<div class="btn-group">
                             <button class="brown noborder" data-original-title="Open Project" onclick="window.location.href=\'' . $this->generateUrl('view_project') . '?id=' . $project['id'] . '\'"><i class="icon-eye-open"></i></button>
                             <button class="blue noborder" data-original-title="Follow Project" onclick="followProject('.$project['id'].');"><i class="icon-twitter"></i></button>
-                            <button class="green noborder" data-original-title="Edit Project" onclick="window.location.href=\'' . $this->generateUrl('customproject_edit', array('id' => $project['id'])).'"><i class=" icon-pencil"></i></button>
+                            <button class="green noborder" data-original-title="Edit Project" onclick="window.location.href=\'' . $this->generateUrl('customproject_edit', array('id' => $project['id'])).'\'"><i class=" icon-pencil"></i></button>
                             <button class="orange noborder" data-original-title="Remove Project" onclick="deleteProject('.$project['id'].');"><i class=" icon-remove"></i></button>
                     </div>';
             $row[] = '<div class="progress progress-info progress-striped active tipsy" data-original-title="Project Preparation">
