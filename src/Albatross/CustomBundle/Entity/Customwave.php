@@ -8,8 +8,8 @@ use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 /**
  * Customwave
  */
-class Customwave
-{
+class Customwave {
+
     /**
      * @var integer
      */
@@ -38,18 +38,16 @@ class Customwave
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->recap = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -59,8 +57,7 @@ class Customwave
      * @param string $name
      * @return Customwave
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
 
         return $this;
@@ -69,10 +66,9 @@ class Customwave
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
@@ -82,8 +78,7 @@ class Customwave
      * @param \Albatross\AceBundle\Entity\Attachments $attachments
      * @return Customwave
      */
-    public function setAttachments(\Albatross\AceBundle\Entity\Attachments $attachments = null)
-    {
+    public function setAttachments(\Albatross\AceBundle\Entity\Attachments $attachments = null) {
         $this->attachments = $attachments;
 
         return $this;
@@ -92,10 +87,9 @@ class Customwave
     /**
      * Get attachments
      *
-     * @return \Albatross\AceBundle\Entity\Attachments 
+     * @return \Albatross\AceBundle\Entity\Attachments
      */
-    public function getAttachments()
-    {
+    public function getAttachments() {
         return $this->attachments;
     }
 
@@ -105,8 +99,7 @@ class Customwave
      * @param \Albatross\CustomBundle\Entity\Recap $recap
      * @return Customwave
      */
-    public function addRecap(\Albatross\CustomBundle\Entity\Recap $recap)
-    {
+    public function addRecap(\Albatross\CustomBundle\Entity\Recap $recap) {
         $this->recap[] = $recap;
 
         return $this;
@@ -117,18 +110,16 @@ class Customwave
      *
      * @param \Albatross\CustomBundle\Entity\Recap $recap
      */
-    public function removeRecap(\Albatross\CustomBundle\Entity\Recap $recap)
-    {
+    public function removeRecap(\Albatross\CustomBundle\Entity\Recap $recap) {
         $this->recap->removeElement($recap);
     }
 
     /**
      * Get recap
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getRecap()
-    {
+    public function getRecap() {
         return $this->recap;
     }
 
@@ -138,8 +129,7 @@ class Customwave
      * @param \Albatross\CustomBundle\Entity\Customproject $customproject
      * @return Customwave
      */
-    public function setCustomproject(\Albatross\CustomBundle\Entity\Customproject $customproject = null)
-    {
+    public function setCustomproject(\Albatross\CustomBundle\Entity\Customproject $customproject = null) {
         $this->customproject = $customproject;
 
         return $this;
@@ -148,10 +138,9 @@ class Customwave
     /**
      * Get customproject
      *
-     * @return \Albatross\CustomBundle\Entity\Customproject 
+     * @return \Albatross\CustomBundle\Entity\Customproject
      */
-    public function getCustomproject()
-    {
+    public function getCustomproject() {
         return $this->customproject;
     }
 
@@ -160,15 +149,13 @@ class Customwave
      */
     private $project;
 
-
     /**
      * Add project
      *
      * @param \Albatross\AceBundle\Entity\Project $project
      * @return Customwave
      */
-    public function addProject(\Albatross\AceBundle\Entity\Project $project)
-    {
+    public function addProject(\Albatross\AceBundle\Entity\Project $project) {
         $this->project[] = $project;
 
         return $this;
@@ -179,29 +166,27 @@ class Customwave
      *
      * @param \Albatross\AceBundle\Entity\Project $project
      */
-    public function removeProject(\Albatross\AceBundle\Entity\Project $project)
-    {
+    public function removeProject(\Albatross\AceBundle\Entity\Project $project) {
         $this->project->removeElement($project);
     }
 
     /**
      * Get project
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getProject()
-    {
+    public function getProject() {
         return $this->project;
     }
-    
+
     public function __toString() {
         return $this->name;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $customfield;
-
 
     /**
      * Add customfield
@@ -209,8 +194,7 @@ class Customwave
      * @param \Albatross\CustomBundle\Entity\Customfield $customfield
      * @return Customwave
      */
-    public function addCustomfield(\Albatross\CustomBundle\Entity\Customfield $customfield)
-    {
+    public function addCustomfield(\Albatross\CustomBundle\Entity\Customfield $customfield) {
         $this->customfield[] = $customfield;
 
         return $this;
@@ -221,25 +205,23 @@ class Customwave
      *
      * @param \Albatross\CustomBundle\Entity\Customfield $customfield
      */
-    public function removeCustomfield(\Albatross\CustomBundle\Entity\Customfield $customfield)
-    {
+    public function removeCustomfield(\Albatross\CustomBundle\Entity\Customfield $customfield) {
         $this->customfield->removeElement($customfield);
     }
 
     /**
      * Get customfield
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCustomfield()
-    {
+    public function getCustomfield() {
         return $this->customfield;
     }
+
     /**
      * @var \Albatross\CustomBundle\Entity\Poslist
      */
     private $poslist;
-
 
     /**
      * Set poslist
@@ -247,8 +229,7 @@ class Customwave
      * @param \Albatross\CustomBundle\Entity\Poslist $poslist
      * @return Customwave
      */
-    public function setPoslist(\Albatross\CustomBundle\Entity\Poslist $poslist = null)
-    {
+    public function setPoslist(\Albatross\CustomBundle\Entity\Poslist $poslist = null) {
         $this->poslist = $poslist;
 
         return $this;
@@ -257,29 +238,27 @@ class Customwave
     /**
      * Get poslist
      *
-     * @return \Albatross\CustomBundle\Entity\Poslist 
+     * @return \Albatross\CustomBundle\Entity\Poslist
      */
-    public function getPoslist()
-    {
+    public function getPoslist() {
         return $this->poslist;
     }
-    
+
     /**
      * @ORM\PreRemove
      * Release all the children on remove
      */
-    public function preRemove()
-    {
-        foreach($this->getProject() as $child)
+    public function preRemove() {
+        foreach ($this->getProject() as $child)
             $child->setCustomwave(null);
-        
+
         return;
     }
+
     /**
      * @var integer
      */
     private $wavenum;
-
 
     /**
      * Set wavenum
@@ -287,8 +266,7 @@ class Customwave
      * @param integer $wavenum
      * @return Customwave
      */
-    public function setWavenum($wavenum)
-    {
+    public function setWavenum($wavenum) {
         $this->wavenum = $wavenum;
 
         return $this;
@@ -297,17 +275,16 @@ class Customwave
     /**
      * Get wavenum
      *
-     * @return integer 
+     * @return integer
      */
-    public function getWavenum()
-    {
+    public function getWavenum() {
         return $this->wavenum;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $aolsurvey;
-
 
     /**
      * Add aolsurveys
@@ -315,8 +292,7 @@ class Customwave
      * @param \Albatross\AceBundle\Entity\Aolsurveys $aolsurveys
      * @return Customwave
      */
-    public function addAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurvey)
-    {
+    public function addAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurvey) {
         $this->aolsurvey[] = $aolsurvey;
 
         return $this;
@@ -327,25 +303,23 @@ class Customwave
      *
      * @param \Albatross\AceBundle\Entity\Aolsurveys $aolsurveys
      */
-    public function removeAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurvey)
-    {
+    public function removeAolsurvey(\Albatross\AceBundle\Entity\Aolsurvey $aolsurvey) {
         $this->aolsurvey->removeElement($aolsurvey);
     }
 
     /**
      * Get aolsurveys
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getAolsurvey()
-    {
+    public function getAolsurvey() {
         return $this->aolsurvey;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $questionnaire;
-
 
     /**
      * Add questionnaire
@@ -353,8 +327,7 @@ class Customwave
      * @param \Albatross\AceBundle\Entity\Questionnaire $questionnaire
      * @return Customwave
      */
-    public function addQuestionnaire(\Albatross\AceBundle\Entity\Questionnaire $questionnaire)
-    {
+    public function addQuestionnaire(\Albatross\AceBundle\Entity\Questionnaire $questionnaire) {
         $this->questionnaire[] = $questionnaire;
 
         return $this;
@@ -365,25 +338,23 @@ class Customwave
      *
      * @param \Albatross\AceBundle\Entity\Questionnaire $questionnaire
      */
-    public function removeQuestionnaire(\Albatross\AceBundle\Entity\Questionnaire $questionnaire)
-    {
+    public function removeQuestionnaire(\Albatross\AceBundle\Entity\Questionnaire $questionnaire) {
         $this->questionnaire->removeElement($questionnaire);
     }
 
     /**
      * Get questionnaire
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getQuestionnaire()
-    {
+    public function getQuestionnaire() {
         return $this->questionnaire;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $campaign;
-
 
     /**
      * Add campaign
@@ -391,8 +362,7 @@ class Customwave
      * @param \Albatross\AceBundle\Entity\Campaign $campaign
      * @return Customwave
      */
-    public function addCampaign(\Albatross\AceBundle\Entity\Campaign $campaign)
-    {
+    public function addCampaign(\Albatross\AceBundle\Entity\Campaign $campaign) {
         $this->campaign[] = $campaign;
 
         return $this;
@@ -403,25 +373,23 @@ class Customwave
      *
      * @param \Albatross\AceBundle\Entity\Campaign $campaign
      */
-    public function removeCampaign(\Albatross\AceBundle\Entity\Campaign $campaign)
-    {
+    public function removeCampaign(\Albatross\AceBundle\Entity\Campaign $campaign) {
         $this->campaign->removeElement($campaign);
     }
 
     /**
      * Get campaign
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getCampaign()
-    {
+    public function getCampaign() {
         return $this->campaign;
     }
+
     /**
      * @var string
      */
     private $bis;
-
 
     /**
      * Set bis
@@ -429,8 +397,7 @@ class Customwave
      * @param string $bis
      * @return Customwave
      */
-    public function setBis($bis)
-    {
+    public function setBis($bis) {
         $this->bis = $bis;
 
         return $this;
@@ -439,12 +406,12 @@ class Customwave
     /**
      * Get bis
      *
-     * @return string 
+     * @return string
      */
-    public function getBis()
-    {
+    public function getBis() {
         return $this->bis;
     }
+
     /**
      * @var string
      */
@@ -455,15 +422,13 @@ class Customwave
      */
     private $month;
 
-
     /**
      * Set year
      *
      * @param string $year
      * @return Customwave
      */
-    public function setYear($year)
-    {
+    public function setYear($year) {
         $this->year = $year;
 
         return $this;
@@ -472,10 +437,9 @@ class Customwave
     /**
      * Get year
      *
-     * @return string 
+     * @return string
      */
-    public function getYear()
-    {
+    public function getYear() {
         return $this->year;
     }
 
@@ -485,8 +449,7 @@ class Customwave
      * @param string $month
      * @return Customwave
      */
-    public function setMonth($month)
-    {
+    public function setMonth($month) {
         $this->month = $month;
 
         return $this;
@@ -495,17 +458,16 @@ class Customwave
     /**
      * Get month
      *
-     * @return string 
+     * @return string
      */
-    public function getMonth()
-    {
+    public function getMonth() {
         return $this->month;
     }
+
     /**
      * @var integer
      */
     private $totalnum;
-
 
     /**
      * Set totalnum
@@ -513,8 +475,7 @@ class Customwave
      * @param integer $totalnum
      * @return Customwave
      */
-    public function setTotalnum($totalnum)
-    {
+    public function setTotalnum($totalnum) {
         $this->totalnum = $totalnum;
 
         return $this;
@@ -523,17 +484,16 @@ class Customwave
     /**
      * Get totalnum
      *
-     * @return integer 
+     * @return integer
      */
-    public function getTotalnum()
-    {
+    public function getTotalnum() {
         return $this->totalnum;
     }
+
     /**
      * @var \Albatross\CustomBundle\Entity\KickOffMeetingRecap
      */
     private $meeting_recap;
-
 
     /**
      * Set meeting_recap
@@ -541,8 +501,7 @@ class Customwave
      * @param \Albatross\CustomBundle\Entity\KickOffMeetingRecap $meetingRecap
      * @return Customwave
      */
-    public function setMeetingRecap(\Albatross\CustomBundle\Entity\KickOffMeetingRecap $meetingRecap = null)
-    {
+    public function setMeetingRecap(\Albatross\CustomBundle\Entity\KickOffMeetingRecap $meetingRecap = null) {
         $this->meeting_recap = $meetingRecap;
 
         return $this;
@@ -551,17 +510,16 @@ class Customwave
     /**
      * Get meeting_recap
      *
-     * @return \Albatross\CustomBundle\Entity\KickOffMeetingRecap 
+     * @return \Albatross\CustomBundle\Entity\KickOffMeetingRecap
      */
-    public function getMeetingRecap()
-    {
+    public function getMeetingRecap() {
         return $this->meeting_recap;
     }
+
     /**
      * @var \Albatross\UserBundle\Entity\User
      */
     private $user;
-
 
     /**
      * Set user
@@ -569,8 +527,7 @@ class Customwave
      * @param \Albatross\UserBundle\Entity\User $user
      * @return Customwave
      */
-    public function setUser(\Albatross\UserBundle\Entity\User $user = null)
-    {
+    public function setUser(\Albatross\UserBundle\Entity\User $user = null) {
         $this->user = $user;
 
         return $this;
@@ -579,17 +536,16 @@ class Customwave
     /**
      * Get user
      *
-     * @return \Albatross\UserBundle\Entity\User 
+     * @return \Albatross\UserBundle\Entity\User
      */
-    public function getUser()
-    {
+    public function getUser() {
         return $this->user;
     }
+
     /**
      * @var boolean
      */
     private $last_start;
-
 
     /**
      * Set last_start
@@ -597,8 +553,7 @@ class Customwave
      * @param boolean $lastStart
      * @return Customwave
      */
-    public function setLastStart($lastStart)
-    {
+    public function setLastStart($lastStart) {
         $this->last_start = $lastStart;
 
         return $this;
@@ -607,17 +562,16 @@ class Customwave
     /**
      * Get last_start
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getLastStart()
-    {
+    public function getLastStart() {
         return $this->last_start;
     }
+
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     private $invoice;
-
 
     /**
      * Add invoice
@@ -625,8 +579,7 @@ class Customwave
      * @param \Albatross\CustomBundle\Entity\Invoice $invoice
      * @return Customwave
      */
-    public function addInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice)
-    {
+    public function addInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice) {
         $this->invoice[] = $invoice;
 
         return $this;
@@ -637,25 +590,23 @@ class Customwave
      *
      * @param \Albatross\CustomBundle\Entity\Invoice $invoice
      */
-    public function removeInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice)
-    {
+    public function removeInvoice(\Albatross\CustomBundle\Entity\Invoice $invoice) {
         $this->invoice->removeElement($invoice);
     }
 
     /**
      * Get invoice
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
-    public function getInvoice()
-    {
+    public function getInvoice() {
         return $this->invoice;
     }
+
     /**
      * @var \Albatross\UserBundle\Entity\User
      */
     private $project_manager;
-
 
     /**
      * Set project_manager
@@ -663,8 +614,7 @@ class Customwave
      * @param \Albatross\UserBundle\Entity\User $projectManager
      * @return Customwave
      */
-    public function setProjectManager(\Albatross\UserBundle\Entity\User $projectManager = null)
-    {
+    public function setProjectManager(\Albatross\UserBundle\Entity\User $projectManager = null) {
         $this->project_manager = $projectManager;
 
         return $this;
@@ -673,12 +623,12 @@ class Customwave
     /**
      * Get project_manager
      *
-     * @return \Albatross\UserBundle\Entity\User 
+     * @return \Albatross\UserBundle\Entity\User
      */
-    public function getProjectManager()
-    {
+    public function getProjectManager() {
         return $this->project_manager;
     }
+
     /**
      * @var \DateTime
      */
@@ -694,15 +644,13 @@ class Customwave
      */
     private $editing_percent;
 
-
     /**
      * Set delivery_date
      *
      * @param \DateTime $deliveryDate
      * @return Customwave
      */
-    public function setDeliveryDate($deliveryDate)
-    {
+    public function setDeliveryDate($deliveryDate) {
         $this->delivery_date = $deliveryDate;
 
         return $this;
@@ -711,10 +659,9 @@ class Customwave
     /**
      * Get delivery_date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getDeliveryDate()
-    {
+    public function getDeliveryDate() {
         return $this->delivery_date;
     }
 
@@ -724,8 +671,7 @@ class Customwave
      * @param integer $fieldworkPercent
      * @return Customwave
      */
-    public function setFieldworkPercent($fieldworkPercent)
-    {
+    public function setFieldworkPercent($fieldworkPercent) {
         $this->fieldwork_percent = $fieldworkPercent;
 
         return $this;
@@ -734,10 +680,9 @@ class Customwave
     /**
      * Get fieldwork_percent
      *
-     * @return integer 
+     * @return integer
      */
-    public function getFieldworkPercent()
-    {
+    public function getFieldworkPercent() {
         return $this->fieldwork_percent;
     }
 
@@ -747,8 +692,7 @@ class Customwave
      * @param integer $editingPercent
      * @return Customwave
      */
-    public function setEditingPercent($editingPercent)
-    {
+    public function setEditingPercent($editingPercent) {
         $this->editing_percent = $editingPercent;
 
         return $this;
@@ -757,10 +701,9 @@ class Customwave
     /**
      * Get editing_percent
      *
-     * @return integer 
+     * @return integer
      */
-    public function getEditingPercent()
-    {
+    public function getEditingPercent() {
         return $this->editing_percent;
     }
 
@@ -769,15 +712,13 @@ class Customwave
      */
     private $wave_step;
 
-
     /**
      * Set wave_step
      *
      * @param string $waveStep
      * @return Customwave
      */
-    public function setWaveStep($waveStep)
-    {
+    public function setWaveStep($waveStep) {
         $this->wave_step = $waveStep;
 
         return $this;
@@ -786,17 +727,16 @@ class Customwave
     /**
      * Get wave_step
      *
-     * @return string 
+     * @return string
      */
-    public function getWaveStep()
-    {
+    public function getWaveStep() {
         return $this->wave_step;
     }
+
     /**
      * @var integer
      */
     private $assign_percent;
-
 
     /**
      * Set assign_percent
@@ -804,8 +744,7 @@ class Customwave
      * @param integer $assignPercent
      * @return Customwave
      */
-    public function setAssignPercent($assignPercent)
-    {
+    public function setAssignPercent($assignPercent) {
         $this->assign_percent = $assignPercent;
 
         return $this;
@@ -814,10 +753,10 @@ class Customwave
     /**
      * Get assign_percent
      *
-     * @return integer 
+     * @return integer
      */
-    public function getAssignPercent()
-    {
+    public function getAssignPercent() {
         return $this->assign_percent;
     }
+
 }

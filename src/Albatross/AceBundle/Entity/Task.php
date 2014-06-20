@@ -558,7 +558,7 @@ class Task
      */
     public function getProjectnumber()
     {
-        return $this->projectnumber;
+        return $this->projectNumber;
     }
     /**
      * @var integer

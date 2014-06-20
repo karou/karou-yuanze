@@ -1,9 +1,9 @@
 albatross_operation_homepage:
-    pattern:  /operations
-    defaults: { _controller: AlbatrossOperationBundle:Default:index }
+    pattern:  /operations/{type}
+    defaults: { _controller: "AlbatrossOperationBundle:Default:projectStatus", type:'' }
 
 projectStatus:
-    pattern:  /projectStatus/{type}
+    pattern:  /operations/{type}
     defaults: { _controller: "AlbatrossOperationBundle:Default:projectStatus", type:'' }
         
 getBuResult:

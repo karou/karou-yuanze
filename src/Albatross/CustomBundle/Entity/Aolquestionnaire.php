@@ -126,4 +126,32 @@ class Aolquestionnaire
     {
         return $this->recap;
     }
+    /**
+     * @var integer
+     */
+    private $file_index;
+
+
+    /**
+     * Set file_index
+     *
+     * @param integer $fileIndex
+     * @return Aolquestionnaire
+     */
+    public function setFileIndex($fileIndex)
+    {
+        $this->file_index = $fileIndex;
+
+        return $this;
+    }
+
+    /**
+     * Get file_index
+     *
+     * @return integer 
+     */
+    public function getFileIndex()
+    {
+        return $this->file_index;
+    }
 }

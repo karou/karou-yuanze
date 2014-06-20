@@ -244,4 +244,14 @@ class Customproject
     {
         return $this->user;
     }
+    
+    private $reportDeliverySchedule;
+    
+    public function setReportDeliverySchedule($value) {
+        $this->reportDeliverySchedule = $value;
+    }
+    
+    public function getReportDeliverySchedule() {
+        return $this->reportDeliverySchedule;
+    }
 }

@@ -5,6 +5,7 @@ namespace Albatross\FileBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Albatross\AceBundle\Form\AttachmentsType;
 use Albatross\AceBundle\Entity\Attachments;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller {
 
@@ -122,6 +123,30 @@ class DefaultController extends Controller {
         $em->persist($attachment);
         $em->flush();
         return $this->redirect($this->generateUrl('file_homepage'));
+    }
+
+    public function downloadAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        
+        $file = $em->getRepository("AlbatrossAceBundle:Attachments")->findOneById($id);
+        if (!$file)
+            throw $this->createNotFoundException('Unable to find File entity.');
+        
+        // Generate response
+        $response = new Response();
+
+        // Set headers
+        $response->headers->set('Cache-Control', 'private');
+        $response->headers->set('Content-type', mime_content_type($file->getWebPath()));
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . basename($file->getWebPath()) . '";');
+        $response->headers->set('Content-length', filesize($file->getWebPath()));
+
+        // Send headers before outputting anything
+        $response->sendHeaders();
+
+        $response->setContent(readfile($file->getWebPath()));
+        
+        return $response;
     }
 
 }

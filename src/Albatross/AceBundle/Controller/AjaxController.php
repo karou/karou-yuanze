@@ -27,6 +27,8 @@ class AjaxController extends Controller {
     }
 
     public function iof_list_ajaxAction() {
+        $request = $this->getRequest();
+        
         $aColumns = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
         $aColumnSort = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
         $aColumnSearch = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
@@ -508,7 +510,8 @@ class AjaxController extends Controller {
 
                     $lastUpload = '-';
                     if ($rec && $rec->getLabel() != '') {
-                        $lastUpload = '<a href="web/' . $rec->getPath() . '" target="_blank">' . $rec->getLabel() . '</a> (' . $rec->getSubmitteddate()->format("y-m-d H:i:s") . ')'; // ' .$this->basicElements['rootPath'] . '
+//                        $lastUpload = '<a href="web/' . $rec->getPath() . '" target="_blank">' . $rec->getLabel() . '</a> (' . $rec->getSubmitteddate()->format("y-m-d H:i:s") . ')'; // ' .$this->basicElements['rootPath'] . '
+                        $lastUpload = '<a href="'. $this->generateUrl('file_download', array("id" => $rec->getId())) .'" target="_blank">' . $rec->getLabel() . '</a> (' . $rec->getSubmitteddate()->format("y-m-d H:i:s") . ')'; // ' .$this->basicElements['rootPath'] . '
                     }
 
                     $row = '';

@@ -432,7 +432,6 @@ class Customfield
     }
     //for questionnaire
     public function getWebPath2($type) {
-        var_dump($this->path_2);
         return null === $this->path_2 ? null : $this->getUploadDir($type) . '/' . $this->path_2;
     }
     public function getWebPath3($type) {
@@ -1439,5 +1438,547 @@ class Customfield
     public function getAolquestionnaire()
     {
         return $this->aolquestionnaire;
+    }
+        /**
+     * @var boolean
+     */
+    private $questionnaire_upload_file_tick;
+
+    /**
+     * @var boolean
+     */
+    private $questionnaire_new_tick;
+
+    /**
+     * @var boolean
+     */
+    private $questionnaire_modify_tick;
+
+    /**
+     * @var boolean
+     */
+    private $questionnaire_translation_tick;
+
+    /**
+     * @var string
+     */
+    private $questionnaire_team_description;
+
+    /**
+     * @var string
+     */
+    private $questionnaire_from_text;
+
+    /**
+     * @var integer
+     */
+    private $questionnaire_language_num;
+
+    /**
+     * @var integer
+     */
+    private $questionnaire_version_num;
+
+
+    /**
+     * Set questionnaire_upload_file_tick
+     *
+     * @param boolean $questionnaireUploadFileTick
+     * @return Customfield
+     */
+    public function setQuestionnaireUploadFileTick($questionnaireUploadFileTick)
+    {
+        $this->questionnaire_upload_file_tick = $questionnaireUploadFileTick;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_upload_file_tick
+     *
+     * @return boolean 
+     */
+    public function getQuestionnaireUploadFileTick()
+    {
+        return $this->questionnaire_upload_file_tick;
+    }
+
+    /**
+     * Set questionnaire_new_tick
+     *
+     * @param boolean $questionnaireNewTick
+     * @return Customfield
+     */
+    public function setQuestionnaireNewTick($questionnaireNewTick)
+    {
+        $this->questionnaire_new_tick = $questionnaireNewTick;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_new_tick
+     *
+     * @return boolean 
+     */
+    public function getQuestionnaireNewTick()
+    {
+        return $this->questionnaire_new_tick;
+    }
+
+    /**
+     * Set questionnaire_modify_tick
+     *
+     * @param boolean $questionnaireModifyTick
+     * @return Customfield
+     */
+    public function setQuestionnaireModifyTick($questionnaireModifyTick)
+    {
+        $this->questionnaire_modify_tick = $questionnaireModifyTick;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_modify_tick
+     *
+     * @return boolean 
+     */
+    public function getQuestionnaireModifyTick()
+    {
+        return $this->questionnaire_modify_tick;
+    }
+
+    /**
+     * Set questionnaire_translation_tick
+     *
+     * @param boolean $questionnaireTranslationTick
+     * @return Customfield
+     */
+    public function setQuestionnaireTranslationTick($questionnaireTranslationTick)
+    {
+        $this->questionnaire_translation_tick = $questionnaireTranslationTick;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_translation_tick
+     *
+     * @return boolean 
+     */
+    public function getQuestionnaireTranslationTick()
+    {
+        return $this->questionnaire_translation_tick;
+    }
+
+    /**
+     * Set questionnaire_team_description
+     *
+     * @param string $questionnaireTeamDescription
+     * @return Customfield
+     */
+    public function setQuestionnaireTeamDescription($questionnaireTeamDescription)
+    {
+        $this->questionnaire_team_description = $questionnaireTeamDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_team_description
+     *
+     * @return string 
+     */
+    public function getQuestionnaireTeamDescription()
+    {
+        return $this->questionnaire_team_description;
+    }
+
+    /**
+     * Set questionnaire_from_text
+     *
+     * @param string $questionnaireFromText
+     * @return Customfield
+     */
+    public function setQuestionnaireFromText($questionnaireFromText)
+    {
+        $this->questionnaire_from_text = $questionnaireFromText;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_from_text
+     *
+     * @return string 
+     */
+    public function getQuestionnaireFromText()
+    {
+        return $this->questionnaire_from_text;
+    }
+
+    /**
+     * Set questionnaire_language_num
+     *
+     * @param integer $questionnaireLanguageNum
+     * @return Customfield
+     */
+    public function setQuestionnaireLanguageNum($questionnaireLanguageNum)
+    {
+        $this->questionnaire_language_num = $questionnaireLanguageNum;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_language_num
+     *
+     * @return integer 
+     */
+    public function getQuestionnaireLanguageNum()
+    {
+        return $this->questionnaire_language_num;
+    }
+
+    /**
+     * Set questionnaire_version_num
+     *
+     * @param integer $questionnaireVersionNum
+     * @return Customfield
+     */
+    public function setQuestionnaireVersionNum($questionnaireVersionNum)
+    {
+        $this->questionnaire_version_num = $questionnaireVersionNum;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_version_num
+     *
+     * @return integer 
+     */
+    public function getQuestionnaireVersionNum()
+    {
+        return $this->questionnaire_version_num;
+    }
+    /**
+     * @var integer
+     */
+    private $questionnaire_version_num_1;
+
+    /**
+     * @var integer
+     */
+    private $questionnaire_version_num_2;
+
+    /**
+     * @var integer
+     */
+    private $questionnaire_version_num_3;
+
+    /**
+     * @var integer
+     */
+    private $questionnaire_version_num_4;
+
+
+    /**
+     * Set questionnaire_version_num_1
+     *
+     * @param integer $questionnaireVersionNum1
+     * @return Customfield
+     */
+    public function setQuestionnaireVersionNum1($questionnaireVersionNum1)
+    {
+        $this->questionnaire_version_num_1 = $questionnaireVersionNum1;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_version_num_1
+     *
+     * @return integer 
+     */
+    public function getQuestionnaireVersionNum1()
+    {
+        return $this->questionnaire_version_num_1;
+    }
+
+    /**
+     * Set questionnaire_version_num_2
+     *
+     * @param integer $questionnaireVersionNum2
+     * @return Customfield
+     */
+    public function setQuestionnaireVersionNum2($questionnaireVersionNum2)
+    {
+        $this->questionnaire_version_num_2 = $questionnaireVersionNum2;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_version_num_2
+     *
+     * @return integer 
+     */
+    public function getQuestionnaireVersionNum2()
+    {
+        return $this->questionnaire_version_num_2;
+    }
+
+    /**
+     * Set questionnaire_version_num_3
+     *
+     * @param integer $questionnaireVersionNum3
+     * @return Customfield
+     */
+    public function setQuestionnaireVersionNum3($questionnaireVersionNum3)
+    {
+        $this->questionnaire_version_num_3 = $questionnaireVersionNum3;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_version_num_3
+     *
+     * @return integer 
+     */
+    public function getQuestionnaireVersionNum3()
+    {
+        return $this->questionnaire_version_num_3;
+    }
+
+    /**
+     * Set questionnaire_version_num_4
+     *
+     * @param integer $questionnaireVersionNum4
+     * @return Customfield
+     */
+    public function setQuestionnaireVersionNum4($questionnaireVersionNum4)
+    {
+        $this->questionnaire_version_num_4 = $questionnaireVersionNum4;
+
+        return $this;
+    }
+
+    /**
+     * Get questionnaire_version_num_4
+     *
+     * @return integer 
+     */
+    public function getQuestionnaireVersionNum4()
+    {
+        return $this->questionnaire_version_num_4;
+    }
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $translation_file;
+
+
+    /**
+     * Add translation_file
+     *
+     * @param \Albatross\CustomBundle\Entity\TranslationFile $translationFile
+     * @return Customfield
+     */
+    public function addTranslationFile(\Albatross\CustomBundle\Entity\TranslationFile $translationFile)
+    {
+        $this->translation_file[] = $translationFile;
+
+        return $this;
+    }
+
+    /**
+     * Remove translation_file
+     *
+     * @param \Albatross\CustomBundle\Entity\TranslationFile $translationFile
+     */
+    public function removeTranslationFile(\Albatross\CustomBundle\Entity\TranslationFile $translationFile)
+    {
+        $this->translation_file->removeElement($translationFile);
+    }
+
+    /**
+     * Get translation_file
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getTranslationFile()
+    {
+        return $this->translation_file;
+    }
+    /**
+     * @var string
+     */
+    private $translation_signature;
+
+
+    /**
+     * Set translation_signature
+     *
+     * @param string $translationSignature
+     * @return Customfield
+     */
+    public function setTranslationSignature($translationSignature)
+    {
+        $this->translation_signature = $translationSignature;
+
+        return $this;
+    }
+
+    /**
+     * Get translation_signature
+     *
+     * @return string 
+     */
+    public function getTranslationSignature()
+    {
+        return $this->translation_signature;
+    }
+    /**
+     * @var string
+     */
+    private $test_survey_number;
+
+    /**
+     * @var string
+     */
+    private $tested_survey_number;
+
+
+    /**
+     * Set test_survey_number
+     *
+     * @param string $testSurveyNumber
+     * @return Customfield
+     */
+    public function setTestSurveyNumber($testSurveyNumber)
+    {
+        $this->test_survey_number = $testSurveyNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get test_survey_number
+     *
+     * @return string 
+     */
+    public function getTestSurveyNumber()
+    {
+        return $this->test_survey_number;
+    }
+
+    /**
+     * Set tested_survey_number
+     *
+     * @param string $testedSurveyNumber
+     * @return Customfield
+     */
+    public function setTestedSurveyNumber($testedSurveyNumber)
+    {
+        $this->tested_survey_number = $testedSurveyNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get tested_survey_number
+     *
+     * @return string 
+     */
+    public function getTestedSurveyNumber()
+    {
+        return $this->tested_survey_number;
+    }
+    /**
+     * @var boolean
+     */
+    private $rejected_tick;
+
+    /**
+     * @var string
+     */
+    private $rejected_comment;
+
+    /**
+     * @var string
+     */
+    private $rejected_file_path;
+
+
+    /**
+     * Set rejected_tick
+     *
+     * @param boolean $rejectedTick
+     * @return Customfield
+     */
+    public function setRejectedTick($rejectedTick)
+    {
+        $this->rejected_tick = $rejectedTick;
+
+        return $this;
+    }
+
+    /**
+     * Get rejected_tick
+     *
+     * @return boolean 
+     */
+    public function getRejectedTick()
+    {
+        return $this->rejected_tick;
+    }
+
+    /**
+     * Set rejected_comment
+     *
+     * @param string $rejectedComment
+     * @return Customfield
+     */
+    public function setRejectedComment($rejectedComment)
+    {
+        $this->rejected_comment = $rejectedComment;
+
+        return $this;
+    }
+
+    /**
+     * Get rejected_comment
+     *
+     * @return string 
+     */
+    public function getRejectedComment()
+    {
+        return $this->rejected_comment;
+    }
+
+    /**
+     * Set rejected_file_path
+     *
+     * @param string $rejectedFilePath
+     * @return Customfield
+     */
+    public function setRejectedFilePath($rejectedFilePath)
+    {
+        $this->rejected_file_path = $rejectedFilePath;
+
+        return $this;
+    }
+
+    /**
+     * Get rejected_file_path
+     *
+     * @return string 
+     */
+    public function getRejectedFilePath()
+    {
+        return $this->rejected_file_path;
     }
 }

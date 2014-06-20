@@ -128,24 +128,24 @@ $(function () {
 	/*====Select Box====*/
 	$(".chzn-select").chosen();
 	$(".chzn-select-deselect").chosen({
-		allow_single_deselect: true
+            allow_single_deselect: true
 	});
 	
 	/*====Date Picker====*/
 	$('#datetimepicker4').datetimepicker({
-		pickTime: false
+            pickTime: false
 	});
 	
 	/*====Data Table====*/
 	$('#data-table').dataTable({ 
-								  "iDisplayLength": 25,	
-								  "oLanguage" : { "sEmptyTable": "" , "sZeroRecords": "" },
-								  "sDom": "<'row-fluid'<'span12'>r>t<'row-fluid'<'span6'li><'span6'p>>",
-								  "aaSorting": [[1,'asc']],
-								  "bProcessing": true,
-								  "bServerSide": true,
-								  "sAjaxSource": "{{SITE_URL}}iof_list_ajax?client={{searchArr.client}}&status={{searchArr.status}}&bu={{searchArr.bu}}&assigned_to={{searchArr.assigned_to}}&ace_name={{searchArr.ace_name}}&contract_number={{searchArr.contract_number}}&submitted_date={{searchArr.submitted_date}}"
-								});
+            "iDisplayLength": 25,	
+            "oLanguage" : { "sEmptyTable": "" , "sZeroRecords": "" },
+            "sDom": "<'row-fluid'<'span12'>r>t<'row-fluid'<'span6'li><'span6'p>>",
+            "aaSorting": [[1,'asc']],
+            "bProcessing": true,
+            "bServerSide": true,
+            "sAjaxSource": "{{ path("ajax_iof_list_ajax") }}?client={{searchArr.client}}&status={{searchArr.status}}&bu={{searchArr.bu}}&assigned_to={{searchArr.assigned_to}}&ace_name={{searchArr.ace_name}}&contract_number={{searchArr.contract_number}}&submitted_date={{searchArr.submitted_date}}"
+          });
 
 });
 </script>

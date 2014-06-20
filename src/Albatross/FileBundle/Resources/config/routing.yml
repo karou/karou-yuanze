@@ -1,3 +1,7 @@
 file_homepage:
     pattern:  /file_list
     defaults: { _controller: AlbatrossFileBundle:Default:index }
+    
+file_download:
+    pattern:  /download/{id}
+    defaults: { _controller: AlbatrossFileBundle:Default:download }
