@@ -743,34 +743,33 @@ class AjaxController extends Controller {
         $resultsPer = $perStatement->fetchAll();
 
         $perResult = '<tr>
-							<th width="30%">
-								<br/><b>Forecast in Total</b>
-							</th>
-							<th width="5%" align="center">
-								<b>' . $monDateDisp . '</b>
-							</th>
-							<th width="5%" align="center">
-								<b>' . $tuesDateDisp . '</b>
-							</th>
-							<th width="5%" align="center">
-								<b>' . $wedDateDisp . '</b>
-							</th>
-							<th width="5%" align="center">
-								<b>' . $thursDateDisp . '</b>
-							</th>
-							<th width="5%" align="center">
-								<b>' . $friDateDisp . '</b>
-							</th>
-							<th width="5%" align="center">
-								<b>' . $satDateDisp . '</b>
-							</th>
-							<th width="5%" align="center">
-								<b>' . $sunDateDisp . '</b>
-							</th>
-							<th align="center">&nbsp;
-								
-							</th>
-						</tr>';
+                        <th width="30%">
+                            <br/><b>Forecast in Total</b>
+                        </th>
+                        <th width="5%" align="center">
+                            <b>' . $monDateDisp . '</b>
+                        </th>
+                        <th width="5%" align="center">
+                            <b>' . $tuesDateDisp . '</b>
+                        </th>
+                        <th width="5%" align="center">
+                            <b>' . $wedDateDisp . '</b>
+                        </th>
+                        <th width="5%" align="center">
+                            <b>' . $thursDateDisp . '</b>
+                        </th>
+                        <th width="5%" align="center">
+                            <b>' . $friDateDisp . '</b>
+                        </th>
+                        <th width="5%" align="center">
+                            <b>' . $satDateDisp . '</b>
+                        </th>
+                        <th width="5%" align="center">
+                            <b>' . $sunDateDisp . '</b>
+                        </th>
+                        <th align="center">&nbsp;
+                        </th>
+                    </tr>';
 
         if (count($resultsPer) > 0) {
             $arrFinal = array();
