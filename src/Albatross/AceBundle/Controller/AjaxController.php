@@ -561,8 +561,15 @@ class AjaxController extends Controller {
             $sOrder = "ORDER BY  ";
             for ($i = 0; $i < intval($_REQUEST['iSortingCols']); $i++) {
                 if ($_REQUEST['bSortable_' . intval($_REQUEST['iSortCol_' . $i])] == "true") {
-                    $sOrder .= $aColumns[intval($_REQUEST['iSortCol_' . $i])] . "
-							" . ( $_REQUEST['sSortDir_' . $i] ) . ", ";
+                    $sortColumnStr = explode(',', $aColumns[intval($_REQUEST['iSortCol_' . $i])]);
+                    if(count($sortColumnStr) > 1){
+                        foreach($sortColumnStr as $s){
+                            $sOrder .= $s . ' ' . ( $_REQUEST['sSortDir_' . $i] ) . ", ";
+                        }
+                    }else{
+                        $sOrder .= $aColumns[intval($_REQUEST['iSortCol_' . $i])] . "
+                                                            " . ( $_REQUEST['sSortDir_' . $i] ) . ", ";
+                    }
                 }
             }
 
@@ -571,7 +578,6 @@ class AjaxController extends Controller {
                 $sOrder = "";
             }
         }
-
         /*         * *** Filtering **** */
         $sWhere = "";
         if (isset($_REQUEST['sSearch']) and $_REQUEST['sSearch'] != "") {
