@@ -27,9 +27,9 @@
                 <ul class="nav nav-tabs" id="myTab1">
                     {% set counter = 1 %}
                     {% for wave in waveArr %}
-                        <li {% if counter==1 %}class="active"{% endif %}><a href="#tab-wave{{counter}}">Wave {{counter}}</a></li>
-                            {% set counter = counter+1 %}
-                        {% endfor %}
+                    <li {% if counter==1 %}class="active"{% endif %}><a href="#tab-wave{{counter}}">Wave {{counter}}</a></li>
+                        {% set counter = counter+1 %}
+                    {% endfor %}
                     <li><a href="#tab-new-wave">New Wave +</a></li>
                 </ul>
                 <div class="tab-content">
@@ -115,64 +115,64 @@
                                                 <th>Report Delivery</th>
                                             </tr>
                                             {% if operation[wave.id] is defined %}
-                                                {% for bu,info in operation[wave.id] %}
-                                                    <tr>
-                                                        <td title="{{bu}}">{{bu}}</td>
-                                                        {% if info['ace'] != '' %}
-                                                            {% for pname,aceinfo in info['ace'] %}
-                                                                <td>
-                                                                    {{aceinfo['step']}}<br/>
-                                                                </td>
-                                                                <td>
-                                                                    {{aceinfo['scope']}}<br/>
-                                                                </td>
-                                                                <td>
-                                                                    {{aceinfo['fwstartdate']}}<br/>
-                                                                </td>
-                                                                <td>
-                                                                    {{aceinfo['fwenddate']}}<br/>
-                                                                </td>
-                                                            {% endfor %}
-                                                        {% else %}
-                                                            <td class="empty_value">empty</td>
-                                                            <td class="empty_value">empty</td>
-                                                            <td class="empty_value">empty</td>
-                                                            <td class="empty_value">empty</td>
-                                                        {% endif %}
-
-                                                        {% if info['aol'] != '' %}
-                                                            <td>{{info['aol']['assignPercent']}}
-                                                            </td>
-                                                            <td>{{info['aol']['fwdonePercent']}}
-                                                            </td>
-                                                            <td>{{info['aol']['validationPercent']}}
-                                                            </td>
-                                                        {% else %}
-                                                            <td class="empty_value">empty</td>
-                                                            <td class="empty_value">empty</td>
-                                                            <td class="empty_value">empty</td>
-                                                        {% endif %}
-                                                        {% if info['ace'] != '' %}
-                                                            {% for pname,aceinfo in info['ace'] %}
-                                                                <td>{{aceinfo['reportduedate']}}</td>
-                                                            {% endfor %}
-                                                        {% else %}
-                                                            <td class="empty_value">empty</td>
-                                                        {% endif %}
-                                                    </tr>
-                                                {% endfor %}
+                                            {% for bu,info in operation[wave.id] %}
+                                            <tr>
+                                                <td title="{{bu}}">{{bu}}</td>
+                                                {% if info['ace'] != '' %}
+                                                {% for pname,aceinfo in info['ace'] %}
+                                                <td>
+                                                    {{aceinfo['step']}}<br/>
+                                                </td>
+                                                <td>
+                                                    {{aceinfo['scope']}}<br/>
+                                                </td>
+                                                <td>
+                                                    {{aceinfo['fwstartdate']}}<br/>
+                                                </td>
+                                                <td>
+                                                    {{aceinfo['fwenddate']}}<br/>
+                                                </td>
+                                            {% endfor %}
                                             {% else %}
-                                                <tr>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                    <td class="empty_value">empty</td>
-                                                </tr>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                            {% endif %}
+
+                                            {% if info['aol'] != '' %}
+                                                <td>{{info['aol']['assignPercent']}}
+                                                </td>
+                                                <td>{{info['aol']['fwdonePercent']}}
+                                                </td>
+                                                <td>{{info['aol']['validationPercent']}}
+                                                </td>
+                                            {% else %}
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                            {% endif %}
+                                            {% if info['ace'] != '' %}
+                                            {% for pname,aceinfo in info['ace'] %}
+                                                <td>{{aceinfo['reportduedate']}}</td>
+                                            {% endfor %}
+                                            {% else %}
+                                                <td class="empty_value">empty</td>
+                                            {% endif %}
+                                            </tr>
+                                            {% endfor %}
+                                            {% else %}
+                                            <tr>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                                <td class="empty_value">empty</td>
+                                            </tr>
                                             {% endif %}
                                         </tbody>
                                     </table>
@@ -206,12 +206,12 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                        {% if formArr[wave.id]['mm']['user']['fullname'] is defined %}
-                                                            {{formArr[wave.id]['mm']['user']['fullname']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
+                                                    {% if formArr[wave.id]['mm']['user']['fullname'] is defined %}
+                                                        {{formArr[wave.id]['mm']['user']['fullname']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left"><span class="error">*</span>Brand:</label>
@@ -280,22 +280,22 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit Time:</label>
                                                 <label><strong>
-                                                        {% if formArr[wave.id]['brand']['submittime'] is defined %}
-                                                            {{formArr[wave.id]['brand']['submittime']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
+                                                    {% if formArr[wave.id]['brand']['submittime'] is defined %}
+                                                        {{formArr[wave.id]['brand']['submittime']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                        {% if formArr[wave.id]['brand']['user']['fullname'] is defined %}
-                                                            {{formArr[wave.id]['brand']['user']['fullname']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
+                                                    {% if formArr[wave.id]['brand']['user']['fullname'] is defined %}
+                                                        {{formArr[wave.id]['brand']['user']['fullname']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left"><span class="error">*</span>File:</label>
@@ -311,13 +311,13 @@
                                                 <select name="material_name" id="material_name{{wave.id}}" required="">
                                                     <option value="">Please select</option>
                                                     {% for mid,mname in material %}
-                                                        {% set sel = '' %}
-                                                        {% if formArr[wave.id]['brand']['materialName'] is defined %}
-                                                            {% if formArr[wave.id]['brand']['materialName'] == mid %}
-                                                                {% set sel = 'selected="selected"' %}
-                                                            {% endif %}
-                                                        {% endif %}	
-                                                        <option value="{{mid}}" {{sel}}>{{mname}}</option>
+                                                    {% set sel = '' %}
+                                                    {% if formArr[wave.id]['brand']['materialName'] is defined %}
+                                                        {% if formArr[wave.id]['brand']['materialName'] == mid %}
+                                                            {% set sel = 'selected="selected"' %}
+                                                        {% endif %}
+                                                    {% endif %}	
+                                                    <option value="{{mid}}" {{sel}}>{{mname}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -434,22 +434,22 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit Time:</label>
                                                 <label><strong>
-                                                        {% if formArr[wave.id]['questionnaire']['submittime'] is defined %}
-                                                            {{formArr[wave.id]['questionnaire']['submittime']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
+                                                    {% if formArr[wave.id]['questionnaire']['submittime'] is defined %}
+                                                        {{formArr[wave.id]['questionnaire']['submittime']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                        {% if formArr[wave.id]['questionnaire']['user']['fullname'] is defined %}
-                                                            {{formArr[wave.id]['questionnaire']['user']['fullname']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
+                                                    {% if formArr[wave.id]['questionnaire']['user']['fullname'] is defined %}
+                                                        {{formArr[wave.id]['questionnaire']['user']['fullname']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <div class="wave-content-list-inner">
@@ -578,22 +578,22 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit Time:</label>
                                                 <label><strong>
-                                                        {% if formArr[wave.id]['brief']['submittime'] is defined %}
-                                                            {{formArr[wave.id]['brief']['submittime']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
+                                                    {% if formArr[wave.id]['brief']['submittime'] is defined %}
+                                                        {{formArr[wave.id]['brief']['submittime']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                        {% if formArr[wave.id]['brief']['user']['fullname'] is defined %}
-                                                            {{formArr[wave.id]['brief']['user']['fullname']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
+                                                    {% if formArr[wave.id]['brief']['user']['fullname'] is defined %}
+                                                        {{formArr[wave.id]['brief']['user']['fullname']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left"><span class="error">*</span>File:</label>
@@ -1202,112 +1202,112 @@
                 script_url : 'js/tiny_mce/tiny_mce.js',
                         theme : "simple",
                         width : 350
-                });        {% if successMsg != '' %}
-                                    $('.successUl').show('slow');        {% endif %}
+                });{% if successMsg != '' %}
+                        $('.successUl').show('slow');{% endif %}
 
-                                                        setTimeout(function(){$('.successUl').hide('slow'); }, 5000);
-                                                });
-                                                function showMiniForm(id)
-                                                {
-                                                $('.mini-form').hide('fast');
-                                                        $('.' + id).show('slow');
-                                                        $('body,html').animate({
-                                                scrollTop: 850
-                                                }, 500);
-                                                        return false;
-                                                }
+                        setTimeout(function(){$('.successUl').hide('slow'); }, 5000);
+                });
+                function showMiniForm(id)
+                {
+                $('.mini-form').hide('fast');
+                        $('.' + id).show('slow');
+                        $('body,html').animate({
+                scrollTop: 850
+                }, 500);
+                        return false;
+                }
 
-                                        function chkProjectForms(type, frmId, waveId)
-                                        {
-                                        var chk = 1;
-                                                if (type == 'meetingMinutes')
-                                        {
-                                        var mm_brand = document.getElementById('mm_brand' + waveId).value;
-                                                var mm_date = document.getElementById('mm_date' + waveId).value;
-                                                var mm_address = document.getElementById('mm_address' + waveId).value;
-                                                var mm_purpose = document.getElementById('mm_purpose' + waveId).value;
-                                                var mm_nextstep = document.getElementById('mm_nextstep' + waveId).value;
-                                                var mm_agenda_of_the_meeting = document.getElementById('mm_agenda_of_the_meeting' + waveId).value;
-                                                var mm_clients_feedback = document.getElementById('mm_clients_feedback' + waveId).value;
-                                                var mm_comments = document.getElementById('mm_comments' + waveId).value;
-                                                if (mm_brand == '' || mm_date == '' || mm_address == '' || mm_purpose == '' || mm_nextstep == '' || mm_agenda_of_the_meeting == '' || mm_clients_feedback == '' || mm_comments == '')
-                                        {
-                                        chk = 0;
-                                        }
-                                        }
-                                        else if (type == 'brand')
-                                        {
-                                        var fileBrand = document.getElementById('fileBrand' + waveId).value;
-                                                var material_name = document.getElementById('material_name' + waveId).value;
-                                                var mNoFileUploadId = document.getElementById('mNoFileUpload' + waveId);
-                                                if (material_name == '')
-                                        {
-                                        chk = 0;
-                                        }
+        function chkProjectForms(type, frmId, waveId)
+        {
+        var chk = 1;
+                if (type == 'meetingMinutes')
+        {
+        var mm_brand = document.getElementById('mm_brand' + waveId).value;
+                var mm_date = document.getElementById('mm_date' + waveId).value;
+                var mm_address = document.getElementById('mm_address' + waveId).value;
+                var mm_purpose = document.getElementById('mm_purpose' + waveId).value;
+                var mm_nextstep = document.getElementById('mm_nextstep' + waveId).value;
+                var mm_agenda_of_the_meeting = document.getElementById('mm_agenda_of_the_meeting' + waveId).value;
+                var mm_clients_feedback = document.getElementById('mm_clients_feedback' + waveId).value;
+                var mm_comments = document.getElementById('mm_comments' + waveId).value;
+                if (mm_brand == '' || mm_date == '' || mm_address == '' || mm_purpose == '' || mm_nextstep == '' || mm_agenda_of_the_meeting == '' || mm_clients_feedback == '' || mm_comments == '')
+        {
+        chk = 0;
+        }
+        }
+        else if (type == 'brand')
+        {
+        var fileBrand = document.getElementById('fileBrand' + waveId).value;
+                var material_name = document.getElementById('material_name' + waveId).value;
+                var mNoFileUploadId = document.getElementById('mNoFileUpload' + waveId);
+                if (material_name == '')
+        {
+        chk = 0;
+        }
 
-                                        if (fileBrand == '' && mNoFileUploadId.checked == false)
-                                        {
-                                        alert('Please either select file to upload or check "No file to upload".');
-                                                return false;
-                                        }
-                                        }
-                                        else if (type == "questionnaire")
-                                        {
-                                        var path = document.getElementById('path' + waveId).value;
-                                                var file1_label = document.getElementById('question_file1_label' + waveId).value;
-                                                var quesNoFileUploadId = document.getElementById('quesNoFileUpload' + waveId);
-                                                if (path == '' && quesNoFileUploadId.checked == false)
-                                        {
-                                        alert('Please either select file to upload or check "No file to upload".');
-                                                return false;
-                                        }
-                                        }
-                                        else if (type == 'pos_file')
-                                        {
-                                        var filePos = document.getElementById('pos_list_file' + waveId).value;
-                                                if (filePos == '')
-                                        {
-                                        chk = 0;
-                                        }
-                                        }
-                                        else if (type == 'brief')
-                                        {
-                                        var spePath = document.getElementById('spePath' + waveId).value;
-                                                var not_file_upload_spe = document.getElementById('not_file_upload_spe' + waveId);
-                                                if (material_name == '')
-                                        {
-                                        chk = 0;
-                                        }
+        if (fileBrand == '' && mNoFileUploadId.checked == false)
+        {
+        alert('Please either select file to upload or check "No file to upload".');
+                return false;
+        }
+        }
+        else if (type == "questionnaire")
+        {
+        var path = document.getElementById('path' + waveId).value;
+                var file1_label = document.getElementById('question_file1_label' + waveId).value;
+                var quesNoFileUploadId = document.getElementById('quesNoFileUpload' + waveId);
+                if (path == '' && quesNoFileUploadId.checked == false)
+        {
+        alert('Please either select file to upload or check "No file to upload".');
+                return false;
+        }
+        }
+        else if (type == 'pos_file')
+        {
+        var filePos = document.getElementById('pos_list_file' + waveId).value;
+                if (filePos == '')
+        {
+        chk = 0;
+        }
+        }
+        else if (type == 'brief')
+        {
+        var spePath = document.getElementById('spePath' + waveId).value;
+                var not_file_upload_spe = document.getElementById('not_file_upload_spe' + waveId);
+                if (material_name == '')
+        {
+        chk = 0;
+        }
 
-                                        if (spePath == '' && not_file_upload_spe.checked == false)
-                                        {
-                                        alert('Please either select file to upload or check "No file to upload".');
-                                                return false;
-                                        }
-                                        }
-                                        else if (type == 'report')
-                                        {
-                                        var report_file = document.getElementById('report_file' + waveId).value;
-                                                var report_nofileupload = document.getElementById('report_nofileupload' + waveId);
-                                                if (material_name == '')
-                                        {
-                                        chk = 0;
-                                        }
+        if (spePath == '' && not_file_upload_spe.checked == false)
+        {
+        alert('Please either select file to upload or check "No file to upload".');
+                return false;
+        }
+        }
+        else if (type == 'report')
+        {
+        var report_file = document.getElementById('report_file' + waveId).value;
+                var report_nofileupload = document.getElementById('report_nofileupload' + waveId);
+                if (material_name == '')
+        {
+        chk = 0;
+        }
 
-                                        if (report_file == '' && report_nofileupload.checked == false)
-                                        {
-                                        alert('Please either select file to upload or check "No file to upload".');
-                                                return false;
-                                        }
-                                        }
+        if (report_file == '' && report_nofileupload.checked == false)
+        {
+        alert('Please either select file to upload or check "No file to upload".');
+                return false;
+        }
+        }
 
-                                        if (chk == 0)
-                                        {
-                                        alert('Please fill all the required fields');
-                                                return false;
-                                        }
-                                        else
-                                                return true;
-                                        }
+        if (chk == 0)
+        {
+        alert('Please fill all the required fields');
+                return false;
+        }
+        else
+                return true;
+        }
     </script>
 {% endblock %}
