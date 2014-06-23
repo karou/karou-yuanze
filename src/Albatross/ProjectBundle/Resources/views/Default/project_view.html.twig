@@ -45,7 +45,7 @@
 							<div class="pull-left span6">
 								<div class="wave-content-list">
 									<label class="pull-left"><strong>Report KA:</strong></label>
-									<label>{{wave.user.fullname}}</label>
+                                                                        <label>{% if wave.user.id is defined %}{{wave.user.fullname}}{% else %}not set{% endif %}</label>
 								</div>
 								<div class="wave-content-list">
 									<label class="pull-left"><strong>Global PM:</strong></label>
