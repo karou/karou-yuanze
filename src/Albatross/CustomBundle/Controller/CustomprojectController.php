@@ -20,8 +20,11 @@ use Albatross\CustomBundle\Entity\Aolquestionnaire;
 use Albatross\AceBundle\Entity\IOFFile;
 use Albatross\AceBundle\Entity\IOFMessage;
 use Albatross\AceBundle\Entity\Attachinfo;
-//use Albatross\CustomBundle\Entity\KickOffMeetingRecap;
-//use Albatross\CustomBundle\Form\KickOffMeetingRecapType;
+use Albatross\CustomBundle\Entity\KickOffMeetingRecap;
+use Albatross\CustomBundle\Form\KickOffMeetingRecapType;
+use Albatross\CustomBundle\Entity\Invoice;
+use Albatross\CustomBundle\Form\InvoiceType;
+use Albatross\CustomBundle\Entity\TranslationFile;
 
 /**
  * Customproject controller.
@@ -42,15 +45,16 @@ class CustomprojectController extends Controller {
         $clientk = $this->getRequest()->get('clientk');
         $typek = $this->getRequest()->get('typek');
         $scopek = $this->getRequest()->get('scopek');
+        $aceNum = $this->getRequest()->get('ace_num_k');
         
-        $scopeNumArr = array('1' => 14, 
+        $scopeNumArr = array('1' => 14,
             '2' => 7, '3' => 11, '4' => 13,
-            '5' => 9,'6' => 10,'7' => 16,
-            '8' => 6,'9' => 4,'10' => 5,
-            '11' => 12,'12' => 3,'13' => 15,
-            '14' => 8,'15' => 1,'16' => 2);
+            '5' => 9, '6' => 10, '7' => 16,
+            '8' => 6, '9' => 4, '10' => 5,
+            '11' => 12, '12' => 3, '13' => 15,
+            '14' => 8, '15' => 1, '16' => 2);
 
-        if($secu->isGranted('ROLE_TYPE_CLIENT'))
+        if ($secu->isGranted('ROLE_TYPE_CLIENT'))
             $user_type = 1;
         else
             $user_type = 0;
@@ -59,15 +63,10 @@ class CustomprojectController extends Controller {
         $scope = $scopeAndTypeOption['scope'];
         $type = $scopeAndTypeOption['type'];
 
-        if($groupk == '' && $clientk == '' && $typek == '' && $scopek == ''){
-            $groupk = '';
-            $clientk = '';
-            $typek = '';
-            $scopek = '';
+        if ($groupk == '' && $clientk == '' && $typek == '' && $scopek == '' && $aceNum == '') {
             if ($user->getType() != 1) {
                 $entities = $em->getRepository('AlbatrossCustomBundle:Customproject')->findAll();
             } else {
-
                 $qb = $em->createQueryBuilder();
                 $qb->add('select', 'c')
                         ->add('from', 'AlbatrossCustomBundle:Customproject c')
@@ -80,7 +79,7 @@ class CustomprojectController extends Controller {
                 $query = $qb->getQuery();
                 $entities = $query->getResult();
             }
-        }else{
+        } else {
             $parameters = array();
             if ($user->getType() != 1) {
                 $qb = $em->createQueryBuilder();
@@ -97,7 +96,7 @@ class CustomprojectController extends Controller {
                         ->leftJoin('location.country', 'country')
                         ->leftJoin('country.bu', 'bu')
                         ->where('cc.id is not null');
-            }else{
+            } else {
                 $qb = $em->createQueryBuilder();
                 $qb->add('select', 'c')
                         ->add('from', 'AlbatrossCustomBundle:Customproject c')
@@ -107,36 +106,44 @@ class CustomprojectController extends Controller {
                     'uid' => $user->getId()
                 );
             }
-            if($groupk != ''){
+            if ($groupk != '') {
                 $qb->andWhere('cg.name LIKE :groupk');
             }
-            if($clientk != ''){
+            if ($clientk != '') {
                 $qb->andWhere('cc.name LIKE :clientk');
             }
-            if($typek != ''){
+            if ($typek != '') {
                 $qb->andWhere('c.type = :typek');
             }
-            if($scopek != ''){
-                if($scopek > 16){
+            if ($scopek != '') {
+                if ($scopek > 16) {
                     $qb->andWhere('c.scope = :scopek');
-                }else{
+                } else {
                     $qb->andWhere('c.scope = :scopek OR (bu.code = :bucode AND (c.scope = :bucode2 OR c.scope = 17 OR c.scope = 18 OR c.scope = 19)) OR (task.number > 100 AND task.number < 117 AND task.number = :tasknum)');
                 }
             }
-            if($groupk != ''){
-                $parameters = array_merge($parameters, array('groupk' => '%'.$groupk.'%'));
+            if ($aceNum != '') {
+                $qb->andWhere('task.number > 100 AND task.number < 117 AND task.projectnumber LIKE :acenum');
             }
-            if($clientk != ''){
-                $parameters = array_merge($parameters, array('clientk' => '%'.$clientk.'%'));
+            //==================================================================
+            if ($groupk != '') {
+                $parameters = array_merge($parameters, array('groupk' => '%' . $groupk . '%'));
             }
-            if($typek != ''){
+            if ($clientk != '') {
+                $parameters = array_merge($parameters, array('clientk' => '%' . $clientk . '%'));
+            }
+            if ($typek != '') {
                 $parameters = array_merge($parameters, array('typek' => $typek));
             }
-            if($scopek != ''){
-                if($scopek > 16)
+            if ($scopek != '') {
+                if ($scopek > 16) {
                     $parameters = array_merge($parameters, array('scopek' => $scopek));
-                else
+                } else {
                     $parameters = array_merge($parameters, array('scopek' => $scopek, 'bucode' => $scope[$scopek], 'bucode2' => $scopek, 'tasknum' => $scopeNumArr[$scopek] + 100));
+                }
+            }
+            if ($aceNum != '') {
+                $parameters = array_merge($parameters, array('acenum' => '%' . $aceNum . '%'));
             }
 
             $qb->setParameters($parameters);
@@ -151,39 +158,252 @@ class CustomprojectController extends Controller {
         $scopeOption = $this->getOption($scope);
         $typeOption = $this->getOption($type);
         return $this->render('AlbatrossCustomBundle:Customproject:index.html.twig', array(
-                    'entities' => $pagination,
-                    'current' => 'custom_project',
-                    'menu_bar' => 'custom',
-                    'menu_cal_cur' => 'project',
-                    'scope' => $scope,
-                    'type' => $type,
-                    'scopek' => $scopek,
-                    'typek' => $typek,
-                    'clientk' => $clientk,
-                    'groupk' => $groupk,
-                    'typeoption' => '<select id="typeselect" name="typek">'.$typeOption.'</select>',
-                    'scopeoption' => '<select id="scopeselect" name="scopek">'.$scopeOption.'</select>',
-                    'user_type' => $user_type
+                    'entities'      => $pagination,
+                    'current'       => 'custom_project',
+                    'menu_bar'      => 'custom',
+                    'menu_cal_cur'  => 'project',
+                    'scope'         => $scope,
+                    'type'          => $type,
+                    'scopek'        => $scopek,
+                    'typek'         => $typek,
+                    'clientk'       => $clientk,
+                    'groupk'        => $groupk,
+                    'typeoption'    => '<select id="typeselect" name="typek">' . $typeOption . '</select>',
+                    'scopeoption'   => '<select id="scopeselect" name="scopek">' . $scopeOption . '</select>',
+                    'user_type'     => $user_type
         ));
     }
 
-//    public function meetingRecapAction($projName){
-//        $form = $this->createForm(new KickOffMeetingRecapType());
-//        
-//        $render = 'AlbatrossCustomBundle:Customproject:kickOffMeetingRecap.html.twig';
-//        return $this->render($render, array(
-//                    'meetingRecapForm' => $form->createView(),
-//                    'projname' => $projName
-//        ));
-//    }
+    public function foroneTimeToLastStartAction() {
+        $em = $this->getDoctrine()->getManager();
 
-    protected function getOption($data){
-        $result = '<option value=""></option>';
-        foreach($data as $key => $d){
-            $result .= '<option value="'.$key.'">'.$d.'</option>';
+        $projArr    = $em->getRepository('AlbatrossCustomBundle:CustomProject')->findAll();
+        $allArr     = array();
+        $hasFileArr = array();
+
+        foreach ($projArr as $proj) {
+            $waveArr = $proj->getCustomwave()->toArray();
+            foreach ($waveArr as $wave) {
+                $attach     = $wave->getAttachments();
+                $field      = $wave->getCustomfield()->toArray();
+                $invoice    = $wave->getInvoice();
+                if (!empty($attach) || !empty($field) || !empty($invoice)) {
+                    $hasFileArr[$proj->getId()][] = $wave;
+                }
+                $allArr[$proj->getId()][] = $wave;
+            }
         }
-        return $result.'</select>';
+        $lastWaveArr = array();
+        foreach ($allArr as $key => $all) {
+            if (!empty($hasFileArr[$key])) {
+                $checkBiggestNum = array('num' => 0, 'year' => 0, 'month' => 0);
+                foreach ($hasFileArr[$key] as $k => $waveHasFile) {
+                    if (($waveHasFile->getYear() > $checkBiggestNum['year']) ||
+                            ( ($waveHasFile->getYear() == $checkBiggestNum['year']) && ($waveHasFile->getMonth() > $checkBiggestNum['month']) ) ||
+                            ( ($waveHasFile->getYear() == $checkBiggestNum['year']) && ($waveHasFile->getMonth() == $checkBiggestNum['month']) && ($waveHasFile->getWavenum() > $checkBiggestNum['num']) )) {
+                        $checkBiggestNum['num']     = $waveHasFile->getWavenum();
+                        $checkBiggestNum['year']    = $waveHasFile->getYear();
+                        $checkBiggestNum['month']   = $waveHasFile->getMonth();
+                        $lastWaveArr[$key]          = $waveHasFile;
+                    }
+                }
+            }
+        }
+        foreach ($lastWaveArr as $k => $waveHaveToSave) {
+            $waveHaveToSave->setLastStart(1);
+            $em->persist($waveHaveToSave);
+        }
+
+        $em->flush();
+        var_dump('all done');
+        exit();
     }
+
+    //invoice part//////////////////////////////////////////////////////////////
+    public function invoiceAction() {
+        $form = $this->createForm(new InvoiceType());
+
+        $render = 'AlbatrossCustomBundle:Customproject:invoice.html.twig';
+        return $this->render($render, array(
+            'invoiceForm' => $form->createView()
+        ));
+    }
+    
+    public function createInvoiceAction(Request $request, $wid, $type) {
+        $entity = new Invoice();
+        $form = $this->createForm(new InvoiceType(), $entity);
+        $form->bind($request);
+        $em = $this->getDoctrine()->getManager();
+        $waveEntity = $em->getRepository('AlbatrossCustomBundle:Customwave')->find($wid);
+
+        //if type 1 deposit, type 2 balance
+        $typeArr = array('Deposit' => 1, 'Balance' => 2);
+
+        if ($form->isValid()) {
+            $this->checkLastKaWave($waveEntity);
+            $content = $entity->getFile();
+            $filename = $content->getClientOriginalName();
+            $entity->setCustomwave($waveEntity);
+            $date = date('ymd');
+            $path = 'Invoice/' . $date . '/' . $entity->getCustomwave()->getName() . '/' . $type . '/' . $filename;
+            $dir = $this->get('kernel')->getRootDir() . '/../web/Invoice/' . $date . '/' . $entity->getCustomwave()->getName() . '/' . $type . '/';
+            $content->move($dir, $filename);
+            $entity->setInvoiceType($typeArr[$type]);
+            $entity->setPath($path);
+            $em->persist($entity);
+            $em->flush();
+
+            if (is_object($entity->getCustomwave()->getProjectManager()) && !($to = $entity->getCustomwave()->getProjectManager()->getEmail()))
+                $to = "dbentouhami@albatross.fr";
+            if (is_object($entity->getProjectManager()) && !($toCc = $entity->getProjectManager()->getEmail()))
+                $toCc = "dbentouhami@albatross.fr";
+            $message = \Swift_Message::newInstance()
+                    ->setSubject('New Invoice Uploaded')
+                    ->setFrom('noreply@albatrossasia.com')
+                    ->setTo($to)
+                    ->setCc($toCc)
+                    ->setBcc("dbentouhami@albatross.fr")
+                    ->setBody(
+                        $this->renderView(
+                                'AlbatrossCustomBundle:Email:invoice.html.twig', array('invoice' => $entity)
+                            )
+                    )
+            ;
+            $this->get('mailer')->send($message);
+        }
+
+        $referer = $this->getRequest()->headers->get('referer');
+        return $this->redirect($referer);
+    }
+
+    protected function getInvoiceList($waves) {
+        $result = array();
+        foreach ($waves as $wave) {
+            $invoices = $wave->getInvoice()->toArray();
+            if (!empty($invoices)) {
+                foreach ($invoices as $invoice) {
+                    if(is_object($invoice->getBu())){
+                        $buCode = $invoice->getBu()->getCode();
+                    }else{
+                        $buCode = '';
+                    }
+                    if ($invoice->getInvoiceType() == 1) {
+                        if (!isset($result[$wave->getId()]['deposit']))
+                            $result[$wave->getId()]['deposit'] = '<ul class="invoice-list-ul">';
+                        $result[$wave->getId()]['deposit'] .= '<li onclick="showInvoiceInfo(\'' . $invoice->getId() . '\')">' . $invoice->getLabel() .' '. $buCode . '</li>';
+                    }else if ($invoice->getInvoiceType() == 2) {
+                        if (!isset($result[$wave->getId()]['balance']))
+                            $result[$wave->getId()]['balance'] = '<ul class="invoice-list-ul">';
+                        $result[$wave->getId()]['balance'] .= '<li onclick="showInvoiceInfo(\'' . $invoice->getId() . '\')">' . $invoice->getLabel() .' '. $buCode . '</li>';
+                    }
+                }
+            }
+        }
+        return $result;
+    }
+
+    public function showInvoiceInfoAction($invoiceid) {
+        $em = $this->getDoctrine()->getManager();
+        $request = $this->getRequest();
+        $invoiceEntity = $em->getRepository('AlbatrossCustomBundle:Invoice')->find($invoiceid);
+        $typeArr = array(1 => 'Deposit Invoice', 2 => 'Balance Invoice');
+        $result = '<table id="invoice-info-table"><tr><th colspan="2">' . $typeArr[$invoiceEntity->getInvoiceType()] . '</th></tr>';
+        $result .= '<tr><th>Label</th><td>' . $invoiceEntity->getLabel() . '</td></tr>';
+        $result .= '<tr><th>Download</th><td><form action="' . $request->getBaseUrl() . '/Customproject/downloadInvoiceFile/' . $invoiceid . '"><input type="submit" value="Download" /></td></tr>';
+        $result .= '<tr><th>Invoice Number</th><td>' . $invoiceEntity->getNumber() . '</td></tr>';
+        $result .= '<tr><th>Description</th><td>' . $invoiceEntity->getDescription() . '</td></tr>';
+        if($invoiceEntity->getRegional() && is_object($invoiceEntity->getBu())){
+            $result .= '<tr><th>is it a local invoice for a regional program ?</th><td>yes</td></tr>';
+            $result .= '<tr><th>BU</th><td>' . $invoiceEntity->getBu()->getName() . '</td></tr>';
+            $result .= '<tr><th>Project Manager</th><td>' . $invoiceEntity->getProjectmanager()->getFullname() . '</td></tr>';
+        }else{
+            $result .= '<tr><th>is it a local invoice for a regional program ?</th><td>no</td></tr>';
+        }
+        $result .= '<tr><th colspan="2"><input type="button" value="close" onclick="closeInvoiceInfo();"></th></tr>';
+        $result .= '</table>';
+
+        return new Response($result);
+    }
+
+    //end invoice part//////////////////////////////////////////////////////////
+    //kick off meeting part/////////////////////////////////////////////////////
+    public function meetingRecapAction() {
+        $form = $this->createForm(new KickOffMeetingRecapType());
+
+        $render = 'AlbatrossCustomBundle:Customproject:kickOffMeetingRecap.html.twig';
+        return $this->render($render, array(
+                    'meetingRecapForm' => $form->createView()
+        ));
+    }
+
+    public function CreateUpdateKickOffMeetingAction(Request $request, $wid) {
+
+        $entity = new KickOffMeetingRecap();
+        $form = $this->createForm(new KickOffMeetingRecapType(), $entity);
+        $form->bind($request);
+        $em = $this->getDoctrine()->getManager();
+        $waveEntity = $em->getRepository('AlbatrossCustomBundle:Customwave')->find($wid);
+
+        if ($form->isValid()) {
+            $entity->setCustomwave($waveEntity);
+            $em->persist($entity);
+            $em->flush();
+        }
+
+        $referer = $this->getRequest()->headers->get('referer');
+        return $this->redirect($referer);
+    }
+
+    public function createUpdateKickOffMeetingInfoAction($wid) {
+        $em = $this->getDoctrine()->getManager();
+        $waveEntity = $em->getRepository('AlbatrossCustomBundle:Customwave')->find($wid);
+        $KickOffMeetingEntity = $waveEntity->getMeetingRecap();
+        $result = '<table><tr><th colspan="2">Kick-Off Meeting Recap
+                <span id="close_button" style=" position: absolute; right:0;" onclick="closeKickOff();" title="close">
+                <img width="20px" height="20px" style="margin-right: 5px;" src="/images/close.png">
+                </span></th></tr>' .
+                '<tr><td class="kick-off-title">Wave Name: </td><td>' . $waveEntity->getName() . '</td></tr>' .
+                '<tr><td>PM attendee</td><td>' . $KickOffMeetingEntity->getPmAttendee() . '</td></tr>' .
+                '<tr><td>OP attendee</td><td>' . $KickOffMeetingEntity->getOpAttendee() . '</td></tr>' .
+                '<tr><td>VA attendee</td><td>' . $KickOffMeetingEntity->getVaAttendee() . '</td></tr>' .
+                '<tr><td>QC attendee</td><td>' . $KickOffMeetingEntity->getQcAttendee() . '</td></tr>' .
+                '<tr><td>Report attendee</td><td>' . $KickOffMeetingEntity->getReportAttendee() . '</td></tr>' .
+                '<tr><td>Brand Positioning, Products categories</td><td>'
+                . $KickOffMeetingEntity->getText1() . '</td></tr>' .
+                '<tr><td>What are the objectives of this Store Evaluation Program?</td><td>'
+                . $KickOffMeetingEntity->getText2() . '</td></tr>' .
+                '<tr><td>Key points to pay attention for the report</td><td>'
+                . $KickOffMeetingEntity->getText3() . '</td></tr>' .
+                '<tr><td>Timeline</td><td>'
+                . $KickOffMeetingEntity->getText4() . '</td></tr>' .
+                '<tr><td>Scenario/key points for OP surveys screening</td><td>'
+                . $KickOffMeetingEntity->getText5() . '</td></tr>' .
+                '<tr><td>Key points for the SPE profile and recruitment</td><td>'
+                . $KickOffMeetingEntity->getText6() . '</td></tr>' .
+                '<tr><td>Training methods</td><td>'
+                . $KickOffMeetingEntity->getText7() . '</td></tr>' .
+                '<tr><td>Payrate and flexibility/Bonus</td><td>'
+                . $KickOffMeetingEntity->getText8() . '</td></tr>' .
+                '<tr><td>Key points for the SPE Briefing</td><td>'
+                . $KickOffMeetingEntity->getText9() . '</td></tr>' .
+                '<tr><td>Debrief of the pilot visit/Go through the Questionnaire</td><td>'
+                . $KickOffMeetingEntity->getText10() . '</td></tr>' .
+                '<tr><td>Key points for editing/QC</td><td>'
+                . $KickOffMeetingEntity->getText11() . '</td></tr>' .
+                '<tr><td>Specific requirements: misfires records, proof of visit…</td><td>'
+                . $KickOffMeetingEntity->getText12() . '</td></tr></table>';
+        return new Response($result);
+    }
+
+    //end kick off meeting part/////////////////////////////////////////////////
+    protected function getOption($data) {
+        $result = '<option value=""></option>';
+        foreach ($data as $key => $d) {
+            $result .= '<option value="' . $key . '">' . $d . '</option>';
+        }
+        return $result . '</select>';
+    }
+
     /**
      * Creates a new Customproject entity.
      *
@@ -234,7 +454,8 @@ class CustomprojectController extends Controller {
      */
     public function showAction($id) {
         $em = $this->getDoctrine()->getManager();
-
+        $secu = $this->container->get('security.context');
+        $user = $secu->getToken()->getUser();
         $entity = $em->getRepository('AlbatrossCustomBundle:Customproject')->find($id);
 
         if (!$entity) {
@@ -249,19 +470,23 @@ class CustomprojectController extends Controller {
         $recapform = $this->createForm(new RecapType());
         $waves = $entity->getCustomwave()->toArray();
 
+        if (!empty($waves))
+            $invoiceEntity = $this->getInvoiceList($waves);
+        else
+            $invoiceEntity = array();
         $wavesname = array();
         $lastIOF = array();
-        foreach($waves as $w){
+        foreach ($waves as $w) {
             $pending = $w->getName();
             $pendingArr = explode('_', $pending);
             $wavesname[$w->getId()][0] = str_replace('w', 'Wave ', $pendingArr[3]);
             $wavesname[$w->getId()][1] = $pendingArr[4];
-            if($w->getAttachments() != null){
-                if($w->getAttachments()->getChildren()){
+            if ($w->getAttachments() != null) {
+                if ($w->getAttachments()->getChildren()) {
                     $iofID_entity = $this->getLastIOF($w->getAttachments(), $em);
                     $lastIOF[$w->getId()]['id'] = $iofID_entity->getId();
                     $lastIOF[$w->getId()]['status'] = $iofID_entity->getStatus();
-                }else{
+                } else {
                     $lastIOF[$w->getId()]['id'] = $w->getAttachments()->getId();
                     $lastIOF[$w->getId()]['status'] = $w->getAttachments()->getStatus();
                 }
@@ -269,18 +494,18 @@ class CustomprojectController extends Controller {
         }
         $waveNameList = '<table id="waveList"><tr><th colspan="2" style="font-style:italic; font-weight: bold; padding-left:7px; text-align:left;">Quick link:</th></tr>';
         $waveIndex = 1;
-        foreach($wavesname as $key => $wn){
-            $waveNameList .= '<tr><th>'.$waveIndex.':</th><td><a href="#'.$key.'-table">'.$wn[0].'-'.$wn[1].'</a></td></tr>';
+        foreach ($wavesname as $key => $wn) {
+            $waveNameList .= '<tr><th>' . $waveIndex . ':</th><td><a href="#' . $key . '-table">' . $wn[0] . '-' . $wn[1] . '</a></td></tr>';
             $waveIndex++;
         }
         $waveNameList .= '</table>';
         $projectNamePending = $entity->getName();
         $projectName = str_replace('_', ' ', $projectNamePending);
-        if(!empty($waves)){
+        if (!empty($waves)) {
             $operation = $this->getProjectOperation($waves);
             $operation_2 = $this->getProjectOperation2($waves);
             $operationInformation = $this->combineTwoArr($operation, $operation_2);
-        }else{
+        } else {
             $operationInformation = '';
         }
         return $this->render('AlbatrossCustomBundle:Customproject:show.html.twig', array(
@@ -297,64 +522,68 @@ class CustomprojectController extends Controller {
                     'projectName' => $projectName,
                     'operation' => $operationInformation,
                     'lastIOF' => $lastIOF,
-                    'waveNameList' => $waveNameList
+                    'waveNameList' => $waveNameList,
+                    'user' => $user,
+                    'invoiceEntity' => $invoiceEntity
         ));
     }
 
-    protected function getLastIOF($entity, $em){
-        if($child = $em->getRepository('AlbatrossAceBundle:Attachments')->findLastOneByParentID($entity->getId())){
+    protected function getLastIOF($entity, $em) {
+        if ($child = $em->getRepository('AlbatrossAceBundle:Attachments')->findLastOneByParentID($entity->getId())) {
             $entity = $this->getLastIOF($child, $em);
         }
         return $entity;
     }
-    protected function combineTwoArr($operation, $operation_2){
+
+    protected function combineTwoArr($operation, $operation_2) {
         $result = array();
         $buArr = array();
-        foreach($operation as $waveId => $projectinfo){
-            foreach($projectinfo as $buname => $pi){
+        foreach ($operation as $waveId => $projectinfo) {
+            foreach ($projectinfo as $buname => $pi) {
                 $buArr[$waveId][] = $buname;
             }
         }
-        foreach($operation_2 as $waveId2 => $aolinfo){
-            foreach($aolinfo as $bname2 => $ai){
+        foreach ($operation_2 as $waveId2 => $aolinfo) {
+            foreach ($aolinfo as $bname2 => $ai) {
                 $buArr[$waveId2][] = $bname2;
             }
         }
-        
-        foreach($buArr as $wid => $bu){
+
+        foreach ($buArr as $wid => $bu) {
             $buArr[$wid] = array_unique($bu);
         }
-        
-        foreach($buArr as $wid => $bu){
-            foreach($bu as $buname){
-                if(isset($operation[$wid][$buname])){
+
+        foreach ($buArr as $wid => $bu) {
+            foreach ($bu as $buname) {
+                if (isset($operation[$wid][$buname])) {
                     $result[$wid][$buname]['ace'] = $operation[$wid][$buname];
-                }else{
+                } else {
                     $result[$wid][$buname]['ace'] = '';
                 }
-                if(isset($operation_2[$wid][$buname])){
+                if (isset($operation_2[$wid][$buname])) {
                     $result[$wid][$buname]['aol'] = $operation_2[$wid][$buname];
-                }else{
+                } else {
                     $result[$wid][$buname]['aol'] = '';
                 }
             }
         }
         return $result;
     }
+
     //check the operations if belong to this customproject bu
-    protected function getCustomprojectBuByWave($waves){
+    protected function getCustomprojectBuByWave($waves) {
         $em = $this->getDoctrine()->getManager();
-        
-        foreach($waves as $wave){
-            if($projecName = $wave->getCustomproject()->getName())
-                    break;
+
+        foreach ($waves as $wave) {
+            if ($projecName = $wave->getCustomproject()->getName())
+                break;
         }
-        
+
         $pNameArr = explode('_', $projecName);
         $bu = $pNameArr[2];
         $notCheckArr = array('WW', 'APAC', 'EU');
-        if(in_array($bu,$notCheckArr))
-                return '';
+        if (in_array($bu, $notCheckArr))
+            return '';
         $buEntity = $em->getRepository('AlbatrossAceBundle:Bu')->findOneByCode($bu);
         $buName = $buEntity->getName();
         return $buName;
@@ -365,20 +594,20 @@ class CustomprojectController extends Controller {
         $em = $this->getDoctrine()->getManager();
         $filterBu = $this->getCustomprojectBuByWave($waves);
         $waveArr = array();
-        foreach( $waves as $wave ){
+        foreach ($waves as $wave) {
             $waveArr[] = $wave->getId();
         }
         $qb = $em->createQueryBuilder();
-        $qb->select('p','t', 'w')
+        $qb->select('p', 't', 'w')
                 ->from('AlbatrossAceBundle:Project', 'p')
                 ->leftJoin('p.tasks', 't')
                 ->leftJoin('p.customwave', 'w');
         $temp = 1;
-        foreach($waveArr as $w){
-            if($temp == 1){
+        foreach ($waveArr as $w) {
+            if ($temp == 1) {
                 $qb->andWhere(sprintf('w.id=:key_%d', $temp))
                         ->setParameter('key_' . $temp, $w);
-            }else{
+            } else {
                 $qb->orWhere(sprintf('w.id=:key_%d', $temp))
                         ->setParameter('key_' . $temp, $w);
             }
@@ -393,17 +622,17 @@ class CustomprojectController extends Controller {
         $taskBuProjectArr = array();
         $taskPrjNameDuedate = array();
         $taskResultIndex = 0;
-        foreach( $taskResult as $r ){
-            foreach($r['tasks'] as $task){
-                if($task['number'] > 100 && $task['number'] < 117){
+        foreach ($taskResult as $r) {
+            foreach ($r['tasks'] as $task) {
+                if ($task['number'] > 100 && $task['number'] < 117) {
                     $taskArr[] = $task['id'];
-                    $taskBuProjectArr[$taskResultIndex]['bu'] = $task['number'] - 100 ;
-                    $taskBuProjectArr[$taskResultIndex]['project'] = $r['id'] ;
+                    $taskBuProjectArr[$taskResultIndex]['bu'] = $task['number'] - 100;
+                    $taskBuProjectArr[$taskResultIndex]['project'] = $r['id'];
                 }
-                if($task['number'] == 500){
+                if ($task['number'] == 600) {
                     $taskPrjNameDuedate[$r['name']] = $task['reportduedate'];
                 }
-                if(!isset($taskPrjNameDuedate[$r['name']])){
+                if (!isset($taskPrjNameDuedate[$r['name']])) {
                     $taskPrjNameDuedate[$r['name']] = '';
                 }
             }
@@ -416,11 +645,11 @@ class CustomprojectController extends Controller {
                 ->leftJoin('pm.task', 't')
                 ->leftJoin('t.project', 'p');
         $index = 1;
-        foreach($taskArr as $t){
-            if($index == 1){
+        foreach ($taskArr as $t) {
+            if ($index == 1) {
                 $pm_qb->andWhere(sprintf('t.id=:key_%d', $index))
                         ->setParameter('key_' . $index, $t);
-            }else{
+            } else {
                 $pm_qb->orWhere(sprintf('t.id=:key_%d', $index))
                         ->setParameter('key_' . $index, $t);
             }
@@ -429,7 +658,7 @@ class CustomprojectController extends Controller {
         $pm_query = $pm_qb->getQuery();
         $pmResult = $pm_query->getArrayResult();
         $pmFinalResult = array();
-        foreach($pmResult as $p){
+        foreach ($pmResult as $p) {
             $pmFinalResult[$p['task']['id']]['project'] = $p['task']['project']['name'];
             $pmFinalResult[$p['task']['id']]['bu'] = $buArr[$p['task']['number'] - 100];
             $pmFinalResult[$p['task']['id']]['scope'] = $p['scope'];
@@ -446,13 +675,13 @@ class CustomprojectController extends Controller {
                 ->leftJoin('iof.attachments', 'a')
                 ->leftJoin('a.customwave', 'cw')
                 ->where('a.children = 0')
-                ;
+        ;
         $seq = 1;
-        foreach($waveArr as $w) {
-            if($seq == 1){
+        foreach ($waveArr as $w) {
+            if ($seq == 1) {
                 $iof_qb->andWhere(sprintf('cw.id= :key_%d', $seq))
                         ->setParameter('key_' . $seq, $w);
-            }else{
+            } else {
                 $iof_qb->orWhere(sprintf('cw.id= :key_%d', $seq))
                         ->setParameter('key_' . $seq, $w);
             }
@@ -464,38 +693,38 @@ class CustomprojectController extends Controller {
         //make final result ====================================================
         //
         $result = array();
-        foreach( $taskResult as $tr ){
-            foreach($tr['tasks'] as $t){
-                if($t['number'] > 100 && $t['number'] < 117){
-                    $result[$buArr[$t['number']-100]]
+        foreach ($taskResult as $tr) {
+            foreach ($tr['tasks'] as $t) {
+                if ($t['number'] > 100 && $t['number'] < 117) {
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['fwstartdate'] = $t['fwstartdate'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['fwenddate'] = $t['fwenddate'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['step'] = 'ACE';
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['scope'] = $t['scope'] ? $t['scope'] : 0;
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['number'] = $t['projectnumber'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['reportduedate'] = $taskPrjNameDuedate[$tr['name']];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['waveid'] = $tr['customwave']['id'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['wavename'] = $tr['customwave']['name'];
                 }
             }
         }
-        foreach($pmFinalResult as $pm){
-            if(isset($result[$pm['bu']]) && isset($result[$pm['bu']][$pm['project']])){
+        foreach ($pmFinalResult as $pm) {
+            if (isset($result[$pm['bu']]) && isset($result[$pm['bu']][$pm['project']])) {
                 $result[$pm['bu']][$pm['project']]['fwstartdate'] = $pm['fwstartdate'];
                 $result[$pm['bu']][$pm['project']]['fwenddate'] = $pm['fwenddate'];
                 $result[$pm['bu']][$pm['project']]['scope'] = $pm['scope'];
@@ -504,9 +733,9 @@ class CustomprojectController extends Controller {
             }
         }
 
-        foreach($iof_result as $iof){
-            if(isset($result[$iof['bu']['name']]
-                    [$iof['project']['name']])){
+        foreach ($iof_result as $iof) {
+            if (isset($result[$iof['bu']['name']]
+                            [$iof['project']['name']])) {
                 $result[$iof['bu']['name']]
                         [$iof['project']['name']]
                         ['fwstartdate'] = $iof['fwstartdate']->format('Y-m-d');
@@ -519,11 +748,11 @@ class CustomprojectController extends Controller {
                 $result[$iof['bu']['name']]
                         [$iof['project']['name']]
                         ['scope'] = $iof['scope'];
-                if(!$iof['reporttype']){
+                if (!$iof['reporttype']) {
                     $result[$iof['bu']['name']]
                             [$iof['project']['name']]
                             ['reportduedate'] = $iof['reportduedate']->format('Y-m-d');
-                }else if($iof['reporttype']){
+                } else if ($iof['reporttype']) {
                     $result[$iof['bu']['name']]
                             [$iof['project']['name']]
                             ['reportduedate'] = $iof['reportduedatetext'];
@@ -531,14 +760,14 @@ class CustomprojectController extends Controller {
             }
         }
         $final = array();
-        foreach($result as $k => $r){
-            if($filterBu == '' || $filterBu == $k){
-                foreach($r as $pname => $info){
-                    if(isset($info['waveid'])){
-                        if($info['number'] != ''){
+        foreach ($result as $k => $r) {
+            if ($filterBu == '' || $filterBu == $k) {
+                foreach ($r as $pname => $info) {
+                    if (isset($info['waveid'])) {
+                        if ($info['number'] != '') {
                             $final[$info['waveid']][$k][$pname] = $info;
                         }
-                    }else{
+                    } else {
                         $final = array();
                     }
                 }
@@ -551,12 +780,12 @@ class CustomprojectController extends Controller {
         $campaign = array();
         $final = array();
         $filterBu = $this->getCustomprojectBuByWave($waves);
-        foreach( $waves as $wave ){
+        foreach ($waves as $wave) {
             $campaign[$wave->getId()] = $wave->getCampaign()->toArray();
         }
         $status_Total = array(
-            'Declined', 
-            'Open Opportunities - No Applications', 
+            'Declined',
+            'Open Opportunities - No Applications',
             'Open Opportunities - With Applications');
         $status_Assigned = array(
             'Assigned - Completed not yet submitted',
@@ -576,56 +805,55 @@ class CustomprojectController extends Controller {
             'Hide from Reports; Hide from Client Survey Explorer',
             'Hide from Reports; OK for Client Survey Explorer',
             'Completed - Export Failed');
-        foreach($campaign as $waveid => $waveC){
-            foreach($waveC as $obj){
+        foreach ($campaign as $waveid => $waveC) {
+            foreach ($waveC as $obj) {
                 $survey = $obj->getAolsurvey()->toArray();
 
-                foreach($survey as $surveykey => $s){
-                    if(!is_object($s->getLocation()->getCountry())){
+                foreach ($survey as $surveykey => $s) {
+                    if (!is_object($s->getLocation()->getCountry())) {
                         var_dump($s->getLocation()->getLocCountryCode());
                         exit();
                     }
-                    if($s->getMailboxName() != 'mdelete' && $s->getMailboxName() != 'invalidsurvey'){
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']))
+                    if ($s->getMailboxName() != 'mdelete' && $s->getMailboxName() != 'invalidsurvey') {
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'] = 0;
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']))
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign'] = 0;
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']))
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone'] = 0;
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation']))
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation'] = 0;
-                        if (in_array($s->getSurveyStatusName(), $statusValidation)){
+                        if (in_array($s->getSurveyStatusName(), $statusValidation)) {
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation']++;
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']++;
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']++;
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
-                        } else if (in_array($s->getSurveyStatusName(), $statusFWdone)){
+                        } else if (in_array($s->getSurveyStatusName(), $statusFWdone)) {
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']++;
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']++;
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
-                        } else if (in_array($s->getSurveyStatusName(), $status_Assigned)){
+                        } else if (in_array($s->getSurveyStatusName(), $status_Assigned)) {
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']++;
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
-                        } else if (in_array($s->getSurveyStatusName(), $status_Total)){
+                        } else if (in_array($s->getSurveyStatusName(), $status_Total)) {
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
                         }
                         $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['aolname'][] = $obj->getQuestionnaire()->getName();
                         $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['campaign'][] = $obj->getName();
                         $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['num'] = $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'];
                     }
-                    
                 }
             }
         }
-        foreach($final as $key => $f){
-            foreach($f as $k => $unique){
-                if($filterBu == '' || $filterBu == $k){
+        foreach ($final as $key => $f) {
+            foreach ($f as $k => $unique) {
+                if ($filterBu == '' || $filterBu == $k) {
                     $final[$key][$k]['aolname'] = array_unique($unique['aolname']);
                     $final[$key][$k]['campaign'] = array_unique($unique['campaign']);
-                    $final[$key][$k]['assignPercent'] = floor(($unique['assign']/$unique['total'])*100).'% ('.$unique['assign'].')';
-                    $final[$key][$k]['fwdonePercent'] = floor(($unique['fwdone']/$unique['total'])*100).'% ('.$unique['fwdone'].')';
-                    $final[$key][$k]['validationPercent'] = floor(($unique['validation']/$unique['total'])*100).'% ('.$unique['validation'].')';
-                }else{
+                    $final[$key][$k]['assignPercent'] = floor(($unique['assign'] / $unique['total']) * 100) . '% (' . $unique['assign'] . ')';
+                    $final[$key][$k]['fwdonePercent'] = floor(($unique['fwdone'] / $unique['total']) * 100) . '% (' . $unique['fwdone'] . ')';
+                    $final[$key][$k]['validationPercent'] = floor(($unique['validation'] / $unique['total']) * 100) . '% (' . $unique['validation'] . ')';
+                } else {
                     unset($final[$key][$k]);
                 }
             }
@@ -633,32 +861,32 @@ class CustomprojectController extends Controller {
         return $final;
     }
 
-    public function recapGetAolquestionnaireAction(){
+    public function recapGetAolquestionnaireAction() {
         $em = $this->getDoctrine()->getManager();
         $data = $this->getRequest()->getContent();
         //set Aol Questionnaire selection
         $aolqb = $em->createQueryBuilder();
         $aolqb->select('a')
-                ->from('AlbatrossCustomBundle:Aolquestionnaire','a')
+                ->from('AlbatrossCustomBundle:Aolquestionnaire', 'a')
                 ->leftJoin('a.customfield', 'cf')
                 ->leftJoin('cf.customwave', 'cw')
                 ->where('cw.id = :cwid');
         $aolqb->setParameters(array(
             'cwid' => $data,
-            ));
+        ));
         $aolquery = $aolqb->getQuery();
         $aolEntitys = $aolquery->getArrayResult();
         $result = '<table style="border-collapse: collapse;">';
         $index = 0;
-        if(empty($aolEntitys)){
+        if (empty($aolEntitys)) {
             $result = 'No aol questionnaire.';
         } else {
-            foreach ($aolEntitys as $aol){
+            foreach ($aolEntitys as $aol) {
                 $index++;
-                if( $index%3 == 0 )
-                    $result .= '<td><input type="checkbox" class="recap_form_input" name="aolquestionnaire[]" value="'.$aol['id'].'">'.$aol['name'].'</td></tr><tr>';
+                if ($index % 3 == 0)
+                    $result .= '<td><input type="checkbox" class="recap_form_input" name="aolquestionnaire[]" value="' . $aol['id'] . '">' . $aol['name'] . '</td></tr><tr>';
                 else
-                    $result .= '<td><input type="checkbox" class="recap_form_input" name="aolquestionnaire[]" value="'.$aol['id'].'">'.$aol['name'].'</td>';
+                    $result .= '<td><input type="checkbox" class="recap_form_input" name="aolquestionnaire[]" value="' . $aol['id'] . '">' . $aol['name'] . '</td>';
             }
         }
 
@@ -666,49 +894,49 @@ class CustomprojectController extends Controller {
     }
 
     //get Country from updated poslist country
-    public function recapGetCountryAction(){
+    public function recapGetCountryAction() {
         $data = $this->getRequest()->getContent();
         $poslistdataEntities = $this->getAllPosCountry($data);
-                
+
         $selectedCountry = $this->getRecapSeletedCountry($data);
 
         $result = '<table style="border-collapse: collapse;">';
         $countryArr = array();
         $index = 0;
-        if(!empty($poslistdataEntities)){
-            foreach($poslistdataEntities as $c) {
+        if (!empty($poslistdataEntities)) {
+            foreach ($poslistdataEntities as $c) {
                 $countryArr[$c->getCountry()->getId()] = $c->getCountry()->getName();
             }
-            foreach($countryArr as $k => $c){
+            foreach ($countryArr as $k => $c) {
                 $index++;
-                if(isset($selectedCountry[$k])){
-                    if( $index%3 == 0 )
-                        $result .= '<td><input type="checkbox" disabled="disabled" class="recap_form_input" name="recapcountry[]" value="'.$k.'"><font color="gray">'.$c.'</font></td></tr><tr>';
+                if (isset($selectedCountry[$k])) {
+                    if ($index % 3 == 0)
+                        $result .= '<td><input type="checkbox" disabled="disabled" class="recap_form_input" name="recapcountry[]" value="' . $k . '"><font color="gray">' . $c . '</font></td></tr><tr>';
                     else
-                        $result .= '<td><input type="checkbox" disabled="disabled" class="recap_form_input" name="recapcountry[]" value="'.$k.'"><font color="gray">'.$c.'</font></td>';
-                }else{
-                    if( $index%3 == 0 )
-                        $result .= '<td><input type="checkbox" class="recap_form_input" name="recapcountry[]" value="'.$k.'">'.$c.'</td></tr>';
+                        $result .= '<td><input type="checkbox" disabled="disabled" class="recap_form_input" name="recapcountry[]" value="' . $k . '"><font color="gray">' . $c . '</font></td>';
+                }else {
+                    if ($index % 3 == 0)
+                        $result .= '<td><input type="checkbox" class="recap_form_input" name="recapcountry[]" value="' . $k . '">' . $c . '</td></tr>';
                     else
-                        $result .= '<td><input type="checkbox" class="recap_form_input" name="recapcountry[]" value="'.$k.'">'.$c.'</td>';
+                        $result .= '<td><input type="checkbox" class="recap_form_input" name="recapcountry[]" value="' . $k . '">' . $c . '</td>';
                 }
             }
-            if( $index%3 == 0 ){
+            if ($index % 3 == 0) {
                 rtrim($result, '<tr>');
                 $result .= '</table>';
-            }else if( $index%2 == 0 && $index%3 != 0 ){
+            } else if ($index % 2 == 0 && $index % 3 != 0) {
                 $result .= '<td></td></tr></table>';
-            }else{
+            } else {
                 $result .= '<td></td><td></td></tr></table>';
             }
-        }else{
+        } else {
             $result = 'No country info from POS list.';
         }
 
         return new Response($result);
     }
 
-    protected function getRecapSeletedCountry($cid){
+    protected function getRecapSeletedCountry($cid) {
         $em = $this->getDoctrine()->getManager();
         $recapEntityQb = $em->createQueryBuilder();
         $recapEntityQb->select('re')
@@ -721,10 +949,10 @@ class CustomprojectController extends Controller {
         $recapEntityQuery = $recapEntityQb->getQuery();
         $recapEntity = $recapEntityQuery->getResult();
         $selectedCountry = array();
-        if(!empty($recapEntity)){
-            foreach($recapEntity as $re){
+        if (!empty($recapEntity)) {
+            foreach ($recapEntity as $re) {
                 $countryEntity = $re->getCountry()->toArray();
-                foreach($countryEntity as $ce){
+                foreach ($countryEntity as $ce) {
                     $selectedCountry[$ce->getId()] = $ce->getName();
                 }
             }
@@ -732,7 +960,7 @@ class CustomprojectController extends Controller {
         return $selectedCountry;
     }
 
-    protected function getAllPosCountry($cid){
+    protected function getAllPosCountry($cid) {
         $em = $this->getDoctrine()->getManager();
         $poslistdataEntityQb = $em->createQueryBuilder();
         $poslistdataEntityQb->select('pd')
@@ -745,10 +973,10 @@ class CustomprojectController extends Controller {
         ));
         $poslistdataEntityQuery = $poslistdataEntityQb->getQuery();
         $poslistdataEntity = $poslistdataEntityQuery->getResult();
-        
+
         return $poslistdataEntity;
     }
-    
+
     public function getGantChartAction($id, $bu, $project) {
 
         $em = $this->getDoctrine()->getManager();
@@ -803,7 +1031,7 @@ class CustomprojectController extends Controller {
 
             $projectSelect .= '</select>';
             $buSelect .= '</select>';
-        }else{
+        } else {
             $data = $this->getGantChartData('', '', $id);
             $projectSelect = '<select></select>';
             $buSelect = '<select></select>';
@@ -887,7 +1115,7 @@ class CustomprojectController extends Controller {
         $em->flush();
         return new Response('Followed success');
     }
-     /**
+    /**
      * Deletes a Customproject entity.
      *
      */
@@ -901,15 +1129,10 @@ class CustomprojectController extends Controller {
         $em->remove($entity);
         $em->flush();
 
-        return new Response('Delete success');
+        return $this->redirect($this->generateUrl('customproject'));
     }
-    //get current login user
-    public function getCurUser(){
-        $secu = $this->container->get('security.context');
-        $user = $secu->getToken()->getUser();
-        return $user;
-    }
-    public function checkWaveBindToProjectAction(){
+
+    public function checkWaveBindToProjectAction() {
         $em = $this->getDoctrine()->getManager();
         $id = $this->getRequest()->getContent();
 
@@ -918,6 +1141,7 @@ class CustomprojectController extends Controller {
         $count = count($customwaveEntity);
         return new Response($count);
     }
+
     /**
      * Creates a form to delete a Customproject entity by id.
      *
@@ -944,14 +1168,14 @@ class CustomprojectController extends Controller {
 
         $aolquestionnaire = $request->get('aolquestionnaire');
         $recapcountry = $request->get('recapcountry');
-        
+
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity->getActual()->setType('Actual');
             $entity->getPlanned()->setType('Planned');
 
-            if(!empty($aolquestionnaire)){
-                foreach($aolquestionnaire as $aol){
+            if (!empty($aolquestionnaire)) {
+                foreach ($aolquestionnaire as $aol) {
                     $aolquestEntity = $em->getRepository('AlbatrossCustomBundle:Aolquestionnaire')->find($aol);
                     $entity->addAolquestionnaire($aolquestEntity);
                     $aolquestEntity->addRecap($entity);
@@ -959,8 +1183,8 @@ class CustomprojectController extends Controller {
                 }
             }
 
-            if(!empty($recapcountry)){
-                foreach($recapcountry as $country){
+            if (!empty($recapcountry)) {
+                foreach ($recapcountry as $country) {
                     $countryEntity = $em->getRepository('AlbatrossAceBundle:Country')->find($country);
                     $entity->addCountry($countryEntity);
                     $countryEntity->addRecap($entity);
@@ -973,10 +1197,10 @@ class CustomprojectController extends Controller {
             $entity->setUser($user);
             $em->persist($entity);
             $em->flush();
-            
-            if($this->estimateCountry($entity->getCustomwave()->getId())){
+
+            if ($this->estimateCountry($entity->getCustomwave()->getId())) {
                 $entity->setCountryType('0');
-            }else{
+            } else {
                 $entity->setCountryType('1');
             }
             $em->persist($entity);
@@ -989,22 +1213,22 @@ class CustomprojectController extends Controller {
         return $this->redirect($this->generateUrl('customproject'));
     }
 
-    protected function estimateCountry($cid){
+    protected function estimateCountry($cid) {
         $seletedCountry = $this->getRecapSeletedCountry($cid);
         $poslistdataEntities = $this->getAllPosCountry($cid);
         $countryArr = array();
-        if(!empty($poslistdataEntities)){
-            foreach($poslistdataEntities as $c) {
+        if (!empty($poslistdataEntities)) {
+            foreach ($poslistdataEntities as $c) {
                 $countryArr[$c->getCountry()->getId()] = $c->getCountry()->getName();
             }
         }
-        if(count($seletedCountry) == count($countryArr)){
+        if (count($seletedCountry) == count($countryArr)) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-    
+
     public function recapformAction($projName) {
         $recapform = $this->createForm(new RecapType());
         return $this->render('AlbatrossCustomBundle:Customproject:recapform.html.twig', array(
@@ -1037,8 +1261,13 @@ class CustomprojectController extends Controller {
 
         $form->bindRequest($this->getRequest());
 
+        $waveEntity = $form->getData()->getCustomwave();
+
         $referer = $this->getRequest()->headers->get('referer');
         if ($form->isValid()) {
+
+            $this->checkLastKaWave($waveEntity);
+
             $entity->upload($type);
             $entity->setFieldtype($type);
             $entity->setSubmittime(date('Y-m-d'));
@@ -1053,8 +1282,10 @@ class CustomprojectController extends Controller {
                 $entity->setPath4($entity->getWebPath4($type));
             }
             if ($type == 'mm') {
-                foreach ($entity->getAttendees() as $attendees)
-                    $attendees->setCustomfield($entity);
+                if ($entity->getAttendees()) {
+                    foreach ($entity->getAttendees() as $attendees)
+                        $attendees->setCustomfield($entity);
+                }
             }
             $em->persist($entity);
             $em->flush();
@@ -1062,19 +1293,122 @@ class CustomprojectController extends Controller {
         }
     }
 
+    protected function checkLastKaWave($waveEntity) {
+        $fieldArr = $waveEntity->getCustomfield()->toArray();
+
+        if (empty($fieldArr)) {
+            $em = $this->getDoctrine()->getManager();
+            $waveEntityArrInSameProject = $waveEntity->getCustomproject()->getCustomwave()->toArray();
+            $checkPreviousLastWave = 0;
+            foreach ($waveEntityArrInSameProject as $wave) {
+
+                if ($waveEntity->getId() != $wave->getId()) {
+                    $attach = $wave->getAttachments();
+                    $field = $wave->getCustomfield()->toArray();
+                    $invoice = $wave->getInvoice()->toArray();
+                    $meetingRecap = $wave->getMeetingRecap();
+                    if (!empty($attach) || !empty($field) || !empty($invoice) || !empty($meetingRecap)) {
+                        if (($waveEntity->getYear() > $wave->getYear()) ||
+                                (($waveEntity->getYear() == $wave->getYear()) && ($waveEntity->getMonth() > $wave->getMonth())) ||
+                                (($waveEntity->getYear() == $wave->getYear()) && ($waveEntity->getMonth() == $wave->getMonth()) && $waveEntity->getWavenum() > $wave->getWavenum())) {
+                            $wave->setLastStart(0);
+                        } else {
+                            $checkPreviousLastWave = 1;
+                        }
+                        $em->persist($wave);
+                    }
+                }
+            }
+            if ($checkPreviousLastWave != 1) {
+                $waveEntity->setLastStart(1);
+                $em->persist($waveEntity);
+            }
+            $em->flush();
+        }
+
+        return;
+    }
+
+    // public function moveProjectManagerToWaveFromReportDeliveryScheduleTableAction(){
+    //     $em = $this->getDoctrine()->getManager();
+    //     $reportDeliveryScheduleEntityArr = $em->getRepository('AlbatrossCustomBundle:ReportDeliverySchedule')->findAll();
+
+    //     foreach ($reportDeliveryScheduleEntityArr as $rds) {
+    //         $pmEntity = $rds->getProjectManager();
+    //         if(!empty($pmEntity)){
+    //             if(!is_object($rds->getCustomproject())){
+    //                 var_dump($rds->getId());
+    //                 exit();
+    //             }
+    //             $waveArr = $rds->getCustomproject()->getCustomwave();
+    //             $haha = 0;
+    //             foreach ($waveArr as $wave) {
+    //                 if($wave->getLastStart() == 1){
+    //                     $wave->setProjectManager($pmEntity);
+    //                     $haha = 1;
+    //                     $em->persist($wave);
+    //                 }
+    //             }
+    //             if($haha == 0){
+    //                 var_dump($rds->getCustomproject()->getId());
+    //             }
+    //         }
+    //     }
+    //     $em->flush();
+    //     var_dump('done');
+    //     exit();
+    // }
+    // protected function checkLastKaWavebasedOnProject($pEntity){
+    //     $em = $this->getDoctrine()->getManager();
+    //     $waveArr = $pEntity->getCustomwave()->toArray();
+    //     foreach ($waveArr as $wave) {
+    //         $attach = $wave->getAttachments();
+    //         $field = $wave->getCustomfield()->toArray();
+    //         $invoice = $wave->getInvoice();
+    //         $meetingRecap = $wave->getMeetingRecap();
+    //         if (!empty($attach) || !empty($field) || !empty($invoice) || !empty($meetingRecap)) {
+    //             $hasFileArr[$pEntity->getId()][] = $wave;
+    //         }
+    //         $allArr[$pEntity->getId()][] = $wave;
+    //     }
+
+    //     $lastWaveArr = array();
+    //     foreach ($allArr as $key => $all) {
+    //         if (!empty($hasFileArr[$key])) {
+    //             $checkBiggestNum = array('num' => 0, 'year' => 0, 'month' => 0);
+    //             foreach ($hasFileArr[$key] as $k => $waveHasFile) {
+    //                 if (($waveHasFile->getYear() > $checkBiggestNum['year']) ||
+    //                         ( ($waveHasFile->getYear() == $checkBiggestNum['year']) && ($waveHasFile->getMonth() > $checkBiggestNum['month']) ) ||
+    //                         ( ($waveHasFile->getYear() == $checkBiggestNum['year']) && ($waveHasFile->getMonth() == $checkBiggestNum['month']) && ($waveHasFile->getWavenum() > $checkBiggestNum['num']) )) {
+    //                     $checkBiggestNum['num'] = $waveHasFile->getWavenum();
+    //                     $checkBiggestNum['year'] = $waveHasFile->getYear();
+    //                     $checkBiggestNum['month'] = $waveHasFile->getMonth();
+    //                     $lastWaveArr[$key] = $waveHasFile;
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     foreach ($lastWaveArr as $k => $waveHaveToSave) {
+    //         $waveHaveToSave->setLastStart(1);
+    //         $em->persist($waveHaveToSave);
+    //     }
+    //     $em->flush();
+    //     return;
+    // }
     public function getFieldInfoAction() {
         $data = $this->getRequest()->getContent();
         $dataArr = explode(':', $data);
         $id = $dataArr[0];
         $type = $dataArr[1];
-        
+
         $secu = $this->container->get('security.context');
         $user = $secu->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
-        $qb->select('f, c, u, w, p, a')
+        $qb->select('f, c, u, w, p, a, aolquestionnaire')
                 ->from('AlbatrossCustomBundle:Customfield', 'f')
                 ->leftJoin('f.country', 'c')
+                ->leftJoin('f.aolquestionnaire', 'aolquestionnaire')
                 ->leftJoin('f.user', 'u')
                 ->leftJoin('f.customwave', 'w')
                 ->leftJoin('w.customproject', 'p')
@@ -1128,21 +1462,42 @@ class CustomprojectController extends Controller {
             $step = $result['question_status'];
             if ($step == 4) {
                 if ($result['choosen_type'] == 1) {
-                    $step = 8;
+                    $step = 10;
                 } elseif ($result['choosen_type'] == 2) {
-                    $step = 9;
+                    $step = 11;
                 }
             }
+
+            //check how many files uploaded
+            $fileNum = array();
+
             $otherFile = '';
+            $v1 = ($result['questionnaire_version_num_1'] == null) ? ' V1' : ' V' . $result['questionnaire_version_num_1'];
+            $v2 = ($result['questionnaire_version_num_2'] == null) ? ' V1' : ' V' . $result['questionnaire_version_num_2'];
+            $v3 = ($result['questionnaire_version_num_3'] == null) ? ' V1' : ' V' . $result['questionnaire_version_num_3'];
+            $v4 = ($result['questionnaire_version_num_4'] == null) ? ' V1' : ' V' . $result['questionnaire_version_num_4'];
+            if ($result['path']) {
+                $fileNum = $fileNum + array($result['question_file1_label'] => 1);
+            }
             if ($result['path_2'] != null) {
-                $otherFile .= '<form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '/2"><input type="submit" value="' . $result['question_file2_label'] . '"/></form>';
+                $otherFile .= '<td><form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '/2"><input class="file-button-questionnaire-down" type="submit" title="' . $result['question_file2_label'] . $v2 . '" value="' . $result['question_file2_label'] . $v2 . '"/></form></td>';
+                $fileNum = $fileNum + array($result['question_file2_label'] => 2);
+            } else {
+                $otherFile .= '<td></td>';
             }
             if ($result['path_3'] != null) {
-                $otherFile .= '<form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '/3"><input type="submit" value="' . $result['question_file3_label'] . '"/></form>';
+                $otherFile .= '<td><form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '/3"><input class="file-button-questionnaire-down" type="submit" title="' . $result['question_file3_label'] . $v3 . '" value="' . $result['question_file3_label'] . $v3 . '"/></form></td>';
+                $fileNum = $fileNum + array($result['question_file3_label'] => 3);
+            } else {
+                $otherFile .= '<td></td>';
             }
             if ($result['path_4'] != null) {
-                $otherFile .= '<form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '/4"><input type="submit" value="' . $result['question_file4_label'] . '"/></form>';
+                $otherFile .= '<td><form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '/4"><input class="file-button-questionnaire-down" type="submit" title="' . $result['question_file4_label'] . $v4 . '" value="' . $result['question_file4_label'] . $v4 . '"/></form></td>';
+                $fileNum = $fileNum + array($result['question_file4_label'] => 4);
+            } else {
+                $otherFile .= '<td></td>';
             }
+            $otherFile .= '</tr></table>';
         } elseif ($type == 'dic') {
             $diccountryStr = '';
             if (!empty($result['country'])) {
@@ -1160,7 +1515,7 @@ class CustomprojectController extends Controller {
         $closeButton = '<span id="fieldform_title_span"></span><span id="close_button" title="close" onclick="closedFieldInfo();" style=" position: absolute; right:0;"><img src="/images/close.png" height="30px" width="30px" style="margin-right: 5px;"></span>';
         switch ($type) {
             case 'report':
-                $html = '<tr><th colspan="2" style="'.$titleStyle.'">Report Info'.$closeButton.'</th></tr>' .
+                $html = '<tr><th colspan="2" style="' . $titleStyle . '">Report Info' . $closeButton . '</th></tr>' .
                         '<tr><th>Project Name</th><td>' . $result['customwave']['customproject']['name'] . '</td></tr>' .
                         '<tr><th>Wave Name</th><td>' . $result['customwave']['name'] . '</td></tr>' .
                         '<tr><th>Submit Time</th><td>' . $result['submittime'] . '</td></tr>' .
@@ -1168,15 +1523,15 @@ class CustomprojectController extends Controller {
                         '<tr><th>Report Type</th><td>' . $reportType . '</td></tr>' .
                         '<tr><th>Executive</th><td>' . $executive . '</td></tr>' .
                         '<tr><th>Zone</th><td>' . $zone . '</td></tr>' .
-                        '<tr><th>Country</th><td>' . $countryStrTrim . '</td></tr>' ;
-                if($secu->isGranted('ROLE_ADMIN') || $secu->isGranted('ROLE_SENIOR_PROJECT_MANAGER') ||
-                        $secu->isGranted('ROLE_PROJECT_MANAGER')|| $secu->isGranted('ROLE_BU_MANAGER') ||
-                        $user->getPosition()->getName() == 'Top Management' || $user->getPosition()->getName() == 'Market Research Dept'){
+                        '<tr><th>Country</th><td>' . $countryStrTrim . '</td></tr>';
+                if ($secu->isGranted('ROLE_ADMIN') || $secu->isGranted('ROLE_SENIOR_PROJECT_MANAGER') ||
+                        $secu->isGranted('ROLE_PROJECT_MANAGER') || $secu->isGranted('ROLE_BU_MANAGER') ||
+                        $user->getPosition()->getName() == 'Top Management' || $user->getPosition()->getName() == 'Market Research Dept') {
                     $html .= '<tr><td colspan="2"><form action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '"><input type="submit" value="download"/></form></td></tr>';
                 }
                 break;
             case 'brief':
-                $html = '<tr><th colspan="2" style="'.$titleStyle.'">SPE Brief'.$closeButton.'</th></tr>' .
+                $html = '<tr><th colspan="2" style="' . $titleStyle . '">SPE Brief' . $closeButton . '</th></tr>' .
                         '<tr><th>Project Name</th><td>' . $result['customwave']['customproject']['name'] . '</td></tr>' .
                         '<tr><th>Wave Name</th><td>' . $result['customwave']['name'] . '</td></tr>' .
                         '<tr><th>Submit Time</th><td>' . $result['submittime'] . '</td></tr>' .
@@ -1186,7 +1541,7 @@ class CustomprojectController extends Controller {
                         '<tr><td colspan="2"><form action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '"><input type="submit" value="download"/></form></td></tr>';
                 break;
             case 'material':
-                $html = '<tr><th colspan="2" style="'.$titleStyle.'">Brand Material Info'.$closeButton.'</th></tr>' .
+                $html = '<tr><th colspan="2" style="' . $titleStyle . '">Brand Material Info' . $closeButton . '</th></tr>' .
                         '<tr><th>Project Name</th><td>' . $result['customwave']['customproject']['name'] . '</td></tr>' .
                         '<tr><th>Wave Name</th><td>' . $result['customwave']['name'] . '</td></tr>' .
                         '<tr><th>Submit Time</th><td>' . $result['submittime'] . '</td></tr>' .
@@ -1195,7 +1550,7 @@ class CustomprojectController extends Controller {
                         '<tr><td colspan="2"><form action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '"><input type="submit" value="download"/></form></td></tr>';
                 break;
             case 'mm':
-                $html = '<tr><th colspan="2" style="'.$titleStyle.'">Meeting Minutes'.$closeButton.'</th></tr>' .
+                $html = '<tr><th colspan="2" style="' . $titleStyle . '">Meeting Minutes' . $closeButton . '</th></tr>' .
                         '<tr><th>Project Name</th><td>' . $result['customwave']['customproject']['name'] . '</td></tr>' .
                         '<tr><th>Wave Name</th><td>' . $result['customwave']['name'] . '</td></tr>' .
                         '<tr><th>Submit Time</th><td>' . $result['submittime'] . '</td></tr>' .
@@ -1211,18 +1566,311 @@ class CustomprojectController extends Controller {
                         '<tr><th>Comments</th><td>' . $result['mm_comments'] . '</td></tr>';
                 break;
             case 'questionnaire':
-                $html = '<tr><th colspan="2" style="'.$titleStyle.'">Questionnaire'.$closeButton.'</th></tr>' .
+                $closeQuestionnaireButton = '<span id="fieldform_title_span"></span><span id="close_button" title="close" onclick="closedQuestionnaireFieldInfo();" style=" position: absolute; right:0;"><img src="/images/close.png" height="30px" width="30px" style="margin-right: 5px;"></span>';
+                $language = array(
+                    0 => '',
+                    1 => 'French',
+                    2 => 'Spanish',
+                    3 => 'Italian',
+                    4 => 'German',
+                    5 => 'Korean',
+                    6 => 'Japanese',
+                    7 => 'Portuguese',
+                    8 => 'Russian',
+                    9 => 'traditional Chinese',
+                    10 => 'Simplified Chinese',
+                    11 => 'Thai'
+                );
+                $html = '<tr><th colspan="2" style="' . $titleStyle . '">Questionnaire' . $closeQuestionnaireButton . '</th></tr>' .
                         '<tr><th>Project Name</th><td>' . $result['customwave']['customproject']['name'] . '</td></tr>' .
                         '<tr><th>Wave Name</th><td>' . $result['customwave']['name'] . '</td></tr>' .
                         '<tr><th>Submit Time</th><td>' . $result['submittime'] . '</td></tr>' .
-                        '<tr><th>Step</th><td>' . $steplist[$step] . '</td></tr>' .
-                        '<tr id="signature_tr"><th id="signature_label">Signature</th><td id="signature_input"></td></tr>' .
-                        '<tr><th>Down Load File:</th><td colspan="2">' .
-                        '<form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '"><input type="submit" value="' . $result['question_file1_label'] . '"/></form>' . $otherFile .
-                        '<div class="clear_both"></div></td></tr><tr><td colspan="3"><span id="cancel_button_quest"></span></td></tr>';
+                        '<tr><th>Step</th><td>' . $steplist[$step] . '</td></tr>';
+                //set three tick option value
+                if ($result['questionnaire_new_tick']) {
+                    $newTick = 'YES';
+                } else {
+                    $newTick = 'NO';
+                }
+                if ($result['questionnaire_modify_tick']) {
+                    $modifyTick = 'YES';
+                } else {
+                    $modifyTick = 'NO';
+                }
+                if ($result['questionnaire_translation_tick']) {
+                    $transelationTick = 'YES';
+                } else {
+                    $transelationTick = 'NO';
+                }
+                //set pm information html include in html
+                if ($step > 2) {
+                    $pmInfo = '<tr><th>PM Information</th><td><table id="pmInformation"><tr><th>PM Confirmation</th></tr><tr><td>'
+                            . $result['pm_signature'] . '</td></tr><tr><th>Request for Questionnaire team description</th></tr><tr><td>'
+                            . urldecode($result['questionnaire_team_description']) . '</td></tr><tr><th>Is it a new questionnaire ?</th></tr><tr><td id="new-questionnaire">'
+                            . $newTick . '</td></tr>';
+                    if ($newTick == 'NO') {
+                        $formTextStr = '<table id="if-cloned-text-table">';
+                        if (empty($fileNum)) {
+                            $formTextStr .= $result['questionnaire_from_text'];
+                        } else {
+                            $formTextArr = explode('***', $result['questionnaire_from_text']);
+                            foreach ($formTextArr as $everyForm) {
+                                $formTextStr .= '<tr><td>';
+                                $everyFormArr = explode('**', $everyForm);
+                                if ($everyFormArr[0] == '1') {
+                                    $formTextStr .= $result['question_file1_label'] . ':' . $everyFormArr[1];
+                                }
+                                if ($everyFormArr[0] == '2') {
+                                    $formTextStr .= $result['question_file2_label'] . ':' . $everyFormArr[1];
+                                }
+                                if ($everyFormArr[0] == '3') {
+                                    $formTextStr .= $result['question_file3_label'] . ':' . $everyFormArr[1];
+                                }
+                                if ($everyFormArr[0] == '4') {
+                                    $formTextStr .= $result['question_file4_label'] . ':' . $everyFormArr[1];
+                                }
+                                $formTextStr .= '</td></tr>';
+                            }
+                        }
+                        $formTextStr .= '</table>';
+                        $pmInfo .= '<tr><th>If cloned, from wich questionnaire ?</th></tr>
+                            <tr><td>' . $formTextStr . '</td></tr>
+                            <tr><th>If cloned, is there any modification ?</th></tr>
+                            <tr><td id="cloned-questionnaire">' . $modifyTick . '</td></tr>';
+                    }
+                    $pmInfo .= '<tr><th>Translation needed ?</th></tr>
+                        <tr><td>' . $transelationTick . '</td></tr>';
+                    if ($transelationTick == 'YES') {
+                        $languageNumArr = explode(',', $result['questionnaire_language_num']);
+                        $languageString = '';
+                        foreach ($languageNumArr as $num) {
+                            $languageString .= $language[$num] . ' ';
+                        }
+                        $pmInfo .= '<tr><th>Languages</th></tr>
+                            <tr><td>' . $languageString . '</td></tr>';
+                    }
+                    $pmInfo .= '</table></td></tr>';
+                }
+                //set Proofreading information
+                $proofInfo = '<tr><th>Proofreading Information</th><td><table id="pmInformation"><tr><th>Proofreading Confirmation</th></tr><tr><td>'
+                        . $result['proofreading_signature'] . '</td></tr>';
+                $proofInfo .= '</td></tr></table></td></tr>';
+                //set questionnaire information
+                if ($step > 4) {
+                    $questionnaireInfo = '<tr><th>Upload or Clonage Information</th><td><table id="pmInformation"><tr><th>Upload or Clonage Confirmation</th></tr><tr><td>'
+                            . $result['upload_waiting_clonage_signature'] . '</td></tr><tr><th>Aol Questionnaire</th></tr><tr><td>';
+                    if (!empty($fileNum)) {
+                        foreach ($fileNum as $key => $f) {
+                            foreach ($result['aolquestionnaire'] as $aolquestionnaire) {
+                                if ($aolquestionnaire['file_index'] == $f) {
+                                    $questionnaireInfo .= $key . ':' . $aolquestionnaire['name'] . '.<br/>';
+                                }
+                            }
+                        }
+                    } else {
+                        if (isset($result['aolquestionnaire']['0']))
+                            $questionnaireInfo .= $result['aolquestionnaire']['0']['name'];
+                    }
+                    $questionnaireInfo .= '</td></tr></table></td></tr>';
+                }
+                if ($step == 2) {
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= '<tr><th>Request for Questionnaire team description</th><td>
+                        <textarea id="albatross_custombundle_customfieldtype_questionnaire_team_description" 
+                        name="albatross_custombundle_customfieldtype[questionnaire_team_description]"></textarea></td></tr>';
+                    $html .= '<tr><th>Is it a new questionnaire ? YES/NO</th><td>
+                        <input type="radio" value="0" onclick="questionnaireNewRadio(0);" name="albatross_custombundle_customfieldtype[questionnaire_new_tick]" checked="checked">YES
+                        <input type="radio" value="1" onclick="questionnaireNewRadio(1);" name="albatross_custombundle_customfieldtype[questionnaire_new_tick]">NO</td></tr>';
+                    $html .= '<tr><th>If cloned, from wich questionnaire ?</th><td><table>';
+                    if ($result['question_file1_label'] != null || $result['question_file2_label'] != null || $result['question_file3_label'] != null || $result['question_file4_label'] != null) {
+                        if ($result['question_file1_label'] != null) {
+                            $html .= '<tr><td>' . $result['question_file1_label']
+                                    . '</td><td>: <input class="clone-aol-questionnaire" type="text" placeholder="enter AOL Questionnaire" name="albatross_custombundle_customfieldtype_1"></td></tr>';
+                        }
+                        if ($result['question_file2_label'] != null) {
+                            $html .= '<tr><td>' . $result['question_file2_label']
+                                    . '</td><td>: <input class="clone-aol-questionnaire" type="text" placeholder="enter AOL Questionnaire" name="albatross_custombundle_customfieldtype_2"></td></tr>';
+                        }
+                        if ($result['question_file3_label'] != null) {
+                            $html .= '<tr><td>' . $result['question_file3_label']
+                                    . '</td><td>: <input class="clone-aol-questionnaire" type="text" placeholder="enter AOL Questionnaire" name="albatross_custombundle_customfieldtype_3"></td></tr>';
+                        }
+                        if ($result['question_file4_label'] != null) {
+                            $html .= '<tr><td>' . $result['question_file4_label']
+                                    . '</td><td>: <input class="clone-aol-questionnaire" type="text" placeholder="enter AOL Questionnaire" name="albatross_custombundle_customfieldtype_4"></td></tr>';
+                        }
+                        $html .= '<input id="is-nofile-which-questionnaire" type="text" value="1" style="display:none" />';
+                    } else {
+                        $html .= '<tr><td><textarea id="albatross_custombundle_customfieldtype_questionnaire_from_text" 
+                        name="albatross_custombundle_customfieldtype[questionnaire_from_text]"></textarea></td></tr>';
+                        $html .= '<input id="is-nofile-which-questionnaire" type="text" value="0" style="display:none" />';
+                    }
+
+                    $html .= '</table></td></tr>';
+                    $html .= '<tr><th>If cloned, is there any modification ? YES/NO</th><td>
+                        <input type="radio" value="0" name="albatross_custombundle_customfieldtype[questionnaire_modify_tick]">YES
+                        <input type="radio" value="1" id="albatross_custombundle_customfieldtype_questionnaire_modify_tick_no" name="albatross_custombundle_customfieldtype[questionnaire_modify_tick]">NO</td></tr>';
+                    $html .= '<tr><th>Translation needed ? YES/NO</th><td>
+                        <input class="transelation-radio" onclick="questionnaireTranslationRadio(0);" type="radio" value="0" name="albatross_custombundle_customfieldtype[questionnaire_translation_tick]">YES
+                        <input class="transelation-radio" onclick="questionnaireTranslationRadio(1);" type="radio" value="1" name="albatross_custombundle_customfieldtype[questionnaire_translation_tick]" checked="checked">NO</td></tr>';
+                    $html .= '<tr><th>languages needed</th><td>
+                        <select id="albatross_custombundle_customfieldtype_questionnaire_language_num" 
+                        name="albatross_custombundle_customfieldtype[questionnaire_new_tick]" multiple="multiple">
+                        <script type="text/javascript">useChosenAtLanguageSelect();</script>';
+                    foreach ($language as $key => $l) {
+                        $html .= '<option value="' . $key . '">' . $l . '</option>';
+                    }
+                    $html .= '</select></td></tr>';
+                } else if ($step == 3) { //proof step
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= '<tr><th>Reject</th><td><input id="reject-tick" onclick="showRejectForm();" type="checkbox"></td></tr>';
+                    $html .= '<tr id="reject-comment-tr" style="display:none"><th>Reject Comment</th><td><textarea id="reject-comment"></textarea></td></tr>';
+                    $html .= '<tr id="reject-file-tr" style="display:none"><th>Reject File</th><td><input id="reject-file" type="file"><input type="button" onclick="updateRejectQuestionnaireFile(' . $result['id'] . ')" id="reject-file-button" value="Upload"></td></tr>';
+                } else if ($step == 5) { //qc step
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= $proofInfo;
+                    $html .= $questionnaireInfo;
+                    $html .= '<tr><th>Test survey number</th><td><input type="text" id="test-survey-number"></td></tr>';
+                } else if ($step == 6) { //test step
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= $proofInfo;
+                    $html .= $questionnaireInfo;
+                    $html .= '<tr><th>Quality Control Confirmation</th><td><table><tr><th>QC Signature</th><td>' . $result['quality_control_signature'] . '</td></tr>
+                        <tr><th>Test Survey Number: </th><td>' . $result['test_survey_number'] . '</td></tr></table></td></tr>';
+                    $html .= '<tr><th>Tested survey number</th><td><input type="text" id="tested-survey-number"></td></tr>';
+                } else if ($step == 7) {
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= $proofInfo;
+                    $html .= $questionnaireInfo;
+                    $html .= '<tr><th>Quality Control Confirmation</th><td><table><tr><th>QC Signature</th><td>' . $result['quality_control_signature'] . '</td></tr>
+                        <tr><th>Test Survey Number: </th><td>' . $result['test_survey_number'] . '</td></tr></table></td></tr>';
+                    $html .= '<tr><th>Test Confirmation</th><td><table><tr><th>Testing Signature</th><td>' . $result['testing_signature'] . '</td></tr>
+                        <tr><th>Tested Survey Number: </th><td>' . $result['tested_survey_number'] . '</td></tr></table></td></tr>';
+                } else if ($step == 8) {
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= $proofInfo;
+                    $html .= $questionnaireInfo;
+                    if ($result['choosen_type'] == 2 && $result['questionnaire_modify_tick'] == 0) {
+                        $html .= '<tr><th>Quality Control Confirmation</th><td>Skipped</td></tr>';
+                        $html .= '<tr><th>Test Confirmation</th><td>Skipped</td></tr>';
+                        $html .= '<tr><th>Translation Confirmation</th><td>Skipped</td></tr>';
+                    } else {
+                        $html .= '<tr><th>Quality Control Confirmation</th><td><table><tr><th>QC Signature</th><td>' . $result['quality_control_signature'] . '</td></tr>
+                            <tr><th>Test Survey Number: </th><td>' . $result['test_survey_number'] . '</td></tr></table></td></tr>';
+                        $html .= '<tr><th>Test Confirmation</th><td><table><tr><th>Testing Signature</th><td>' . $result['testing_signature'] . '</td></tr>
+                            <tr><th>Tested Survey Number: </th><td>' . $result['tested_survey_number'] . '</td></tr></table></td></tr>';
+                        if ($result['questionnaire_translation_tick'] == 1) {
+                            $html .= '<tr><th>Translation Confirmation</th><td>' . $result['translation_signature'] . '</td></tr>';
+                        } else {
+                            $html .= '<tr><th>Translation Confirmation</th><td>Skipped</td></tr>';
+                        }
+                    }
+                } else if ($step == 9) {
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= $proofInfo;
+                    $html .= '<tr><th>Reject Comment</th><td>' . urldecode($result['rejected_comment']) . '</td></tr>';
+                } else if ($step == 10) {
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= $proofInfo;
+                } else if ($step == 11) {
+                    $html .= '<tr><th>Client Confirmation</th><td>' . $result['client_signature'] . '</td></tr>';
+                    $html .= $pmInfo;
+                    $html .= $proofInfo;
+                }
+                if ($step == 9) {
+                    $html .= '<tr><th>Download Reject File</th>';
+                    $html .= '<td><form class="question_down_file" action = "'
+                            . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id']
+                            . '/9"><input type="submit" class="reject-file-button-questionnaire-down" title="Rejected File" 
+                                    value="Rejected File"/></form></td></tr>';
+                } else {
+                    $html .= '<tr id="signature_tr"><th id="signature_label">Signature</th><td id="signature_input"></td></tr>';
+                }
+                $html .= '<tr><th>DownLoad File:</th><td>';
+                if ($result['path'] != null) {
+
+                    if ($step == 10 || $step == 11) {
+                        $html .= '<table><tr><td><form class="question_down_file" action = "'
+                                . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id']
+                                . '"><input type="submit" class="file-button-questionnaire-down" title="'
+                                . $result['question_file1_label'] . $v1 . '" value="' . $result['question_file1_label'] . $v1
+                                . '"/></form><input placeholder="New AOL questionnaire name" class="aol_questionnaire_wide" name="aol_questionnaire_1" type="text" value=""><input type="text" id="check-new-questionnaire-type" value="0"></td></td></tr>';
+                        if ($result['path_2'] != null) {
+                            $html .= '<tr><td><form class="question_down_file" action = "'
+                                    . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id']
+                                    . '/2"><input type="submit" class="file-button-questionnaire-down" title="'
+                                    . $result['question_file2_label'] . $v2 . '" value="' . $result['question_file2_label'] . $v2
+                                    . '"/></form><input placeholder="New AOL questionnaire name" class="aol_questionnaire_wide" name="aol_questionnaire_2" type="text" value=""></td></td></tr>';
+                        }
+                        if ($result['path_3'] != null) {
+                            $html .= '<tr><td><form class="question_down_file" action = "'
+                                    . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id']
+                                    . '/3"><input type="submit" class="file-button-questionnaire-down" title="'
+                                    . $result['question_file3_label'] . $v3 . '" value="' . $result['question_file3_label'] . $v3
+                                    . '"/></form><input placeholder="New AOL questionnaire name" class="aol_questionnaire_wide" name="aol_questionnaire_3" type="text" value=""></td></td></tr>';
+                        }
+                        if ($result['path_4'] != null) {
+                            $html .= '<tr><td><form class="question_down_file" action = "'
+                                    . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id']
+                                    . '/4"><input type="submit" class="file-button-questionnaire-down" title="'
+                                    . $result['question_file4_label'] . $v4 . '" value="' . $result['question_file4_label'] . $v2
+                                    . '"/></form><input placeholder="New AOL questionnaire name" class="aol_questionnaire_wide" name="aol_questionnaire_4" type="text" value=""></td></td></tr>';
+                        }
+                    } else {
+                        $html .= '<table><tr><td><form class="question_down_file" action = "' . $request->getBaseUrl() . '/Customproject/downloadFile/' . $result['id'] . '"><input type="submit" class="file-button-questionnaire-down" title="' . $result['question_file1_label'] . $v1 . '" value="' . $result['question_file1_label'] . $v1 . '"/></form></td>' . $otherFile .
+                                '<div class="clear_both"></div></td></tr>';
+                    }
+                } else {
+                    if ($step == 10 || $step == 11) {
+                        $html .= 'No File.<div class="clear_both"></div><textarea placeholder="New AOL questionnaire name" id="aol_questionnaire_wide_null" name="aol_questionnaire_null" type="text" value=""></textarea><input type="text" id="check-new-questionnaire-type" value="1"></td></tr>';
+                    } else {
+                        $html .= 'No File.<div class="clear_both"></div></td></tr>';
+                    }
+                }
+
+                if ($step == 3) {
+                    if ($result['questionnaire_upload_file_tick'] == 0 || $result['questionnaire_upload_file_tick'] == null) {
+                        $updateFile = '<table id="update-file-table"><tr>';
+                        foreach ($fileNum as $key => $f) {
+                            $updateFile .= '<td><input style="display:none;" id="update-file-' . $f . '" type="file"  name="update_file[' . $f . ']" onchange="$(\'#update-file-button-' . $f . '\').val(\'Selected\'); $(\'#update-file-button-' . $f . '\').css(\'background\', \'#D35400\');">';
+                            $updateFile .= '<input class="file-button-questionnaire-update" type="button" id="update-file-button-' . $f . '" onclick="$(\'#update-file-' . $f . '\').click();" value="Browse">';
+                            $updateFile .= '</br><input type="button" class="update-file-button" onclick="updateQuestionnaireFile(' . $result['id'] . ', ' . $f . ');" value="Update"></td>';
+                        }
+                        $updateFile .= '</tr></table>';
+                        $html .= '<tr id="upload-updated-version"><th>Upload updated version</th><td>' . $updateFile . '</td></tr>';
+                    }
+                }
+                if ($step == 7) {
+                    if ($result['questionnaire_language_num'] != 'null') {
+                        $languageArr = explode(',', $result['questionnaire_language_num']);
+                        foreach ($languageArr as $l) {
+                            $html .= '<tr><th class="language-update-th">' . $language[$l] . ' Upload : </th><td><table class="update-language-file-table"><input id="upload-language-signature" style="display:none;" value="' . $result['translation_signature'] . '" ><tr>';
+                            foreach ($fileNum as $key => $f) {
+                                if ($translationEntity = $em->getRepository('AlbatrossCustomBundle:TranslationFile')->findLastOneByFileIndexLanguageNum($result['id'], $f, $l)) {
+                                    $html .= '<td><input id="language_file_' . $f . '_' . $l . '" name="language_file[' . $f . '_' . $l . ']" type="file" onchange="languageFileSelected(' . $f . ', ' . $l . ')" class="language_file" style="display:none;">';
+                                    $html .= '<input id="language_file_button' . $f . '_' . $l . '" type="button" value="Updated" style="background:#34495e;border:1px #2c3e50 solid" onclick="$(\'#language_file_' . $f . '_' . $l . '\').click();" class="language-file-update-button">';
+                                    $html .= '</br><input type="button" id="language_file_submit' . $f . '_' . $l . '" class="update-language-file-submit" onclick="setTranslationFile(' . $result['id'] . ', ' . $f . ', ' . $l . ');" value="Update"></td>';
+                                } else {
+                                    $html .= '<td><input id="language_file_' . $f . '_' . $l . '" name="language_file[' . $f . '_' . $l . ']" type="file" onchange="languageFileSelected(' . $f . ', ' . $l . ')" class="language_file" style="display:none;">';
+                                    $html .= '<input id="language_file_button' . $f . '_' . $l . '" type="button" value="Browse" onclick="$(\'#language_file_' . $f . '_' . $l . '\').click();" class="language-file-update-button">';
+                                    $html .= '</br><input type="button" id="language_file_submit' . $f . '_' . $l . '" class="update-language-file-submit" onclick="setTranslationFile(' . $result['id'] . ', ' . $f . ', ' . $l . ');" value="Save"></td>';
+                                }
+                            }
+                            $html .= '</tr></table></td></tr>';
+                        }
+                    }
+                }
+                $html .= '<tr><td colspan="3"><span id="submit_button_quest"></span></td></tr>';
                 break;
             case 'dic':
-                $html = '<tr><th colspan="2" style="'.$titleStyle.'">DIC Info'.$closeButton.'</th></tr>' .
+                $html = '<tr><th colspan="2" style="' . $titleStyle . '">DIC Info' . $closeButton . '</th></tr>' .
                         '<tr><th>Project Name</th><td>' . $result['customwave']['customproject']['name'] . '</td></tr>' .
                         '<tr><th>Wave Name</th><td>' . $result['customwave']['name'] . '</td></tr>' .
                         '<tr><th>Submit Time</th><td>' . $result['submittime'] . '</td></tr>' .
@@ -1235,16 +1883,121 @@ class CustomprojectController extends Controller {
         return new Response($html);
     }
 
-    public function setQuestionSignAction() {
-        $data = $this->getRequest()->getContent();
-        $dataArr = explode(':', $data);
-        $id = $dataArr[0];
-        $step = $dataArr[1];
-        $value = $dataArr[2];
-        if ($step == '3') {
-            $choosen = $dataArr[3];
+    public function updateFileAction($id, $index) {
+        $content = $this->getRequest()->files->get('file0'); //to get file object        
+        if (is_object($content)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AlbatrossCustomBundle:Customfield')->find($id);
+
+            $filename = $content->getClientOriginalName();
+            $date = date('ymd');
+            $path = 'Questionnaire/' . $date . '/' . $entity->getCustomwave()->getName() . '/' . $filename;
+            $dir = $this->get('kernel')->getRootDir() . '/../web/Questionnaire/' . $date . '/' . $entity->getCustomwave()->getName() . '/';
+            $content->move($dir, $filename);
+            $version = 0;
+            if ($index == 1) {
+                $entity->setPath($path);
+                $version = ($entity->getQuestionnaireVersionNum1() == null) ? 2 : ($entity->getQuestionnaireVersionNum1() + 1);
+                $entity->setQuestionnaireVersionNum1($version);
+            } else if ($index == 2) {
+                $entity->setPath2($path);
+                $version = ($entity->getQuestionnaireVersionNum2() == null) ? 2 : ($entity->getQuestionnaireVersionNum2() + 1);
+                $entity->setQuestionnaireVersionNum2($version);
+            } else if ($index == 3) {
+                $entity->setPath3($path);
+                $version = ($entity->getQuestionnaireVersionNum3() == null) ? 2 : ($entity->getQuestionnaireVersionNum3() + 1);
+                $entity->setQuestionnaireVersionNum3($version);
+            } else if ($index == 4) {
+                $entity->setPath4($path);
+                $version = ($entity->getQuestionnaireVersionNum4() == null) ? 2 : ($entity->getQuestionnaireVersionNum4() + 1);
+                $entity->setQuestionnaireVersionNum4($version);
+            }
+            $em->persist($entity);
+            $em->flush();
         }
 
+        return new Response($version);
+    }
+
+    public function updateRejectFileAction($id) {
+        $content = $this->getRequest()->files->get('file0'); //to get file object        
+        if (is_object($content)) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AlbatrossCustomBundle:Customfield')->find($id);
+
+            $filename = $content->getClientOriginalName();
+            $date = date('ymd');
+            $path = 'Questionnaire/' . $date . '/RejectFiles/' . $entity->getCustomwave()->getName() . '/' . $filename;
+            $dir = $this->get('kernel')->getRootDir() . '/../web/Questionnaire/' . $date . '/RejectFiles/' . $entity->getCustomwave()->getName() . '/';
+            $content->move($dir, $filename);
+            $entity->setRejectedFilePath($path);
+            $em->persist($entity);
+            $em->flush();
+        }
+
+        return new Response('updated');
+    }
+
+    public function setTranslationFileAction($id, $index, $language) {
+        $languageArr = array(
+            0 => '',
+            1 => 'French',
+            2 => 'Spanish',
+            3 => 'Italian',
+            4 => 'German',
+            5 => 'Korean',
+            6 => 'Japanese',
+            7 => 'Portuguese',
+            8 => 'Russian',
+            9 => 'traditional Chinese',
+            10 => 'Simplified Chinese',
+            11 => 'Thai'
+        );
+        $content = $this->getRequest()->files->get('file0'); //to get file object
+        if (is_object($content)) {
+
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AlbatrossCustomBundle:Customfield')->find($id);
+
+            $filename = $content->getClientOriginalName();
+            $date = date('ymd');
+            $path = 'QuestionnaireLanguage/' . $date . '/' . $entity->getCustomwave()->getName() . '/' . $languageArr[$language] . '/' . $filename;
+            $dir = $this->get('kernel')->getRootDir() . '/../web/QuestionnaireLanguage/' . $date . '/' . $entity->getCustomwave()->getName() . '/' . $languageArr[$language] . '/';
+            $content->move($dir, $filename);
+            if (!$translationFileEntityArr = $em->getRepository('AlbatrossCustomBundle:TranslationFile')->findLastOneByFileIndexLanguageNum($id, $index, $language)) {
+                $translationFileEntity = new TranslationFile();
+                $translationFileEntity->setCustomfield($entity);
+                $translationFileEntity->setFileIndex($index);
+                $translationFileEntity->setLanguageIndex($language);
+            } else {
+                $translationFileEntity = $translationFileEntityArr[0];
+            }
+            $translationFileEntity->setPath($path);
+
+            $em->persist($translationFileEntity);
+            $em->flush();
+            return new Response('Updated');
+        }
+        return new Response('');
+    }
+
+    public function setQuestionSignAction() {
+        $data = $this->getRequest()->getContent();
+        $dataArr = json_decode($data, true);
+
+        $id = $dataArr['id'];
+        $step = $dataArr['step'];
+        $value = $dataArr['value'];
+        if ($step == '2') {
+            $description = $dataArr['description'];
+
+            $fromtext = rtrim($dataArr['formtext'], '***');
+
+            $new = $dataArr['new'];
+            $modify = $dataArr['modify'];
+            $translation = $dataArr['translation'];
+            $language = $dataArr['language'];
+        }
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('AlbatrossCustomBundle:Customfield')->find($id);
 
@@ -1256,6 +2009,27 @@ class CustomprojectController extends Controller {
                 $entity->setClientConfirmationTime(date('Y-m-d H:i:s'));
                 break;
             case '2':
+                if ($new == 0) {
+                    $entity->setQuestionnaireNewTick(1);
+                } else if ($new == 1) {
+                    $entity->setQuestionnaireNewTick(0);
+                }
+
+                if ($modify == 0) {
+                    $entity->setQuestionnaireModifyTick(1);
+                } else if ($modify == 1) {
+                    $entity->setQuestionnaireModifyTick(0);
+                }
+
+                if ($translation == 0) {
+                    $entity->setQuestionnaireTranslationTick(1);
+                } else if ($translation == 1) {
+                    $entity->setQuestionnaireTranslationTick(0);
+                }
+
+                $entity->setQuestionnaireTeamDescription($description);
+                $entity->setQuestionnaireFromText($fromtext);
+                $entity->setQuestionnaireLanguageNum($language);
                 $entity->setPmConfirmation(1);
                 $entity->setPmSignature($value);
                 $entity->setQuestionStatus(3);
@@ -1263,50 +2037,141 @@ class CustomprojectController extends Controller {
             case '3':
                 $entity->setProofreading(1);
                 $entity->setProofreadingSignature($value);
-                $entity->setChoosenType($choosen);
-                $entity->setQuestionStatus(4);
+                if (isset($dataArr['choosen'])) {
+                    $entity->setChoosenType($dataArr['choosen']);
+                    $entity->setQuestionStatus(4);
+                } else if (isset($dataArr['comment'])) {
+                    $entity->setRejectedComment($dataArr['comment']);
+                    $entity->setQuestionStatus(9);
+                }
                 break;
             case '5':
+                $testSurveyNumber = $dataArr['testSurveyNumber'];
                 $entity->setQualityControl(1);
                 $entity->setQualityControlSignature($value);
+                $entity->setTestSurveyNumber($testSurveyNumber);
                 $entity->setQuestionStatus(6);
                 break;
             case '6':
+                $testedSurveyNumber = $dataArr['testedSurveyNumber'];
                 $entity->setTesting(1);
+                if ($entity->getQuestionnaireTranslationTick() == 0) {
+                    $entity->setQuestionStatus(8);
+                } else {
+                    $entity->setQuestionStatus(7);
+                }
                 $entity->setTestingSignature($value);
-                $entity->setQuestionStatus(7);
+                $entity->setTestedSurveyNumber($testedSurveyNumber);
+                break;
+            case '7':
+                $entity->setTranslationSignature($value);
                 $entity->setQuestionEndTime(date('Y-m-d'));
+                if ($entity->getQuestionnaireTranslationTick()) {
+                    $languageStr = $entity->getQuestionnaireLanguageNum();
+                    $languageArr = explode(',', $languageStr);
+                    $languageNum = count($languageArr);
+
+                    $firstUpdateFileNum = 0;
+                    if ($entity->getQuestionFile1Label())
+                        $firstUpdateFileNum++;
+                    if ($entity->getQuestionFile2Label())
+                        $firstUpdateFileNum++;
+                    if ($entity->getQuestionFile3Label())
+                        $firstUpdateFileNum++;
+                    if ($entity->getQuestionFile4Label())
+                        $firstUpdateFileNum++;
+                    $translationEntityArr = $entity->getTranslationFile()->toArray();
+                    $updatedFileNum = count($translationEntityArr);
+
+                    if (($languageNum * $firstUpdateFileNum) == $updatedFileNum) {
+                        $entity->setQuestionStatus(8);
+                    }
+                } else {
+                    $entity->setQuestionStatus(8);
+                }
                 break;
         }
         $em->persist($entity);
         $em->flush();
         return new Response('1');
     }
-    
+
     public function setQuestionSign2Action() {
         $data = $this->getRequest()->getContent();
         $dataArr = explode('***', $data);
         $id = $dataArr[0];
         $value = $dataArr[2];
-        $aolquest = explode('&&', $dataArr[3]);
-
+        $aolquestArrStr = explode('&&&', $dataArr[3]);
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('AlbatrossCustomBundle:Customfield')->find($id);
         $entity->setUploadWaitingClonage(1);
         $entity->setUploadWaitingClonageSignature($value);
-        $entity->setQuestionStatus(5);
 
-        foreach ($aolquest as $aol){
-            if($aol != ''){
+        // if is cloned (chosen value 2 is cloned , 1 is upload)
+        // check modification tick value
+        if ($entity->getChoosenType() == 2) {
+            if ($entity->getQuestionnaireModifyTick() == 0) {
+                $entity->setQuestionStatus(8);
+            } else {
+                $entity->setQuestionStatus(5);
+            }
+        } else {
+            $entity->setQuestionStatus(5);
+        }
+
+        foreach ($aolquestArrStr as $aol) {
+            if ($aol != '') {
                 $aolquestEntity = new Aolquestionnaire();
-                $aolquestEntity->setCustomfield($entity);
-                $aolquestEntity->setName($aol);
+                if (strpos($aol, '&&') !== false) {
+                    $aolquestArr = explode('&&', $aol);
+                    $aolquestEntity->setCustomfield($entity);
+                    $aolquestEntity->setName($aolquestArr[0]);
+                    $aolquestEntity->setFileIndex($aolquestArr[1]);
+                } else {
+                    $aolquestEntity->setCustomfield($entity);
+                    $aolquestEntity->setName($aol);
+                    $aolquestEntity->setFileIndex(null);
+                }
                 $em->persist($aolquestEntity);
             }
         }
         $em->persist($entity);
         $em->flush();
         return new Response('1');
+    }
+
+    public function downloadInvoiceFileAction($id) {
+        $em = $this->getDoctrine()->getManager();
+        $file_entity = $em->getRepository('AlbatrossCustomBundle:Invoice')->find($id);
+        $file_dir = $file_entity->getPath();
+        $file_arr = explode('/', $file_dir);
+        $file_name = $file_arr['4'];
+        if (!file_exists($file_dir)) {
+            header("Content-type: text/html; charset=utf-8");
+            echo "File not found!";
+            exit;
+        } else {
+            $file = fopen($file_dir, "r");
+            $file_size = filesize($file_dir);
+            $header = $this->getRequest()->server->getHeaders();
+            $ua = $header['USER_AGENT'];
+            $encoded_filename_pre = urlencode($file_name);
+            $encoded_filename = str_replace("+", "%20", $encoded_filename_pre);
+            Header("Content-type: application/octet-stream");
+            Header("Accept-Ranges: bytes");
+            Header("Accept-Length: " . $file_size);
+            if (preg_match("/MSIE/", $ua)) {
+                header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+            } else if (preg_match("/Firefox/", $ua)) {
+                header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $file_name . '"');
+            }
+            $contents = fread($file, $file_size);
+            echo $contents;
+            fclose($file);
+            exit();
+        }
     }
 
     public function downloadFileAction($id, $filenum = null) {
@@ -1318,10 +2183,18 @@ class CustomprojectController extends Controller {
             $file_dir = $file_entity->getPath3();
         elseif ($filenum == 4)
             $file_dir = $file_entity->getPath4();
+        elseif ($filenum == 9)
+            $file_dir = $file_entity->getRejectedFilePath();
         else
             $file_dir = $file_entity->getPath();
         $file_arr = explode('/', $file_dir);
-        $file_name = str_replace(' ', '%20', $file_arr['2']);
+
+        if ($file_entity->getFieldType() == 'questionnaire' && $filenum != 9)
+            $file_name = $file_arr['3'];
+        else if ($file_entity->getFieldType() == 'questionnaire' && $filenum == 9)
+            $file_name = $file_arr['4'];
+        else
+            $file_name = $file_arr['2'];
         if (!file_exists($file_dir)) {
             header("Content-type: text/html; charset=utf-8");
             echo "File not found!";
@@ -1329,10 +2202,20 @@ class CustomprojectController extends Controller {
         } else {
             $file = fopen($file_dir, "r");
             $file_size = filesize($file_dir);
+            $header = $this->getRequest()->server->getHeaders();
+            $ua = $header['USER_AGENT'];
+            $encoded_filename_pre = urlencode($file_name);
+            $encoded_filename = str_replace("+", "%20", $encoded_filename_pre);
             Header("Content-type: application/octet-stream");
             Header("Accept-Ranges: bytes");
             Header("Accept-Length: " . $file_size);
-            Header("Content-Disposition: attachment; filename=" . $file_name);
+            if (preg_match("/MSIE/", $ua)) {
+                header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+            } else if (preg_match("/Firefox/", $ua)) {
+                header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $file_name . '"');
+            }
             $contents = fread($file, $file_size);
             echo $contents;
             fclose($file);
@@ -1354,7 +2237,7 @@ class CustomprojectController extends Controller {
     protected function getGantChartData($start, $end, $wid) {
         $em = $this->getDoctrine()->getManager();
         $secu = $this->container->get('security.context');
-        
+
         $data = array();
         $style = 'style="color:#FFF"';
 
@@ -1392,12 +2275,12 @@ class CustomprojectController extends Controller {
         $recapqb->setParameters(array(
             'wid' => $wid
         ));
-        
+
         $recapquery = $recapqb->getQuery();
         $recapEntity = $recapquery->getArrayResult();
-        
+
         //get pos belong to this customwave
-        
+
         $poslistqb = $em->createQueryBuilder();
         $poslistqb->select('p')
                 ->from('AlbatrossCustomBundle:Poslist', 'p')
@@ -1406,11 +2289,11 @@ class CustomprojectController extends Controller {
         $poslistqb->setParameters(array(
             'wid' => $wid
         ));
-        
+
         $poslistquery = $poslistqb->getQuery();
         $poslistEntity = $poslistquery->getArrayResult();
         //set the estimate times
-        if($start == '' && $end == ''){
+        if ($start == '' && $end == '') {
             $eContracts = '';
             $eContracte = '';
             $eDeposits = '';
@@ -1439,7 +2322,7 @@ class CustomprojectController extends Controller {
             $eReporte = '';
             $eBalances = '';
             $eBalancee = '';
-        }else{
+        } else {
             $eContracts = '';
             $eContracte = '';
             $eDeposits = '';
@@ -1550,7 +2433,7 @@ class CustomprojectController extends Controller {
             $recapDateActual = date('Y-m-d', strtotime($recapDate));
         }
         //from poslist
-        if(!empty($poslistEntity) && ($poslistEntity[0]['submittime'] != null)){
+        if (!empty($poslistEntity) && ($poslistEntity[0]['submittime'] != null)) {
             $posTimeStart = $poslistEntity[0]['submittime'];
             $posTimeEnd = date('Y-m-d', strtotime('+1 day', strtotime($posTimeStart)));
         }
@@ -1602,7 +2485,7 @@ class CustomprojectController extends Controller {
             'end' => $eSPEe,
             'class' => 'estimated-msb',
         );
-        if(!$secu->isGranted('ROLE_TYPE_CLIENT')){
+        if (!$secu->isGranted('ROLE_TYPE_CLIENT')) {
             $data[] = array(
                 'label' => '<span class="estimated-iof-label" >Estimated IOF</span>',
                 'start' => $eIOFs,
@@ -1642,87 +2525,87 @@ class CustomprojectController extends Controller {
         );
 
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Contract signed</span>',
+            'label' => '<span ' . $style . '>Actual Contract signed</span>',
             'start' => '',
             'end' => '',
             'class' => 'estimated-contract',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Deposit invoiced</span>',
+            'label' => '<span ' . $style . '>Actual Deposit invoiced</span>',
             'start' => '',
             'end' => '',
             'class' => 'estimated-deposit',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Validate Questionnaire</span>',
+            'label' => '<span ' . $style . '>Actual Validate Questionnaire</span>',
             'start' => $questionnaireStart,
             'end' => $questionnaireEnd,
             'class' => 'estimated-questionnaire',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual POS list</span>',
+            'label' => '<span ' . $style . '>Actual POS list</span>',
             'start' => $posTimeStart,
             'end' => $posTimeEnd,
             'class' => 'estimated-pos',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Staff list</span>',
+            'label' => '<span ' . $style . '>Actual Staff list</span>',
             'start' => $stafflistStart,
             'end' => $stafflistEnd,
             'class' => 'estimated-staff',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Shopper profile</span>',
+            'label' => '<span ' . $style . '>Actual Shopper profile</span>',
             'start' => $shopperprofileStart,
             'end' => $shopperprofileEnd,
             'class' => 'estimated-shopper',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Brand Guidelines</span>',
+            'label' => '<span ' . $style . '>Actual Brand Guidelines</span>',
             'start' => $brandguidelinesStart,
             'end' => $brandguidelinesEnd,
             'class' => 'estimated-bm',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual SPE Brief</span>',
+            'label' => '<span ' . $style . '>Actual SPE Brief</span>',
             'start' => $spebriefStart,
             'end' => $spebriefEnd,
             'class' => 'estimated-msb',
         );
-        if(!$secu->isGranted('ROLE_TYPE_CLIENT')){
+        if (!$secu->isGranted('ROLE_TYPE_CLIENT')) {
             $data[] = array(
-                'label' => '<span '.$style.'>Actual IOF</span>',
+                'label' => '<span ' . $style . '>Actual IOF</span>',
                 'start' => $iofActualStart,
                 'end' => $iofActualEnd,
                 'class' => 'estimated-iof',
             );
             $data[] = array(
-                'label' => '<span '.$style.'>Actual Fieldwork</span>',
+                'label' => '<span ' . $style . '>Actual Fieldwork</span>',
                 'start' => $questionendtime,
                 'end' => $recapDateActual,
                 'class' => 'estimated-fw-end',
             );
             $data[] = array(
-                'label' => '<span '.$style.'>Actual Editing</span>',
+                'label' => '<span ' . $style . '>Actual Editing</span>',
                 'start' => '',
                 'end' => '',
                 'class' => 'estimated-fw-end',
             );
             $data[] = array(
-                'label' => '<span '.$style.'>Actual Quality Control</span>',
+                'label' => '<span ' . $style . '>Actual Quality Control</span>',
                 'start' => $qcTimeStart,
                 'end' => $qcTimeEnd,
                 'class' => 'estimated-qc',
             );
         }
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Report Delivery</span>',
+            'label' => '<span ' . $style . '>Actual Report Delivery</span>',
             'start' => $reportTimeStart,
             'end' => $reportTimeEnd,
             'class' => 'estimated-report',
         );
         $data[] = array(
-            'label' => '<span '.$style.'>Actual Balance invoiced</span>',
+            'label' => '<span ' . $style . '>Actual Balance invoiced</span>',
             'start' => '',
             'end' => '',
             'class' => 'estimated-balance',
@@ -1731,7 +2614,7 @@ class CustomprojectController extends Controller {
         return $data;
     }
 
-    public function uploadIofAction($wid){//old version
+    public function uploadIofAction($wid) {//old version
         $attachmentsOption = $this->container->getParameter('valuelist');
         $attachmentsOption['attachments']['type'] = array('0' => 'IOF');
         $attachmentsForm = $this->createForm(new AttachmentsType(), $attachmentsOption);
@@ -1745,7 +2628,7 @@ class CustomprojectController extends Controller {
         ));
     }
 
-    public function iofeditAction($id){
+    public function iofeditAction($id) {
         $em = $this->getDoctrine()->getManager();
         $IOFEntity = $em->getRepository('AlbatrossAceBundle:Attachments')->find($id);
         $wid = $IOFEntity->getCustomwave()->getId();
@@ -1758,13 +2641,13 @@ class CustomprojectController extends Controller {
                 ->setParameter('wid', $wid);
         $waveQuery = $waveQb->getQuery();
         $waveArr = $waveQuery->getArrayResult();
-        
+
         $IOFFileEntity = $IOFEntity->getIoffile()->toArray();
         $IOFInfoEntity = $IOFEntity->getAttachinfo()->toArray();
-        
+
         $result = array();
-        
-        foreach($IOFFileEntity as $key => $files){
+
+        foreach ($IOFFileEntity as $key => $files) {
             $result[$files->getFormindex()]['fileinfo'][$files->getFormindex2()]['file'][$key]['label'] = $files->getLabel();
             $result[$files->getFormindex()]['fileinfo'][$files->getFormindex2()]['file'][$key]['path'] = $files->getPath();
             $result[$files->getFormindex()]['fileinfo'][$files->getFormindex2()]['file'][$key]['fid'] = $files->getId();
@@ -1772,19 +2655,19 @@ class CustomprojectController extends Controller {
             $result[$files->getFormindex()]['fileinfo'][$files->getFormindex2()]['mid'] = $files->getIofmessage()->getId();
         }
         $selectedArr = array();
-        foreach($IOFInfoEntity as $key => $info){
-            $selectedArr[$info->getFormindex()][] = $info->getBu()->getName().$info->getProject()->getId();
+        foreach ($IOFInfoEntity as $key => $info) {
+            $selectedArr[$info->getFormindex()][] = $info->getBu()->getName() . $info->getProject()->getId();
         }
         $iofHtml = '';
-        foreach($result as $key => $r){
+        foreach ($result as $key => $r) {
             $iofHtml .= $this->getIOFFormHead($key);
-            foreach($r['fileinfo'] as $key2 => $info){
+            foreach ($r['fileinfo'] as $key2 => $info) {
                 $iofHtml .= $this->getIOFFormFileLabelHead($key2);
                 $fileindex = 1;
-                foreach($info['file'] as $key3 => $file){
-                    if( $fileindex == 1 ){
+                foreach ($info['file'] as $key3 => $file) {
+                    if ($fileindex == 1) {
                         $iofHtml .= $this->getIOFFormFileLableBodyForEdit1($key, $key2, $key3, $file['label'], $file['fid']);
-                    }else{
+                    } else {
                         $iofHtml .= $this->getIOFFormFileLableBodyForEdit2($key, $key2, $key3, $file['label'], $file['fid']);
                     }
                     $fileindex++;
@@ -1797,13 +2680,13 @@ class CustomprojectController extends Controller {
         }
         $iofHtml .= $this->getIOFFormSubmit($wid);
         $pmid = $IOFEntity->getUser()->getId();
-        if($IOFEntity->getSubmitby()){
+        if ($IOFEntity->getSubmitby()) {
             $submitby = $IOFEntity->getSubmitby();
             $user = $em->getRepository('AlbatrossUserBundle:User')->find($submitby);
-        }else{
+        } else {
             $user = $IOFEntity->getUser();
         }
-        
+
         $userSelect = $this->getUserSelectionHtml();
         return $this->render('AlbatrossCustomBundle:Customproject:IOFupload.html.twig', array(
                     'wave' => $waveArr[0],
@@ -1815,8 +2698,8 @@ class CustomprojectController extends Controller {
                     'pmid' => $pmid
         ));
     }
-    
-    public function iofuploadAction($wid){
+
+    public function iofuploadAction($wid) {
         $em = $this->getDoctrine()->getManager();
         $waveQb = $em->createQueryBuilder();
         $waveQb->select('wave', 'customproject', 'customclient')
@@ -1827,7 +2710,7 @@ class CustomprojectController extends Controller {
                 ->setParameter('wid', $wid);
         $waveQuery = $waveQb->getQuery();
         $waveArr = $waveQuery->getArrayResult();
-        
+
         $secu = $this->container->get('security.context');
         $user = $secu->getToken()->getUser();
         $iofHtml = $this->IOFStractureHtmlAction(1, $wid);
@@ -1840,226 +2723,241 @@ class CustomprojectController extends Controller {
                     'type' => 'create'
         ));
     }
-    protected function getUserSelectionHtml(){
+
+    protected function getUserSelectionHtml() {
         $em = $this->getDoctrine()->getManager();
         $userQb = $em->createQueryBuilder();
         $userQb->select('pm')
                 ->from('AlbatrossUserBundle:User', 'pm')
                 ->where('pm.status = :active');
-        $userQb->setParameter('active' , 'active');
+        $userQb->setParameter('active', 'active');
         $userQuery = $userQb->getQuery();
         $users = $userQuery->getArrayResult();
         $result = '<select id="pm-select" name="pm">';
-        foreach($users as $user){
-            $result .= '<option value="'.$user['id'].'">'.$user['username'].'</option>';
+        foreach ($users as $user) {
+            $result .= '<option value="' . $user['id'] . '">' . $user['username'] . '</option>';
         }
-        return $result.'</select>';
+        return $result . '</select>';
     }
-    public function IOFStractureHtmlAction($index = null, $wid = null){
-        if($index == null){
+
+    public function IOFStractureHtmlAction($index = null, $wid = null) {
+        if ($index == null) {
             $ajax = $this->getRequest()->getContent();
             $ajaxArr = json_decode($ajax, true);
             $index = $ajaxArr['index'];
             $wid = $ajaxArr['wid'];
         }
-        
+
         $result = $this->getIOFFormHead($index);
         $result .= $this->getFileMessageHtmlAction($index, 1);
         $result .= $this->getIOFFileMessageAddTr($index);
         $result .= $this->getIOFInfoHtml($wid, $index);
-        
+
         $result .= $this->getIOFFormTail();
-        if($index == 1){
+        if ($index == 1) {
             $result .= $this->getIOFFormSubmit($wid);
-        }else{
+        } else {
             return new Response($result);
         }
         return $result;
     }
+
     //first of IOF Form 1
-    protected function getIOFFormHead($index){
-        $result = '<table id="iof-form-'.$index.'" class="iof-form"><tr><th class="form-title">FORM '.$index.'</th></tr>';
+    protected function getIOFFormHead($index) {
+        $result = '<table id="iof-form-' . $index . '" class="iof-form"><tr><th class="form-title">FORM ' . $index . '</th></tr>';
         return $result;
     }
+
     //file label message part
-    protected function getIOFFormFileLabelHead($index2){
-        $result = '<tr class="file-message-clone-'.$index2.'"><td><table class="file-message-table"><tr>'.
-                '<th id="file-message-'.$index2.'" class="file-message-td">FILE&MESSAGE -'.$index2.'</th></tr>'.
+    protected function getIOFFormFileLabelHead($index2) {
+        $result = '<tr class="file-message-clone-' . $index2 . '"><td><table class="file-message-table"><tr>' .
+                '<th id="file-message-' . $index2 . '" class="file-message-td">FILE&MESSAGE -' . $index2 . '</th></tr>' .
                 '<tr><td><table class="file-iof-table">';
         return $result;
     }
-    protected function getIOFFormFileLableBody($index, $index2){
+
+    protected function getIOFFormFileLableBody($index, $index2) {
         $result = '';
-        $result .= '<tr><th>FILE:</th><td>'.
-                '<input type="file" onchange="adaptValue(this);" name="iof-file['.$index.']['.$index2.'][]" />'.
-                '</td><th>LABEL:</th><td><input type="text" class="iof-label" name="iof-label['.$index.']['.$index2.'][]"></td>'.
-                '<th><div id="'.$index2.'-add-file-button-'.$index.'" onclick="addfile(this);" class="add-file-button"></div>'.
-                '<div id="delete-file-button-'.$index.'" onclick="deletefile(this);" class="delete-file-button">'.
+        $result .= '<tr><th>FILE:</th><td>' .
+                '<input type="file" onchange="adaptValue(this);" name="iof-file[' . $index . '][' . $index2 . '][]" />' .
+                '</td><th>LABEL:</th><td><input type="text" class="iof-label" name="iof-label[' . $index . '][' . $index2 . '][]"></td>' .
+                '<th><div id="' . $index2 . '-add-file-button-' . $index . '" onclick="addfile(this);" class="add-file-button"></div>' .
+                '<div id="delete-file-button-' . $index . '" onclick="deletefile(this);" class="delete-file-button">' .
                 '</div></th></tr>';
         return $result;
     }
+
     //for editpart first
-    protected function getIOFFormFileLableBodyForEdit1($index, $index2, $key3, $label, $labelId){
+    protected function getIOFFormFileLableBodyForEdit1($index, $index2, $key3, $label, $labelId) {
         $result = '';
-        $result .= '<tr><th>FILE:</th><td>'.
-                '<input type="file" onchange="adaptValue(this);" name="iof-file['.$index.']['.$index2.']['.$key3.']" />'.
-                '</td><th>LABEL:</th><td><input type="text" class="iof-label" name="iof-label['.$index.']['.$index2.']['.$key3.']" value="'.$label.'">'.
-                '<input type="text" style="display:none;" name="iof-label-id['.$index.']['.$index2.']['.$key3.']" value="'.$labelId.'"></td>'.
-                '<th><div id="'.$index2.'-add-file-button-'.$index.'" onclick="addfile(this);" class="add-file-button"></div>'.
-                '<div id="delete-file-button-'.$index.'" onclick="deletefile(this);" class="delete-file-button">'.
+        $result .= '<tr><th>FILE:</th><td>' .
+                '<input type="file" onchange="adaptValue(this);" name="iof-file[' . $index . '][' . $index2 . '][' . $key3 . ']" />' .
+                '</td><th>LABEL:</th><td><input type="text" class="iof-label" name="iof-label[' . $index . '][' . $index2 . '][' . $key3 . ']" value="' . $label . '">' .
+                '<input type="text" style="display:none;" name="iof-label-id[' . $index . '][' . $index2 . '][' . $key3 . ']" value="' . $labelId . '"></td>' .
+                '<th><div id="' . $index2 . '-add-file-button-' . $index . '" onclick="addfile(this);" class="add-file-button"></div>' .
+                '<div id="delete-file-button-' . $index . '" onclick="deletefile(this);" class="delete-file-button">' .
                 '</div></th></tr>';
         return $result;
     }
+
     //for editpart not first
-    protected function getIOFFormFileLableBodyForEdit2($index, $index2, $key3, $label, $labelId){
+    protected function getIOFFormFileLableBodyForEdit2($index, $index2, $key3, $label, $labelId) {
         $result = '';
-        $result .= '<tr><th>FILE:</th><td>'.
-                '<input type="file" onchange="adaptValue(this);" name="iof-file['.$index.']['.$index2.']['.$key3.']" />'.
-                '</td><th>LABEL:</th><td><input type="text" class="iof-label" name="iof-label['.$index.']['.$index2.']['.$key3.']" value="'.$label.'">'.
-                '<input type="text" style="display:none;" name="iof-label-id['.$index.']['.$index2.']['.$key3.']" value="'.$labelId.'"></td>'.
+        $result .= '<tr><th>FILE:</th><td>' .
+                '<input type="file" onchange="adaptValue(this);" name="iof-file[' . $index . '][' . $index2 . '][' . $key3 . ']" />' .
+                '</td><th>LABEL:</th><td><input type="text" class="iof-label" name="iof-label[' . $index . '][' . $index2 . '][' . $key3 . ']" value="' . $label . '">' .
+                '<input type="text" style="display:none;" name="iof-label-id[' . $index . '][' . $index2 . '][' . $key3 . ']" value="' . $labelId . '"></td>' .
                 '<th></th></tr>';
         return $result;
     }
-    protected function getIOFFormFileLabelTail($index, $index2){ // message part
-        $result = '</table></td></tr>'.
-                '<tr><td><fieldset class="message-fieldset"><legend>MESSAGE</legend><textarea name="iof-text['.
-                $index.']['.$index2.']"></textarea></fieldset></td></tr></table></td></tr>';
-        return $result.'<script>CKEDITOR.replace("iof-text['.$index.']['.$index2.']");</script>';
+
+    protected function getIOFFormFileLabelTail($index, $index2) { // message part
+        $result = '</table></td></tr>' .
+                '<tr><td><fieldset class="message-fieldset"><legend>MESSAGE</legend><textarea name="iof-text[' .
+                $index . '][' . $index2 . ']"></textarea></fieldset></td></tr></table></td></tr>';
+        return $result . '<script>CKEDITOR.replace("iof-text[' . $index . '][' . $index2 . ']");</script>';
     }
-    protected function getIOFFormFileLabelTailEdit($index, $index2, $value, $messageId){ // message part
-        $result = '</table></td></tr>'.
-                '<tr><td><fieldset class="message-fieldset"><legend>MESSAGE</legend><textarea name="iof-text['.
-                $index.']['.$index2.']">'.$value.'</textarea></fieldset>'.
-                '<input type="text" style="display:none;" name="iof-text-id['.$index.']['.$index2.']" value="'.$messageId.'">'.
+
+    protected function getIOFFormFileLabelTailEdit($index, $index2, $value, $messageId) { // message part
+        $result = '</table></td></tr>' .
+                '<tr><td><fieldset class="message-fieldset"><legend>MESSAGE</legend><textarea name="iof-text[' .
+                $index . '][' . $index2 . ']">' . $value . '</textarea></fieldset>' .
+                '<input type="text" style="display:none;" name="iof-text-id[' . $index . '][' . $index2 . ']" value="' . $messageId . '">' .
                 '</td></tr></table></td></tr>';
-        return $result.'<script>CKEDITOR.replace("iof-text['.$index.']['.$index2.']");</script>';
+        return $result . '<script>CKEDITOR.replace("iof-text[' . $index . '][' . $index2 . ']");</script>';
     }
+
     //file label message part end
     //file label message add 
-    protected function getIOFFileMessageAddTr($index){
-        $result = '<tr><td class="add-index2-td" id="add-index2-td-'.$index.
-                '" onmouseover="addFileMessageOver(this)" onmouseout="addFileMessageOut(this)" onclick="addFileMessageClick(this)">'.
-                '<div id="add-index2-button">'.
-                '<img height="20px" width="20px" src="/images/add_index.png" />'.
-                '<span class="message-add-index2">ADD A NEW FILE AND MESSAGE FORM</span></div></td></tr><tr><td class="iof-info-td" id="iof-info-td-'.$index.'">';
+    protected function getIOFFileMessageAddTr($index) {
+        $result = '<tr><td class="add-index2-td" id="add-index2-td-' . $index .
+                '" onmouseover="addFileMessageOver(this)" onmouseout="addFileMessageOut(this)" onclick="addFileMessageClick(this)">' .
+                '<div id="add-index2-button">' .
+                '<img height="20px" width="20px" src="/images/add_index.png" />' .
+                '<span class="message-add-index2">ADD A NEW FILE AND MESSAGE FORM</span></div></td></tr><tr><td class="iof-info-td" id="iof-info-td-' . $index . '">';
         return $result;
     }
+
     //file label message add End
-    protected function getIOFInfoHtml($wid, $index){
+    protected function getIOFInfoHtml($wid, $index) {
         $iofInfo = $this->IOFTaskInfo($wid);
         $key = 0;
         $result = '';
-        foreach($iofInfo as $iof){
-            foreach($iof as $i){
-                $result .= '<table class="form-info-table"><tr><th>BU</th><td>'.$i['bu'].
-                        '<input type="text" style="display:none;" value="'.$i['bu'].'" name="iof-info['
-                        .$index.'][bu][]" disabled="disabled"></td><th>ACE</th><td>'
-                        .$i['project'].'<input type="text" style="display:none;" value="'.$i['pid'].'" name="iof-info['
-                        .$index.'][project][]" disabled="disabled"></td></tr>';
+        foreach ($iofInfo as $iof) {
+            foreach ($iof as $i) {
+                $result .= '<table class="form-info-table"><tr><th>BU</th><td>' . $i['bu'] .
+                        '<input type="text" style="display:none;" value="' . $i['bu'] . '" name="iof-info['
+                        . $index . '][bu][]" disabled="disabled"></td><th>ACE</th><td>'
+                        . $i['project'] . '<input type="text" style="display:none;" value="' . $i['pid'] . '" name="iof-info['
+                        . $index . '][project][]" disabled="disabled"></td></tr>';
                 $result .= '<tr><th>Scope</th><td><input type="text" name="iof-info['
-                        .$index.'][scope][]" value="'.$i['scope'].'" disabled="disabled"></td>'.
+                        . $index . '][scope][]" value="' . $i['scope'] . '" disabled="disabled"></td>' .
                         '<th>Report Due Date</th><td><input type="text" class="calender reportinput reportdate" name="iof-info['
-                        .$index.'][report][]" value="'.$i['due'].'" disabled="disabled">'.
+                        . $index . '][report][]" value="' . $i['due'] . '" disabled="disabled">' .
                         '<input type="text" class="reportinput reporttext" name="iof-info['
-                        .$index.'][reporttext][]" value="" placeholder="Type Text" style="display:none;" disabled="disabled">'.
+                        . $index . '][reporttext][]" value="" placeholder="Type Text" style="display:none;" disabled="disabled">' .
                         '<input type="text" name="iof-info['
-                        .$index.'][reporttype][]" value="0" style="display:none;" disabled="disabled">'.
+                        . $index . '][reporttype][]" value="0" style="display:none;" disabled="disabled">' .
                         '<div class="change-date-report" onclick="changeReportDueType(this);" title="Exchange Date and Text"></div></td></tr>';
                 $result .= '<tr><th>FW Start Date</th><td><input type="text" class="calender" name="iof-info['
-                        .$index.'][fwstart][]" value="'.$i['fws'].'" disabled="disabled"></td>'.
+                        . $index . '][fwstart][]" value="' . $i['fws'] . '" disabled="disabled"></td>' .
                         '<th>FW End Date</th><td><input type="text" class="calender" name="iof-info['
-                        .$index.'][fwend][]" value="'.$i['fwe'].'" disabled="disabled"></td></tr>';
+                        . $index . '][fwend][]" value="' . $i['fwe'] . '" disabled="disabled"></td></tr>';
                 $result .= '<tr><th>Comment</th><td><input type="text" name="iof-info['
-                        .$index.'][comment][]" value="'.$i['comment'].'" disabled="disabled"></td>'.
-                        '<th>Select this BU</th><td><input class="iof-info-checkbox" type="checkbox" onclick="changeInfoBack(this);" name="'.$key.'-iof-check-'
-                        .$index.'[]" id="'.$key.'-iof-check-'.$index.'" /></td></tr></table>';
+                        . $index . '][comment][]" value="' . $i['comment'] . '" disabled="disabled"></td>' .
+                        '<th>Select this BU</th><td><input class="iof-info-checkbox" type="checkbox" onclick="changeInfoBack(this);" name="' . $key . '-iof-check-'
+                        . $index . '[]" id="' . $key . '-iof-check-' . $index . '" /></td></tr></table>';
                 $key++;
             }
         }
         return $result;
     }
-    protected function getIOFInfoHtmlEdit($wid, $index, $selectedArr){
+
+    protected function getIOFInfoHtmlEdit($wid, $index, $selectedArr) {
         $iofInfo = $this->IOFEditInfo($wid);
         $key = 0;
         $result = '';
-        foreach($iofInfo as $iof){
-            foreach($iof as $i){
-                $result .= '<table class="form-info-table"><tr><th>BU</th><td>'.$i['bu'].
-                        '<input type="text" style="display:none;" value="'.$i['bu'].'" name="iof-info['
-                        .$index.'][bu][]" disabled="disabled"></td><th>ACE</th><td>'
-                        .$i['project'].'<input type="text" style="display:none;" value="'.$i['pid'].'" name="iof-info['
-                        .$index.'][project][]" disabled="disabled"></td></tr>';
+        foreach ($iofInfo as $iof) {
+            foreach ($iof as $i) {
+                $result .= '<table class="form-info-table"><tr><th>BU</th><td>' . $i['bu'] .
+                        '<input type="text" style="display:none;" value="' . $i['bu'] . '" name="iof-info['
+                        . $index . '][bu][]" disabled="disabled"></td><th>ACE</th><td>'
+                        . $i['project'] . '<input type="text" style="display:none;" value="' . $i['pid'] . '" name="iof-info['
+                        . $index . '][project][]" disabled="disabled"></td></tr>';
                 $result .= '<tr><th>Scope</th><td><input type="text" name="iof-info['
-                        .$index.'][scope][]" value="'.$i['scope'].'" disabled="disabled"></td>';
-                if($i['type'] == 'date'){
+                        . $index . '][scope][]" value="' . $i['scope'] . '" disabled="disabled"></td>';
+                if ($i['type'] == 'date') {
                     $result .= '<th>Report Due Date</th><td><input type="text" class="calender reportinput reportdate" name="iof-info['
-                            .$index.'][report][]" value="'.$i['due'].'" disabled="disabled">'.
+                            . $index . '][report][]" value="' . $i['due'] . '" disabled="disabled">' .
                             '<input type="text" class="reportinput reporttext" name="iof-info['
-                            .$index.'][reporttext][]" value="" placeholder="Type Text" style="display:none;" disabled="disabled">'.
+                            . $index . '][reporttext][]" value="" placeholder="Type Text" style="display:none;" disabled="disabled">' .
                             '<input type="text" class="reporttype" name="iof-info['
-                            .$index.'][reporttype][]" value="0" style="display:none;" disabled="disabled">'.
-                            '<div class="change-date-report" onclick="changeReportDueType(this);" title="Exchange Date and Text">'.
+                            . $index . '][reporttype][]" value="0" style="display:none;" disabled="disabled">' .
+                            '<div class="change-date-report" onclick="changeReportDueType(this);" title="Exchange Date and Text">' .
                             '</div></td></tr>';
-                }else if($i['type'] == 'text'){
+                } else if ($i['type'] == 'text') {
                     $result .= '<th>Report Due Date</th><td><input type="text" class="calender reportinput reportdate" name="iof-info['
-                            .$index.'][report][]" value="'.$i['due'].'" disabled="disabled" style="display:none;">'.
+                            . $index . '][report][]" value="' . $i['due'] . '" disabled="disabled" style="display:none;">' .
                             '<input type="text" class="reportinput reporttext" name="iof-info['
-                            .$index.'][reporttext][]" value="'.$i['duetext'].'" placeholder="Type Text" disabled="disabled">'.
+                            . $index . '][reporttext][]" value="' . $i['duetext'] . '" placeholder="Type Text" disabled="disabled">' .
                             '<input type="text" class="reporttype" name="iof-info['
-                            .$index.'][reporttype][]" value="1" style="display:none;" disabled="disabled">'.
-                            '<div class="change-date-report" onclick="changeReportDueType(this);" title="Exchange Date and Text">'.
+                            . $index . '][reporttype][]" value="1" style="display:none;" disabled="disabled">' .
+                            '<div class="change-date-report" onclick="changeReportDueType(this);" title="Exchange Date and Text">' .
                             '</div></td></tr>';
                 }
                 $result .= '<tr><th>FW Start Date</th><td><input type="text" class="calender" name="iof-info['
-                        .$index.'][fwstart][]" value="'.$i['fws'].'" disabled="disabled"></td>'.
+                        . $index . '][fwstart][]" value="' . $i['fws'] . '" disabled="disabled"></td>' .
                         '<th>FW End Date</th><td><input type="text" class="calender" name="iof-info['
-                        .$index.'][fwend][]" value="'.$i['fwe'].'" disabled="disabled"></td></tr>';
+                        . $index . '][fwend][]" value="' . $i['fwe'] . '" disabled="disabled"></td></tr>';
                 $result .= '<tr><th>Comment</th><td><input type="text" name="iof-info['
-                        .$index.'][comment][]" value="'.$i['comment'].'" disabled="disabled"></td>';
-                if(in_array($i['bu'].$i['pid'], $selectedArr[$index])){
-                    $result .= '<th>Select this BU</th><td><input class="iof-info-checkbox" type="checkbox" checked="checked" onclick="changeInfoBack(this);" name="'.$key.'-iof-check-'
-                            .$index.'[]" id="'.$key.'-iof-check-'.$index.'" /></td></tr></table>'.
-                            '<script>changeInfoBackForEdit("'.$key.'-iof-check-'.$index.'")</script>';
-                }else{
-                    $result .= '<th>Select this BU</th><td><input class="iof-info-checkbox" type="checkbox" onclick="changeInfoBack(this);" name="'.$key.'-iof-check-'
-                            .$index.'[]" id="'.$key.'-iof-check-'.$index.'" /></td></tr></table>';
+                        . $index . '][comment][]" value="' . $i['comment'] . '" disabled="disabled"></td>';
+                if (in_array($i['bu'] . $i['pid'], $selectedArr[$index])) {
+                    $result .= '<th>Select this BU</th><td><input class="iof-info-checkbox" type="checkbox" checked="checked" onclick="changeInfoBack(this);" name="' . $key . '-iof-check-'
+                            . $index . '[]" id="' . $key . '-iof-check-' . $index . '" /></td></tr></table>' .
+                            '<script>changeInfoBackForEdit("' . $key . '-iof-check-' . $index . '")</script>';
+                } else {
+                    $result .= '<th>Select this BU</th><td><input class="iof-info-checkbox" type="checkbox" onclick="changeInfoBack(this);" name="' . $key . '-iof-check-'
+                            . $index . '[]" id="' . $key . '-iof-check-' . $index . '" /></td></tr></table>';
                 }
                 $key++;
             }
         }
-        return $result.'<script>formShow("'.$index.'");iofInfoSelected("'.$index.'");</script>';
+        return $result . '<script>formShow("' . $index . '");iofInfoSelected("' . $index . '");</script>';
     }
-    protected function getIOFFormTail(){
+
+    protected function getIOFFormTail() {
         $result = '</td></tr></table>';
         return $result;
     }
-    protected function getIOFFormSubmit($wid){
-        $result = '<input style="display:none;" type="text" value="'.$wid.'" id="iof-form-waveid" />';
+
+    protected function getIOFFormSubmit($wid) {
+        $result = '<input style="display:none;" type="text" value="' . $wid . '" id="iof-form-waveid" />';
         $result .= '<input type="submit" id="iof-submit-button" value="SUBMIT" /><input type="button" value="" onclick="addIOFBigForm();" id="iof-form-add-big-button" />';
         return $result;
     }
 
-    public function getFileMessageHtmlAction($index = null , $index2 = null){
+    public function getFileMessageHtmlAction($index = null, $index2 = null) {
         $result = '';
-        if($index2 == null){
+        if ($index2 == null) {
             $indexStr = $this->getRequest()->getContent();
             $indexArr = json_decode($indexStr, true);
             $index = $indexArr['index1'];
             $index2 = $indexArr['index2'];
             $returnWay = 'ajax';
-        }else{
+        } else {
             $returnWay = 'normal';
         }
         $result .= $this->getIOFFormFileLabelHead($index2);
         $result .= $this->getIOFFormFileLableBody($index, $index2);
         $result .= $this->getIOFFormFileLabelTail($index, $index2);
-        if($returnWay == 'normal'){
+        if ($returnWay == 'normal') {
             return $result;
-        }else{
+        } else {
             return new Response($result);
         }
     }
-    protected function IOFEditInfo($wid){
+
+    protected function IOFEditInfo($wid) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->add('select', 'info')
@@ -2072,10 +2970,10 @@ class CustomprojectController extends Controller {
         ));
         $query = $qb->getQuery();
         $result = $query->getResult();
-        
+
         $resultArr = $this->IOFTaskInfo($wid);
-        foreach ($result as $re){
-            if(isset($resultArr[$re->getProject()->getId()][$re->getBu()->getName()])){
+        foreach ($result as $re) {
+            if (isset($resultArr[$re->getProject()->getId()][$re->getBu()->getName()])) {
                 $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['scope'] = $re->getScope();
                 $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['fws'] = $re->getFwstartdate()->format('Y-m-d');
                 $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['fwe'] = $re->getFwenddate()->format('Y-m-d');
@@ -2085,17 +2983,18 @@ class CustomprojectController extends Controller {
                 $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['pid'] = $re->getProject()->getId();
                 $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['due'] = $re->getReportduedate()->format('Y-m-d');
                 $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['duetext'] = ($re->getReportduedatetext() != null) ? $re->getReportduedatetext() : '';
-                
-                if(!$re->getReporttype()){
+
+                if (!$re->getReporttype()) {
                     $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['type'] = 'date';
-                }else{
+                } else {
                     $resultArr[$re->getProject()->getId()][$re->getBu()->getName()]['type'] = 'text';
                 }
             }
         }
         return $resultArr;
     }
-    protected function IOFTaskInfo($wid){
+
+    protected function IOFTaskInfo($wid) {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->add('select', 't, p')
@@ -2109,7 +3008,7 @@ class CustomprojectController extends Controller {
         ));
         $query = $qb->getQuery();
         $result = $query->getArrayResult();
-        
+
         $buArr = $this->getBuArr();
         $dueArr = array();
         foreach ($result as $list) {
@@ -2132,22 +3031,23 @@ class CustomprojectController extends Controller {
                 $resultArr[$list['project']['id']][$buArr[$list['number'] - 100]]['duetext'] = '';
             }
         }
-        
+
         return $resultArr;
     }
 
-    public function IOFFileUploadAction($wid){
+    public function IOFFileUploadAction($wid) {
         $data = $this->getRequest('post')->request->all();
         $files = $this->getRequest('post')->files->all();
         $date = date('ymd');
         $datetime = date('Y-m-d H:i:s');
-        
+
         $em = $this->getDoctrine()->getManager();
-        
+
         $secu = $this->container->get('security.context');
         $user = $secu->getToken()->getUser();
         $pm = $em->getRepository('AlbatrossUserBundle:User')->find($data['pm']);
         $waveEntity = $em->getRepository('AlbatrossCustomBundle:Customwave')->find($wid);
+        $this->checkLastKaWave($waveEntity);
         //
         //iof Entity save part
         //
@@ -2164,12 +3064,12 @@ class CustomprojectController extends Controller {
         //iof Entity save part end
         //
         if ($files['iof-file'] != null) {
-            foreach($files['iof-file'] as $index1 => $fileArr1){
+            foreach ($files['iof-file'] as $index1 => $fileArr1) {
                 $infoLength = count($data['iof-info'][$index1]['bu']);
-                
+
                 //
                 //iof information save part
-                for($infoIndex = 0; $infoIndex < $infoLength; $infoIndex++){
+                for ($infoIndex = 0; $infoIndex < $infoLength; $infoIndex++) {
                     $iofInfoEntity = new Attachinfo();
                     $buEntity = $em->getRepository('AlbatrossAceBundle:Bu')->findByName($data['iof-info'][$index1]['bu'][$infoIndex]);
                     $projectEntity = $em->getRepository('AlbatrossAceBundle:Project')->find($data['iof-info'][$index1]['project'][$infoIndex]);
@@ -2181,21 +3081,20 @@ class CustomprojectController extends Controller {
                     $iofInfoEntity->setFwstartdate(new \DateTime($data['iof-info'][$index1]['fwstart'][$infoIndex]));
                     $iofInfoEntity->setFwenddate(new \DateTime($data['iof-info'][$index1]['fwend'][$infoIndex]));
                     $iofInfoEntity->setFormindex($index1);
-                    if($data['iof-info'][$index1]['reporttype'][$infoIndex] == 0){
+                    if ($data['iof-info'][$index1]['reporttype'][$infoIndex] == 0) {
                         $iofInfoEntity->setReporttype(0);
-                        $em = $this->saveDelieveryDateToWaveFromIOF($waveEntity, $em, $data['iof-info'][$index1]['report'][$infoIndex]);
-                    }else if($data['iof-info'][$index1]['reporttype'][$infoIndex] == 1){
+                    } else if ($data['iof-info'][$index1]['reporttype'][$infoIndex] == 1) {
                         $iofInfoEntity->setReporttype(1);
                     }
                     $iofInfoEntity->setReportduedate(new \DateTime($data['iof-info'][$index1]['report'][$infoIndex]));
                     $iofInfoEntity->setReportduedatetext($data['iof-info'][$index1]['reporttext'][$infoIndex]);
                     $iofInfoEntity->setScope($data['iof-info'][$index1]['scope'][$infoIndex]);
                     $em->persist($iofInfoEntity);
-                //iof information save part end
+                    //iof information save part end
                 //
                 }
-                
-                foreach($fileArr1 as $index2 => $fileArr2){
+
+                foreach ($fileArr1 as $index2 => $fileArr2) {
                     //
                     //iof message save part
                     //
@@ -2208,12 +3107,12 @@ class CustomprojectController extends Controller {
                     //
                     //iof message save part end
                     //
-                    foreach($fileArr2 as $index3 => $file){
+                    foreach ($fileArr2 as $index3 => $file) {
                         //
                         //iof file save part
                         //
                         $filename = $file->getClientOriginalName();
-                        $file->move( $this->get('kernel')->getRootDir() . '/../web/projectFiles/' . $date . '/', $filename);
+                        $file->move($this->get('kernel')->getRootDir() . '/../web/projectFiles/' . $date . '/', $filename);
                         //get path info
                         $path = 'projectFiles/' . $date . '/' . $filename;
                         $fileEntity = new IOFFile();
@@ -2226,35 +3125,26 @@ class CustomprojectController extends Controller {
                         $em->persist($fileEntity);
                         //
                         //iof file save part end
-                        //
+                    //
                     }
                 }
             }
         }
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('viewiof', array(
-            'id' => $iofEntity->getId(),
-            'status' => $iofEntity->getStatus(),
+                            'id' => $iofEntity->getId(),
+                            'status' => $iofEntity->getStatus(),
         )));
     }
-    protected function saveDelieveryDateToWaveFromIOF($waveEntity, $em, $deliveryDate) {
-        if(is_object($waveEntity)) {
-            if(strtotime($waveEntity->getDeliveryDate()) < strtotime($deliveryDate) || $waveEntity->getDeliveryDate() == '-' || !$waveEntity->getDeliveryDate()){
-                $waveEntity->setDeliveryDate($deliveryDate);
-                $waveEntity->setWaveStep('IOF');
-            }
-            $em->persist($waveEntity);
-        }
-        return $em;
-    }
-    public function IOFFileEditAction($id){
+
+    public function IOFFileEditAction($id) {
         $data = $this->getRequest('post')->request->all();
         $files = $this->getRequest('post')->files->all();
         $date = date('ymd');
         $datetime = date('Y-m-d H:i:s');
         $em = $this->getDoctrine()->getManager();
-        
+
         $secu = $this->container->get('security.context');
         $user = $secu->getToken()->getUser();
         $pm = $em->getRepository('AlbatrossUserBundle:User')->find($data['pm']);
@@ -2268,11 +3158,11 @@ class CustomprojectController extends Controller {
         //iof Entity save part end
         //
         $this->deleteAttachInfoByAttachmentId($iofEntity->getId());
-        foreach($files['iof-file'] as $index1 => $fileArr1){
+        foreach ($files['iof-file'] as $index1 => $fileArr1) {
             $infoLength = count($data['iof-info'][$index1]['bu']);
             //
             //iof information save part
-            for($infoIndex = 0; $infoIndex < $infoLength; $infoIndex++){
+            for ($infoIndex = 0; $infoIndex < $infoLength; $infoIndex++) {
                 $iofInfoEntity = new Attachinfo();
                 $buEntity = $em->getRepository('AlbatrossAceBundle:Bu')->findByName($data['iof-info'][$index1]['bu'][$infoIndex]);
                 $projectEntity = $em->getRepository('AlbatrossAceBundle:Project')->find($data['iof-info'][$index1]['project'][$infoIndex]);
@@ -2284,11 +3174,9 @@ class CustomprojectController extends Controller {
                 $iofInfoEntity->setFwstartdate(new \DateTime($data['iof-info'][$index1]['fwstart'][$infoIndex]));
                 $iofInfoEntity->setFwenddate(new \DateTime($data['iof-info'][$index1]['fwend'][$infoIndex]));
                 $iofInfoEntity->setFormindex($index1);
-                if($data['iof-info'][$index1]['reporttype'][$infoIndex] == 0){
+                if ($data['iof-info'][$index1]['reporttype'][$infoIndex] == 0) {
                     $iofInfoEntity->setReporttype(0);
-                    $waveEntity = $iofEntity->getCustomwave();
-                    $em = $this->saveDelieveryDateToWaveFromIOF($waveEntity, $em, $data['iof-info'][$index1]['report'][$infoIndex]);
-                }else if($data['iof-info'][$index1]['reporttype'][$infoIndex] == 1){
+                } else if ($data['iof-info'][$index1]['reporttype'][$infoIndex] == 1) {
                     $iofInfoEntity->setReporttype(1);
                 }
                 $iofInfoEntity->setReportduedate(new \DateTime($data['iof-info'][$index1]['report'][$infoIndex]));
@@ -2299,11 +3187,11 @@ class CustomprojectController extends Controller {
             //iof information save part end
             //
             //================================================================//
-            foreach($fileArr1 as $index2 => $fileArr2){
+            foreach ($fileArr1 as $index2 => $fileArr2) {
                 //iof message save part
-                if(isset($data['iof-text-id'][$index1][$index2])){
+                if (isset($data['iof-text-id'][$index1][$index2])) {
                     $messageEntity = $em->getRepository('AlbatrossAceBundle:IOFMessage')->find($data['iof-text-id'][$index1][$index2]);
-                }else{
+                } else {
                     $messageEntity = new IOFMessage();
                     $messageEntity->setFormindex($index1);
                     $messageEntity->setFormindex2($index2);
@@ -2312,20 +3200,20 @@ class CustomprojectController extends Controller {
                 $messageEntity->setMessage($data['iof-text'][$index1][$index2]);
                 $em->persist($messageEntity);
                 //iof message save part end
-                foreach($fileArr2 as $index3 => $file){
+                foreach ($fileArr2 as $index3 => $file) {
                     //iof file save part
-                    if(isset($data['iof-label-id'][$index1][$index2][$index3])){
+                    if (isset($data['iof-label-id'][$index1][$index2][$index3])) {
                         $fileEntity = $em->getRepository('AlbatrossAceBundle:IOFFile')->find($data['iof-label-id'][$index1][$index2][$index3]);
-                    }else{
+                    } else {
                         $fileEntity = new IOFFile();
                         $fileEntity->setAttachments($iofEntity);
                         $fileEntity->setIofmessage($messageEntity);
                         $fileEntity->setFormindex($index1);
                         $fileEntity->setFormindex2($index2);
                     }
-                    if($file != null){
+                    if ($file != null) {
                         $filename = $file->getClientOriginalName();
-                        $file->move( $this->get('kernel')->getRootDir() . '/../web/projectFiles/' . $date . '/', $filename);
+                        $file->move($this->get('kernel')->getRootDir() . '/../web/projectFiles/' . $date . '/', $filename);
                         //get path info
                         $path = 'projectFiles/' . $date . '/' . $filename;
                         $fileEntity->setPath($path);
@@ -2337,12 +3225,13 @@ class CustomprojectController extends Controller {
             }
         }
         $em->flush();
-        
+
         return $this->redirect($this->generateUrl('viewiof', array(
-            'id' => $iofEntity->getId(),
-            'status' => $iofEntity->getStatus(),
+                            'id' => $iofEntity->getId(),
+                            'status' => $iofEntity->getStatus(),
         )));
     }
+
     //when edit first delete all the attachinfo belong to this attachment
     protected function deleteAttachInfoByAttachmentId($id) {
         $em = $this->getDoctrine()->getManager();
@@ -2353,8 +3242,8 @@ class CustomprojectController extends Controller {
         $em->flush();
         return;
     }
-    
-    public function saveFileAndMessageForPreAction(){
+
+    public function saveFileAndMessageForPreAction() {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('iof')
@@ -2362,9 +3251,9 @@ class CustomprojectController extends Controller {
                 ->where('iof.type = 0');
         $query = $qb->getQuery();
         $entities = $query->getResult();
-        foreach($entities as $entity){
+        foreach ($entities as $entity) {
             $infos = $entity->getAttachinfo()->toArray();
-            foreach($infos as $info){
+            foreach ($infos as $info) {
                 $info->setFormindex('1');
                 $em->persist($info);
             }
@@ -2387,8 +3276,8 @@ class CustomprojectController extends Controller {
         var_dump('finish');
         exit();
     }
-    
-    public function showposlistAction(){
+
+    public function showposlistAction() {
         $id = $this->getRequest()->getContent();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
@@ -2409,8 +3298,8 @@ class CustomprojectController extends Controller {
                     'entities' => $entity
         ));
     }
-    
-    public function downloadPOSAction($wid){
+
+    public function downloadPOSAction($wid) {
         $em = $this->getDoctrine()->getManager();
         $file_entity = $em->getRepository('AlbatrossCustomBundle:Poslist')->findOneByCustomwave($wid);
 
@@ -2436,15 +3325,15 @@ class CustomprojectController extends Controller {
         }
     }
 
-    public function checkProjectNameAction(){
+    public function checkProjectNameAction() {
         $data = $this->getRequest()->getContent();
         $dataArr = json_decode($data, true);
-        $name = $dataArr['client'].'_'.$dataArr['type'].'_'.$dataArr['scope'];
-        $name2 = $dataArr['client'].'_'.lcfirst($dataArr['type']).'_'.$dataArr['scope'];
+        $name = $dataArr['client'] . '_' . $dataArr['type'] . '_' . $dataArr['scope'];
+        $name2 = $dataArr['client'] . '_' . lcfirst($dataArr['type']) . '_' . $dataArr['scope'];
         $em = $this->getDoctrine()->getManager();
-        if(($em->getRepository('AlbatrossCustomBundle:Customproject')->findOneByName($name) == null) && ($em->getRepository('AlbatrossCustomBundle:Customproject')->findOneByName($name2) == null)){
+        if (($em->getRepository('AlbatrossCustomBundle:Customproject')->findOneByName($name) == null) && ($em->getRepository('AlbatrossCustomBundle:Customproject')->findOneByName($name2) == null)) {
             return new Response('1');
-        }else{
+        } else {
             return new Response('0');
         }
     }

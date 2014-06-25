@@ -20,4 +20,7 @@ Albatross\CustomBundle\Entity\Aolquestionnaire:
       type: string
       length: 255
       nullable: true
+    file_index:
+      type: bigint
+      nullable: true
   lifecycleCallbacks: {}
