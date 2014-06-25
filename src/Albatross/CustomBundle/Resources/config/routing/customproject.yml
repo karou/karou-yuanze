@@ -25,14 +25,10 @@ customproject_update:
     requirements: { _method: post|put }
 
 customproject_delete:
-    pattern:  /delete/{id}
-    defaults: { _controller: "AlbatrossCustomBundle:Customproject:delete", id:'' }
+    pattern:  /delete
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:delete" }
     requirements: { _method: post|delete }
     
-followProject:
-    pattern:  /followProject/{id}
-    defaults: { _controller: "AlbatrossCustomBundle:Customproject:followProject", id:'' }
-
 saveField:
     pattern:  /saveField/{type}
     defaults: { _controller: "AlbatrossCustomBundle:Customproject:saveField", type:'' }
@@ -83,6 +79,10 @@ getFileMessageHtml:
 checkWaveBindToProject:
     pattern:  /checkWaveBindToProject
     defaults: { _controller: "AlbatrossCustomBundle:Customproject:checkWaveBindToProject" }
+    
+followProject:
+    pattern:  /followProject
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:followProject" }
 
 recapGetAolquestionnaire:
     pattern:  /recapGetAolquestionnaire
@@ -103,3 +103,28 @@ downloadPOS:
 checkProjectName:
     pattern:  /checkProjectName
     defaults: { _controller: "AlbatrossCustomBundle:Customproject:checkProjectName" }
+createInvoice:
+    pattern:  /createInvoice/{wid}/{type}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:createInvoice", wid:'', type:'' }
+showInvoiceInfo:
+    pattern:  /showInvoiceInfo/{invoiceid}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:showInvoiceInfo", invoiceid:'' }
+downloadInvoiceFile:
+    pattern:  /downloadInvoiceFile/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:downloadInvoiceFile", id:'' }
+createUpdateKickOffMeeting:
+    pattern:  /createUpdateKickOffMeeting/{wid}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:createUpdateKickOffMeeting", wid:'' }
+createUpdateKickOffMeetingInfo:
+    pattern:  /createUpdateKickOffMeetingInfo/{wid}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:createUpdateKickOffMeetingInfo", wid:'' }
+updateFile:
+    pattern:  /updateFile/{id}/{index}
+    defaults: { _controller: AlbatrossCustomBundle:Customproject:updateFile, id:'', index:''}
+updateRejectFile:
+    pattern:  /updateRejectFile/{id}
+    defaults: { _controller: AlbatrossCustomBundle:Customproject:updateRejectFile, id:''}
+setTranslationFile:
+    pattern:  /setTranslationFile/{id}/{index}/{language}
+    defaults: { _controller: AlbatrossCustomBundle:Customproject:setTranslationFile, id:'', index:'', language:'' }
+    

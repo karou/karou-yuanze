@@ -1,0 +1,26 @@
+Albatross\CustomBundle\Entity\TranslationFile:
+  type: entity
+  table: translation_file
+  manyToOne:
+    customfield:
+      targetEntity: Albatross\CustomBundle\Entity\Customfield
+      inversedBy: translation_file
+  repositoryClass: 
+    Albatross\CustomBundle\Entity\TranslationFileRepository
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    path:
+      type: string
+      length: 255
+      nullable: true
+    language_index:
+      type: bigint
+      nullable: true
+    file_index:
+      type: bigint
+      nullable: true
+  lifecycleCallbacks: {}

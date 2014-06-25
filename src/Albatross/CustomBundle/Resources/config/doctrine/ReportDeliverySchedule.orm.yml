@@ -1,0 +1,24 @@
+Albatross\CustomBundle\Entity\ReportDeliverySchedule:
+  type: entity
+  table: report_delivery_schedule
+  uniqueConstraints:
+    customproject_uniq:
+      columns: customproject_id
+  oneToOne:
+    customproject:
+      targetEntity: Customproject
+      inversedBy: reportDeliverySchedule
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    updated_date:
+      type: date
+      nullable: true
+    report_status:
+      type: bigint
+      nullable: true
+  lifecycleCallbacks: {}

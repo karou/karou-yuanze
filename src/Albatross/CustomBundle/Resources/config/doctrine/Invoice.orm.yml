@@ -1,0 +1,44 @@
+Albatross\CustomBundle\Entity\Invoice:
+  type: entity
+  table: invoice
+  manyToOne:
+    customwave:
+      targetEntity: Customwave
+      inversedBy: invoice
+    project_manager:
+      targetEntity: Albatross\UserBundle\Entity\User
+      inversedBy: invoice
+      nullable: true
+    bu:
+      targetEntity: Albatross\AceBundle\Entity\Bu
+      inversedBy: invoice
+      nullable: true
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    invoice_type:
+      type: bigint
+      nullable: false
+    label:
+      type: string
+      length: 255
+      nullable: false
+    path:
+      type: string
+      length: 255
+      nullable: false
+    number:
+      type: string
+      length: 255
+      nullable: true
+    description:
+      type: string
+      length: 255
+      nullable: true
+    regional:
+      type: boolean
+      nullable: true
+  lifecycleCallbacks: {}
