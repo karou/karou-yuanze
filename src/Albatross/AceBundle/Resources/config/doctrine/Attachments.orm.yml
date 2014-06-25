@@ -8,6 +8,9 @@ Albatross\AceBundle\Entity\Attachments:
       targetEntity: Albatross\UserBundle\Entity\User
     parent:
       targetEntity: Albatross\AceBundle\Entity\Attachments
+      joinColumn:
+          onDelete: CASCADE
+      cascade: ["remove"]
       nullable: true
     filesection:
       targetEntity: FileSection
@@ -18,12 +21,12 @@ Albatross\AceBundle\Entity\Attachments:
       targetEntity: Attachinfo
       mappedBy: attachments
       cascade: ["remove"]
-    ioffile:
-      targetEntity: IOFFile
-      mappedBy: attachments
-      cascade: ["remove"]
     iofmessage:
       targetEntity: IOFMessage
+      mappedBy: attachments
+      cascade: ["remove"]
+    ioffile:
+      targetEntity: IOFFile
       mappedBy: attachments
       cascade: ["remove"]
   oneToOne:
@@ -60,4 +63,4 @@ Albatross\AceBundle\Entity\Attachments:
       type: boolean
       nullable: true
   lifecycleCallbacks:
-      preRemove: [preRemove]
+      preRemove: [ preRemove ]
