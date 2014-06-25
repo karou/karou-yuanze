@@ -21,6 +21,10 @@ Albatross\CustomBundle\Entity\Customwave:
       targetEntity: Albatross\CustomBundle\Entity\Poslist
       mappedBy: customwave
       cascade: ["remove"]
+    meeting_recap:
+      targetEntity: KickOffMeetingRecap
+      mappedBy: customwave
+      cascade: ["remove"]
   oneToMany:
     recap:
       targetEntity: Albatross\CustomBundle\Entity\Recap
@@ -34,6 +38,10 @@ Albatross\CustomBundle\Entity\Customwave:
       targetEntity: Albatross\AceBundle\Entity\Project
       mappedBy: customwave
       cascade: ["persist"]
+    invoice:
+      targetEntity: Invoice
+      mappedBy: customwave
+      cascade: ["remove"]
   manyToMany:
     questionnaire:
       targetEntity: Albatross\AceBundle\Entity\Questionnaire
@@ -66,6 +74,11 @@ Albatross\CustomBundle\Entity\Customwave:
     totalnum:
       type: bigint
       nullable: true
+    last_start:
+      type: boolean
+      nullable: true
+      options:
+        default: 0
     delivery_date:
       type: string
       length: 255
