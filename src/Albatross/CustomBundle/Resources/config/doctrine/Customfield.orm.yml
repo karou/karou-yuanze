@@ -23,6 +23,11 @@ Albatross\CustomBundle\Entity\Customfield:
       mappedBy: customfield
       nullable: true
       cascade: ["persist", "remove"]
+    translation_file:
+      targetEntity: TranslationFile
+      mappedBy: customfield
+      nullable: true
+      cascade: ["persist", "remove"]
   fields:
     id:
       type: bigint
@@ -167,7 +172,65 @@ Albatross\CustomBundle\Entity\Customfield:
       type: string
       length: 255
       nullable: true
+    translation_signature:
+      type: string
+      length: 255
+      nullable: true
+    test_survey_number:
+      type: string
+      length: 255
+      nullable: true
+    tested_survey_number:
+      type: string
+      length: 255
+      nullable: true
     question_end_time:
+      type: string
+      length: 255
+      nullable: true
+    questionnaire_upload_file_tick:
+      type: boolean
+      nullable: true
+    questionnaire_new_tick:
+      type: boolean
+      nullable: true
+    questionnaire_modify_tick:
+      type: boolean
+      nullable: true
+    questionnaire_translation_tick:
+      type: boolean
+      options:
+        default: 0
+      nullable: false
+    questionnaire_team_description:
+      type: text
+      nullable: true
+    questionnaire_from_text:
+      type: text
+      nullable: true
+    questionnaire_language_num:
+      type: string
+      length: 255
+      nullable: true
+    questionnaire_version_num_1:
+      type: bigint
+      nullable: true
+    questionnaire_version_num_2:
+      type: bigint
+      nullable: true
+    questionnaire_version_num_3:
+      type: bigint
+      nullable: true
+    questionnaire_version_num_4:
+      type: bigint
+      nullable: true
+    rejected_tick:
+      type: boolean
+      nullable: true
+    rejected_comment:
+      type: text
+      nullable: true
+    rejected_file_path:
       type: string
       length: 255
       nullable: true
