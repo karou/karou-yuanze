@@ -15,6 +15,10 @@ Albatross\UserBundle\Entity\User:
     log:
       targetEntity: Log
       mappedBy: user
+    comment:
+      targetEntity: Comment
+      mappedBy: user
+      cascade: ["persist"]
   manyToMany:
     customproject:
       targetEntity: Albatross\CustomBundle\Entity\Customproject

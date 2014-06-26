@@ -1,0 +1,21 @@
+Albatross\UserBundle\Entity\Comment:
+  type: entity
+  table: comment
+  manyToOne:
+    wave:
+      targetEntity: Albatross\CustomBundle\Entity\Customwave
+      inversedBy: comment
+    user:
+      targetEntity: User
+      inversedBy: comment
+  fields:
+    id:
+      type: bigint
+      id: true
+      generator:
+        strategy: AUTO
+    content:
+      type: text
+    submittime:
+      type: datetime
+  lifecycleCallbacks: {  }
