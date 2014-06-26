@@ -42,6 +42,10 @@ Albatross\CustomBundle\Entity\Customwave:
       targetEntity: Invoice
       mappedBy: customwave
       cascade: ["remove"]
+    comment:
+      targetEntity: Albatross\UserBundle\Entity\Comment
+      mappedBy: customwave
+      cascade: ["remove"]
   manyToMany:
     questionnaire:
       targetEntity: Albatross\AceBundle\Entity\Questionnaire
