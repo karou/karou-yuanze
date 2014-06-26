@@ -759,4 +759,42 @@ class Customwave {
         return $this->assign_percent;
     }
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $comment;
+
+
+    /**
+     * Add comment
+     *
+     * @param \Albatross\UserBundle\Entity\Comment $comment
+     * @return Customwave
+     */
+    public function addComment(\Albatross\UserBundle\Entity\Comment $comment)
+    {
+        $this->comment[] = $comment;
+    
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \Albatross\UserBundle\Entity\Comment $comment
+     */
+    public function removeComment(\Albatross\UserBundle\Entity\Comment $comment)
+    {
+        $this->comment->removeElement($comment);
+    }
+
+    /**
+     * Get comment
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getComment()
+    {
+        return $this->comment;
+    }
 }
