@@ -79,3 +79,7 @@ adminEdit:
 log:
     pattern:  /log
     defaults: { _controller: "AlbatrossUserBundle:Admin:log"}
+    
+saveUserComment:
+    pattern:  /saveUserComment
+    defaults: { _controller: "AlbatrossUserBundle:Default:saveUserComment" }

@@ -301,26 +301,25 @@
                                                 </div>
                                                 <div class="tab-pane" id="tab-comment">
                                                     <div class="comment-items">
-                                                        <?php for($i=1;$i<=5;$i++): ?>
+                                                        {% for com in userInfo.comment %}
                                                         <div class="item-block clearfix">
                                                             <div class="item-thumb pull-left">
                                                                 <ul>
-                                                                    <li class="item-pic"><img src="{{ asset('bundles/falgun/') }}images/user-icon.png" width="34" height="34" alt="anchor"></li>
+                                                                    <li class="item-pic"><img src="{{ asset(userInfo.webPath) }}" width="34" height="34" alt="anchor"></li>
                                                                 </ul>
                                                             </div>
                                                             <div class="item-intro pull-left" style="width:85%;">
-                                                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                                                                <p>{{ com.content }}</p>
                                                                 <div class="item-meta">
                                                                     <ul>
-                                                                        <li>@ibouguet</li>
-                                                                        <li>Project: <a href="#">Christofle_Retail_SW</a></li>
-                                                                        <li>1 Min ago</li>
+                                                                        <li>{{ com.user.username }}</li>
+                                                                        <li>Project: <a href="#">{{ com.wave.customproject.name }}</a></li>
+                                                                        <li>{{ com.submittime|date('Y-m-d H:i:s') }}</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <?php endfor; ?>
-                                                   
+                                                        {% endfor %}
                                                     </div>
                                                 </div>
                                             </div>

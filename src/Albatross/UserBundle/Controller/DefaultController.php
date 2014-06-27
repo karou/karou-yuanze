@@ -3,6 +3,8 @@
 namespace Albatross\UserBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Albatross\UserBundle\Entity\Comment;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends Controller {
 
@@ -544,9 +546,41 @@ class DefaultController extends Controller {
         ));
     }
 	
-	function getMonthName($val)
-	{
-		$arrayMonth = array('','January','February','March','April','May','June','July','August','September','Octuber','November','December');
-		return $arrayMonth[$val];
-	}
+    function getMonthName($val)
+    {
+            $arrayMonth = array('','January','February','March','April','May','June','July','August','September','Octuber','November','December');
+            return $arrayMonth[$val];
+    }
+
+    public function saveUserCommentAction(){
+        $request = $this->getRequest();
+        $text = $request->get('text');
+        $waveId = $request->get('waveid');
+        
+        if(!empty($text)) {
+            $em = $this->getDoctrine()->getManager();
+            $secu = $this->container->get('security.context');
+            $user = $secu->getToken()->getUser();
+            $curTime = date('Y-m-d H:i:s', time());
+            $waveEntity = $em->getRepository('AlbatrossCustomBundle:Customwave')->find($waveId);
+            $commentEntity = new Comment();
+            $commentEntity->setContent($text);
+            $commentEntity->setUser($user);
+            $commentEntity->setWave($waveEntity);
+            $commentEntity->setSubmittime(new \DateTime($curTime));
+            
+            $em->persist($commentEntity);
+            $em->flush();
+            
+            $time = $commentEntity->getSubmittime()->format('Y-m-d H:i:s');
+            $return = '<div class="item-block clearfix"><div class="item-thumb pull-left"><ul><li class="item-pic"><img src="/'
+                    . $commentEntity->getUser()->getWebPath() .'" width="34" height="34" alt="anchor"></li>'
+                    . '</ul></div><div class="item-intro pull-left" style="width:85%;"><p>'
+                    . $commentEntity->getContent() .'</p><div class="item-meta"><ul><li>'
+                    . $commentEntity->getUser()->getUsername() .'</li><li>Project: <a href="#">'
+                    . $commentEntity->getWave()->getCustomproject()->getName() .'</a></li><li>'
+                    . $time .'</li></ul></div></div></div>';
+            return new Response($return);
+        }
+    }
 }
