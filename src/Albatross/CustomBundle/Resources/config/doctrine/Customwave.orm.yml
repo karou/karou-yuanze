@@ -44,8 +44,9 @@ Albatross\CustomBundle\Entity\Customwave:
       cascade: ["remove"]
     comment:
       targetEntity: Albatross\UserBundle\Entity\Comment
-      mappedBy: customwave
+      mappedBy: wave
       cascade: ["remove"]
+      orderBy: { 'submittime': 'DESC' }
   manyToMany:
     questionnaire:
       targetEntity: Albatross\AceBundle\Entity\Questionnaire

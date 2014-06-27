@@ -81,8 +81,8 @@ checkWaveBindToProject:
     defaults: { _controller: "AlbatrossCustomBundle:Customproject:checkWaveBindToProject" }
     
 followProject:
-    pattern:  /followProject
-    defaults: { _controller: "AlbatrossCustomBundle:Customproject:followProject" }
+    pattern:  /followProject/{id}
+    defaults: { _controller: "AlbatrossCustomBundle:Customproject:followProject", id:'' }
 
 recapGetAolquestionnaire:
     pattern:  /recapGetAolquestionnaire

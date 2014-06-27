@@ -1107,7 +1107,8 @@ class CustomprojectController extends Controller {
 
     //follow the project use Ajax
     public function followProjectAction($id){
-        $user = $this->getCurUser();
+        $secu = $this->container->get('security.context');
+        $user = $secu->getToken()->getUser();
         $em = $this->getDoctrine()->getManager();
         $customProjectEntity = $em->getRepository('AlbatrossCustomBundle:Customproject')->find($id);
         $user->addCustomproject($customProjectEntity);
