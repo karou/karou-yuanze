@@ -1069,25 +1069,29 @@
                                             </div>
                                             <div class="tab-pane" id="tab-comment{{wave.id}}">
                                                 <div class="comment-items">
-                                                    {% for i in 0..5 %}
+                                                    {% for com in wave.comment %}
                                                         <div class="item-block clearfix">
                                                             <div class="item-thumb pull-left">
                                                                 <ul>
-                                                                    <li class="item-pic"><img src="{{ asset('bundles/falgun/') }}images/user-icon.png" width="34" height="34" alt="anchor"></li>
+                                                                    <li class="item-pic"><img src="{{ asset(com.user.webPath) }}" width="34" height="34" alt="anchor"></li>
                                                                 </ul>
                                                             </div>
                                                             <div class="item-intro pull-left" style="width:85%;">
-                                                                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                                                                <p>{{com.content}}</p>
                                                                 <div class="item-meta">
                                                                     <ul>
-                                                                        <li>@ibouguet</li>
-                                                                        <li>Project: <a href="#">Christofle_Retail_SW</a></li>
-                                                                        <li>1 Min ago</li>
+                                                                        <li>{{com.user.username}}</li>
+                                                                        <li>Project: <a href="#">{{com.wave.customproject.name}}</a></li>
+                                                                        <li>{{com.submittime|date('Y-m-d H:i:s')}}</li>
                                                                     </ul>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     {% endfor %}
+                                                    <div class="item-block clearfix">
+                                                        <textarea class="user-comment" id="user-comment-{{wave.id}}" style="width: 96%;"></textarea>
+                                                        <button class="btn btn-success" onclick="submitComment(this);" style="width:46%">Submit</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1197,50 +1201,66 @@
         .successUl li {color:#9b5269; list-style:circle; padding:2px; margin-left:17px;}
     </style>
     <script>
-                $(function() {
-                $('textarea.chat-inputbox').tinymce({
+        $(function() {
+            $('textarea.chat-inputbox').tinymce({
                 script_url : 'js/tiny_mce/tiny_mce.js',
-                        theme : "simple",
-                        width : 350
-                });{% if successMsg != '' %}
-                        $('.successUl').show('slow');{% endif %}
+                theme : "simple",
+                width : 350
+            });
+            {% if successMsg != '' %}
+            $('.successUl').show('slow');{% endif %}
 
-                        setTimeout(function(){$('.successUl').hide('slow'); }, 5000);
-                });
-                function showMiniForm(id)
-                {
-                $('.mini-form').hide('fast');
-                        $('.' + id).show('slow');
-                        $('body,html').animate({
-                scrollTop: 850
-                }, 500);
-                        return false;
+            setTimeout(function(){$('.successUl').hide('slow'); }, 5000);
+        });
+        function showMiniForm(id)
+        {
+            $('.mini-form').hide('fast');
+                $('.' + id).show('slow');
+                $('body,html').animate({
+            scrollTop: 850
+            }, 500);
+                return false;
+        }
+        {#    function for commit use comment use ajax    #}
+        function submitComment(e) {
+            var text = $(e).parent().children('.user-comment').val();
+            var waveId = $(e).parent().children('.user-comment').attr('id').split('-')[2];
+
+            $.ajax({
+                type: "POST",
+                url: "{{ path('saveUserComment') }}",
+                data: {text: text, waveid: waveId},
+                success: function(result) {
+                    $(e).parent().parent().prepend(result);
+                    $(e).parent().children('.user-comment').val('');
                 }
-
+            });
+        }
+        
         function chkProjectForms(type, frmId, waveId)
         {
         var chk = 1;
                 if (type == 'meetingMinutes')
         {
-        var mm_brand = document.getElementById('mm_brand' + waveId).value;
-                var mm_date = document.getElementById('mm_date' + waveId).value;
-                var mm_address = document.getElementById('mm_address' + waveId).value;
-                var mm_purpose = document.getElementById('mm_purpose' + waveId).value;
-                var mm_nextstep = document.getElementById('mm_nextstep' + waveId).value;
-                var mm_agenda_of_the_meeting = document.getElementById('mm_agenda_of_the_meeting' + waveId).value;
-                var mm_clients_feedback = document.getElementById('mm_clients_feedback' + waveId).value;
-                var mm_comments = document.getElementById('mm_comments' + waveId).value;
-                if (mm_brand == '' || mm_date == '' || mm_address == '' || mm_purpose == '' || mm_nextstep == '' || mm_agenda_of_the_meeting == '' || mm_clients_feedback == '' || mm_comments == '')
-        {
-        chk = 0;
-        }
+            var mm_brand = document.getElementById('mm_brand' + waveId).value;
+            var mm_date = document.getElementById('mm_date' + waveId).value;
+            var mm_address = document.getElementById('mm_address' + waveId).value;
+            var mm_purpose = document.getElementById('mm_purpose' + waveId).value;
+            var mm_nextstep = document.getElementById('mm_nextstep' + waveId).value;
+            var mm_agenda_of_the_meeting = document.getElementById('mm_agenda_of_the_meeting' + waveId).value;
+            var mm_clients_feedback = document.getElementById('mm_clients_feedback' + waveId).value;
+            var mm_comments = document.getElementById('mm_comments' + waveId).value;
+            if (mm_brand == '' || mm_date == '' || mm_address == '' || mm_purpose == '' || mm_nextstep == '' || mm_agenda_of_the_meeting == '' || mm_clients_feedback == '' || mm_comments == '')
+            {
+                chk = 0;
+            }
         }
         else if (type == 'brand')
         {
-        var fileBrand = document.getElementById('fileBrand' + waveId).value;
-                var material_name = document.getElementById('material_name' + waveId).value;
-                var mNoFileUploadId = document.getElementById('mNoFileUpload' + waveId);
-                if (material_name == '')
+            var fileBrand = document.getElementById('fileBrand' + waveId).value;
+            var material_name = document.getElementById('material_name' + waveId).value;
+            var mNoFileUploadId = document.getElementById('mNoFileUpload' + waveId);
+            if (material_name == '')
         {
         chk = 0;
         }
@@ -1248,66 +1268,66 @@
         if (fileBrand == '' && mNoFileUploadId.checked == false)
         {
         alert('Please either select file to upload or check "No file to upload".');
-                return false;
+            return false;
         }
         }
         else if (type == "questionnaire")
         {
-        var path = document.getElementById('path' + waveId).value;
-                var file1_label = document.getElementById('question_file1_label' + waveId).value;
-                var quesNoFileUploadId = document.getElementById('quesNoFileUpload' + waveId);
-                if (path == '' && quesNoFileUploadId.checked == false)
-        {
-        alert('Please either select file to upload or check "No file to upload".');
+            var path = document.getElementById('path' + waveId).value;
+            var file1_label = document.getElementById('question_file1_label' + waveId).value;
+            var quesNoFileUploadId = document.getElementById('quesNoFileUpload' + waveId);
+            if (path == '' && quesNoFileUploadId.checked == false)
+            {
+                alert('Please either select file to upload or check "No file to upload".');
                 return false;
-        }
+            }
         }
         else if (type == 'pos_file')
         {
-        var filePos = document.getElementById('pos_list_file' + waveId).value;
-                if (filePos == '')
-        {
-        chk = 0;
-        }
+            var filePos = document.getElementById('pos_list_file' + waveId).value;
+            if (filePos == '')
+            {
+                chk = 0;
+            }
         }
         else if (type == 'brief')
         {
-        var spePath = document.getElementById('spePath' + waveId).value;
-                var not_file_upload_spe = document.getElementById('not_file_upload_spe' + waveId);
-                if (material_name == '')
-        {
-        chk = 0;
-        }
+            var spePath = document.getElementById('spePath' + waveId).value;
+            var not_file_upload_spe = document.getElementById('not_file_upload_spe' + waveId);
+            if (material_name == '')
+            {
+                chk = 0;
+            }
 
-        if (spePath == '' && not_file_upload_spe.checked == false)
-        {
-        alert('Please either select file to upload or check "No file to upload".');
+            if (spePath == '' && not_file_upload_spe.checked == false)
+            {
+                alert('Please either select file to upload or check "No file to upload".');
                 return false;
-        }
+            }
         }
         else if (type == 'report')
         {
-        var report_file = document.getElementById('report_file' + waveId).value;
-                var report_nofileupload = document.getElementById('report_nofileupload' + waveId);
-                if (material_name == '')
-        {
-        chk = 0;
-        }
+            var report_file = document.getElementById('report_file' + waveId).value;
+            var report_nofileupload = document.getElementById('report_nofileupload' + waveId);
+            if (material_name == '')
+            {
+                chk = 0;
+            }
 
-        if (report_file == '' && report_nofileupload.checked == false)
-        {
-        alert('Please either select file to upload or check "No file to upload".');
-                return false;
-        }
+            if (report_file == '' && report_nofileupload.checked == false)
+            {
+                alert('Please either select file to upload or check "No file to upload".');
+                    return false;
+            }
         }
 
         if (chk == 0)
         {
-        alert('Please fill all the required fields');
-                return false;
+            alert('Please fill all the required fields');
+            return false;
         }
         else
-                return true;
+            return true;
         }
     </script>
 {% endblock %}

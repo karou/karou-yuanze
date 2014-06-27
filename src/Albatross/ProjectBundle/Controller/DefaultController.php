@@ -391,8 +391,9 @@ class DefaultController extends Controller {
         $projectArr = $projectquery->getArrayResult();
 
         $waveqb = $em->createQueryBuilder();
-        $waveqb->select('c,p,pm,ca,q')
+        $waveqb->select('c,com,p,pm,ca,q')
                 ->from('AlbatrossCustomBundle:Customwave', 'c')
+                ->leftJoin('c.comment', 'com')
                 ->leftJoin('c.customproject', 'p')
 //                ->leftJoin('c.reportKa', 'rk')
                 ->leftJoin('c.project_manager', 'pm')
@@ -403,6 +404,7 @@ class DefaultController extends Controller {
 
         $wavequery = $waveqb->getQuery();
         $waves = $wavequery->getResult();
+        
         //echo '<pre>';print_r($projectArr);print_r($waves);exit;
 
         $arrWaveTaskData = $arrWaveData = array();
