@@ -428,7 +428,7 @@ class CustomprojectController extends Controller {
 
         $em->persist($entity);
         $em->flush();
-        return $this->redirect($this->generateUrl('customproject'));
+        return $this->redirect($this->generateUrl('project_homepage'));
     }
 
     /**

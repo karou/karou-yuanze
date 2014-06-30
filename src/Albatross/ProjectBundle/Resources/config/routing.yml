@@ -5,3 +5,7 @@ project_homepage:
 view_project:
     pattern: /view_project
     defaults: { _controller: ProjectBundle:Default:view}
+    
+customproject_new:
+    pattern:  /project/new
+    defaults: { _controller: "ProjectBundle:Default:new" }

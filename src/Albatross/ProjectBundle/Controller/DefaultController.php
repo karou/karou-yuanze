@@ -3,6 +3,7 @@
 namespace Albatross\ProjectBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Albatross\ProjectBundle\Form\CustomprojectType;
 
 class DefaultController extends Controller {
 
@@ -58,6 +59,16 @@ class DefaultController extends Controller {
                     'list_type' => $list_type,
                     'list_pm' => $list_pm,
                     'searchArr' => $searchArr
+        ));
+    }
+
+    public function newAction() {
+        $scopeAndTypeOption = $this->container->getParameter('valuelist');
+
+        $form = $this->createForm(new CustomprojectType(), $scopeAndTypeOption);
+
+        return $this->render('ProjectBundle:Default:new.html.twig', array(
+                    'form' => $form->createView(),
         ));
     }
 
@@ -404,7 +415,7 @@ class DefaultController extends Controller {
 
         $wavequery = $waveqb->getQuery();
         $waves = $wavequery->getResult();
-        
+
         //echo '<pre>';print_r($projectArr);print_r($waves);exit;
 
         $arrWaveTaskData = $arrWaveData = array();
@@ -630,56 +641,56 @@ class DefaultController extends Controller {
         $result = $query->getArrayResult();
         return $result;
     }
-    
-    
-protected function combineTwoArr($operation, $operation_2){
+
+    protected function combineTwoArr($operation, $operation_2) {
         $result = array();
         $buArr = array();
-        foreach($operation as $waveId => $projectinfo){
-            foreach($projectinfo as $buname => $pi){
+        foreach ($operation as $waveId => $projectinfo) {
+            foreach ($projectinfo as $buname => $pi) {
                 $buArr[$waveId][] = $buname;
             }
         }
-        foreach($operation_2 as $waveId2 => $aolinfo){
-            foreach($aolinfo as $bname2 => $ai){
+        foreach ($operation_2 as $waveId2 => $aolinfo) {
+            foreach ($aolinfo as $bname2 => $ai) {
                 $buArr[$waveId2][] = $bname2;
             }
         }
-        
-        foreach($buArr as $wid => $bu){
+
+        foreach ($buArr as $wid => $bu) {
             $buArr[$wid] = array_unique($bu);
         }
-        
-        foreach($buArr as $wid => $bu){
-            foreach($bu as $buname){
-                if(isset($operation[$wid][$buname])){
+
+        foreach ($buArr as $wid => $bu) {
+            foreach ($bu as $buname) {
+                if (isset($operation[$wid][$buname])) {
                     $result[$wid][$buname]['ace'] = $operation[$wid][$buname];
-                }else{
+                } else {
                     $result[$wid][$buname]['ace'] = '';
                 }
-                if(isset($operation_2[$wid][$buname])){
+                if (isset($operation_2[$wid][$buname])) {
                     $result[$wid][$buname]['aol'] = $operation_2[$wid][$buname];
-                }else{
+                } else {
                     $result[$wid][$buname]['aol'] = '';
                 }
             }
         }
         return $result;
     }
+
     //check the operations if belong to this customproject bu
-    protected function getCustomprojectBuByWave($waves){
+    protected function getCustomprojectBuByWave($waves) {
         $em = $this->getDoctrine()->getManager();
-        
-        foreach($waves as $wave){
-            if($projecName = $wave->getCustomproject()->getName())
-                    break;
+
+        foreach ($waves as $wave) {
+            if ($projecName = $wave->getCustomproject()->getName())
+                break;
         }
-        
+
         $pNameArr = explode('_', $projecName);
         $bu = $pNameArr[2];
         $notCheckArr = array('WW', 'APAC', 'EU');
-        if(in_array($bu,$notCheckArr))
-                return '';
+        if (in_array($bu, $notCheckArr))
+            return '';
         $buEntity = $em->getRepository('AlbatrossAceBundle:Bu')->findOneByCode($bu);
         $buName = $buEntity->getName();
         return $buName;
@@ -690,20 +701,20 @@ protected function combineTwoArr($operation, $operation_2){
         $em = $this->getDoctrine()->getManager();
         $filterBu = $this->getCustomprojectBuByWave($waves);
         $waveArr = array();
-        foreach( $waves as $wave ){
+        foreach ($waves as $wave) {
             $waveArr[] = $wave->getId();
         }
         $qb = $em->createQueryBuilder();
-        $qb->select('p','t', 'w')
+        $qb->select('p', 't', 'w')
                 ->from('AlbatrossAceBundle:Project', 'p')
                 ->leftJoin('p.tasks', 't')
                 ->leftJoin('p.customwave', 'w');
         $temp = 1;
-        foreach($waveArr as $w){
-            if($temp == 1){
+        foreach ($waveArr as $w) {
+            if ($temp == 1) {
                 $qb->andWhere(sprintf('w.id=:key_%d', $temp))
                         ->setParameter('key_' . $temp, $w);
-            }else{
+            } else {
                 $qb->orWhere(sprintf('w.id=:key_%d', $temp))
                         ->setParameter('key_' . $temp, $w);
             }
@@ -718,17 +729,17 @@ protected function combineTwoArr($operation, $operation_2){
         $taskBuProjectArr = array();
         $taskPrjNameDuedate = array();
         $taskResultIndex = 0;
-        foreach( $taskResult as $r ){
-            foreach($r['tasks'] as $task){
-                if($task['number'] > 100 && $task['number'] < 117){
+        foreach ($taskResult as $r) {
+            foreach ($r['tasks'] as $task) {
+                if ($task['number'] > 100 && $task['number'] < 117) {
                     $taskArr[] = $task['id'];
-                    $taskBuProjectArr[$taskResultIndex]['bu'] = $task['number'] - 100 ;
-                    $taskBuProjectArr[$taskResultIndex]['project'] = $r['id'] ;
+                    $taskBuProjectArr[$taskResultIndex]['bu'] = $task['number'] - 100;
+                    $taskBuProjectArr[$taskResultIndex]['project'] = $r['id'];
                 }
-                if($task['number'] == 500){
+                if ($task['number'] == 500) {
                     $taskPrjNameDuedate[$r['name']] = $task['reportduedate'];
                 }
-                if(!isset($taskPrjNameDuedate[$r['name']])){
+                if (!isset($taskPrjNameDuedate[$r['name']])) {
                     $taskPrjNameDuedate[$r['name']] = '';
                 }
             }
@@ -741,11 +752,11 @@ protected function combineTwoArr($operation, $operation_2){
                 ->leftJoin('pm.task', 't')
                 ->leftJoin('t.project', 'p');
         $index = 1;
-        foreach($taskArr as $t){
-            if($index == 1){
+        foreach ($taskArr as $t) {
+            if ($index == 1) {
                 $pm_qb->andWhere(sprintf('t.id=:key_%d', $index))
                         ->setParameter('key_' . $index, $t);
-            }else{
+            } else {
                 $pm_qb->orWhere(sprintf('t.id=:key_%d', $index))
                         ->setParameter('key_' . $index, $t);
             }
@@ -754,7 +765,7 @@ protected function combineTwoArr($operation, $operation_2){
         $pm_query = $pm_qb->getQuery();
         $pmResult = $pm_query->getArrayResult();
         $pmFinalResult = array();
-        foreach($pmResult as $p){
+        foreach ($pmResult as $p) {
             $pmFinalResult[$p['task']['id']]['project'] = $p['task']['project']['name'];
             $pmFinalResult[$p['task']['id']]['bu'] = $buArr[$p['task']['number'] - 100];
             $pmFinalResult[$p['task']['id']]['scope'] = $p['scope'];
@@ -771,13 +782,13 @@ protected function combineTwoArr($operation, $operation_2){
                 ->leftJoin('iof.attachments', 'a')
                 ->leftJoin('a.customwave', 'cw')
                 ->where('a.children = 0')
-                ;
+        ;
         $seq = 1;
-        foreach($waveArr as $w) {
-            if($seq == 1){
+        foreach ($waveArr as $w) {
+            if ($seq == 1) {
                 $iof_qb->andWhere(sprintf('cw.id= :key_%d', $seq))
                         ->setParameter('key_' . $seq, $w);
-            }else{
+            } else {
                 $iof_qb->orWhere(sprintf('cw.id= :key_%d', $seq))
                         ->setParameter('key_' . $seq, $w);
             }
@@ -789,38 +800,38 @@ protected function combineTwoArr($operation, $operation_2){
         //make final result ====================================================
         //
         $result = array();
-        foreach( $taskResult as $tr ){
-            foreach($tr['tasks'] as $t){
-                if($t['number'] > 100 && $t['number'] < 117){
-                    $result[$buArr[$t['number']-100]]
+        foreach ($taskResult as $tr) {
+            foreach ($tr['tasks'] as $t) {
+                if ($t['number'] > 100 && $t['number'] < 117) {
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['fwstartdate'] = $t['fwstartdate'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['fwenddate'] = $t['fwenddate'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['step'] = 'ACE';
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['scope'] = $t['scope'] ? $t['scope'] : 0;
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['number'] = $t['projectNumber'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['reportduedate'] = $taskPrjNameDuedate[$tr['name']];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['waveid'] = $tr['customwave']['id'];
-                    $result[$buArr[$t['number']-100]]
+                    $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['wavename'] = $tr['customwave']['name'];
                 }
             }
         }
-        foreach($pmFinalResult as $pm){
-            if(isset($result[$pm['bu']]) && isset($result[$pm['bu']][$pm['project']])){
+        foreach ($pmFinalResult as $pm) {
+            if (isset($result[$pm['bu']]) && isset($result[$pm['bu']][$pm['project']])) {
                 $result[$pm['bu']][$pm['project']]['fwstartdate'] = $pm['fwstartdate'];
                 $result[$pm['bu']][$pm['project']]['fwenddate'] = $pm['fwenddate'];
                 $result[$pm['bu']][$pm['project']]['scope'] = $pm['scope'];
@@ -829,9 +840,9 @@ protected function combineTwoArr($operation, $operation_2){
             }
         }
 
-        foreach($iof_result as $iof){
-            if(isset($result[$iof['bu']['name']]
-                    [$iof['project']['name']])){
+        foreach ($iof_result as $iof) {
+            if (isset($result[$iof['bu']['name']]
+                            [$iof['project']['name']])) {
                 $result[$iof['bu']['name']]
                         [$iof['project']['name']]
                         ['fwstartdate'] = $iof['fwstartdate']->format('Y-m-d');
@@ -844,11 +855,11 @@ protected function combineTwoArr($operation, $operation_2){
                 $result[$iof['bu']['name']]
                         [$iof['project']['name']]
                         ['scope'] = $iof['scope'];
-                if(!$iof['reporttype']){
+                if (!$iof['reporttype']) {
                     $result[$iof['bu']['name']]
                             [$iof['project']['name']]
                             ['reportduedate'] = $iof['reportduedate']->format('Y-m-d');
-                }else if($iof['reporttype']){
+                } else if ($iof['reporttype']) {
                     $result[$iof['bu']['name']]
                             [$iof['project']['name']]
                             ['reportduedate'] = $iof['reportduedatetext'];
@@ -856,14 +867,14 @@ protected function combineTwoArr($operation, $operation_2){
             }
         }
         $final = array();
-        foreach($result as $k => $r){
-            if($filterBu == '' || $filterBu == $k){
-                foreach($r as $pname => $info){
-                    if(isset($info['waveid'])){
-                        if($info['number'] != ''){
+        foreach ($result as $k => $r) {
+            if ($filterBu == '' || $filterBu == $k) {
+                foreach ($r as $pname => $info) {
+                    if (isset($info['waveid'])) {
+                        if ($info['number'] != '') {
                             $final[$info['waveid']][$k][$pname] = $info;
                         }
-                    }else{
+                    } else {
                         $final = array();
                     }
                 }
@@ -876,12 +887,12 @@ protected function combineTwoArr($operation, $operation_2){
         $campaign = array();
         $final = array();
         $filterBu = $this->getCustomprojectBuByWave($waves);
-        foreach( $waves as $wave ){
+        foreach ($waves as $wave) {
             $campaign[$wave->getId()] = $wave->getCampaign()->toArray();
         }
         $status_Total = array(
-            'Declined', 
-            'Open Opportunities - No Applications', 
+            'Declined',
+            'Open Opportunities - No Applications',
             'Open Opportunities - With Applications');
         $status_Assigned = array(
             'Assigned - Completed not yet submitted',
@@ -901,63 +912,62 @@ protected function combineTwoArr($operation, $operation_2){
             'Hide from Reports; Hide from Client Survey Explorer',
             'Hide from Reports; OK for Client Survey Explorer',
             'Completed - Export Failed');
-        foreach($campaign as $waveid => $waveC){
-            foreach($waveC as $obj){
+        foreach ($campaign as $waveid => $waveC) {
+            foreach ($waveC as $obj) {
                 $survey = $obj->getAolsurvey()->toArray();
 
-                foreach($survey as $surveykey => $s){
-                    if(!is_object($s->getLocation()->getCountry())){
+                foreach ($survey as $surveykey => $s) {
+                    if (!is_object($s->getLocation()->getCountry())) {
                         var_dump($s->getLocation()->getLocCountryCode());
                         exit();
                     }
-                    if($s->getMailboxName() != 'mdelete' && $s->getMailboxName() != 'invalidsurvey'){
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']))
+                    if ($s->getMailboxName() != 'mdelete' && $s->getMailboxName() != 'invalidsurvey') {
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'] = 0;
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']))
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign'] = 0;
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']))
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone'] = 0;
-                        if(!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation']))
+                        if (!isset($final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation']))
                             $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation'] = 0;
-                        if (in_array($s->getSurveyStatusName(), $statusValidation)){
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation']++;
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']++;
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']++;
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
-                        } else if (in_array($s->getSurveyStatusName(), $statusFWdone)){
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone']++;
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']++;
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
-                        } else if (in_array($s->getSurveyStatusName(), $status_Assigned)){
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign']++;
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
-                        } else if (in_array($s->getSurveyStatusName(), $status_Total)){
-                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total']++;
+                        if (in_array($s->getSurveyStatusName(), $statusValidation)) {
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['validation'] ++;
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone'] ++;
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign'] ++;
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'] ++;
+                        } else if (in_array($s->getSurveyStatusName(), $statusFWdone)) {
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['fwdone'] ++;
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign'] ++;
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'] ++;
+                        } else if (in_array($s->getSurveyStatusName(), $status_Assigned)) {
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['assign'] ++;
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'] ++;
+                        } else if (in_array($s->getSurveyStatusName(), $status_Total)) {
+                            $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'] ++;
                         }
                         $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['aolname'][] = $obj->getQuestionnaire()->getName();
                         $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['campaign'][] = $obj->getName();
                         $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['num'] = $final[$waveid][$s->getLocation()->getCountry()->getBu()->getName()]['total'];
                     }
-                    
                 }
             }
         }
-        foreach($final as $key => $f){
-            foreach($f as $k => $unique){
-                if($filterBu == '' || $filterBu == $k){
+        foreach ($final as $key => $f) {
+            foreach ($f as $k => $unique) {
+                if ($filterBu == '' || $filterBu == $k) {
                     $final[$key][$k]['aolname'] = array_unique($unique['aolname']);
                     $final[$key][$k]['campaign'] = array_unique($unique['campaign']);
-                    $final[$key][$k]['assignPercent'] = floor(($unique['assign']/$unique['total'])*100).'% ('.$unique['assign'].')';
-                    $final[$key][$k]['fwdonePercent'] = floor(($unique['fwdone']/$unique['total'])*100).'% ('.$unique['fwdone'].')';
-                    $final[$key][$k]['validationPercent'] = floor(($unique['validation']/$unique['total'])*100).'% ('.$unique['validation'].')';
-                }else{
+                    $final[$key][$k]['assignPercent'] = floor(($unique['assign'] / $unique['total']) * 100) . '% (' . $unique['assign'] . ')';
+                    $final[$key][$k]['fwdonePercent'] = floor(($unique['fwdone'] / $unique['total']) * 100) . '% (' . $unique['fwdone'] . ')';
+                    $final[$key][$k]['validationPercent'] = floor(($unique['validation'] / $unique['total']) * 100) . '% (' . $unique['validation'] . ')';
+                } else {
                     unset($final[$key][$k]);
                 }
             }
         }
         return $final;
     }
-    
+
     protected function getBuArr() {
         $em = $this->getDoctrine()->getManager();
         $buEntities = $em->getRepository('AlbatrossAceBundle:Bu')->findAll();
@@ -968,4 +978,5 @@ protected function combineTwoArr($operation, $operation_2){
 
         return $buArr;
     }
+
 }

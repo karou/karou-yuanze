@@ -6,9 +6,9 @@ customproject_show:
     pattern:  /{id}/show
     defaults: { _controller: "AlbatrossCustomBundle:Customproject:show" }
 
-customproject_new:
-    pattern:  /new
-    defaults: { _controller: "AlbatrossCustomBundle:Customproject:new" }
+#customproject_new:
+#    pattern:  /new
+#    defaults: { _controller: "AlbatrossCustomBundle:Customproject:new" }
 
 customproject_create:
     pattern:  /create
