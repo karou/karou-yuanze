@@ -29,14 +29,14 @@ class AjaxController extends Controller {
     public function iof_list_ajaxAction() {
         $request = $this->getRequest();
         
-        $aColumns = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
+        $aColumns = array('f.label', 'a.submitteddate', 'a.status', 'u.fullname');
         $aColumnSort = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
         $aColumnSearch = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
 
-        $sIndexColumn = "a.id";
+        $sIndexColumn = "f.id";
 
         /* DB table to use */
-        $sTable = "attachments";
+        $sTable = "ioffile";
 
         /*         * *** paging **** */
         $sLimit = "";
@@ -117,9 +117,8 @@ class AjaxController extends Controller {
             $and .= ' and a.submitteddate="' . $_REQUEST['submitted_date'] . '" ';
         }
 
-        $sqlCount = 'select a.id from attachments a left join user u on (a.user_id=u.id) left join attachinfo ai on (a.id=ai.attachments_id) left join project p on (ai.project_id=p.id) left join customwave cw on (cw.id=a.customwave_id) where a.type=0 ' . $sWhere . $and . ' group by a.id ' . $sOrder;
-
-        $sql = 'select a.id,a.label,a.submitteddate,a.status,u.fullname from attachments a left join user u on (a.user_id=u.id) left join attachinfo ai on (a.id=ai.attachments_id) left join project p on (ai.project_id=p.id) left join customwave cw on (cw.id=a.customwave_id) where a.type=0 ' . $sWhere . $and . ' group by a.id ' . $sOrder . ' ' . $sLimit;
+        $sqlCount = 'select f.id from ioffile f left join attachments a on (f.attachments_id=a.id) left join user u on (a.user_id=u.id) left join attachinfo ai on (a.id=ai.attachments_id) left join project p on (ai.project_id=p.id) left join customwave cw on (cw.id=a.customwave_id) where a.type=0 ' . $sWhere . $and . ' group by a.id ' . $sOrder;
+        $sql = 'select f.id,f.label,a.submitteddate,a.status,u.fullname from ioffile f left join attachments a on (f.attachments_id=a.id) left join user u on (a.user_id=u.id) left join attachinfo ai on (a.id=ai.attachments_id) left join project p on (ai.project_id=p.id) left join customwave cw on (cw.id=a.customwave_id) where a.type=0 ' . $sWhere . $and . ' group by a.id ' . $sOrder . ' ' . $sLimit;
 
         $em = $this->getDoctrine()->getManager();
         $connection = $em->getConnection();
@@ -135,7 +134,7 @@ class AjaxController extends Controller {
         $results = $statement->fetchAll();
         $iFilteredTotal = count($results);
 
-        //* Output //		 
+        //* Output //
         $output = array(
             "order" => $sOrder,
             "q" => $sql,
@@ -150,8 +149,7 @@ class AjaxController extends Controller {
             if ($attach['status'] == 'approved')
                 $status = '<span class="status green">Approved</span>';
 
-            $row = '';
-            $row[] = $attach['id'];
+            $row = array();
             $row[] = $attach['label'];
             $row[] = $attach['submitteddate'];
             $row[] = $status;

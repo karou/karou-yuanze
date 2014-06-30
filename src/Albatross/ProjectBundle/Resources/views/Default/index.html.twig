@@ -66,9 +66,9 @@
                                 <th>Report KA</th>
                                 <th>Project Manager</th>
                                 <th>Status</th>
-                                <th>Delivery Date</th>
-                                <th>Actions</th>
-                                <th>Progress</th>
+                                <th style="width:11%;">Delivery Date</th>
+                                <th style="width:11%;">Actions</th>
+                                <th style="width:15%;">Progress</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -136,6 +136,7 @@
                     "aaSorting": [[0, 'asc']],
                     "bProcessing": true,
                     "bServerSide": true,
+                    "bAutoWidth": false,
                     "sAjaxSource": "{{path('ajax_get_project_data',{'client': searchArr.client, 'type':searchArr.type, 'bu':searchArr.bu})}}"
                 });
 
