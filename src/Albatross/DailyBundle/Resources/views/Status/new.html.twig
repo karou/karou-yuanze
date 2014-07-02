@@ -1,6 +1,15 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 
-{% block content -%}
+{% block title %}
+Add Survey Status
+{% endblock %}
+{% block pageHeading 'Add Survey Status' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Add Survey Status</li>
+{% endblock %}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'status' })) }}
     <h1>Status creation</h1>
 
     <form action="{{ path('status_create') }}" method="post" {{ form_enctype(form) }}>

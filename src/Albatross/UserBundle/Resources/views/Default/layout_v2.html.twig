@@ -110,14 +110,8 @@
                             </div>
                             <div class="pull-right">
                                 <ul class="nav">
-                                    <li class="dropdown"> <a data-toggle="dropdown" class="dropdown-toggle" href="#">lbouguet<b class="icon-angle-down"></b><img src="{{ asset('bundles/falgun/images/user-icon.png') }}" /></a>
-                                        <div class="dropdown-menu">
-                                            <ul>
-                                                <li><a href="{{ path("user_profile") }}">Profile</a></li>
-                                                <li><a href="{{ path("logout") }}">Logout</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
+{#              user header part                      #}
+                                    {{ render(controller('AlbatrossUserBundle:Default:header')) }}
                                 </ul>
                             </div>
                         </div>
@@ -129,7 +123,7 @@
                     <div class="row-fluid">
                         <div class="span12">
                             <div class="primary-head"> <br />
-                                <h3 class="page-header">{% block pageHeading 'Christofle Retail SW' %}
+                                <h3 class="page-header">{% block pageHeading '' %}
                                 {% block extraAction %}
                                 {% endblock %}
                                 </h3>

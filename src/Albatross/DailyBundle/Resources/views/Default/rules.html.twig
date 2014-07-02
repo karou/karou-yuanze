@@ -1,4 +1,4 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 
 {% block title %}
 OP Check Rules List
@@ -18,8 +18,13 @@ function deleteRule(url) {
 {% block stylesheets %}
 <link href="{{ asset('/css/project.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
-
-{% block content -%}
+{% block pageHeading 'OP Check Rules List' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Rules List</li>
+{% endblock %}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'rules' })) }}
     <h1>OP Check Rules List</h1>
     <h2><a href="{{ path('rules_new') }}">Add a new rule</a></h2>
     <table class="records_list" style="border: 1px solid #000; text-align: center;">

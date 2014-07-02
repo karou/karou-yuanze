@@ -1,49 +1,91 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 {% block title %}
 User List
 {% endblock %}
-{% block content -%}
-<table class="user_list">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td {%if entity.status == 'active'%}class ="active-user"{% elseif entity.status == 'deleted' %}class = "deleted"{%endif%}>{{ entity.username }}</td>
-                <td {%if entity.status == 'active'%}class ="active-user"{% elseif entity.status == 'deleted' %}class = "deleted"{%endif%}>{{ entity.email }}</td>
-                <td> 
-                    {%if entity.status == 'active'%}
-                    <ul>
-                        <li>
+    
+{% block stylesheet %}
+    <link href="{{ asset('bundles/falgun/css/user-page.css') }}" rel="stylesheet">
+{% endblock %}
+
+{% block pageHeading 'User List' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">User list</li>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        //============================================================data Table
+        $('#user-list-table').dataTable({
+                    "aaSorting": [[4, 'asc']],
+                    "bFilter": true,
+                    "bSort": true,
+                    "iDisplayLength": 25
+         });
+        //============================================================data Table
+    });
+</script>
+{% endblock %}
+
+{% block body -%}
+<div class="tab-widget">
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'user' })) }}
+    <div class="tab-content" style="padding:20px;">
+        <table class="table table-hover" id="user-list-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Position</th>
+                    <th>Department/Unit</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                    <th>Enable/Disable</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entity in entities %}
+                <tr>
+                    <td>{{ entity.username }}</td>
+                    <td>{{ entity.email }}</td>
+                    <td>
+                        {% if entity.identity.name is defined %}{{ entity.identity.name }}
+                        {% else %}<span class="label label-Danger">Not Set</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if entity.position.name is defined %}{{ entity.position.name }}
+                        {% else %}<span class="label label-Danger">Not Set</span>
+                        {% endif %}
+                    </td>
+                    <td> 
+                        {%if entity.status == 'active'%}<span class="label label-success">Active</span>
+                        {% elseif entity.status == 'deleted' %}<span class="label label-warning">Disabled</span>
+                        {%endif%}
+                    </td>
+                    <td>
+                        {%if entity.status == 'active'%}
                             <a class="edit-button" href="{{ path('user_edit', { 'id': entity.id }) }}">Edit</a>
-                        </li>
-                        <li>
-                            <form action="{{ path('user_delete', { 'id': entity.id }) }}" method="POST">
-                                <a href="#" class="disable-button" onclick="$(this).parent().submit();">Disable</a>
+                        {% elseif entity.status == 'deleted' %}
+                            Disabled
+                        {%endif%}
+                    </td>
+                    <td>
+                        {%if entity.status == 'active'%}
+                            <form class="user-action-form" action="{{ path('user_delete', { 'id': entity.id }) }}" method="POST">
+                                <a href="#" title="Disable User" class="disable-button icon-eye-close" onclick="$(this).parent().submit();"></a>
                             </form>
-                        </li>
-                    </ul>
-                    {% elseif entity.status == 'deleted' %}
-                        <font class="deleted">Disabled</font>
-                        <form action="{{ path('user_enable', { 'id': entity.id }) }}" method="POST">
-                            <a class="enable-button" href="#" onclick="$(this).parent().submit();">Enable</a>
-                        </form>
-                    {%endif%}
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<ul>
-    <li>
-        <a href="{{ path('user_new') }}">
-            Create a new entry
-        </a>
-    </li>
-</ul>
-    {% endblock %}
+                        {% elseif entity.status == 'deleted' %}
+                            <form class="user-action-form" action="{{ path('user_enable', { 'id': entity.id }) }}" method="POST">
+                                <a href="#" title="Enable User" class="enable-button icon-eye-open" onclick="$(this).parent().submit();"></a>
+                            </form>
+                        {%endif%}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

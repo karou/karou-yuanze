@@ -1,4 +1,4 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 
 {% block title %}
 OP Check - Edit Rules
@@ -20,7 +20,13 @@ OP Check - Edit Rules
 </script>
 {% endblock %}
 
-{% block content -%}
+{% block pageHeading 'OP Check - Edit Rules' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Edit Rules</li>
+{% endblock %}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'rules' })) }}
     <h1>Rules edition</h1>
 
     <form action="{{ path('rules_edit', {id: entity.id}) }}" method="post" {{ form_enctype(form) }}>

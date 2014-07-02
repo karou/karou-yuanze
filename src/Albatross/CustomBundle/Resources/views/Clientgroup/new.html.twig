@@ -1,10 +1,14 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 {% block title %}
 Croup New
 {% endblock %}
-{% block content -%}
-    <h1>Clientgroup creation</h1>
-
+{% block pageHeading 'Add Group' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Group Creation</li>
+{% endblock %}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'group' })) }}
     <form action="{{ path('clientgroup_create') }}" method="post" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <p>

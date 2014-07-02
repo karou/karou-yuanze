@@ -1,34 +1,42 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
-{% block stylesheets %}
-<link href="{{ asset('/css/user.css') }}" rel="stylesheet" type="text/css" media="screen" />
-<link href="{{ asset('/css/chosen.css') }}" rel="stylesheet" type="text/css" />
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
+{% block stylesheet %}
+    <link href="{{ asset('bundles/falgun/css/user-page.css') }}" rel="stylesheet">
 {% endblock %}
 {% block title %}
-Albatross New User
+Add New User
+{% endblock %}
+{% block pageHeading 'Add User' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Add User</li>
 {% endblock %}
 {% block javascripts %}
-<script src="{{ asset('js/chosen.jquery.min.js')}}"></script>
-<script src="{{ asset('js/chosen.proto.min.js')}}"></script>
+<script src="{{ asset('bundles/falgun/js/user-c-m-validation.js') }}"></script>
+<script src="{{ asset('bundles/falgun/js/jquery.validate.js') }}"></script>
+<script src="{{ asset('bundles/falgun/js/jquery.metadata.js') }}" type="text/javascript"></script>
 <script>
     $(document).ready(function() {
-        $(".chz_client").chosen({width: "100%"});
-        $(".chz_project").chosen({width: "100%"});
         clientOrUser();
         $('#albatross_userbundle_usertype_type').change(function(){
             clientOrUser();
         });
         
         $('#albatross_userbundle_usertype_customclient').change(function(){
-            data = $('#albatross_userbundle_usertype_customclient').val();
-            dataStr = data.join(':');
-            $.ajax({
-                type: "POST",
-                data: dataStr,
-                url: "{{ path('getBindProject') }}",
-                success: function(result) {
-                    $('#albatross_userbundle_usertype_customproject').html(result);
-                    $(".chz_project").trigger("liszt:updated");
-                }});
+            if($('#albatross_userbundle_usertype_customclient').val()){
+                data = $('#albatross_userbundle_usertype_customclient').val();
+                dataStr = data.join(':');
+                $.ajax({
+                    type: "POST",
+                    data: dataStr,
+                    url: "{{ path('getBindProject') }}",
+                    success: function(result) {
+                        $('#albatross_userbundle_usertype_customproject').html(result);
+                        $("#albatross_userbundle_usertype_customproject").trigger("liszt:updated");
+                    }});
+            }else{
+                $('#albatross_userbundle_usertype_customproject').html('');
+                $("#albatross_userbundle_usertype_customproject").trigger("liszt:updated");
+            }
         });
         
         $('#albatross_userbundle_usertype_identity').change(function(){
@@ -41,181 +49,117 @@ Albatross New User
             }
         });
     });
-    function clientOrUser(){
-        if($('#albatross_userbundle_usertype_type').val() === '1'){
-            $('.ace_crm_tr').hide();
-            $('.client_project_tr').show();
-            $('.access_right').hide();
-        }else if($('#albatross_userbundle_usertype_type').val() === '0'){
-            $('.ace_crm_tr').show();
-            $('.client_project_tr').hide();
-            $('.access_right').show();
-        }
-    }
-    //password part
-    function getPswType() {
-        var type = $('#pswType').val();
-        return type;
-    }
-    function showPsw(obj) { //show the change psw form, and assign the psw type to pswType;
-        var type = $(obj).attr('id');
-        $('#pswType').val(type);
-
-        clearPwValue();
-        $('#password_edit_box').fadeIn();
-    }
-    function hidePsw() {
-        clearPwValue();
-        $('#password_edit_box').fadeOut();
-    }
-    function clearPwValue() {
-        $('#pwmessage').html('');
-        $('#Error1').html('');
-        $('#Error2').html('');
-        $('#new_password').val('');
-        $('#confirm_password').val('');
-    }
-    function getData() { //get password value and make is as array
-        var dataArr = [$('#new_password').val(), $('#confirm_password').val()];
-        return dataArr;
-    }
-    function validate() {
-        var dataArr = getData();
-        var v = 0;
-        var result = '';
-        if (dataArr[0] === '') {
-            $('#Error1').html('<font color="red" style="font-size:12px;">Cannot empty</font>');
-            v = 1;
-        } else if (dataArr[1] === '') {
-            $('#Error2').html('<font color="red" style="font-size:12px;">Cannot empty</font>');
-            v = 1;
-        } else if (dataArr[0] !== dataArr[1]) {
-            $('#Error2').html('<font color="red" style="font-size:12px;">Passwords do not match</font>');
-            v = 1;
-        }else{
-            result = dataArr[0];
-        }
-        if (v === 0) {
-            setPasswordToForm(result);
-        } else {
-            return false;
-        }
-    }
-    function setPasswordToForm(result) {
-        var type = getPswType();
-        if (type === 'platform') {
-            $('#albatross_userbundle_usertype_password').val(result);
-            $('#platform_password_status').html('done');
-        } else if (type === 'aol') {
-            $('#albatross_userbundle_usertype_aol_password').val(result);
-            $('#aol_password_status').html('done');
-        } else if (type === 'ace') {
-            $('#ace_userbundle_usertype_ace_password').val(result);
-            $('#platform_password_status').html('done');
-        } else if (type === 'crm') {
-            $('#ace_userbundle_usertype_crm_password').val(result);
-            $('#crm_password_status').html('done');
-        }
-        hidePsw();
-    }
     </script>
 {% endblock %}
-{% block content -%}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'user' })) }}
+    
+    <div class="tab-content" style="padding:20px;">
     {% if app.session.FlashBag('error') %}
           <div class="flash_error">
             {{ app.session.flash('error') }}
           </div>
     {% endif %}
-    <form action="{{ path('user_create') }}" method="post" {{ form_enctype(form) }}>
-        <table class="user_info_table">
+    <form id="user-form" action="{{ path('user_create') }}" method="post" {{ form_enctype(form) }}>
+        <h3 class="page-header">Basic Info</h3>
+        <table class="table">
+            <tbody>
+{#      basic info part          #}
+                <tr>
+                    <th>User Type:</th>
+                    <td>{{form_widget(form.type)}}</td>
+                    <th>Full name:</th>
+                    <td>{{form_widget(form.fullname)}}</td>
+                </tr>
+                <tr>
+                    <th>Position:</th>
+                    <td>{{form_widget(form.identity)}}</td>
+                    <th>Department/Unit:</th>
+                    <td>{{form_widget(form.position)}}</td>
+                </tr>
+            </tbody>
+        </table>
+{#      site name part          #}
+        {% if is_granted('ROLE_ADMIN') %}
+        <h3 class="page-header">Site name</h3>
+        <table class="table">
             <tbody>
                 <tr>
+                    <th>Platform name:</th>
+                    <td>{{form_widget(form.username)}}</td>
+                    <th>Platform password:</th>
                     <td>
-                        <fieldset>
-                            <legend class="user_info_legend">
-                                Name
-                            </legend>
-                            <div id="user_info_pic">
-                                <img height="75px" width="75px" src="{{ entity.pic ?  asset(entity.webPath) : '/images/user/default.png' }}" />
-                            </div>
-                            <div id="user_info_name">
-                                <table class="user_field">
-                                    <tr>
-                                        <th>User Type:&nbsp;&nbsp;&nbsp;&nbsp;{{form_widget(form.type)}}</th>
-                                        <th class="access_right">Position</th>
-                                        <td class="access_right">{{form_widget(form.identity)}}</td>
-                                    </tr>
-                                    <tr>
-                                        <th>Full name:<font color="red">*</font>
-                                        </th>
-                                        <th class="access_right">Department/Unit</th>
-                                        <td class="access_right">{{form_widget(form.position)}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td id = "fullname" class="user_edit">{{form_widget(form.fullname)}}</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </fieldset>
+                        {{form_widget(form.password)}}
+                        <input type="password" name="confirm_password" placeholder="Confirm password" id="confirm_albatross_userbundle_usertype_password" class="confirm-password" />
                     </td>
                 </tr>
-                {% if is_granted('ROLE_ADMIN') %}
                 <tr>
-                    <td>
-                        <fieldset>
-                            <legend class="user_info_legend">
-                                Site name
-                            </legend>
-                            <div id="user_info_info">
-                                <table class="user_field">
-                                    <tr>
-                                        <th>PlatForm name:<font color="red">*</font></th>
-                                        <td id="username" class="user_edit">{{form_widget(form.username)}}</td>
-                                        <td><span id="platform_password_status"><font color="red">not set*</font></span>{{form_widget(form.password, {attr: {'style': 'display:none'}})}}</td>
-                                        <td><input type="button" id="platform" value="Set PlatformPassword" onclick="showPsw(this);"></td>
-                                    </tr>
-                                    <tr>
-                                        <th>Aol name:
-                                        </th>
-                                        <td id="aolusername" class="user_edit">{{form_widget(form.aol_username)}}</td>
-                                        <td><span id="aol_password_status">not set</span>{{form_widget(form.aol_password, {attr: {'style': 'display:none'}})}}</td>
-                                        <td><input type="button" id="aol" value="Set AolPassword" onclick="showPsw(this);"></td>
-
-                                    </tr>
-                                    <tr class="ace_crm_tr">
-                                        <th>Ace name:
-                                        </th>
-                                        <td id="aceusername" class="user_edit">{{form_widget(form.ace_username)}}</td>
-                                        <td><span id="ace_password_status">not set</span>{{form_widget(form.ace_password, {attr: {'style': 'display:none'}})}}</td>
-                                        <td><input type="button" id="ace" value="Set AcePassword" onclick="showPsw(this);"></td>
-
-                                    </tr>
-                                    <tr class="ace_crm_tr">
-                                        <th>Crm name:
-                                        </th>
-                                        <td id="crmusername" class="user_edit">{{form_widget(form.crm_username) }}</td>
-                                        <td><span id="crm_password_status">not set</span>{{form_widget(form.crm_password, {attr: {'style': 'display:none'}})}}</td>
-                                        <td><input type="button" id="crm" value="Set CrmPassword" onclick="showPsw(this);"></td>
-                                    </tr>
-                                    <tr class="client_project_tr" style="display: none">
-                                        <th>Client:
-                                        </th>
-                                        <td colspan="3">{{form_widget(form.customclient) }}
-                                        </td>
-                                    </tr>
-                                    <tr class="client_project_tr" style="display: none">
-                                        <th>Project:
-                                        </th>
-                                        <td colspan="3">{{form_widget(form.customproject) }}
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </fieldset>
+                    <th>AOL name:</th>
+                    <td>{{form_widget(form.aol_username)}}</td>
+                    <th>AOL password:</th>
+                    <td>{{form_widget(form.aol_password)}}
+                        <input type="password" name="confirm_aol_password" placeholder="Confirm AOL password" id="confirm_albatross_userbundle_usertype_aol_password" class="confirm-password" />
                     </td>
                 </tr>
-                {% endif %}
+                <tr class="ace_crm_tr">
+                    <th>ACE name:</th>
+                    <td>{{form_widget(form.ace_username)}}</td>
+                    <th>ACE password:</th>
+                    <td>{{form_widget(form.ace_password)}}
+                        <input type="password" name="confirm_ace_password" placeholder="Confirm ACE password" id="confirm_albatross_userbundle_usertype_ace_password" class="confirm-password" />
+                    </td>
+                </tr>
+                <tr class="ace_crm_tr">
+                    <th>CRM name:</th>
+                    <td>{{form_widget(form.crm_username)}}</td>
+                    <th>CRM password:</th>
+                    <td>{{form_widget(form.crm_password)}}
+                        <input type="password" name="confirm_crm_password" placeholder="Confirm CRM password" id="confirm_albatross_userbundle_usertype_crm_password" class="confirm-password" />
+                    </td>
+                </tr>
+                <tr class="client_project_tr">
+                    <th>Client:</th>
+                    <td>{{form_widget(form.customclient) }}</td>
+                    <th>Project:</th>
+                    <td>{{form_widget(form.customproject) }}</td>
+                </tr>
+            </tbody>
+        </table>
+        {% endif %}
+        <h3 class="page-header">Information</h3>
+        <table class="table">
+            <tbody>
                 <tr>
+                    <th>Email:</th>
+                    <td>{{form_widget(form.email) }}</td>
+                    <th>Title:</th>
+                    <td>{{form_widget(form.title) }}</td>
+                </tr>
+                <tr>
+                    <th>Skype:</th>
+                    <td>{{form_widget(form.skype)}}</td>
+                    <th>Mobile:</th>
+                    <td>{{form_widget(form.mobile)}}</td>
+                </tr>
+                <tr>
+                    <th>Office phone:</th>
+                    <td>{{form_widget(form.office_phone)}}</td>
+                    <th>Country:</th>
+                    <td>{{form_widget(form.country)}}</td>
+                </tr>
+                <tr>
+                    <th>Office address:</th>
+                    <td colspan="3">{{form_widget(form.office_address) }}</td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        {{ form_widget(form._token) }}
+                        <button class="btn btn-success" type="submit" style="float:right;">Create</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+                {#<tr>
                     <td>
                         <fieldset>
                             <legend class="user_info_legend">
@@ -263,7 +207,7 @@ Albatross New User
                             <button type="submit">Create</button>
                         </div>
                     </td>
-                </tr>
+                </tr>#}
             </tbody>
         </table>
     </form>
@@ -303,5 +247,6 @@ Albatross New User
                 </tr>
             </table>
         </div>
+    </div>
     </div>
 {% endblock %}

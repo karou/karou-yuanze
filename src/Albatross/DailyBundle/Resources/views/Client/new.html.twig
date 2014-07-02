@@ -1,6 +1,14 @@
-{% extends '::base.html.twig' %}
-
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
+{% block title %}
+    Add Client
+{% endblock %}
+{% block pageHeading 'Add Client' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Add Client</li>
+{% endblock %}
 {% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'client' })) }}
     <h1>Client creation</h1>
 
     <form action="{{ path('client_create') }}" method="post" {{ form_enctype(form) }}>
@@ -10,11 +18,11 @@
         </p>
     </form>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('client') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('client') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
 {% endblock %}

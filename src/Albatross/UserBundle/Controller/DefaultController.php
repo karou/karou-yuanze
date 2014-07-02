@@ -416,8 +416,6 @@ class DefaultController extends Controller {
         //0: nothing 1:admin 2:user_add
         if ($secu->isGranted('ROLE_ADMIN'))
             $role_button = 1;
-        elseif ($secu->isGranted('ROLE_USER_ADD'))
-            $role_button = 2;
         else
             $role_button = 0;
 

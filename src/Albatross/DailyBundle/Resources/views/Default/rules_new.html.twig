@@ -1,4 +1,4 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 
 {% block title %}
 OP Check - New Rules
@@ -20,7 +20,13 @@ OP Check - New Rules
 </script>
 {% endblock %}
 
-{% block content -%}
+{% block pageHeading 'OP Check - New Rules' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">New Rules</li>
+{% endblock %}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'rules' })) }}
     <h1>Rules creation</h1>
 
     <form action="{{ path('rules_new') }}" method="post" {{ form_enctype(form) }}>

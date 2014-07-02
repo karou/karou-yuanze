@@ -1,4 +1,4 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 
 {% block title %}
 User Action
@@ -26,7 +26,14 @@ User Action
     });
 </script>
 {% endblock %}
-{% block content -%}
+
+{% block pageHeading 'User Action Log' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">User Action Log</li>
+{% endblock %}
+{% block body -%}
+{{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'log' })) }}
 <form action="{{ path('log') }}" method="POST" id="user-log-form">
     <table>
         <tr>

@@ -72,7 +72,7 @@ class UserController extends Controller {
         $form = $this->createForm(new UserType(), $entity);
         $form->bind($request);
         $data = $form->getData();
-
+        
         $em = $this->getDoctrine()->getManager();
         if ($data->getType() == 1) {
             $idEntity = $em->getRepository('AlbatrossUserBundle:Identity')->findOneByParameters('client');
@@ -84,7 +84,7 @@ class UserController extends Controller {
             $entity->setStatus('active');
             $em->persist($entity);
             $em->flush();
-
+            
             return $this->redirect($this->generateUrl('user'));
         } else {
             var_dump($form->getErrorsAsString());

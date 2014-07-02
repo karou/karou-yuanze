@@ -167,85 +167,36 @@ class AdminController extends Controller {
         ));
     }
 
-    public function menuAction($current_menu) {
+    public function menuAction($active) {
         $secu = $this->container->get('security.context');
         $menu = array();
         $menu['user'] = array(
-            'label' => 'User', //label is name for show on the page
-            'route' => 'user', 
-            'children' => array(
-                'add_user' => array(
-                    'label' => 'Add New User',
-                    'route' => 'user_new',
-                )
-            )
+            'label' => 'User', 'children' => array( 'user' => array( 'label' => 'User List','route' => 'user'), 'add_user' => array( 'label' => 'New User', 'route' => 'user_new'))
         );
         $menu['group'] = array(
-            'label' => 'Group',
-            'route' => 'clientgroup',
-            'children' => array(
-                'add_group' => array(
-                    'label' => 'Add Group',
-                    'route' => 'clientgroup_new'
-                )
-            )
+            'label' => 'Group', 'children' => array( 'group' => array( 'label' => 'Group List', 'route' => 'clientgroup' ), 'add_group' => array( 'label' => 'New Group', 'route' => 'clientgroup_new'))
         );
         $menu['filesection'] = array(
-            'label' => 'File Section',
-            'route' => 'filesection',
-            'children' => array(
-                'add_filesection' => array(
-                    'label' => 'Add File Section',
-                    'route' => 'filesection_new'
-                )
-            )
+            'label' => 'File Section', 'children' => array( 'filesection' => array( 'label' => 'File Section List', 'route' => 'filesection'), 'add_filesection' => array( 'label' => 'New File Section', 'route' => 'filesection_new'))
         );
         $menu['status'] = array(
-            'label' => 'Survey status',
-            'route' => 'status',
-            'children' => array(
-                'add_status' => array(
-                    'label' => 'Add & Edit Status',
-                    'route' => 'status_new',
-                )
-            )
+            'label' => 'Survey status', 'children' => array( 'status' => array( 'label' => 'Survey Status List', 'route' => 'status' ), 'add_status' => array( 'label' => 'New & Edit Status', 'route' => 'status_new'))
         );
         $menu['client'] = array(
-            'label' => 'Client',
-            'route' => 'client',
-            'children' => array(
-                'edit_client' => array(
-                    'label' => 'Client List',
-                    'route' => 'client',
-                )
-            )
+            'label' => 'Client', 'children' => array( 'client' => array( 'label' => 'Client List', 'route' => 'client'), 'add_client' => array( 'label' => 'New Client', 'route' => 'client_new'))
         );
         $menu['rules'] = array(
-            'label' => 'Rule',
-            'route' => 'rules',
-            'children' => array(
-                'edit_client' => array(
-                    'label' => 'Rules List',
-                    'route' => 'rules',
-                )
-            )
+            'label' => 'Rule', 'children' => array( 'rules' => array( 'label' => 'Rules List', 'route' => 'rules'), 'add_rule' => array( 'label' => 'New Rule', 'route' => 'rules_new'))
         );
         $menu['log'] = array(
-            'label' => 'Log',
-            'route' => 'log'
+            'label' => 'User Log', 'children' => array( 'log' => array( 'label' => 'Log List', 'route' => 'log' ))
         );
         if ($secu->isGranted('ROLE_ACE_BU_LIST'))
             $menu['countryandbu'] = array(
-                'label' => 'Country & Bu',
-                'route' => 'bu',
+                'label' => 'Country & Bu', 'children' => array( 'log' => array( 'label' => 'Country & Bu', 'route' => 'bu' ))
             );
-
         return $this->render('AlbatrossUserBundle:Default:menu.html.twig', array(
-                    'menu' => $menu,
-                    'menu_cal_cur' => $current_menu,
+                    'menu' => $menu, 'active' => $active,
         ));
     }
-
 }
-
-?>

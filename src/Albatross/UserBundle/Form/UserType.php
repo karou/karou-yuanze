@@ -14,7 +14,7 @@ class UserType extends AbstractType
         $builder
             ->add('username')
             ->add('fullname', null, array(
-                'required' => false,
+                'required' => true,
             ))
             ->add('title', null, array(
                 'required' => false,
@@ -34,9 +34,12 @@ class UserType extends AbstractType
             ->add('country', null, array(
                 'required' => false,
             ))
-            ->add('password')
-            ->add('email', null, array(
-                'required' => false,
+            ->add('password', 'password')
+            ->add('email', 'email', array(
+                'attr' => array(
+                    'class' => 'form-control',
+                    ),
+                'required' => true,
             ))
             ->add('pic', null, array(
                 'required' => false,
@@ -47,19 +50,19 @@ class UserType extends AbstractType
             ->add('aol_username', null, array(
                 'required' => false,
             ))
-            ->add('aol_password', null, array(
+            ->add('aol_password', 'password', array(
                 'required' => false,
             ))
             ->add('ace_username', null, array(
                 'required' => false,
             ))
-            ->add('ace_password', null, array(
+            ->add('ace_password', 'password', array(
                 'required' => false,
             ))
             ->add('crm_username', null, array(
                 'required' => false,
             ))
-            ->add('crm_password', null, array(
+            ->add('crm_password', 'password', array(
                 'required' => false,
             ))
             ->add('create_at', null, array(
@@ -73,41 +76,41 @@ class UserType extends AbstractType
             ))
             ->add('customproject', null, array(
                 'attr' => array(
-                    'class' => 'chz_project',
+                    'class' => 'chzn-select',
                     'multiple' => true,
                     ),
                 'required' => false
             ))
             ->add('customclient', null, array(
                 'attr' => array(
-                    'class' => 'chz_client',
+                    'class' => 'chzn-select',
                     'multiple' => true,
                     ),
                 'required' => false
             ))
             ->add('identity', 'entity', array(
-                    'expanded' => false,
-                    'required' => false,
-                    'class' => 'AlbatrossUserBundle:Identity',
-                    'property' => 'name',
-                    'multiple' => false,
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('i')
-                                ->where("i.name != :client")
-                                ->setParameters(array('client' => 'Client'));
-                    }
+                'expanded' => false,
+                'required' => false,
+                'class' => 'AlbatrossUserBundle:Identity',
+                'property' => 'name',
+                'multiple' => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('i')
+                            ->where("i.name != :client")
+                            ->setParameters(array('client' => 'Client'));
+                }
             ))
             ->add('position', 'entity', array(
-                    'expanded' => false,
-                    'required' => false,
-                    'class' => 'AlbatrossUserBundle:Position',
-                    'property' => 'name',
-                    'multiple' => false,
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('p')
-                                ->where("p.name != :client")
-                                ->setParameters(array('client' => 'Client'));
-                    }
+                'expanded' => false,
+                'required' => false,
+                'class' => 'AlbatrossUserBundle:Position',
+                'property' => 'name',
+                'multiple' => false,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('p')
+                            ->where("p.name != :client")
+                            ->setParameters(array('client' => 'Client'));
+                }
             ))
         ;
     }

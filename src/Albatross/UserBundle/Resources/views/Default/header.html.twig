@@ -1,41 +1,16 @@
-{% block javascripts %}
-<script src="{{ asset('js/global.js')}}"></script>
-{% endblock %}
-<div id="header">
-    <div>
-        <a id="logo" href="{{ path('albatross_user_homepage') }}">
-            <img  alt="logo" title="homepage" src="{{ asset('/images/logo.jpg') }}" />
-        </a>
-    </div>
-    <div id="page_title">
-        <span id="title_left">Albatross</span><br /><span id="title_right">Platform</span>
-    </div>
-    {% if user == 'anon.' %}
-    <div id="anon_box" class="font_type">
-        <span>Hi, Welcome!&nbsp;</span> 
-        <a href="{{ path('login') }}">Sign in</a>
-    </div>
-    {% else %}
-    <div id="uinfo_box">
+<li class="dropdown"> 
+    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+        {{ user.username }}
+        <b class="icon-angle-down"></b>
+        <img height="28px" width="28px" src="{{ user.pic ?  asset(user.webPath) : '/images/user/default.png' }}" />
+    </a>
+    <div class="dropdown-menu">
         <ul>
-            <li>
             {% if role_button == 1 %}
-                    <a href="{{ path('admin') }}"><div id="role_botton" class="font_type" >Administration</div></a>
-            {% elseif role_button == 2 %}
-                    <a href="{{ path('admin') }}"><div id="role_botton" class="font_type" >User Add</div></a>
+            <li><a href="{{ path("admin") }}">Administration</a></li>
             {% endif %}
-                    <div id="user_name" class="font_type">{{ user.username }}</div>
-                </li>
-                <li>
-                    <a href="{{ path('logout') }}">
-                        <img id="logout_btn" src="/images/user/logout.png" title="logout" height="28" widht:="28" />
-                    </a>
-                </li>
-            </ul>
-                {% if user.pic is defined %}
-            <img id="user_pic" height="75px" width="75px" src="{{ user.pic ?  asset(user.webPath) : '/images/user/default.png' }}" />
-            {% endif %}
-        </div>
-    {% endif %}
+            <li><a href="{{ path("user_profile") }}">Profile</a></li>
+            <li><a href="{{ path("logout") }}">Logout</a></li>
+        </ul>
     </div>
-    <div class='clear'></div>
+</li>

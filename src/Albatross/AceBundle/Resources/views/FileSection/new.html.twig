@@ -1,8 +1,14 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 {% block title %}
 Add File Section
 {% endblock %}
-{% block content -%}
+{% block pageHeading 'Add File Section' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Add File Section</li>
+{% endblock %}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'filesection' })) }}
     <h1>FileSection creation</h1>
 
     <form action="{{ path('filesection_create') }}" method="post" {{ form_enctype(form) }}>

@@ -1,14 +1,19 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 
 {% block title %}
-Albatross Client List
+Client List
 {% endblock %}
 {% block stylesheets %}
 <link href="{{ asset('/css/client.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
 
-
-{% block content -%}
+{% block pageHeading 'Client List' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Client List</li>
+{% endblock %}
+{% block body -%}
+{{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'client' })) }}
 <script type="text/javascript">
     $(function() {
        

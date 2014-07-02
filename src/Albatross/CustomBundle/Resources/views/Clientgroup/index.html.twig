@@ -1,13 +1,17 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 {% block title %}
 Group List
 {% endblock %}
 {% block stylesheets %}
     <link href="{{ asset('/css/custom_style.css') }}" rel="stylesheet" type="text/css" />
 {% endblock %}
-{% block content -%}
-    <h1>Clientgroup list</h1>
-
+{% block pageHeading 'Group List' %}
+{% block breadcrumb %}
+    <li><a href="{{ path('admin') }}">Administration</a></li>
+    <li class="active">Group List</li>
+{% endblock %}
+{% block body -%}
+    {{ render(controller('AlbatrossUserBundle:Admin:menu', {'active': 'group' })) }}
     <table class="records_list">
         <thead>
             <tr>
@@ -22,14 +26,14 @@ Group List
                 <td><a href="{{ path('clientgroup_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.name }}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('clientgroup_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('clientgroup_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <ul>
+                        <li>
+                            <a href="{{ path('clientgroup_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('clientgroup_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
