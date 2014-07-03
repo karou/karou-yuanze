@@ -19,6 +19,8 @@ Albatross\AceBundle\Entity\Aolsurvey:
   oneToOne:
     billing:
       targetEntity: Albatross\AceBundle\Entity\Billing
+      cascade: ["remove"]
+      mappedBy: aolsurvey
   fields:
     id:
       type: bigint

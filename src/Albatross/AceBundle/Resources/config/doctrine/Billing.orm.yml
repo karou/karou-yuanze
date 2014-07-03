@@ -4,6 +4,7 @@ Albatross\AceBundle\Entity\Billing:
   oneToOne:
     aolsurvey:
       targetEntity: Albatross\AceBundle\Entity\Aolsurvey
+      inversedBy: billing
   repositoryClass: 
     Albatross\AceBundle\Entity\BillingRepository
   fields:
