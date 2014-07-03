@@ -418,12 +418,6 @@ class Task
     private $pm;
 
     /**
-     * @var string
-     */
-    private $projectnumber;
-
-
-    /**
      * Set fwstartdate
      *
      * @param \DateTime $fwstartdate
@@ -539,28 +533,6 @@ class Task
     }
 
     /**
-     * Set projectnumber
-     *
-     * @param string $projectnumber
-     * @return Task
-     */
-    public function setProjectnumber($projectnumber)
-    {
-        $this->projectnumber = $projectnumber;
-
-        return $this;
-    }
-
-    /**
-     * Get projectnumber
-     *
-     * @return string 
-     */
-    public function getProjectnumber()
-    {
-        return $this->projectNumber;
-    }
-    /**
      * @var integer
      */
     private $step;
@@ -660,5 +632,33 @@ class Task
     public function getUpdated()
     {
         return $this->updated;
+    }
+    /**
+     * @var string
+     */
+    private $projectNumber;
+
+
+    /**
+     * Set projectNumber
+     *
+     * @param string $projectNumber
+     * @return Task
+     */
+    public function setProjectNumber($projectNumber)
+    {
+        $this->projectNumber = $projectNumber;
+    
+        return $this;
+    }
+
+    /**
+     * Get projectNumber
+     *
+     * @return string 
+     */
+    public function getProjectNumber()
+    {
+        return $this->projectNumber;
     }
 }
