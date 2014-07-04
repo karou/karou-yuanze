@@ -560,7 +560,7 @@ class DefaultController extends Controller {
         }
         //get report Done gab number, sun number first day month to select day
         $report_done = $this->getReportDone($select_time, $bu);
- 
+
 //        $results = $this->setSurveyValidatedNumber($result, $cur_week_date_array, $bu);
 
         return $this->render('AlbatrossDailyBundle:Default:dailycheck.html.twig', array(
@@ -582,7 +582,41 @@ class DefaultController extends Controller {
                     'last_date_month' => $last_day_month
         ));
     }
-    
+    public function downloadDailyFileAction($date = null, $fname = null) {
+        $header = $this->getRequest()->server->getHeaders();
+        if ($date == null) $date = date('ymd');
+        else $date = date('ymd', strtotime($date));
+        
+        $file_name = $fname;
+        $file_dir = $dir = 'aolExport2/'.$date.'/'.$file_name;
+        
+        $encoded_filename_pre = urlencode($file_name);  
+        $encoded_filename = str_replace("+", "%20", $encoded_filename_pre);  
+        $ua = $header['USER_AGENT'];
+        if (!file_exists($file_dir)) {
+            header("Content-type: text/html; charset=utf-8");
+            echo "File not found!";
+            exit;
+        } else {
+            $file = fopen($file_dir, "r");
+            $file_size = filesize($file_dir);
+            Header("Content-type: application/octet-stream");
+            Header("Accept-Ranges: bytes");
+            Header("Accept-Length: " . $file_size);
+            
+            if (preg_match("/MSIE/", $ua)) {  
+                header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');  
+            } else if (preg_match("/Firefox/", $ua)) {  
+                header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');  
+            } else {  
+                header('Content-Disposition: attachment; filename="' . $file_name . '"');  
+            }
+            $contents = fread($file, $file_size);
+            echo $contents;
+            fclose($file);
+            exit();
+        }
+    }
     //20130911 Survey Validated Number status caculate by curent day pending validate - pre day pending validate + curent day submitted surveys  
 //    protected function setSurveyValidatedNumber($result, $cur_week_date_array, $bu){ 
 //        $prenumber = $this->getPreFridaySubmitPendingNumber($cur_week_date_array, $bu);

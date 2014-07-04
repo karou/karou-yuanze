@@ -1,13 +1,12 @@
-{% extends 'AlbatrossUserBundle:Default:layout.html.twig' %}
+{% extends 'AlbatrossUserBundle:Default:layout_v2.html.twig' %}
 {% block title %}
 Albatross Daily Check
 {% endblock %}
-{% block stylesheets %}
+{% block stylesheet %}
 <link href="{{ asset('/css/dailycheck.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ asset('/css/calendar.css') }}" rel="stylesheet" type="text/css" />
-<script src="{{ asset('js/jquery-ui.js')}}"></script>
 {% endblock %}
-{% block content -%}
+{% block javascripts %}
 <script type="text/javascript">
     $(function() {
         $("#datepicker").datepicker();
@@ -28,27 +27,32 @@ Albatross Daily Check
 
         background();
 
-        $("#showfiles").click(function showfiles() {
+        $("#showfiles").mouseover(function() {
             if ($("#filelistbox").is(":hidden")) {
-                if ($("#filelistbox").html()) {
-                    $("#filelistbox").show();
-                    $("#showfiles").val("Hide Files");
-                } else {
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ path('showfiles') }}/daily/" + "{{showdate}}",
-                        success: function(result) {
-                            $("#filelistbox").show();
-                            $("#showfiles").val("Hide Files");
-                            $("#filelistbox").css('display', 'block');
-                            $("#filelistbox").html(result);
-                        }
-                    });
-                }
-            } else {
-                $("#filelistbox").hide();
-                $("#showfiles").val("Show Files");
+                $("#showfiles").css('cursor', 'wait');
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('showfiles') }}/daily/" + "{{showdate}}",
+                    success: function(result) {
+                        var width = $('#showfiles').width() + 40;
+                        var height = -$('#showfiles').height() - 16;
+                        $("#showfiles").css('cursor', 'pointer');
+                        $("#filelistbox").css('margin-left', width);
+                        $("#filelistbox").css('margin-top', height);
+                        $("#filelistbox").css('display', 'block');
+                        $("#filelistbox").show();
+                        $("#filelistbox").html(result);
+                        $('.filename').hover(function(){
+                            $(this).children('i').attr('class', 'icon-download-alt');
+                        }, function(){
+                            $(this).children('i').attr('class', 'icon-file');
+                        });
+                    }
+                });
             }
+        });
+        $("#showfiles").parent().mouseleave(function() {
+            $("#filelistbox").hide();
         });
         
         $('.weekend').each(function(){
@@ -72,8 +76,7 @@ Albatross Daily Check
             $(this).find("td:eq(" + cur + ")").css('font-size', '12px');
             $(this).find("td:eq(" + cur + ")").css('font-weight', 'bold');
             $(this).find("td:eq(" + cur + ")").css('font-style', 'italic');
-            $(this).find("td:eq(" + cur + ")").css('border-left', '#6595D6 2px solid');
-            $(this).find("td:eq(" + cur + ")").css('border-right', '#6595D6 2px solid');
+            $(this).find("td:eq(" + cur + ")").css('background', 'rgb(223, 240, 216)');
             //gab calculate
             var todayNum = $(this).find("td:eq(" + cur + ")").html();
             if (cur != 2) {
@@ -244,6 +247,12 @@ Albatross Daily Check
             }
         });
     }
+    
+    function downloadFile(filename) {
+        $('#download-daily-file').attr('action', '{{ path('downloadDailyFile') }}/' + "{{showdate}}/" + filename);
+        $('#download-daily-file').submit();
+    }
+    
     function refreshForecast() {
         $('#reload').show();
         $.ajax({
@@ -260,150 +269,190 @@ Albatross Daily Check
         });
     }
     </script>
-    <div id="reload" style="display: none">
-        <image id="loading_2" src="{{ asset('images/ajax_loader.gif') }}" width="140px" height="140px">
-    </div>
-    <div id="daily_top_left">
-        <a id="left_button" href="{{path('daily', {'date':preweek, 'bu': bu})}}">‹‹ PREVIOUS WEEK</a>
-        <span id = "show_date">{{ showdate }}<br/>
-    {% if bu is null %}
-                ALL
-    {% else %}
-        {{ all_bu[bu]}}
-    {% endif %}
-            </span>
-            <a id="right_button" href="{{path('daily', {'date':nxtweek, 'bu': bu})}}">NEXT WEEK ››</a>
-    </div>
-        <div id="daily_top_middle">
-            BU:
-            <select id="selectedBu">
-                <option value ="0">ALL</option>
-        {% for k,b in all_bu %}<!-- select the bu, k is id and b is bu code -->
-                <option value ="{{ k }}">{{ b }}</option>
-        {% endfor %}
-            </select>
-        </div>
-        <div id="daily_top_right">Calendar:
-            <input type="text" id="datepicker" />
-        </div>
-    {% if is_granted('ROLE_ADMIN') %}
-        <div id="fileupload_box">
-            <form action="{{ path('dailyfileupload', {'date':showdate}) }}" id="fileupload" method="post" enctype="multipart/form-data">
-        {{ form_label(fileForm.file, 'Filename:') }}
-        {{ form_widget(fileForm.file, {attr: {'style': 'display:none', 'size': '28', 'onchange' : "document.getElementById('albatross_dailybundle_fileuploadtype_text').value = this.value"}}) }}
-        {{ form_widget(fileForm.text, {attr: {'onclick' : "$('#albatross_dailybundle_fileuploadtype_file').click()"}}) }}
-                    <input type="submit" name="submit" value="Submit" />
-                    <div class="error_msg">{{ form_errors(fileForm) }}</div>
-            </form>
+{% endblock %}
+{% block body -%}
+    <div class="row-fluid">
+        {#  filter part      #}
+        <div class="span12">
+            <div class="content-widgets">
+                <div class="widget-container" style="min-height:50px;">
+                    {#         bu select           #}
+                    <div class="span3">
+                        <select id="selectedBu" data-placeholder="All Business Unit" class="chzn-select span6" tabindex="2" style="width:99%; height:34px; float:left;">
+                            <option value="0">All Business Unit</option>
+                            {% for k,b in all_bu %}<!-- select the bu, k is id and b is bu code -->
+                            <option value ="{{ k }}">{{ b }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="span3 input-append" id="datetimepicker4">
+                        <input name="calender" id="datepicker" placeholder="Calender" data-format="yyyy-MM-dd" type="text" style="width:74%; float:left;"/>
+                        <span class="add-on" onclick="$('#datepicker').focus();"><i class="icon-calendar"></i>
+                        </span>
+                    </div>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <div class="span4 input-append">
+                        {{ form_widget(fileForm.text, {attr: {'onclick' : "$('#albatross_dailybundle_fileuploadtype_file').click()", 'placeholder' : "File name"}}) }}
+                        <div class="btn-group">
+                            <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+                                File Actions
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a data-target="#" onclick="$('#fileupload').submit();" >Submit File</a>
+                                </li>
+                                <li class="divider"></li>
+                                <li>
+                                    <a data-target="#" onclick="$('#read-daily-file-form').submit();">Update Data</a>
+                                </li>
+                                <li>
+                                    <a id="showfiles" data-target="#" title="Today's updated file list" >Show Files&nbsp;&nbsp;&nbsp;
+                                        <i class="icon-play"></i>
+                                    </a>
+                                    <ul id="filelistbox"></ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <form id="read-daily-file-form" action="{{ path('readDailyExcel',{'date':showdate}) }}" method="post">
+                        </form>
+                        <form action="{{ path('dailyfileupload', {'date':showdate}) }}" id="fileupload" method="post" enctype="multipart/form-data">
+                            {{ form_widget(fileForm.file, {attr: {'style': 'display:none', 'size': '28', 'onchange' : "document.getElementById('albatross_dailybundle_fileuploadtype_text').value = this.value"}}) }}
+                            <div class="error_msg">{{ form_errors(fileForm) }}</div>
+                        </form>
+                        <form action="" id="download-daily-file">
+                        </form>
+                    </div>
+                {% endif %}
+                </div>
             </div>
-            <div id="updateNumber_box">
-                <form action="{{ path('readDailyExcel',{'date':showdate}) }}" method="post">
-                    <input type="submit" id="UpdateNumber" name="submit" value="UpdateNumber" />
-                </form>
+            <div class="content-widgets">
+                <div class="widget-container" style="min-height:50px;">
+                    {#          icon part          #}
+                    <div class="inner-widget-iof-first">
+                        <i class="icon-filter"></i>
+                    </div>
+                    {#          previous week          #}
+                    <div class="inner-widget-iof">
+                        <a type="button" class="btn pre-next-btn" href="{{path('daily', {'date':preweek, 'bu': bu})}}">&lt;&lt; &nbsp; PREVIOUS WEEK</a>
+                    </div>
+                    {#          date&bu info          #}
+                    <div class="inner-widget-iof">
+                        <h4 style="margin-top:5px;">{{ showdate }} &nbsp;&nbsp;&nbsp;
+                            {% if bu is null %}ALL{% else %}{{ all_bu[bu]}}{% endif %}
+                        </h4>
+                    </div>
+                    {#          next week          #}
+                    <div class="inner-widget-iof">
+                        <a type="button" class="btn pre-next-btn" href="{{path('daily', {'date':nxtweek, 'bu': bu})}}">NEXT WEEK &nbsp; &gt;&gt;</a>
+                    </div>
+                </div>
             </div>
-            <form method="POST" style="float: left">
-                <input type="button" value="Show Files" id="showfiles" title="List of updated File today" />
-                <div id="filelistbox" ></div>
-            </form>
-            <div class="clear"></div>
-            {% endif %}
-            <table id="daily_table" border="1">
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12" style="margin:0;">
+            <table id="daily_table" class="stat-table responsive table table-stats table-striped table-sortable table-bordered">
                 <tr id="first_row">
-                    <th rowspan="2" width="28px" class="tabletitle" style="border-right: 3px #000100 solid; color: #fff; background-color: #6595d6">No.
+                    <th rowspan="2" colspan="2" width="30%">
+                        <br>
+                        <b>Forecast in Total</b>
                     </th>
-                    <th rowspan="2" style="background-color: #6595d6; border: 0; color: #fff;">
-                        The number of
+                    <th>Mon
                     </th>
-                    <th style="background-color: #6595d6; border: 0; color: #fff;">Mon
+                    <th>Tue
                     </th>
-                    <th style="background-color: #6595d6; border: 0; color: #fff;">Tue
+                    <th>Wed
                     </th>
-                    <th style="background-color: #6595d6; border: 0; color: #fff;">Wed
+                    <th>Thu
                     </th>
-                    <th style="background-color: #6595d6; border: 0; color: #fff;">Thu
+                    <th>Fri
                     </th>
-                    <th style="background-color: #6595d6; border: 0; color: #fff;">Fri
+                    <th>Sat
                     </th>
-                    <th style="background-color: #6595d6; border: 0; color: #fff;">Sat
+                    <th>Sun
                     </th>
-                    <th style="background-color: #6595d6; border: 0; color: #fff;">Sun
-                    </th>
-                    <th rowspan="2" style="background-color: #6595d6; border: 0; color: #fff;">GAP(between today & yesterday)
+                    <th rowspan="2">GAP(between today & yesterday)
                     </th>
                 </tr>
                 <tr>
                     <!-- upward size date for click start-->
-        {% for k,cur in cur_week_date_array%}
-                        <th width="28px"><a href="{{path('daily', {'date':cur, 'bu': bu})}}" class="datelink">{{k}}</a></th>
-        {% endfor %}
+                {% for k,cur in cur_week_date_array%}
+                    <th width="5%"><a href="{{path('daily', {'date':cur, 'bu': bu})}}" class="datelink">{{k}}</a></th>
+                {% endfor %}
                     <!-- upward size date for click end-->
-                        </tr>
-                        <tr>
-                            <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                            </th>
-                            <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                                Forecast in Total
-                                <!--span id="forecastform" onclick="replaceForecast(this);" title="click to edit">{{ forcast }}</span-->
-                                <span id="forecastform">{{ forcast }}</span>
-                                <input type="button" value="Refresh" onclick="refreshForecast();">
-                            </th>
+                </tr>
+                <tr>
+                    <th colspan="2" class="center">
+                        <!--span id="forecastform" onclick="replaceForecast(this);" title="click to edit">{{ forcast }}</span-->
+                        <span id="forecastform">{{ forcast }}</span>
+                        <a class="btn btn-info btn-blue" onclick="refreshForecast();" href="javascript:;">
+                            <i class="icon-refresh"></i>
+                            Refresh
+                        </a>
+                    </th>
         {% for k,i in percent_calc %}
             {% if k == cur_date %}
-                            <th id="forecastPercent" style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                {{i}}</th>
+                    <th id="forecastPercent">
+                {{i}}
+                    </th>
             {% else %}
-                                <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                {{i}}</th>
-            {% endif %}
-        {% endfor %}
-                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                                    </th>
-                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                                        Situation as for today:
-                                    </th>
-                                    <th colspan="8" style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                                    </th>
-                                </tr>
+                    <th>
+                {{i}}
+                    </th>
+                {% endif %}
+            {% endfor %}
+                    <th>
+                    </th>
+                </tr>
+                <tr>
+                    <th>
+                    </th>
+                    <th>
+                        Situation as for today:
+                    </th>
+                    <th colspan="8">
+                    </th>
+                </tr>
     {% set i = 1 %}<!-- table row number -->
     {% set v = 0 %}<!-- distinguish editable  -->
     {% for sts in status %}
         {% if sts.today == 0 and v == 0 %}
-                                <tr>
-                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                                    </th>
-                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">Today's result:
-                                    </th>
-                                    <th colspan="7" style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">
-                                    </th>
-                                    <th style="border-bottom: 3px #000100 solid; border-top: 3px #000100 solid; border-left: 0; border-right: 0; ">Sum of the current month</th>
-                                </tr>
+                <tr>
+                    <th>
+                    </th>
+                    <th>Today's result:
+                    </th>
+                    <th colspan="7">
+                    </th>
+                    <th>Sum of the current month
+                    </th>
+                </tr>
             {% set v = 1 %}
         {% endif %}
-                                <tr>
-                                    <td style="border-right: 3px #000100 solid; background-color: #6595d6; color: #fff">{{ i }}</td>
-                                    <td>{{ sts.status }}</td>
+                <tr>
+                    <td>{{ i }}</td>
+                    <td>{{ sts.status }}</td>
             {% set j = 0 %}<!-- consider if there is no date in this status  -->
             {% for key,re in result %}
                 {% if key == sts.status %}
                     {% if sts.editable == 1 %}
                         {% for k,r in re %}<!-- k to check witch week day is it. 1 monday, 7 sunday  -->
                             {% if k >= 6 %}
-                                    <td class="editable weekend" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
+                    <td class="editable weekend" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
                             {% else %}
-                                    <td class="editable" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
+                    <td class="editable" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
                             {% endif %}
                         {% endfor %}
                         {% set j = 1 %}
                     {% else %}
                         {% for k,r in re %}
                             {% if k >= 6 %}
-                                    <td class="survaynum weekend">{{ r }}</td>
+                    <td class="survaynum weekend">{{ r }}</td>
                             {% else %}
-                                    <td class="survaynum">{{ r }}</td>
+                    <td class="survaynum">{{ r }}</td>
                             {% endif %}
                         {% endfor %}
                         {% set j = 1 %}
@@ -414,27 +463,29 @@ Albatross Daily Check
                 {% if sts.editable == 1 %}
                     {% for empty in 1..7 %}
                             {% if empty >= 6 %}
-                                     <td class="editable weekend" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
+                    <td class="editable weekend" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
                             {% else %}
-                                     <td class="editable" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
+                    <td class="editable" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
                             {% endif %}
                     {% endfor %}
                 {% else %}
                     {% for empty in 1..7 %}
                             {% if empty >= 6 %}
-                                     <td class="fixable weekend">0</td>
+                    <td class="fixable weekend">0</td>
                             {% else %}
-                                     <td class="fixable">0</td>
+                    <td class="fixable">0</td>
                             {% endif %}
                     {% endfor %}
                 {% endif %}
             {% endif %}
-                                    <td class="gab"></td><!-- gab line -->
-                                    <td class="monday_gab" style="display:none">{% if gab != null %}{{gab[sts.weight]}}{% else %}{{gab}}{% endif %}</td>
-                                </tr>
-    {% set i = i + 1 %}
-    {% endfor %}
-                            </table>
-                            <input type="text" id="tmp" value="0" style="display:none" />
-                            <input type="text" id="tmp2" value="0" style="display:none" />
+                    <td class="gab"></td><!-- gab line -->
+                    <td class="monday_gab" style="display:none">{% if gab != null %}{{gab[sts.weight]}}{% else %}{{gab}}{% endif %}</td>
+                </tr>
+        {% set i = i + 1 %}
+        {% endfor %}
+            </table>
+            <input type="text" id="tmp" value="0" style="display:none" />
+            <input type="text" id="tmp2" value="0" style="display:none" />
+        </div>
+    </div>
 {% endblock %}

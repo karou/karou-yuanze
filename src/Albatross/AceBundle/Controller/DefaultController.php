@@ -1073,7 +1073,7 @@ class DefaultController extends Controller {
             if (strlen($re) > 25) {
                 $re = substr($re, 0, 20) . '... .csv';
             }
-            $list .="<div class=\"filelist\" ><div class=\"filename\" title=\"$retitle\">$re</div><div onclick=\"deletefile('$retitle')\" class=\"deletefile\">delete</div></div>";
+            $list .="<li class=\"filelist\" ><span class=\"filename\" onclick=\"downloadFile('$retitle')\" title=\"Download $retitle\"><i class=\"icon-file\"></i>$re</span><span onclick=\"deletefile('$retitle')\" class=\"deletefile\">delete</span></li>";
         }
 
         return (new Response($list));

@@ -1,5 +1,5 @@
 albatross_daily_homepage:
-    pattern:  /daily
+    pattern:  /dailaaa
     defaults: { _controller: AlbatrossDailyBundle:Default:index }
 readDailyExcel:
     pattern:  /daily/readdailyexcel/{date}
@@ -8,6 +8,9 @@ dailyfileupload:
     pattern:  /daily/fileupload/{date}
     defaults: { _controller: AlbatrossDailyBundle:Default:fileUpload, date:'' }
     requirements: { _method: post }
+downloadDailyFile:
+    pattern:  /daily/downloadDailyFile/{date}/{fname}
+    defaults: { _controller: AlbatrossDailyBundle:Default:downloadDailyFile, date:'', fname:''}
 daily:
     pattern:  /daily/{date}/{bu}
     defaults: { _controller: AlbatrossDailyBundle:Default:daily, date:'', bu:'0', current:'daily' }
