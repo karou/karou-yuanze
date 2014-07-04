@@ -1,3 +1,4 @@
 forecast_homepage:
-    pattern:  /forecast
-    defaults: { _controller: ForecastBundle:Default:index }
+    pattern:  /forecast/{isrefresh}
+    defaults: { _controller: AlbatrossAceBundle:Default:forecast, current:'forecast', isrefresh:''}
+    requirements: { __method: post }

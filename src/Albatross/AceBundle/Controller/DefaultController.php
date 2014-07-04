@@ -142,7 +142,7 @@ class DefaultController extends Controller {
 //==============================================================================
     public function saveAolSurveyByAjaxAction() {
         $path_num = $this->getRequest()->getContent();
-        $path_num_arr = json_decode($path_num, true);        
+        $path_num_arr = json_decode($path_num, true);
         $return = $this->saveAolsurvey($path_num_arr['path'], $path_num_arr['number']);
         return new Response($return);
     }
@@ -253,8 +253,8 @@ class DefaultController extends Controller {
             if ($index >= 500) {
                 $em->flush();
                 $lineNum = $curNum + $index;
-                $percent = ceil(($lineNum/$count)*100);
-                $return = '{"percent":"'.$percent.'","number":"'.$lineNum.'","path":"'.$path.'"}';
+                $percent = ceil(($lineNum / $count) * 100);
+                $return = '{"percent":"' . $percent . '","number":"' . $lineNum . '","path":"' . $path . '"}';
                 return $return;
             }
         }
@@ -334,12 +334,12 @@ class DefaultController extends Controller {
                 if ($val['TASK_NUMBER'] >= 101 && $val['TASK_NUMBER'] <= 116) {
                     $fwsdate = $this->operateAceDate($val['DATE_EXPECTED_START_TASK']);
                     $fwedate = $this->operateAceDate($val['DATE_EXPECTED_END_TASK']);
-                    if($isNew == 1){
+                    if ($isNew == 1) {
                         $task->setCreatedDate(new \DateTime(date("Y-m-d H:i:s")));
-                    }elseif($task->getFwstartdate() != $fwsdate || 
-                            $task->getFwenddate() != $fwedate || 
+                    } elseif ($task->getFwstartdate() != $fwsdate ||
+                            $task->getFwenddate() != $fwedate ||
                             $task->getProjectnumber() != $val['PROJECT_NUMBER'] ||
-                            $task->getScope() != strip_tags($val['TASK_DESC_CREATOR'])){
+                            $task->getScope() != strip_tags($val['TASK_DESC_CREATOR'])) {
                         $task->setCreatedDate(new \DateTime(date("Y-m-d H:i:s")));
                     }
                     $task->setProjectnumber($val['PROJECT_NUMBER']);
@@ -349,9 +349,9 @@ class DefaultController extends Controller {
                 }
                 if ($val['TASK_NUMBER'] == 600) {
                     $duedate = $this->operateAceDate($val['DATE_EXPECTED_END_TASK']);
-                    if($isNew == 1){
+                    if ($isNew == 1) {
                         $task->setCreatedDate(new \DateTime(date("Y-m-d H:i:s")));
-                    }elseif($task->getReportduedate() != $duedate){
+                    } elseif ($task->getReportduedate() != $duedate) {
                         $task->setCreatedDate(new \DateTime(date("Y-m-d H:i:s")));
                     }
                     $task->setReportduedate($duedate);
@@ -378,18 +378,18 @@ class DefaultController extends Controller {
             $pn_pct = '{"pagenum":"' . $pagenum . '","percent":"' . $prg_pct . '"}';
             return (new Response($pn_pct));
         } else {
-            if($this->clearTask()){
+            if ($this->clearTask()) {
                 $pn_pct = '{"pagenum":"stop","percent":"' . $prg_pct . '"}';
                 return (new Response($pn_pct));
             }
         }
     }
+
     protected function saveDelieveryDateToWaveFromTask($task, $em) {
         $project = $task->getProject();
         $waveEntity = $project->getCustomwave();
-        if(is_object($waveEntity)) {
-            if( ($waveEntity->getWaveStep() == 'ACE' || $waveEntity->getWaveStep() == '') 
-                    && (strtotime($waveEntity->getDeliveryDate()) < strtotime($task->getReportduedate()) || $waveEntity->getDeliveryDate() == '-' || !$waveEntity->getDeliveryDate())){
+        if (is_object($waveEntity)) {
+            if (($waveEntity->getWaveStep() == 'ACE' || $waveEntity->getWaveStep() == '') && (strtotime($waveEntity->getDeliveryDate()) < strtotime($task->getReportduedate()) || $waveEntity->getDeliveryDate() == '-' || !$waveEntity->getDeliveryDate())) {
                 $waveEntity->setDeliveryDate($task->getReportduedate());
                 $waveEntity->setWaveStep('ACE');
                 $em->persist($waveEntity);
@@ -397,6 +397,7 @@ class DefaultController extends Controller {
         }
         return $em;
     }
+
     protected function clearTask() {
         $em = $this->getDoctrine()->getManager();
 //        $sql_delete_task = "DELETE MyProject\Model\User u WHERE u.id = 4";
@@ -406,7 +407,7 @@ class DefaultController extends Controller {
                 ->where('t.updated = 0');
         $query = $qb->getQuery();
         $result = $query->getResult();
-        foreach($result as $re){
+        foreach ($result as $re) {
             $em->remove($re);
         }
         $em->flush();
@@ -1299,7 +1300,7 @@ class DefaultController extends Controller {
 
             if (!empty($wave)) {
                 $firstIOF = $this->getFirstIOF($parentAttachment, $em);
-                if($firstIOF->getCustomwave() == null)
+                if ($firstIOF->getCustomwave() == null)
                     $firstIOF->setCustomwave($wave);
             }
 
@@ -1315,7 +1316,7 @@ class DefaultController extends Controller {
                 $attachment->setPath($path);
             }
             if (!empty($wave)) {
-                if($attachment->getParent() == null && $attachment->getCustomwave() == null)
+                if ($attachment->getParent() == null && $attachment->getCustomwave() == null)
                     $attachment->setCustomwave($wave);
             }
             if ($label != '') {
@@ -1371,10 +1372,10 @@ class DefaultController extends Controller {
                             'status' => $attachment->getStatus(),
         )));
     }
-    
-    protected function getFirstIOF($entity, $em){
-        if($entity->getParent() != null) {
-            if($parent = $em->getRepository('AlbatrossAceBundle:Attachments')->findFirstOneByParentID($entity->getParent()->getId())){
+
+    protected function getFirstIOF($entity, $em) {
+        if ($entity->getParent() != null) {
+            if ($parent = $em->getRepository('AlbatrossAceBundle:Attachments')->findFirstOneByParentID($entity->getParent()->getId())) {
                 $entity = $this->getFirstIOF($parent, $em);
             }
         }
@@ -1476,8 +1477,8 @@ class DefaultController extends Controller {
         $file_dir = $file_entity->getPath();
         $file_arr = explode('/', $file_dir);
         $file_name = $file_arr['2'];
-        $encoded_filename_pre = urlencode($file_name);  
-        $encoded_filename = str_replace("+", "%20", $encoded_filename_pre);  
+        $encoded_filename_pre = urlencode($file_name);
+        $encoded_filename = str_replace("+", "%20", $encoded_filename_pre);
         $ua = $header['USER_AGENT'];
         if (!file_exists($file_dir)) {
             header("Content-type: text/html; charset=utf-8");
@@ -1489,13 +1490,13 @@ class DefaultController extends Controller {
             Header("Content-type: application/octet-stream");
             Header("Accept-Ranges: bytes");
             Header("Accept-Length: " . $file_size);
-            
-            if (preg_match("/MSIE/", $ua)) {  
-                header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');  
-            } else if (preg_match("/Firefox/", $ua)) {  
-                header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');  
-            } else {  
-                header('Content-Disposition: attachment; filename="' . $file_name . '"');  
+
+            if (preg_match("/MSIE/", $ua)) {
+                header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+            } else if (preg_match("/Firefox/", $ua)) {
+                header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $file_name . '"');
             }
             $contents = fread($file, $file_size);
             echo $contents;
@@ -1667,22 +1668,23 @@ class DefaultController extends Controller {
         }
         return $buArr;
     }
+
     public function viewiofAction($id, $status, $current) {
         $em = $this->getDoctrine()->getManager();
         $IOFEntity = $em->getRepository('AlbatrossAceBundle:Attachments')->find($id);
         $IOFFileEntity = $IOFEntity->getIoffile()->toArray();
         $IOFInfoEntity = $IOFEntity->getAttachinfo()->toArray();
-        
+
         $result = array();
-        foreach($IOFFileEntity as $key => $files){
-            if($files->getFormindex() == null){
+        foreach ($IOFFileEntity as $key => $files) {
+            if ($files->getFormindex() == null) {
                 $index1 = 1;
-            }else{
+            } else {
                 $index1 = $files->getFormindex();
             }
-            if($files->getFormindex2() == null){
+            if ($files->getFormindex2() == null) {
                 $index2 = 1;
-            }else{
+            } else {
                 $index2 = $files->getFormindex2();
             }
             $result[$index1]['fileinfo'][$index2]['file'][$key]['label'] = $files->getLabel();
@@ -1690,14 +1692,14 @@ class DefaultController extends Controller {
             $result[$index1]['fileinfo'][$index2]['file'][$key]['fid'] = $files->getId();
             $result[$index1]['fileinfo'][$index2]['message'] = $files->getIofmessage()->getMessage();
         }
-        if(empty($IOFInfoEntity)){
+        if (empty($IOFInfoEntity)) {
             $result[1]['project'][1]['bu'] = 'none';
             $result[1]['project'][1]['project'] = 'none';
-        }else{
-            foreach($IOFInfoEntity as $key => $info){
-                if($info->getFormindex() == null){
+        } else {
+            foreach ($IOFInfoEntity as $key => $info) {
+                if ($info->getFormindex() == null) {
                     $index1 = 1;
-                }else{
+                } else {
                     $index1 = $info->getFormindex();
                 }
                 $result[$index1]['project'][$key]['bu'] = $info->getBu()->getName();
@@ -1709,28 +1711,29 @@ class DefaultController extends Controller {
                 $result[$index1]['project'][$key]['comment'] = $info->getComment();
             }
         }
-        
+
         $otherInfo = array();
-        if($IOFEntity->getSubmitby()){
+        if ($IOFEntity->getSubmitby()) {
             $submitby = $IOFEntity->getSubmitby();
-        }else{
+        } else {
             $submitby = $IOFEntity->getUser()->getId();
         }
-        
+
         $otherInfo['user'] = $em->getRepository('AlbatrossUserBundle:User')->find($submitby);
         $otherInfo['pm'] = $IOFEntity->getUser()->getUsername();
         $otherInfo['wave']['id'] = $IOFEntity->getCustomwave()->getId();
         $otherInfo['wave']['name'] = $IOFEntity->getCustomwave()->getName();
         $otherInfo['wave']['pid'] = $IOFEntity->getCustomwave()->getCustomproject()->getId();
         $otherInfo['iof'] = $id;
-        
+
         return $this->render('AlbatrossAceBundle:Default:viewIOF.html.twig', array(
-            'result' => $result,
-            'current' => $current,
-            'status' => $status,
-            'otherInfo' => $otherInfo
+                    'result' => $result,
+                    'current' => $current,
+                    'status' => $status,
+                    'otherInfo' => $otherInfo
         ));
     }
+
     public function downloadIOFAction($fid) {
         $em = $this->getDoctrine()->getManager();
         $file_entity = $em->getRepository('AlbatrossAceBundle:IOFFile')->find($fid);
@@ -1738,10 +1741,10 @@ class DefaultController extends Controller {
         $file_arr = explode('/', $file_dir);
         $header = $this->getRequest()->server->getHeaders();
         $file_name = $file_arr['2'];
-        $encoded_filename_pre = urlencode($file_name);  
-        $encoded_filename = str_replace("+", "%20", $encoded_filename_pre);  
+        $encoded_filename_pre = urlencode($file_name);
+        $encoded_filename = str_replace("+", "%20", $encoded_filename_pre);
         $ua = $header['USER_AGENT'];
-        
+
         if (!file_exists($file_dir)) {
             header("Content-type: text/html; charset=utf-8");
             echo "File not found!";
@@ -1752,20 +1755,21 @@ class DefaultController extends Controller {
             Header("Content-type: application/octet-stream");
             Header("Accept-Ranges: bytes");
             Header("Accept-Length: " . $file_size);
-            
-            if (preg_match("/MSIE/", $ua)) {  
-                header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');  
-            } else if (preg_match("/Firefox/", $ua)) {  
-                header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');  
-            } else {  
-                header('Content-Disposition: attachment; filename="' . $file_name . '"');  
-            }  
+
+            if (preg_match("/MSIE/", $ua)) {
+                header('Content-Disposition: attachment; filename="' . $encoded_filename . '"');
+            } else if (preg_match("/Firefox/", $ua)) {
+                header('Content-Disposition: attachment; filename*="utf8\'\'' . $file_name . '"');
+            } else {
+                header('Content-Disposition: attachment; filename="' . $file_name . '"');
+            }
             $contents = fread($file, $file_size);
             echo $contents;
             fclose($file);
             exit();
         }
     }
+
     public function iofviewAction($id, $status, $current) {
         $em = $this->getDoctrine()->getManager();
         if ($status == 'approved') {
@@ -1802,12 +1806,12 @@ class DefaultController extends Controller {
         $attachmentsOption['attachments']['type'] = array('0' => 'IOF');
         $attachmentsForm = $this->createForm(new AttachmentsType(), $attachmentsOption);
 
-        if($attachment->getParent() != null ){
+        if ($attachment->getParent() != null) {
             $firstVersionIOF = $this->getFirstIOF($attachment, $em);
-            if($firstVersionIOF->getCustomwave() == null){
+            if ($firstVersionIOF->getCustomwave() == null) {
                 $firstVersionIOF = null;
             }
-        }else{
+        } else {
             $firstVersionIOF = null;
         }
         return $this->render('AlbatrossAceBundle:Default:iofview.html.twig', array(
@@ -2030,22 +2034,18 @@ class DefaultController extends Controller {
         $ioflist = $this->getIofTasks();
         $pmEditList = $this->getPmEditList();
         $userArr = $src_user->toArray();
-        if($src_client == null && empty($userArr) && $src_proj == null && $src_contract == null && 
-                empty($src_step) && $src_scope_f == null && $src_scope_t == null && $src_fw_s_f == null && 
-                $src_fw_s_t == null && $src_fw_e_f == null && $src_fw_e_t == null && $src_due_f == null && 
-                $src_due_t == null && empty($src_scope_month) && $src_update_f == null && $src_update_t == null){
+        if ($src_client == null && empty($userArr) && $src_proj == null && $src_contract == null &&
+                empty($src_step) && $src_scope_f == null && $src_scope_t == null && $src_fw_s_f == null &&
+                $src_fw_s_t == null && $src_fw_e_f == null && $src_fw_e_t == null && $src_due_f == null &&
+                $src_due_t == null && empty($src_scope_month) && $src_update_f == null && $src_update_t == null) {
             $lastYearScope = $this->getLastYearScope($src_bu);
-        }else{
+        } else {
             $lastYearScope = '';
         }
         $result = $this->getForecastPageList($tasklist, $ioflist, $pmEditList, $isrefresh);
-        $final = $this->filterConditions($result, $src_client, $src_bu, 
-                $src_user, $src_proj, $src_contract, $src_step, 
-                $src_scope_f, $src_scope_t, $src_fw_s_f, $src_fw_s_t, 
-                $src_fw_e_f, $src_fw_e_t, $src_due_f, $src_due_t,
-                $src_scope_month, $src_scope_All, $src_update_f, $src_update_t);
+        $final = $this->filterConditions($result, $src_client, $src_bu, $src_user, $src_proj, $src_contract, $src_step, $src_scope_f, $src_scope_t, $src_fw_s_f, $src_fw_s_t, $src_fw_e_f, $src_fw_e_t, $src_due_f, $src_due_t, $src_scope_month, $src_scope_All, $src_update_f, $src_update_t);
 
-        return $this->render('AlbatrossAceBundle:Default:forecast.html.twig', array(
+        return $this->render('AlbatrossAceBundle:Default:forecast_v2.html.twig', array(
                     'tasks' => $final,
                     'current' => $current,
                     'month' => $month,
@@ -2056,29 +2056,29 @@ class DefaultController extends Controller {
                     'lastYearScope' => $lastYearScope,
         ));
     }
-    
-    protected function getLastYearScope($src_bu){
+
+    protected function getLastYearScope($src_bu) {
         //get Current month and year
         $currentTime = date('Y-m', time());
         //get Arr of last year but same month
         $lastYearArr = array();
         $lastYearFinal = array();
-        for($i = 0; $i < 12; $i++){
-            $lastYearArr[$i] = date('Y-m', strtotime('-1 year, +'.$i.' month', strtotime($currentTime)));
+        for ($i = 0; $i < 12; $i++) {
+            $lastYearArr[$i] = date('Y-m', strtotime('-1 year, +' . $i . ' month', strtotime($currentTime)));
         }
-        foreach($lastYearArr as $key => $ly){
+        foreach ($lastYearArr as $key => $ly) {
             $daysOfMonth = date('t', strtotime($ly));
-            $lastYearFinal[$key] = $ly .'-'.$daysOfMonth;
+            $lastYearFinal[$key] = $ly . '-' . $daysOfMonth;
         }
-        
+
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('date')
                 ->from('AlbatrossDailyBundle:Date', 'date')
                 ->leftJoin('date.bu', 'bu');
-        if($src_bu == null){
+        if ($src_bu == null) {
             $qb->where('bu.id is null');
-        }else{
+        } else {
             $qb->where('bu.id = :bid');
             $qb->setParameter('bid', $src_bu->getId());
         }
@@ -2086,9 +2086,9 @@ class DefaultController extends Controller {
                 ->setParameter('dayArr', $lastYearFinal);
         $query = $qb->getQuery();
         $result = $query->getArrayResult();
-        
+
         $dateIdArr = array();
-        foreach($result as $re){
+        foreach ($result as $re) {
             $dateIdArr[] = $re['id'];
         }
         $scopeQb = $em->createQueryBuilder();
@@ -2102,20 +2102,20 @@ class DefaultController extends Controller {
         $scopeQuery = $scopeQb->getQuery();
         $scopeResult = $scopeQuery->getArrayResult();
         $temp = array_flip($lastYearFinal);
-        foreach($scopeResult as $s){
+        foreach ($scopeResult as $s) {
             $temp[$s['date']['dailydate']->format('Y-m-d')] = $s['number'];
         }
         $final = array();
-        foreach($temp as $key => $f){
-            if(is_int($f)){
+        foreach ($temp as $key => $f) {
+            if (is_int($f)) {
                 $temp[$key] = '0';
             }
             $final[] = $temp[$key];
         }
-        
+
         return $final;
     }
-    
+
     public function getForecastPageList($result, $ioflist, $pmEditList, $isrefresh) {
         $buArr = $this->getBuNumberCodeArr();
         $userArr = $this->userNameMatch();
@@ -2132,17 +2132,17 @@ class DefaultController extends Controller {
                     $updateobj = $pmEdit['edittime'];
                     $fws = $fwsobj->format('Y-m-d');
                     $fwe = $fweobj->format('Y-m-d');
-                    if(!$pmEdit['reporttype']){
+                    if (!$pmEdit['reporttype']) {
                         $allobj = $pmEdit['reportduedate'];
                         $all = $allobj->format('Y-m-d');
                         $reportType = 'date';
-                    }else{
+                    } else {
                         $all = $pmEdit['reportduetext'];
                         $reportType = 'text';
                     }
-                    if($updateobj != ''){
+                    if ($updateobj != '') {
                         $update = $updateobj->format('Y-m-d');
-                    }else{
+                    } else {
                         $update = '';
                     }
                     $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['step'] = 'PM';
@@ -2162,18 +2162,18 @@ class DefaultController extends Controller {
                     $attachmentInfo = $ioflist['result'][$ioflist['refer'][$re['project']['id']][$buKey]];
                     $fwsobj = $attachmentInfo['fwstartdate'];
                     $fweobj = $attachmentInfo['fwenddate'];
-                    if(!$attachmentInfo['reporttype']){
+                    if (!$attachmentInfo['reporttype']) {
                         $allobj = $attachmentInfo['reportduedate'];
                         $all = $allobj->format('Y-m-d');
-                    }else{
+                    } else {
                         $all = $attachmentInfo['reportduedatetext'];
                     }
                     $updateobj = $attachmentInfo['attachments']['submitteddate'];
                     $fws = $fwsobj->format('Y-m-d');
                     $fwe = $fweobj->format('Y-m-d');
-                    if($updateobj != ''){
+                    if ($updateobj != '') {
                         $update = $updateobj->format('Y-m-d');
-                    }else{
+                    } else {
                         $update = '';
                     }
                     $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['step'] = 'IOF';
@@ -2191,9 +2191,9 @@ class DefaultController extends Controller {
                 }
                 if (!isset($forecastList[$re['project']['id']]['bu'][$buArr[$buKey]])) {
                     $updateobj = $re['createdDate'];
-                    if($updateobj != ''){
+                    if ($updateobj != '') {
                         $update = $updateobj->format('Y-m-d');
-                    }else{
+                    } else {
                         $update = '';
                     }
                     $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['step'] = 'Contract';
@@ -2209,8 +2209,8 @@ class DefaultController extends Controller {
                 $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['tid'] = $re['id'];
                 $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['pid'] = $re['project']['id'];
                 $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['name'] = $re['project']['name'];
-                $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['contract'] = (strlen($re['projectnumber']) <= 14) ? $re['projectnumber'] : substr($re['projectnumber'], 0, 14) . '...';
-                $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['contracttitle'] = $re['projectnumber'];
+                $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['contract'] = (strlen($re['projectNumber']) <= 14) ? $re['projectNumber'] : substr($re['projectNumber'], 0, 14) . '...';
+                $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['contracttitle'] = $re['projectNumber'];
                 $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['bu'] = $buArr[$buKey];
                 //formula
                 $formula = $this->formula($forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['fws'], $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['fwe'], $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['scope']);
@@ -2218,7 +2218,7 @@ class DefaultController extends Controller {
                 $forecastList[$re['project']['id']]['bu'][$buArr[$buKey]]['projectName'] = $re['project']['name'];
             }
         }
-        
+
         foreach ($result as $re) {
             if ($re['number'] == 600) {
                 if (isset($forecastList[$re['project']['id']]['bu']) && $forecastList[$re['project']['id']]['pm'] == '') {
@@ -2441,11 +2441,11 @@ class DefaultController extends Controller {
         $forecast->setFwstartdate(new \DateTime($data['fwstartdate']));
         $forecast->setFwenddate(new \DateTime($data['fwenddate']));
         $forecast->setEditor($editor);
-        if($data['reporttype'] == 1){
+        if ($data['reporttype'] == 1) {
             $forecast->setReporttype(1);
             $forecast->setReportduetext($data['reportduetext']);
             $em = $this->saveDelieveryDateToWaveFromForecast($task, $em, 1, $data['reportduetext']);
-        }else{
+        } else {
             $forecast->setReporttype(0);
             $forecast->setReportduedate(new \DateTime($data['reportduedate']));
         }
@@ -2456,16 +2456,17 @@ class DefaultController extends Controller {
         $em->flush();
         return $this->redirect($referer);
     }
+
     protected function saveDelieveryDateToWaveFromForecast($task, $em, $deliveryType, $deliveryDate) {
         $project = $task->getProject();
         $waveEntity = $project->getCustomwave();
-        if(is_object($waveEntity)) {
-            if($waveEntity->getWaveStep() == 'PM' || $waveEntity->getWaveStep() == 'ACE' || $waveEntity->getWaveStep() == ''){
-                if(!$deliveryType){
+        if (is_object($waveEntity)) {
+            if ($waveEntity->getWaveStep() == 'PM' || $waveEntity->getWaveStep() == 'ACE' || $waveEntity->getWaveStep() == '') {
+                if (!$deliveryType) {
 //                    $waveEntity->setDeliveryDate($deliveryDate);
 //                    $waveEntity->setWaveStep('PM');
 //                } else {
-                    if($waveEntity->getWaveStep() == 'ACE' || (strtotime($waveEntity->getDeliveryDate()) < strtotime($deliveryDate) || $waveEntity->getDeliveryDate() == '-' || !$waveEntity->getDeliveryDate())){
+                    if ($waveEntity->getWaveStep() == 'ACE' || (strtotime($waveEntity->getDeliveryDate()) < strtotime($deliveryDate) || $waveEntity->getDeliveryDate() == '-' || !$waveEntity->getDeliveryDate())) {
                         $waveEntity->setDeliveryDate($deliveryDate);
                         $waveEntity->setWaveStep('PM');
                     }
@@ -2475,7 +2476,7 @@ class DefaultController extends Controller {
         }
         return $em;
     }
-    
+
     protected function getIofTasks() {
 
         $em = $this->getDoctrine()->getManager();
@@ -2523,25 +2524,20 @@ class DefaultController extends Controller {
         return $return;
     }
 
-    protected function filterConditions($result, $src_client, $src_bu, $src_user, $src_proj, 
-            $src_contract, $src_step, $src_scope_f, 
-            $src_scope_t, $src_fw_s_f, $src_fw_s_t, 
-            $src_fw_e_f, $src_fw_e_t, $src_due_f, 
-            $src_due_t, $src_scope_month, $src_scope_All, 
-            $src_update_f, $src_update_t) {
+    protected function filterConditions($result, $src_client, $src_bu, $src_user, $src_proj, $src_contract, $src_step, $src_scope_f, $src_scope_t, $src_fw_s_f, $src_fw_s_t, $src_fw_e_f, $src_fw_e_t, $src_due_f, $src_due_t, $src_scope_month, $src_scope_All, $src_update_f, $src_update_t) {
 
         if ($src_bu == null) {
             $src_bu = '';
         } else {
             $src_bu = $src_bu->getCode();
         }
-        
+
         $stepArr = array(0 => 'Contract', 1 => 'PM', 2 => 'IOF', 3 => 'exception');
         if (empty($src_step)) {
             $src_step = array(0, 1, 2);
         } else {
-            for($i = 0; $i < 3; $i++){
-                if(!isset($src_step[$i]))
+            for ($i = 0; $i < 3; $i++) {
+                if (!isset($src_step[$i]))
                     $src_step[$i] = 3;
             }
         }
@@ -2550,7 +2546,7 @@ class DefaultController extends Controller {
         if (empty($userArr)) {
             $src_user = '';
         } else {
-            foreach($userArr as $u){
+            foreach ($userArr as $u) {
                 $userArrSearch[] = $u->getId();
             }
         }
@@ -2720,7 +2716,7 @@ class DefaultController extends Controller {
         }
         $startManth = date('Y-m', strtotime($fws));
         $endMonth = date('Y-m', strtotime($fwe));
-        if(!preg_match('/^CI-.*|^.*-CI-.*/', $projectName)){
+        if (!preg_match('/^CI-.*|^.*-CI-.*/', $projectName)) {
             for ($i = $startManth; strtotime($i) <= strtotime($endMonth); $i = date('Y-m', strtotime('+1 month', strtotime($i)))) {
 
                 $m = date('Y-m', strtotime($i));
@@ -2779,17 +2775,17 @@ class DefaultController extends Controller {
 
         return $this->redirect($this->generateUrl('ioflist'));
     }
-    
+
     //Refresh survey function
     ////read todays file, and get monthes from file name.
     ////read files and make surveyid as array.
     ////get survey data from database which belong to these monthes.
     ////check in array or remove.
-    public function refreshSurveysAction(){
+    public function refreshSurveysAction() {
         $dir = 'aolExport/';
         $date = date('ymd');
         $targetDir = $dir . $date;
-        
+
         //init Values
         $monthArrFromFile = array();
         $surveyArrFromFile = array();
@@ -2801,20 +2797,21 @@ class DefaultController extends Controller {
                     $monthAndExtentionArr = explode(' ', $f);
                     $monthArr = explode('.', $monthAndExtentionArr[2]);
                     $monthArrFromFile[] = date('Y-m', strtotime($monthAndExtentionArr[1] . $monthArr[0]));
-                    $surveyIdArr = $this->CurdayAolFileSurveyIdArr($targetDir .'/'. $f);
+                    $surveyIdArr = $this->CurdayAolFileSurveyIdArr($targetDir . '/' . $f);
                     $surveyArrFromFile = array_merge($surveyArrFromFile, $surveyIdArr);
                 }
             }
-        }else{
+        } else {
             $referer = $this->getRequest()->headers->get('referer');
-            return new Response('<script>alert("Please upload file first");location.href = "'.$referer.'"</script>');
+            return new Response('<script>alert("Please upload file first");location.href = "' . $referer . '"</script>');
         }
         $this->getSurveyFromDB($monthArrFromFile, $surveyArrFromFile);
-        
+
         $this->deleteQuestionnaireAndCampaign();
         return $this->redirect($this->generateUrl('project'));
     }
-    protected function getSurveyFromDB($monthArrFromFile, $surveyArrFromFile){
+
+    protected function getSurveyFromDB($monthArrFromFile, $surveyArrFromFile) {
         $em = $this->getDoctrine()->getManager();
         $surveyQuery = $em->createQuery('SELECT s.id, s.SurveyInstanceID, s.SurveyInstanceID, s.Date, q.name FROM AlbatrossAceBundle:Aolsurvey s LEFT JOIN s.campaign cam LEFT JOIN cam.questionnaire q');
         $surveyEntities = $surveyQuery->getResult();
@@ -2822,9 +2819,9 @@ class DefaultController extends Controller {
         $monthArrFromFileFlip = array_flip($monthArrFromFile);
         $surveyArrFromFileFlip = array_flip($surveyArrFromFile);
         $index = 0;
-        foreach($surveyEntities as $survey){
-            if(isset($monthArrFromFileFlip[date('Y-m', strtotime($survey['Date']))])){
-                if(!isset($surveyArrFromFileFlip[trim($survey['SurveyInstanceID'])])){
+        foreach ($surveyEntities as $survey) {
+            if (isset($monthArrFromFileFlip[date('Y-m', strtotime($survey['Date']))])) {
+                if (!isset($surveyArrFromFileFlip[trim($survey['SurveyInstanceID'])])) {
                     $haveToDelete[$index]['id'] = $survey['id'];
                     $haveToDelete[$index]['surveyid'] = $survey['SurveyInstanceID'];
                     $haveToDelete[$index]['survey'] = $survey['name'];
@@ -2833,7 +2830,7 @@ class DefaultController extends Controller {
                 }
             }
         }
-        foreach($haveToDelete as $hd){
+        foreach ($haveToDelete as $hd) {
             $entity = $em->getRepository('AlbatrossAceBundle:Aolsurvey')->find($hd['id']);
             $em->remove($entity);
         }
@@ -2841,7 +2838,8 @@ class DefaultController extends Controller {
         $em->flush();
         return;
     }
-    protected function deleteQuestionnaireAndCampaign(){
+
+    protected function deleteQuestionnaireAndCampaign() {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('questionnaire', 'campaign')
@@ -2851,10 +2849,10 @@ class DefaultController extends Controller {
                 ->where('survey.id is not null');
         $query = $qb->getQuery();
         $result = $query->getResult();
-        
+
         $haveSurveyArr = array();
-        
-        foreach($result as $re){
+
+        foreach ($result as $re) {
             $haveSurveyArr[] = $re->getId();
         }
 
@@ -2865,44 +2863,47 @@ class DefaultController extends Controller {
                 ->setParameter('qid', $haveSurveyArr);
         $query2 = $qb2->getQuery();
         $result2 = $query2->getResult();
-        
-        foreach($result2 as $re2){
+
+        foreach ($result2 as $re2) {
             $em->remove($re2);
         }
-        
+
         $em->flush();
         return;
     }
-    protected function writeSurveyDeleteLog($data){
+
+    protected function writeSurveyDeleteLog($data) {
         $date = date('Ymd');
-        if(!is_dir('deletedSurveyLog')){
+        if (!is_dir('deletedSurveyLog')) {
             mkdir('deletedSurveyLog');
         }
         $file = fopen("deletedSurveyLog/" . $date . ".txt", "a+");
 
         foreach ($data as $surveyData) {
-            fwrite($file,'<tr><td>'. $surveyData['surveyid'].'</td><td>'.$surveyData['survey']. '</td><td>'.$surveyData['date'].'</td></tr>'."\n");
+            fwrite($file, '<tr><td>' . $surveyData['surveyid'] . '</td><td>' . $surveyData['survey'] . '</td><td>' . $surveyData['date'] . '</td></tr>' . "\n");
         }
         fclose($file);
         return;
     }
-    public function showDeletedSurveysAction(){
+
+    public function showDeletedSurveysAction() {
         $date = date('Ymd');
-        $file_handle = fopen('deletedSurveyLog/'.$date.'.txt', "r");
-        
-        $result = '<table id="deleted-survey-table"><tr><th colspan="3" id="deleted-survey-table-title">DELETED SURVERYS'.
-                '<img id="closeShowDeletedSurvey" onclick="closeSurveyShow();" src="/images/close.png"></th></tr>'.
+        $file_handle = fopen('deletedSurveyLog/' . $date . '.txt', "r");
+
+        $result = '<table id="deleted-survey-table"><tr><th colspan="3" id="deleted-survey-table-title">DELETED SURVERYS' .
+                '<img id="closeShowDeletedSurvey" onclick="closeSurveyShow();" src="/images/close.png"></th></tr>' .
                 '<tr id="deleted-survey-table-subtitle"><th>Survey ID</th><th>Survey Name</th><th>Date</th></tr>';
         while (!feof($file_handle)) {
-           $line = fgets($file_handle);
-           if($line != ''){
+            $line = fgets($file_handle);
+            if ($line != '') {
                 $result .= $line;
-           }
+            }
         }
         fclose($file_handle);
-        return new Response($result.'</table>');
+        return new Response($result . '</table>');
     }
-    protected function CurdayAolFileSurveyIdArr($fileDir){
+
+    protected function CurdayAolFileSurveyIdArr($fileDir) {
         $csv = new SplFileObject($fileDir);
         $excelArr = array();
         $result = array();
@@ -2913,7 +2914,7 @@ class DefaultController extends Controller {
         $sid = 0;
 
         foreach ($excelArr[0] as $k => $name) {
-            if($name == 'SurveyInstanceID'){
+            if ($name == 'SurveyInstanceID') {
                 $sid = $k;
                 break;
             }
@@ -2928,6 +2929,7 @@ class DefaultController extends Controller {
         }
         return $result;
     }
+
 //    searchIofFile backup
 //    public function searchIofFile($src_client, $src_status, $src_bu, $src_user, $src_proj, $src_number, $src_t_f, $src_t_t) {
 //        $em = $this->getDoctrine()->getManager();
