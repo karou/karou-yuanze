@@ -122,12 +122,14 @@ Albatross Daily Check
                 {% endif %}
             }else{
                 if (todayNum !== null && yesterdayNum !== null) {
-                    if (parseInt(todayNum) == 0)
-                        gab = '-';
-                    else
-                        gab = parseInt(todayNum) - parseInt(yesterdayNum);
-
-                    $(this).children("td[class=gab]").html(gab);
+                    var gabContent = '';
+                    if (parseInt(todayNum) === 0) gab = '-';
+                    else gab = parseInt(todayNum) - parseInt(yesterdayNum);
+                    
+                    if (gab !== '-' && gab > 0) gabContent = '<i class="icon-arrow-up greenArrow" style="margin-right:30px;"></i>' + gab;
+                    else if (gab !== '-' && gab < 0) gabContent = '<i class="icon-arrow-down redArrow" style="margin-right:30px;"></i>' + gab;
+                    
+                    $(this).children("td[class=gab]").html(gabContent);
                 }
             }
         });
@@ -186,7 +188,7 @@ Albatross Daily Check
             url: "{{ path('setone') }}",
             data: data,
             success: function(result) {
-                var replace = '<td class="editable" id=' + id + ' onclick="showeditform(this.id)">' + result + '</td>';
+                var replace = '<td class="editable center" id=' + id + ' onclick="showeditform(this.id)">' + result + '</td>';
                 $("#" + id).replaceWith(replace);
                 background();
             }
@@ -196,7 +198,7 @@ Albatross Daily Check
     function cancel(data) {
         var id = $(data).parent().parent().parent().attr('id');
         var temp = $("#tmp").val();
-        var replace = '<td class="editable" id=' + id + ' onclick="showeditform(this.id)">' + temp + '</td>';
+        var replace = '<td class="editable center" id=' + id + ' onclick="showeditform(this.id)">' + temp + '</td>';
         $("#" + id).replaceWith(replace);
         background();
     }
@@ -377,7 +379,6 @@ Albatross Daily Check
                 </tr>
                 <tr>
                     <th colspan="2" class="center">
-                        <!--span id="forecastform" onclick="replaceForecast(this);" title="click to edit">{{ forcast }}</span-->
                         <span id="forecastform">{{ forcast }}</span>
                         <a class="btn btn-info btn-blue" onclick="refreshForecast();" href="javascript:;">
                             <i class="icon-refresh"></i>
@@ -448,7 +449,7 @@ Albatross Daily Check
                 <h3 class="page-header">Today's result</h3>
             </div>
 {#          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////          #}
-            <table class="daily_table stat-table responsive table table-stats table-striped table-sortable table-bordered">
+            <table class="daily_table stat-table responsive table table-stats table-striped table-sortable table-bordered" style="margin-bottom:50px;">
                 <tr>
                     <th width="5%">
                         <br>
@@ -476,8 +477,8 @@ Albatross Daily Check
                 <tr>
                     <td width="5%">{{ sts.weight }}</td>
                     <td width="30%">{{ sts.status }}</td>
-                {% for num in result[sts.status] %}
-                    <td class="center" width="5%" align="center">{{ num }}</td>
+                {% for k,num in result[sts.status] %}
+                    <td class="center editable" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);" width="5%" align="center">{{ num }}</td>
                 {% endfor %}
                     <td class="gab"></td>
                     <td class="monday_gab" style="display:none">{% if gab != null %}{{gab[sts.weight]}}{% else %}{{gab}}{% endif %}</td>
@@ -485,7 +486,7 @@ Albatross Daily Check
                 {% endif %}
             {% endfor %}
             </table>
-            
+
    {#                 
             {% set i = 1 %}<!-- table row number -->
             {% set v = 0 %}<!-- distinguish editable  -->

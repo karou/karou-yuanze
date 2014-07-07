@@ -564,7 +564,7 @@ class DefaultController extends Controller {
         $report_done = $this->getReportDone($select_time, $bu);
 
 //        $results = $this->setSurveyValidatedNumber($result, $cur_week_date_array, $bu);
-        
+
         return $this->render('AlbatrossDailyBundle:Default:dailycheck.html.twig', array(
                     'result' => $result,
                     'status' => $status,
