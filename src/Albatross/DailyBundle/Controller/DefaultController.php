@@ -530,14 +530,16 @@ class DefaultController extends Controller {
         $cur_week = strtotime('last monday', strtotime('+1 day', strtotime($show_date)));
 
         $last_day_month = '';
+        $weekName = array('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun');
         for ($t = 0; $t < 7; $t++) {
-            $cur_week_date_array[date('d', $cur_week)] = date('Y-m-d', $cur_week);
+            $cur_week_date_array[date('d', $cur_week)]['date'] = date('Y-m-d', $cur_week);
+            $cur_week_date_array[date('d', $cur_week)]['week'] = $weekName[$t];
             if(date('Y-m-d', $cur_week) == date('Y-m-t', $cur_week)){
                 $last_day_month = $t;
             }
             $cur_week = $cur_week + 86400;
         }
-
+        
         $cur_date = date('w', strtotime($show_date));
         if ($cur_date == 0)
             $cur_date = 7;
@@ -562,7 +564,7 @@ class DefaultController extends Controller {
         $report_done = $this->getReportDone($select_time, $bu);
 
 //        $results = $this->setSurveyValidatedNumber($result, $cur_week_date_array, $bu);
-
+        
         return $this->render('AlbatrossDailyBundle:Default:dailycheck.html.twig', array(
                     'result' => $result,
                     'status' => $status,
@@ -831,8 +833,8 @@ class DefaultController extends Controller {
         $i = 1;
         $return = array();
         foreach ($days as $d) {
-            $month = date('Y-m', strtotime($d));
-            $date = new \DateTime($d);
+            $month = date('Y-m', strtotime($d['date']));
+            $date = new \DateTime($d['date']);
             $resultforecast = $em->getRepository('AlbatrossAceBundle:ForecastScope')->findOneByMonthAndBu($month, $bu);
             if (!empty($resultforecast)) {
                 //get specific total forecast 
@@ -1089,8 +1091,7 @@ class DefaultController extends Controller {
 
     //distinguish number by status
     public function distinguishNumber($num) {
-        $result = array();
-        
+        $result = $this->iniStatusArr();
         foreach ($num as $n) {
             for ($i = 1; $i <= 7; $i++) {
                 foreach ($n->getDate()->getDailydate() as $key => $t) {
@@ -1103,16 +1104,27 @@ class DefaultController extends Controller {
                 }
                 if ($i == $index) {
                     $result[$n->getStatus()->getStatus()][$index] = $n->getNumber();
-                } else {
-                    if (empty($result[$n->getStatus()->getStatus()][$i]))
-                        $result[$n->getStatus()->getStatus()][$i] = '0';
-                }
+                } 
             }
         }
-
+        
         return $result;
     }
-
+    protected function iniStatusArr(){
+        $result = array();
+        $statusArr = array(
+            'Submitted surveys','Assigned surveys','Delayed surveys (> 2 days)','Declined surveys','Pending validation',
+            'Pending validation by Submission Time (> 4 days)','Pending validation by Visit Time (> 4 days)','Pending QC',
+            'RFA opened','Open opportunity','Survey Validated Number','QC Done','Data Integrity Check Done',
+            'LE Translation Done','Report Done','Invalid Survey Number'
+        );
+        foreach($statusArr as $status){
+            for ($i = 1; $i <= 7; $i++) {
+                $result[$status][$i] = 0;
+            }
+        }
+        return $result;
+    }
     //read all bu
     public function getAllBu() {
         $em = $this->getDoctrine()->getManager();

@@ -70,7 +70,7 @@ Albatross Daily Check
     });
 
     function background() {
-        $("table tr").each(function() {
+        $(".daily_table tr").each(function() {
             var cur = {{ cur_date }} + 1;
             var gab;
             $(this).find("td:eq(" + cur + ")").css('font-size', '12px');
@@ -354,35 +354,26 @@ Albatross Daily Check
     </div>
     <div class="row-fluid">
         <div class="span12" style="margin:0;">
-            <table id="daily_table" class="stat-table responsive table table-stats table-striped table-sortable table-bordered">
+            <table class="stat-table responsive table table-stats table-striped table-sortable table-bordered">
                 <tr id="first_row">
-                    <th rowspan="2" colspan="2" width="30%">
+                    <th colspan="2" width="35%">
                         <br>
                         <b>Forecast in Total</b>
                     </th>
-                    <th>Mon
-                    </th>
-                    <th>Tue
-                    </th>
-                    <th>Wed
-                    </th>
-                    <th>Thu
-                    </th>
-                    <th>Fri
-                    </th>
-                    <th>Sat
-                    </th>
-                    <th>Sun
-                    </th>
-                    <th rowspan="2">GAP(between today & yesterday)
-                    </th>
-                </tr>
-                <tr>
                     <!-- upward size date for click start-->
                 {% for k,cur in cur_week_date_array%}
-                    <th width="5%"><a href="{{path('daily', {'date':cur, 'bu': bu})}}" class="datelink">{{k}}</a></th>
+                    <th width="5%"  class="center" align="center">
+                        <a href="{{path('daily', {'date':cur['date'], 'bu': bu})}}" class="datelink">
+                            <b>
+                                {{ cur['week'] }}<br/>
+                                {{k}}
+                            </b>
+                        </a>
+                    </th>
                 {% endfor %}
                     <!-- upward size date for click end-->
+                    <th>
+                    </th>
                 </tr>
                 <tr>
                     <th colspan="2" class="center">
@@ -393,33 +384,113 @@ Albatross Daily Check
                             Refresh
                         </a>
                     </th>
-        {% for k,i in percent_calc %}
-            {% if k == cur_date %}
-                    <th id="forecastPercent">
-                {{i}}
-                    </th>
-            {% else %}
-                    <th>
-                {{i}}
-                    </th>
+            {% for k,i in percent_calc %}
+                {% if k == cur_date %}
+                    <td id="forecastPercent" class="center" width="5%" align="center">
+                    {{i}}
+                    </td>
+                {% else %}
+                    <td class="center" width="5%" align="center">
+                    {{i}}
+                    </td>
                 {% endif %}
             {% endfor %}
                     <th>
                     </th>
                 </tr>
+            </table>
+{#          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////          #}
+            <div class="primary-head">
+                <br>
+                <h3 class="page-header">Situation as for today</h3>
+            </div>
+{#          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////          #}
+            <table class="daily_table stat-table responsive table table-stats table-striped table-sortable table-bordered">
                 <tr>
-                    <th>
+                    <th width="5%">
+                        <br>
+                        <b>No.</b>
                     </th>
-                    <th>
-                        Situation as for today:
+                    <th width="30%">
+                        <br>
+                        <b>The number of</b>
                     </th>
-                    <th colspan="8">
+                {% for k,cur in cur_week_date_array%}
+                    <th width="5%"  class="center" align="center">
+                        <b>
+                            {{ cur['week'] }}<br/>
+                            {{k}}
+                        </b>
+                    </th>
+                {% endfor %}
+                    <th class="center" align="center">
+                        <br>
+                        GAP (between today & yesterday)
                     </th>
                 </tr>
-    {% set i = 1 %}<!-- table row number -->
-    {% set v = 0 %}<!-- distinguish editable  -->
-    {% for sts in status %}
-        {% if sts.today == 0 and v == 0 %}
+            {% for sts in status %}
+                {% if sts.today == 1 %}
+                <tr>
+                    <td width="5%">{{ sts.weight }}</td>
+                    <td width="30%">{{ sts.status }}</td>
+                {% for num in result[sts.status] %}
+                    <td class="center" width="5%" align="center">{{ num }}</td>
+                {% endfor %}
+                    <td class="gab"></td>
+                    <td class="monday_gab" style="display:none">{% if gab != null %}{{gab[sts.weight]}}{% else %}{{gab}}{% endif %}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+{#          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////          #}
+            <div class="primary-head">
+                <br>
+                <h3 class="page-header">Today's result</h3>
+            </div>
+{#          ///////////////////////////////////////////////////////////////////////////////////////////////////////////////          #}
+            <table class="daily_table stat-table responsive table table-stats table-striped table-sortable table-bordered">
+                <tr>
+                    <th width="5%">
+                        <br>
+                        <b>No.</b>
+                    </th>
+                    <th width="30%">
+                        <br>
+                        <b>The number of</b>
+                    </th>
+                {% for k,cur in cur_week_date_array%}
+                    <th width="5%"  class="center" align="center">
+                        <b>
+                            {{ cur['week'] }}<br/>
+                            {{k}}
+                        </b>
+                    </th>
+                {% endfor %}
+                    <th class="center" align="center">
+                        <br>
+                        Sum of the current week
+                    </th>
+                </tr>
+            {% for sts in status %}
+                {% if sts.today == 0 %}
+                <tr>
+                    <td width="5%">{{ sts.weight }}</td>
+                    <td width="30%">{{ sts.status }}</td>
+                {% for num in result[sts.status] %}
+                    <td class="center" width="5%" align="center">{{ num }}</td>
+                {% endfor %}
+                    <td class="gab"></td>
+                    <td class="monday_gab" style="display:none">{% if gab != null %}{{gab[sts.weight]}}{% else %}{{gab}}{% endif %}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+            </table>
+            
+   {#                 
+            {% set i = 1 %}<!-- table row number -->
+            {% set v = 0 %}<!-- distinguish editable  -->
+            {% for sts in status %}
+            {% if sts.today == 0 and v == 0 %}
                 <tr>
                     <th>
                     </th>
@@ -431,19 +502,19 @@ Albatross Daily Check
                     </th>
                 </tr>
             {% set v = 1 %}
-        {% endif %}
+            {% endif %}
                 <tr>
-                    <td>{{ i }}</td>
-                    <td>{{ sts.status }}</td>
+                    <td width="5%">{{ i }}</td>
+                    <td width="25%">{{ sts.status }}</td>
             {% set j = 0 %}<!-- consider if there is no date in this status  -->
             {% for key,re in result %}
                 {% if key == sts.status %}
                     {% if sts.editable == 1 %}
                         {% for k,r in re %}<!-- k to check witch week day is it. 1 monday, 7 sunday  -->
                             {% if k >= 6 %}
-                    <td class="editable weekend" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
+                    <td class="editable weekend center" width="5%" align="center" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
                             {% else %}
-                    <td class="editable" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
+                    <td class="editable center" width="5%" align="center" id="{{sts.id}}_{{k}}" onclick="showeditform(this.id);">{{ r }}</td>
                             {% endif %}
                         {% endfor %}
                         {% set j = 1 %}
@@ -462,19 +533,19 @@ Albatross Daily Check
             {% if j == 0 %}
                 {% if sts.editable == 1 %}
                     {% for empty in 1..7 %}
-                            {% if empty >= 6 %}
-                    <td class="editable weekend" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
-                            {% else %}
-                    <td class="editable" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
-                            {% endif %}
+                        {% if empty >= 6 %}
+                    <td class="editable weekend center" width="5%" align="center" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
+                        {% else %}
+                    <td class="editable center" width="5%" align="center" id="{{sts.id}}_{{empty}}" onclick="showeditform(this.id);">0</td>
+                        {% endif %}
                     {% endfor %}
                 {% else %}
                     {% for empty in 1..7 %}
-                            {% if empty >= 6 %}
+                        {% if empty >= 6 %}
                     <td class="fixable weekend">0</td>
-                            {% else %}
+                        {% else %}
                     <td class="fixable">0</td>
-                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                 {% endif %}
             {% endif %}
@@ -483,7 +554,7 @@ Albatross Daily Check
                 </tr>
         {% set i = i + 1 %}
         {% endfor %}
-            </table>
+            </table>#}
             <input type="text" id="tmp" value="0" style="display:none" />
             <input type="text" id="tmp2" value="0" style="display:none" />
         </div>

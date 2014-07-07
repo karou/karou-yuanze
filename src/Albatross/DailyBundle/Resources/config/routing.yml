@@ -1,5 +1,5 @@
 albatross_daily_homepage:
-    pattern:  /dailaaa
+    pattern:  /dailynew
     defaults: { _controller: AlbatrossDailyBundle:Default:index }
 readDailyExcel:
     pattern:  /daily/readdailyexcel/{date}
