@@ -108,9 +108,9 @@ Albatross Daily Check
                 {% else %}
                     $(this).children("td[class=gab]").html("0");
                 {% endif %}
-            }else if ($(this).find("td:eq(1)").html() === 'LS Translation Done') {
-                {% if report_done['LS Translation Done'] is defined %}
-                    $(this).children("td[class=gab]").html("{{report_done['LS Translation Done']}}");
+            }else if ($(this).find("td:eq(1)").html() === 'LE Translation Done') {
+                {% if report_done['LE Translation Done'] is defined %}
+                    $(this).children("td[class=gab]").html("{{report_done['LE Translation Done']}}");
                 {% else %}
                     $(this).children("td[class=gab]").html("0");
                 {% endif %}

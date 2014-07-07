@@ -777,7 +777,7 @@ class DefaultController extends Controller {
                 ->leftJoin('n.status', 's')
                 ->leftJoin('d.bu', 'b')
                 ->where('d.dailydate BETWEEN :fday AND :cday')
-                ->andWhere('s.status = :Report OR s.status = :Survey OR s.status = :QC OR s.status = :Data OR s.status = :LS OR s.status = :Invalid') //get report done status
+                ->andWhere('s.status = :Report OR s.status = :Survey OR s.status = :QC OR s.status = :Data OR s.status = :LE OR s.status = :Invalid') //get report done status
                 ->andWhere('b.id is null');
         }else{
             $qb->select('n', 's')
@@ -786,7 +786,7 @@ class DefaultController extends Controller {
                 ->leftJoin('n.status', 's')
                 ->leftJoin('d.bu', 'b')
                 ->where('d.dailydate BETWEEN :fday AND :cday')
-                ->andWhere('s.status = :Report OR s.status = :Survey OR s.status = :QC OR s.status = :Data OR s.status = :LS OR s.status = :Invalid') //get report done status
+                ->andWhere('s.status = :Report OR s.status = :Survey OR s.status = :QC OR s.status = :Data OR s.status = :LE OR s.status = :Invalid') //get report done status
                 ->andWhere('b.id = :bu');
         }
         if($bu == null){
@@ -797,7 +797,7 @@ class DefaultController extends Controller {
             'Survey' => 'Survey Validated Number',
             'QC' => 'QC Done',
             'Data' => 'Data Integrity Check Done',
-            'LS' => 'LS Translation Done',
+            'LE' => 'LE Translation Done',
             'Invalid' => 'Invalid Survey Number',
             );
         }else{
@@ -808,7 +808,7 @@ class DefaultController extends Controller {
             'Survey' => 'Survey Validated Number',
             'QC' => 'QC Done',
             'Data' => 'Data Integrity Check Done',
-            'LS' => 'LS Translation Done',
+            'LE' => 'LE Translation Done',
             'Invalid' => 'Invalid Survey Number',
             'bu' => $bu
             );
@@ -823,6 +823,7 @@ class DefaultController extends Controller {
             else
                 $sum[$re['status']['status']] = (int)$re['number'];
         }
+        
         return $sum;
     }
 
