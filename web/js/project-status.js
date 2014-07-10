@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    $('.surveySelection').chosen({width: "100%"});
     $('.multi_choose').chosen({width: "100%"});
     $('#search-form-type').val('aol');
     
@@ -21,42 +20,92 @@ $(document).ready(function() {
     $('#albatross_operationbundle_projectstatusacetype_due_f').datepicker();
     $('#albatross_operationbundle_projectstatusacetype_due_t').datepicker();
     
-    $(window.document).scroll(function(){
-            if($(window.document).scrollTop() > '388'){
-              $('#status-q-title').css('position', 'fixed');
-              $('#status-q-title').css('top', '0');
-              $('#status-ace-title').css('position', 'fixed');
-              $('#status-ace-title').css('top', '0');
+    //============================================================data Table
+    $('#operation-result-table').dataTable({
+                "aaSorting": [[0, 'asc']],
+                "bFilter": true,
+                "bSort": true,
+                "iDisplayLength": 50
+     });
+    //============================================================data Table
+//    $(window.document).scroll(function(){
+//            if($(window.document).scrollTop() > '388'){
+//              $('#status-q-title').css('position', 'fixed');
+//              $('#status-q-title').css('top', '0');
+//              $('#status-ace-title').css('position', 'fixed');
+//              $('#status-ace-title').css('top', '0');
+//            }
+//            if($(window.document).scrollTop() < '500'){
+//              $('#title-name').width('450px');
+//              $('#status-q-title').css('position', 'static');
+//              $('#status-ace-title').css('position', 'static');
+//            }
+//    });
+    
+//    $('#count-box').click(function(){
+//        var indexTotal = 0;
+//        var aolTotal = 0;
+//        $('.questionnaire-result').each(function(){
+//            indexTotal = indexTotal + 1;
+//            if($(this).find('td:eq(3)').html() !== 'none'){
+//                aolTotal = aolTotal + parseInt($(this).find('td:eq(3)').html());
+//            }
+//        });
+//        $('#count-box').animate({width:'220px'}, "normal", "swing", function(){
+//            $('#total-title').html('Number of Results: ');
+//            $('#aol-title').html('Total No. surveys AOL: ');
+//            $('#total').html(indexTotal);
+//            $('#aol').html(aolTotal);
+//        });
+//    });
+    
+    $('#reset-btn-aol').click(function(){
+        $('#questionnaire-search-form .multi_choose').each(function(){
+            $(this).val('');
+            $(this).trigger("liszt:updated");
+            $(this).parent().parent().parent().parent().parent().parent().prev().html('');
+        });
+        $('#questionnaire-search-form .surveySelection').each(function(){
+            if($(this).attr('id') !== 'surveySelection_1'){
+                $(this).parent().parent().remove();
+            }else{
+                $(this).val('');
+                $(this).trigger("liszt:updated");
             }
-            if($(window.document).scrollTop() < '500'){
-              $('#title-name').width('450px');
-              $('#status-q-title').css('position', 'static');
-              $('#status-ace-title').css('position', 'static');
-            }
+            $('#selected-questionnaire').html('');
+        });
+        $('#questionnaire-search-form .campaignSelection').each(function(){
+            $(this).val('');
+            $(this).trigger("liszt:updated");
+        });
     });
     
-    $('#count-box').click(function(){
-        var indexTotal = 0;
-        var aolTotal = 0;
-        $('.questionnaire-result').each(function(){
-            indexTotal = indexTotal + 1;
-            if($(this).find('td:eq(3)').html() !== 'none'){
-                aolTotal = aolTotal + parseInt($(this).find('td:eq(3)').html());
-            }
-        });
-        $('#count-box').animate({width:'220px'}, "normal", "swing", function(){
-            $('#total-title').html('Number of Results: ');
-            $('#aol-title').html('Total No. surveys AOL: ');
-            $('#total').html(indexTotal);
-            $('#aol').html(aolTotal);
+    $('#reset-btn-ace').click(function(){
+        $('#aceproject-search-form .multi_choose').each(function(){
+            $(this).val('');
+            $(this).trigger("liszt:updated");
+            $(this).parent().parent().parent().parent().parent().parent().prev().html('');
         });
     });
+    
     $('#count-box').mouseleave(function(){
         $('#total').html('');
         $('#aol').html('');
         $('#total-title').html('');
         $('#aol-title').html('');
         $('#count-box').animate({width:'20px'});
+    });
+    
+    $('.aol-add-search').hide();
+    $('.ace-add-search').hide();
+    
+    $('#advLink2-aol').click(function(){
+        $('.aol-add-search').toggle('slow');
+        $('#advLink2-aol i').toggleClass('icon-minus-sign');
+    });
+    $('#advLink2-ace').click(function(){
+        $('.ace-add-search').toggle('slow');
+        $('#advLink2-ace i').toggleClass('icon-minus-sign');
     });
 });
 
@@ -100,20 +149,23 @@ function showFormAol(){
     }
 }
 
-function showQuestionnaireSelect(){
+function showQuestionnaireSelect() {
     $('.select-box').each(function(){
         $(this).hide();
     });
     $('#questionnaire-select-table-box').show();
+    $('.surveySelection').chosen();
+    $('.campaignSelection').chosen();
 }
 
 function deleteSurvey(obj){
-    if($(obj).parent().parent().children('td').length < 4){
+    if($(obj).parent().parent().children('td[class="survey"]').children('select').attr('id') !== 'surveySelection_1'){
         $(obj).parent().parent().remove();
     }else{
         $('#surveySelection_1').val('');
         $('#surveySelection_1').trigger("liszt:updated");
         $('#campaign_surveySelection_1').val('');
+        $('#campaign_surveySelection_1').trigger("liszt:updated");
     }
 }
 

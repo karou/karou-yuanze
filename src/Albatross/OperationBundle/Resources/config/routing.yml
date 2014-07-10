@@ -1,8 +1,8 @@
-albatross_operation_homepage:
-    pattern:  /operations/{type}
-    defaults: { _controller: "AlbatrossOperationBundle:Default:projectStatus", type:'' }
-
 projectStatus:
+    pattern:  /operationsa/{type}
+    defaults: { _controller: "AlbatrossOperationBundle:Default:projectStatus2", type:'' }
+
+albatross_operation_homepage:
     pattern:  /operations/{type}
     defaults: { _controller: "AlbatrossOperationBundle:Default:projectStatus", type:'' }
         

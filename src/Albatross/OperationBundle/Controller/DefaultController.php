@@ -14,6 +14,154 @@ class DefaultController extends Controller {
     public function indexAction() {
         return $this->render('AlbatrossOperationBundle:Default:index.html.twig');
     }
+    //project Status(operation page)
+    public function projectStatusAction($type = null) {
+        $aceForm = $this->createForm(new ProjectStatusAceType());
+        $aolForm = $this->createForm(new ProjectStatusAolType());
+        
+        //get questionnaire
+        $em = $this->getDoctrine()->getManager();
+        $aolsurveyQb = $em->createQueryBuilder();
+        $aolsurveyQb->select('q')
+                ->from('AlbatrossAceBundle:Questionnaire', 'q');
+        $aolsurveyQuery = $aolsurveyQb->getQuery();
+        $aolsurvey = $aolsurveyQuery->getArrayResult();
+        $getAolHtml = $this->getAolHtml($aolsurvey);
+
+        $request = $this->getRequest();
+        if ($type == 'questionnaire') {
+            $aolForm->bind($request);
+            $result_merge = $this->getQuestionnaireStatus($request, $aolForm);
+            $result = $result_merge['result'];
+            $buArr = $result_merge['buArr'];
+        } else if ($type == 'ace') {
+            $aceForm->bind($request);
+            $result_merge = $this->getAceprojectStatus($aceForm);
+            $result = $result_merge['result'];
+            $buArr = $result_merge['buArr'];
+        } else {
+            $buArr = '';
+            $result = null;
+        }
+
+        $sort = $aolForm->getData();
+        if ($sort['sort'] != null) {
+            $param = explode('and', $sort['sort']);
+            $result = $this->sortStatusResult($result, $param);
+            if ($param[1] == 'a') {
+                $sortKey = 'd';
+            } else {
+                $sortKey = 'a';
+            }
+        } else {
+            $sortKey = 'a';
+        }
+        $aolFormView = $aolForm->createView();
+        $aceFormView = $aceForm->createView();
+        $opquestionnaireEntity = $em->getRepository('AlbatrossOperationBundle:Operationquestionnaire')->findOneBy(array(), array('modified_date' => 'desc'));
+        $aceEntity = $em->getRepository('AlbatrossOperationBundle:OperationProject')->findOneBy(array(), array('modified_date' => 'desc'));
+        if ($opquestionnaireEntity) {
+            $opquestionnaireTime = $opquestionnaireEntity->getModifiedDate();
+            $formatOpQuestTime = date('Y-m-d', strtotime($opquestionnaireTime));
+        } else {
+            $formatOpQuestTime = 'no data';
+        }
+
+        if ($aceEntity) {
+            $opaceTime = $aceEntity->getModifiedDate();
+            $formatOpAceTime = date('Y-m-d', strtotime($opaceTime));
+        } else {
+            $formatOpAceTime = 'no data';
+        }
+        return $this->render('AlbatrossOperationBundle:Default:projectStatus.html.twig', array(
+                    'aceForm' => $aceFormView,
+                    'aolForm' => $aolFormView,
+                    'current' => 'custom_project_status',
+                    'menu_bar' => 'custom',
+                    'menu_cal_cur' => 'custom_project_status',
+                    'aolform' => $getAolHtml,
+                    'result' => $result,
+                    'type' => $type,
+                    'buArr' => $buArr,
+                    'sortKey' => $sortKey,
+                    'formatOpQuestTime' => $formatOpQuestTime,
+                    'formatOpAceTime' => $formatOpAceTime
+        ));
+    }
+ public function projectStatus2Action($type = null) {
+        $aceForm = $this->createForm(new ProjectStatusAceType());
+        $aolForm = $this->createForm(new ProjectStatusAolType());
+        
+        //get questionnaire
+        $em = $this->getDoctrine()->getManager();
+        $aolsurveyQb = $em->createQueryBuilder();
+        $aolsurveyQb->select('q')
+                ->from('AlbatrossAceBundle:Questionnaire', 'q');
+        $aolsurveyQuery = $aolsurveyQb->getQuery();
+        $aolsurvey = $aolsurveyQuery->getArrayResult();
+        $getAolHtml = $this->getAolHtml($aolsurvey);
+
+        $request = $this->getRequest();
+        if ($type == 'questionnaire') {
+            $aolForm->bind($request);
+            $result_merge = $this->getQuestionnaireStatus($request, $aolForm);
+            $result = $result_merge['result'];
+            $buArr = $result_merge['buArr'];
+        } else if ($type == 'ace') {
+            $aceForm->bind($request);
+            $result_merge = $this->getAceprojectStatus($aceForm);
+            $result = $result_merge['result'];
+            $buArr = $result_merge['buArr'];
+        } else {
+            $buArr = '';
+            $result = null;
+        }
+
+        $sort = $aolForm->getData();
+        if ($sort['sort'] != null) {
+            $param = explode('and', $sort['sort']);
+            $result = $this->sortStatusResult($result, $param);
+            if ($param[1] == 'a') {
+                $sortKey = 'd';
+            } else {
+                $sortKey = 'a';
+            }
+        } else {
+            $sortKey = 'a';
+        }
+        $aolFormView = $aolForm->createView();
+        $aceFormView = $aceForm->createView();
+        $opquestionnaireEntity = $em->getRepository('AlbatrossOperationBundle:Operationquestionnaire')->findOneBy(array(), array('modified_date' => 'desc'));
+        $aceEntity = $em->getRepository('AlbatrossOperationBundle:OperationProject')->findOneBy(array(), array('modified_date' => 'desc'));
+        if ($opquestionnaireEntity) {
+            $opquestionnaireTime = $opquestionnaireEntity->getModifiedDate();
+            $formatOpQuestTime = date('Y-m-d', strtotime($opquestionnaireTime));
+        } else {
+            $formatOpQuestTime = 'no data';
+        }
+
+        if ($aceEntity) {
+            $opaceTime = $aceEntity->getModifiedDate();
+            $formatOpAceTime = date('Y-m-d', strtotime($opaceTime));
+        } else {
+            $formatOpAceTime = 'no data';
+        }
+        return $this->render('AlbatrossOperationBundle:Default:projectStatus_dan.html.twig', array(
+                    'aceForm' => $aceFormView,
+                    'aolForm' => $aolFormView,
+                    'current' => 'custom_project_status',
+                    'menu_bar' => 'custom',
+                    'menu_cal_cur' => 'custom_project_status',
+                    'aolform' => $getAolHtml,
+                    'result' => $result,
+                    'type' => $type,
+                    'buArr' => $buArr,
+                    'sortKey' => $sortKey,
+                    'formatOpQuestTime' => $formatOpQuestTime,
+                    'formatOpAceTime' => $formatOpAceTime,
+                    'Questionnaire' => $this->GetQuestionnaireCampaign()
+        ));
+    }
 
     public function saveOperationDataAction() {
         $em = $this->getDoctrine()->getManager();
@@ -421,84 +569,9 @@ class DefaultController extends Controller {
         return;
     }
 
-    //project Status(operation page)
-    public function projectStatusAction($type = null) {
-        $aceForm = $this->createForm(new ProjectStatusAceType());
-        $aolForm = $this->createForm(new ProjectStatusAolType());
-
-        //get questionnaire
-        $em = $this->getDoctrine()->getManager();
-        $aolsurveyQb = $em->createQueryBuilder();
-        $aolsurveyQb->select('q')
-                ->from('AlbatrossAceBundle:Questionnaire', 'q');
-        $aolsurveyQuery = $aolsurveyQb->getQuery();
-        $aolsurvey = $aolsurveyQuery->getArrayResult();
-        $getAolHtml = $this->getAolHtml($aolsurvey);
-
-        $request = $this->getRequest();
-        if ($type == 'questionnaire') {
-            $aolForm->bind($request);
-            $result_merge = $this->getQuestionnaireStatus($request, $aolForm);
-            $result = $result_merge['result'];
-            $buArr = $result_merge['buArr'];
-        } else if ($type == 'ace') {
-            $aceForm->bind($request);
-            $result_merge = $this->getAceprojectStatus($aceForm);
-            $result = $result_merge['result'];
-            $buArr = $result_merge['buArr'];
-        } else {
-            $buArr = '';
-            $result = null;
-        }
-
-        $sort = $aolForm->getData();
-        if ($sort['sort'] != null) {
-            $param = explode('and', $sort['sort']);
-            $result = $this->sortStatusResult($result, $param);
-            if ($param[1] == 'a') {
-                $sortKey = 'd';
-            } else {
-                $sortKey = 'a';
-            }
-        } else {
-            $sortKey = 'a';
-        }
-        $aolFormView = $aolForm->createView();
-        $aceFormView = $aceForm->createView();
-        $opquestionnaireEntity = $em->getRepository('AlbatrossOperationBundle:Operationquestionnaire')->findOneBy(array(), array('modified_date' => 'desc'));
-        $aceEntity = $em->getRepository('AlbatrossOperationBundle:OperationProject')->findOneBy(array(), array('modified_date' => 'desc'));
-        if ($opquestionnaireEntity) {
-            $opquestionnaireTime = $opquestionnaireEntity->getModifiedDate();
-            $formatOpQuestTime = date('Y-m-d', strtotime($opquestionnaireTime));
-        } else {
-            $formatOpQuestTime = 'no data';
-        }
-
-        if ($aceEntity) {
-            $opaceTime = $aceEntity->getModifiedDate();
-            $formatOpAceTime = date('Y-m-d', strtotime($opaceTime));
-        } else {
-            $formatOpAceTime = 'no data';
-        }
-        return $this->render('AlbatrossOperationBundle:Default:projectStatus.html.twig', array(
-                    'aceForm' => $aceFormView,
-                    'aolForm' => $aolFormView,
-                    'current' => 'custom_project_status',
-                    'menu_bar' => 'custom',
-                    'menu_cal_cur' => 'custom_project_status',
-                    'aolform' => $getAolHtml,
-                    'result' => $result,
-                    'type' => $type,
-                    'buArr' => $buArr,
-                    'sortKey' => $sortKey,
-                    'formatOpQuestTime' => $formatOpQuestTime,
-                    'formatOpAceTime' => $formatOpAceTime
-        ));
-    }
-
     //search form for questionnaire list
     protected function getAolHtml($aolsurvey) {
-        $surveyHtml = '<select id="surveySelection_1" onchange="surveyChange(this);" class="surveySelection" name="surveySelection[]"><option value=""></option>';    //html form to show
+        $surveyHtml = '<select id="surveySelection_1" onchange="surveyChange(this);" class="surveySelection" data-placeholder="Questionnaire" name="surveySelection[]"><option value=""></option>';    //html form to show
 
         foreach ($aolsurvey as $aol) {
             $surveyHtml .= '<option value="' . $aol['id'] . '">' . $aol['name'] . '</option>';
@@ -1169,7 +1242,7 @@ class DefaultController extends Controller {
             $return = '';
             foreach ($Arr as $k => $a) {
                 if (isset($aceArr[$k])) {
-                    $return .= '<tr class="bu-result-tr"><th style="padding:0;"><table style="border-collapse: collapse; height:100%; float:right;"><tr><th></th><td class="bu-name-td" onclick="getCountryResult(\'' . $id . '\', this, \'' . $a['id'] . '\')">' . $k . '</td></tr></table></th>' .
+                    $return .= '<tr style="background-color: rgb(220, 236, 249);" class="bu-result-tr"><th class="bu-name-td" id="questionnairebuname_'.$id.'_'.$a['id'].'"><a href="javascript:;" class="buresult-title"><i class="icon-plus-sign"></i>&nbsp;' . $k . '</a></th>' .
                             '<td class="result-date">' . $aceArr[$k]['fwsdate'] . '</td>' .
                             '<td class="result-date">' . $aceArr[$k]['fwedate'] . '</td>' .
                             '<td class="result-num">' . $a['totlenum'] . '</td>' .
@@ -1180,7 +1253,7 @@ class DefaultController extends Controller {
                             '<td class="result-date">' . $a['lastDate'] . '</td>' .
                             '<td class="result-date">' . $aceArr[$k]['reportdate'] . '</td></tr>';
                 } else {
-                    $return .= '<tr class="bu-result-tr"><th style="padding:0;"><table style="border-collapse: collapse; float:right;"><tr><th></th><td class="bu-name-td" onclick="getCountryResult(\'' . $id . '\', this, \'' . $a['id'] . '\')">' . $k . '</td></tr></table></th>' .
+                    $return .= '<tr style="background-color: rgb(220, 236, 249);" class="bu-result-tr"><th class="bu-name-td" id="questionnairebuname_'.$id.'_'.$a['id'].'"><a href="javascript:;" class="buresult-title"><i class="icon-plus-sign"></i>&nbsp;' . $k . '</a></th>' .
                             '<td class="result-date"></td>' .
                             '<td class="result-date"></td>' .
                             '<td class="result-num">' . $a['totlenum'] . '</td>' .
@@ -1196,7 +1269,7 @@ class DefaultController extends Controller {
 //            $return = '<tr class="show-country-result"><td colspan="10"><table class="c-result">';
             $return = '';
             foreach ($Arr as $k => $a) {
-                $return .= '<tr class="c-result-tr"><th style="padding:0;"><table style="border-collapse: collapse; float:right;"><tr><th></th><td class="c-name-td">' . $k . '</td></tr></table></th>' .
+                $return .= '<tr style="background-color: rgb(234, 248, 231);" class="c-result-tr"><th style="text-align:center;">' . $k . '</th>' .
                         '<td class="result-date italic-style">see by bu</td>' .
                         '<td class="result-date italic-style">see by bu</td>' .
                         '<td class="result-num">' . $a['totlenum'] . '</td>' .
@@ -1684,7 +1757,7 @@ class DefaultController extends Controller {
             $return = '';
             foreach ($aceArr as $k => $a) {
                 if (isset($Arr[$k])) {
-                    $return .= '<tr class="bu-result-tr"><th style="padding:0;"><table style="border-collapse: collapse; height:100%; float:right;"><tr><th></th><td class="bu-name-td" onclick="getAceCountryResult(\'' . $id . '\', this, \'' . $Arr[$k]['id'] . '\')">' . $k . '</td></tr></table></th>' .
+                    $return .= '<tr class="bu-result-tr" style="background-color: rgb(220, 236, 249);"><th class="bu-name-td" id="acebuname_'.$id.'_'.$Arr[$k]['id'].'" ><a href="javascript:;" class="buresult-title"><i class="icon-plus-sign"></i>&nbsp;' . $k . '</a></th>' .
                             '<td class="result-date">' . $a['fwsdate'] . '</td>' .
                             '<td class="result-date">' . $a['fwedate'] . '</td>' .
                             '<td class="result-num">' . $Arr[$k]['totlenum'] . '</td>' .
@@ -1695,7 +1768,7 @@ class DefaultController extends Controller {
                             '<td class="result-date">' . $Arr[$k]['lastDate'] . '</td>' .
                             '<td class="result-date">' . $a['reportdate'] . '</td></tr>';
                 } else {
-                    $return .= '<tr class="bu-result-tr"><th style="padding:0;"><table style="border-collapse: collapse; height:100%; float:right;"><tr><th></th><td class="bu-name-td">' . $k . '</td></tr></table></th>' .
+                    $return .= '<tr class="bu-result-tr" style="background-color: rgb(220, 236, 249);"><th><span class="buresult-title">' . $k . '</span></th>' .
                             '<td class="result-date">' . $aceArr[$k]['fwsdate'] . '</td>' .
                             '<td class="result-date">' . $aceArr[$k]['fwedate'] . '</td>' .
                             '<td class="result-num">' . $aceArr[$k]['scope'] . '</td>' .
@@ -1711,7 +1784,7 @@ class DefaultController extends Controller {
 //            $return = '<tr class="show-country-result"><td colspan="10"><table class="c-result">';
             $return = '';
             foreach ($Arr as $k => $a) {
-                $return .= '<tr class="c-result-tr"><th style="padding:0;"><table style="border-collapse: collapse; float:right;"><tr><th></th><td class="c-name-td">' . $k . '</td></tr></table></th>' .
+                $return .= '<tr class="c-result-tr" style="background-color: rgb(234, 248, 231);"><th style="text-align:center;">' . $k . '</th>' .
                         '<td class="result-date italic-style">see by bu</td>' .
                         '<td class="result-date italic-style">see by bu</td>' .
                         '<td class="result-num">' . $a['totlenum'] . '</td>' .
@@ -1748,5 +1821,17 @@ class DefaultController extends Controller {
         }
         return $buArr;
     }
-
+    
+    private function GetQuestionnaireCampaign() {
+        $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('c','q')
+            ->from('AlbatrossAceBundle:Campaign', 'c')
+            ->leftJoin('AlbatrossAceBundle:Questionnaire', 'q')
+            ->where('q.id = c.questionnaire');
+        $query = $qb->getQuery();
+        $result = $query->getArrayResult();
+        
+        return $result;
+    }
 }

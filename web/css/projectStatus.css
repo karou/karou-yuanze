@@ -25,11 +25,15 @@ root {
 }
 
 #aceproject-search-form-box {
-    float: right;
     height: 100%;
     width: 20%;
 }
-
+.surveySelection {
+    width: 220px;
+}
+.survey {
+    width: 220px;
+}
 #questionnaire-cover-box {
     display: none;
     padding-top: 122px;
@@ -63,12 +67,10 @@ root {
 .select-box {
     display: none;
     position: absolute;
-    width: 612px;
-    height: 200px;
+    min-height: 95px;
     background: #ECF0F1;
-    border: 2px #006666 solid;
-    border-radius: 0 13px 13px;
-    overflow-x: scroll;
+    border: 1px #006666 solid;
+    min-width: 250px;
 }
 .campaignSelection {
   position: relative;
@@ -90,15 +92,13 @@ root {
   width: 130px;
 }
 .selected-style {
-    width: 70%;
+    width: 40%;
     padding-left: 5px;
-    background: #eeece1;
     font-style: italic;
     color: gray;
 }
 .search-title {
-    width: 20%;
-    background: #dce6f1;
+    width: 15%;
     color: #1f497d;
     font-weight: bold;
     padding-left: 10px;
@@ -119,21 +119,10 @@ root {
     font-size: 12px;
 }
 #aceproject-search-table tr td{
-    /*border: 1px #16365c solid;*/
     height: 25px;
 }
 #albatross_custombundle_projectstatusaoltype_brand {
     width: 600px;
-}
-.submit-button {
-    font-weight: bold;
-    height: 35px;
-    background: #27AE61;
-    border:1px #1f497d solid;
-    width: 100%;
-}
-.submit-button:hover {
-    background: #E77E23;
 }
 #result-box {
     width: 100%;
@@ -142,27 +131,9 @@ root {
     width: 100%;
     font-size: 12px;
     margin-top: 10px;
-    border-collapse:  separate;
-    border-top: 2px #1f497d solid;
-}
-.questionnaire-result td {
-    background: whitesmoke;
-    height: 32px;
-}
-#status-q-title th {
-    /*background: #E77E23;*/
-    background: #3598DC;
-    height: 27px;
-}
-#status-ace-title th {
-    /*background: #E77E23;*/
-    background: #9C59B8;
-    height: 27px;
 }
 .bu-table-container{
     border-top: 2px #3598DC solid;
-    /*background: #27AE61;*/
-    /*background: #3598DC;*/
 }
 .italic-style {
     font-style: italic;
@@ -172,24 +143,17 @@ root {
     border-left: 10px;
     cursor: pointer;
 }
-.result-name:hover {
-    background: #BEC3C7;
-}
 .bu-result, .c-result {
-    /*width: 90%;*/
-    float: right;
     margin-right: -3px;
 }
 .bu-result {
     border-left: 2px #3598DC solid;
 }
 .c-result {
-    /*border-left: 2px #27AE61 solid;*/
     border-left: 2px #3598DC solid;
 }
 .bu-pointer {
     width: 10%;
-    float: right;
     border-collapse:collapse;
 }
 .bu-table-container {
@@ -205,39 +169,22 @@ root {
     width: 95px;
 }
 .bu-name-td {
-    width: 300px;
     cursor: pointer;
 }
-.c-name-td {
-    width: 200px;
-}
-.bu-result-tr td {
-    /*width: 90%;*/
-    height: 20px;
-    /*background: #3598DC;*/
-    background: #E77E23;
-    text-align: center;
-    /*color: #4F4F4F;*/
+.buresult-title {
+    margin-left: 15%;
 }
 .bu-pointer tr td {
     height: 10px;
 }
 .pointer-both {
-    /*border-bottom: 2px #fff solid;*/
     border-left: 2px #B3DAF9 solid;
     border-bottom: 2px #B3DAF9 solid;
     width: 20px;
 }
 .pointer-one {
-    /*border-bottom: 2px #fff solid;*/
     border-left: 2px #B3DAF9 solid;
     width: 20px;
-}
-.c-result-tr td {
-    height: 20px;
-    background: #27AE61;
-    text-align: center;
-    color: #FFF;
 }
 #questionnairename, #firstDate, #num, #assigned, #done, #validationPercent, #fwsdate, #fwedate, #reportdate, #scope {
     cursor: pointer;
@@ -271,34 +218,6 @@ root {
 }
 #total-title, #ace-title, #aol-title {
     color: #fff;
-}
-
-#total, #ace, #aol {
-    font-size: 18px;
-    font-style: italic;
-    text-align: right;
-}
-#refresh-operation-button {
-    width: 100%;
-    height: 100%;
-    background: #E77E23;
-    border: #444;
-    cursor: pointer;
-    border-radius: 2px;
-}
-#refresh-operation-button:hover {
-    background: #9c59b8;
-}
-#refresh-operation-button2 {
-    width: 100%;
-    height: 100%;
-    background: #27AE61;
-    border: #444;
-    cursor: pointer;
-    border-radius: 2px;
-}
-#refresh-operation-button2:hover {
-    background: #3598DC;
 }
 #cover-box {
     background: rgba(160, 160, 160, 0.6);
