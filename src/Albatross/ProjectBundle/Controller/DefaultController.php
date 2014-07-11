@@ -290,7 +290,213 @@ class DefaultController extends Controller {
 
             return $this->redirect($this->generateUrl('view_project') . '?id=' . $id . '&msg=success&type=brief', 301);
         }
+//////for upload iof form///////
+        if (isset($_POST['action']) and $_POST['action'] == 'iof') {
+            //echo '<pre>';print_r($_POST);print_r($_FILES);exit;
+            $connection = $em->getConnection();
 
+            $formindex = $_POST['form_index'];
+
+            $form_type = 'iof_upd';
+            /////////check if already added//////////
+            $sql = 'select id from attachments where customwave_id="' . $_POST['wave_id'] . '" and user_id="' . $this->getUser()->getId() . '"';
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+            $resultA = $statement->fetchAll();
+            $countTotal = count($resultA);
+
+            if ($countTotal > 0) {
+                $attachments_id = $resultA[0]['id'];
+            } else {
+                $form_type = 'iof_add';
+                $sql = 'insert into attachments(user_id,type,status,submitteddate,customwave_id) values(' . $this->getUser()->getId() . ',0,"approved","' . date('Y-m-d H:i:s') . '",' . $_POST['wave_id'] . ')';
+                $statement = $connection->prepare($sql);
+                $statement->execute();
+                $attachments_id = $connection->lastInsertId();
+            }
+
+            /////////for inserting attachment info
+            if (isset($_POST['bu_id']) and count($_POST['bu_id']) > 0 and isset($_POST['bu_checked']) and count($_POST['bu_checked']) > 0) {
+                $delSql = 'delete from attachinfo where attachments_id="' . $attachments_id . '" and formindex="' . $formindex . '"';
+                $statement = $connection->prepare($delSql);
+                $statement->execute();
+
+                $x = 0;
+                foreach ($_POST['bu_id'] as $bu) {
+                    if (in_array($bu, $_POST['bu_checked'])) {
+                        //////for cehcking report due date format///////
+                        $reportDueDate = $reportDueDateTxt = '';
+
+                        if ($this->checkData($_POST['report_due_date'][$x])) {
+                            $reportDueDate = $_POST['report_due_date'][$x];
+                            $report_type = 0;
+                        } else {
+                            $reportDueDateTxt = addslashes($_POST['report_due_date'][$x]);
+                            $report_type = 1;
+                        }
+                        $sql = 'insert into attachinfo(attachments_id,bu_id,project_id,scope,fw_start_date,fw_end_date,report_due_date,comment,formindex,report_due_date_text,report_type) values(' . $attachments_id . ',' . $bu . ',' . $id . ',"' . $_POST['scope'][$x] . '","' . $_POST['fw_start_date'][$x] . '","' . $_POST['fw_end_date'][$x] . '","' . $reportDueDate . '","' . addslashes($_POST['comment'][$x]) . '",' . $formindex . ',"' . $reportDueDateTxt . '",' . $report_type . ')';
+                        $statement = $connection->prepare($sql);
+                        $statement->execute();
+                    }
+                    $x++;
+                }
+            }
+            /////////for inserting message and file info
+            if (isset($_POST['message']) and count($_POST['message']) > 0) {
+                $delSqlIM = 'delete from iofmessage where attachments_id="' . $attachments_id . '" and formindex="' . $formindex . '"';
+                $statement = $connection->prepare($delSqlIM);
+                $statement->execute();
+
+                /* $delSqlIMF = 'delete from ioffile where attachments_id="'.$attachments_id.'" and formindex="'.$formindex.'"';
+                  $statement = $connection->prepare($delSqlIMF);
+                  $statement->execute(); */
+
+                $indVal = 1;
+                foreach ($_POST['message'] as $message) {
+                    $keyVal = $indVal - 1;
+                    $formindex2 = $_POST['formindex2'][$keyVal];
+                    $sqlMessage = 'insert into iofmessage(attachments_id,message,formindex,formindex2) values(' . $attachments_id . ',"' . addslashes($message) . '",' . $formindex . ',' . $formindex2 . ')';
+                    $statementMessage = $connection->prepare($sqlMessage);
+                    $statementMessage->execute();
+                    $iof_message_id = $connection->lastInsertId();
+
+                    if (isset($_POST['label']) and count($_POST['label']) > 0) {
+                        foreach ($_POST['label'][$indVal] as $keyInner => $val) {
+                            if (isset($_FILES['path']) and isset($_FILES['path']['name'][$indVal]) and count($_FILES['path']['name'][$indVal]) > 0) {
+                                $pathName = $_FILES['path']['name'][$indVal][$keyInner];
+
+                                if (!is_dir($ROOT_PATH . "web/projectFiles/" . date('ymd'))) {
+                                    mkdir($ROOT_PATH . "web/projectFiles/" . date('ymd'), 0777);
+                                }
+
+                                if (isset($_FILES['path']['error'][$indVal][$keyInner])) {
+                                    if ($_FILES['path']['error'][$indVal][$keyInner] == UPLOAD_ERR_OK) {
+                                        $str = $pathName;
+                                        $dir = $ROOT_PATH . "web/projectFiles/" . date('ymd') . "/";
+                                        $the_file = $_FILES['path']["tmp_name"][$indVal][$keyInner];
+                                        $imageName = str_replace(' ', '_', $str);
+                                        $to_file = "$dir/$imageName";
+
+                                        @move_uploaded_file($the_file, $to_file);
+                                        chmod($to_file, 0777);
+                                    }
+                                }
+                                $path = "projectFiles/" . date('ymd') . "/" . str_replace(' ', '_', $pathName);
+
+                                $sqlFile = 'insert into ioffile(attachments_id,iofmessage_id,label,path,formindex,formindex2) values(' . $attachments_id . ',' . $iof_message_id . ',"' . addslashes($val) . '","' . addslashes($path) . '",' . $formindex . ',' . $formindex2 . ')';
+                                $statementFile = $connection->prepare($sqlFile);
+                                $statementFile->execute();
+                            }
+                        }
+                    }
+                    $indVal++;
+                }
+            }
+            return $this->redirect($this->generateUrl('view_project') . '?id=' . $id . '&msg=success&type=' . $form_type, 301);
+        }
+
+        //////for FW Recap form///////
+        if (isset($_POST['action']) and $_POST['action'] == 'fw_recap') {
+            $connection = $em->getConnection();
+            //echo '<pre>';print_r($_POST);exit;
+            /////////check if already added//////////
+            $sql = 'select * from  recap where customwave_id="' . $_POST['wave_id'] . '" and user_id="' . $this->getUser()->getId() . '"';
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+            $resultF = $statement->fetchAll();
+            $countTotal = count($resultF);
+            //echo '<pre>';print_r($resultF);exit;
+            if ($countTotal > 0) {
+                $actual_id = $resultF[0]['actual_id'];
+                $planned_id = $resultF[0]['planned_id'];
+                $infomations_id = $resultF[0]['infomations_id'];
+
+                ////for Planned
+                $scenariosPlanned = '';
+                if (isset($_POST['planned_name']) and count($_POST['planned_name']) > 0) {
+                    $arrPlanned = array();
+                    $x = 0;
+                    foreach ($_POST['planned_name'] as $planned) {
+                        $arrPlanned[] = array('name' => $planned, 'value' => $_POST['planned_value'][$x]);
+                    }
+                    $scenariosPlanned = json_encode($arrPlanned);
+                }
+                $sqlPlanned = 'update survey_number set pos="' . addslashes($_POST['planned_pos']) . '",surveys="' . addslashes($_POST['planned_surveys']) . '",scenarios="' . addslashes($scenariosPlanned) . '" where id="' . $actual_id . '"';
+                $statement = $connection->prepare($sqlPlanned);
+                $statement->execute();
+
+                ////for Actual
+                $scenariosActual = '';
+                if (isset($_POST['actual_name']) and count($_POST['actual_name']) > 0) {
+                    $arrActual = array();
+                    $x = 0;
+                    foreach ($_POST['actual_name'] as $actual) {
+                        $arrActual[] = array('name' => $actual, 'value' => $_POST['actual_value'][$x]);
+                    }
+                    $scenariosActual = json_encode($arrActual);
+                }
+                $sqlActual = 'update survey_number set pos="' . addslashes($_POST['actual_pos']) . '",surveys="' . addslashes($_POST['actual_surveys']) . '",misfire="' . addslashes($_POST['actual_misfire']) . '",invalid="' . addslashes($_POST['actual_invalid']) . '",scenarios="' . addslashes($scenariosActual) . '" where id="' . $planned_id . '"';
+                $statement = $connection->prepare($sqlActual);
+                $statement->execute();
+
+                ////for Information
+                if ($infomations_id != '' and $infomations_id > 0) {
+                    $sqlInfo = 'update infomation(new_pos_in_Wave="' . addslashes($_POST['add_new_pos']) . '",delete_pos_in_Wave="' . addslashes($_POST['add_del_pos']) . '",invalids_to_be_invoiced="' . addslashes($_POST['add_invalid_inv']) . '",misfires_to_be_invoiced="' . addslashes($_POST['add_mis_inv']) . '",purchases_made="' . addslashes($_POST['add_pur_made']) . '" where id="' . $infomations_id . '"';
+                    $statement = $connection->prepare($sqlInfo);
+                    $statement->execute();
+                } else {
+                    $sqlInfo = 'insert into infomation(new_pos_in_Wave,delete_pos_in_Wave,invalids_to_be_invoiced,misfires_to_be_invoiced,purchases_made) values("' . addslashes($_POST['add_new_pos']) . '","' . addslashes($_POST['add_del_pos']) . '","' . addslashes($_POST['add_invalid_inv']) . '","' . addslashes($_POST['add_mis_inv']) . '","' . addslashes($_POST['add_pur_made']) . '")';
+                    $statement = $connection->prepare($sqlInfo);
+                    $statement->execute();
+                    $infomations_id = $connection->lastInsertId();
+                }
+
+                $sql = 'update recap set actual_id="' . $actual_id . '",planned_id="' . $planned_id . '",infomations_id="' . $infomations_id . '",name="' . addslashes($_POST['recap_name']) . '" where id="' . $resultF[0]['id'] . '"';
+            } else {
+                ////for Planned
+                $scenariosPlanned = '';
+                if (isset($_POST['planned_name']) and count($_POST['planned_name']) > 0) {
+                    $arrPlanned = array();
+                    $x = 0;
+                    foreach ($_POST['planned_name'] as $planned) {
+                        $arrPlanned[] = array('name' => $planned, 'value' => $_POST['planned_value'][$x]);
+                    }
+                    $scenariosPlanned = json_encode($arrPlanned);
+                }
+                $sqlPlanned = 'insert into survey_number(pos,surveys,scenarios,type) values("' . addslashes($_POST['planned_pos']) . '","' . addslashes($_POST['planned_surveys']) . '","' . addslashes($scenariosPlanned) . '","planned")';
+                $statement = $connection->prepare($sqlPlanned);
+                $statement->execute();
+                $planned_id = $connection->lastInsertId();
+
+                ////for Actual
+                $scenariosActual = '';
+                if (isset($_POST['actual_name']) and count($_POST['actual_name']) > 0) {
+                    $arrActual = array();
+                    $x = 0;
+                    foreach ($_POST['actual_name'] as $actual) {
+                        $arrActual[] = array('name' => $actual, 'value' => $_POST['actual_value'][$x]);
+                    }
+                    $scenariosActual = json_encode($arrActual);
+                }
+                $sqlActual = 'insert into survey_number(pos,surveys,misfire,invalid,scenarios,type) values("' . addslashes($_POST['actual_pos']) . '","' . addslashes($_POST['actual_surveys']) . '","' . addslashes($_POST['actual_misfire']) . '","' . addslashes($_POST['actual_invalid']) . '","' . addslashes($scenariosActual) . '","actual")';
+                $statement = $connection->prepare($sqlActual);
+                $statement->execute();
+                $actual_id = $connection->lastInsertId();
+
+                ////for Information
+                $sqlInfo = 'insert into infomation(new_pos_in_Wave,delete_pos_in_Wave,invalids_to_be_invoiced,misfires_to_be_invoiced,purchases_made) values("' . addslashes($_POST['add_new_pos']) . '","' . addslashes($_POST['add_del_pos']) . '","' . addslashes($_POST['add_invalid_inv']) . '","' . addslashes($_POST['add_mis_inv']) . '","' . addslashes($_POST['add_pur_made']) . '")';
+                $statement = $connection->prepare($sqlInfo);
+                $statement->execute();
+                $infomations_id = $connection->lastInsertId();
+
+                ////for inserting records in recap table
+                $sqlRecap = 'insert into recap(actual_id,planned_id,infomations_id,customwave_id,name,user_id,submittime) values("' . $actual_id . '","' . $planned_id . '","' . $infomations_id . '","' . $_POST['wave_id'] . '","' . $_POST['recap_name'] . '","' . $this->getUser()->getId() . '","' . date('Y-m-d') . '")';
+                $statement = $connection->prepare($sqlRecap);
+                $statement->execute();
+            }
+
+            return $this->redirect($this->generateUrl('view_project') . '?id=' . $id . '&msg=success&type=fw_recap', 301);
+        }
         //////for brand material form///////
         if (isset($_POST['action']) and $_POST['action'] == 'dic') {
             $connection = $em->getConnection();
@@ -368,6 +574,34 @@ class DefaultController extends Controller {
 
             return $this->redirect($this->generateUrl('view_project') . '?id=' . $id . '&msg=success&type=report', 301);
         }
+        //////for new wave form///////
+        if (isset($_POST['action']) and $_POST['action'] == 'new_wave') {
+            $connection = $em->getConnection();
+
+            $yearMonthArr = explode('_', $_POST['month_year_sel']);
+            $name = $_POST['project_name'] . '_w' . $_POST['wavenum'] . '_' . $this->getMonthName($yearMonthArr[0]) . ' ' . $yearMonthArr[1];
+
+            $sql = 'insert into customwave(customproject_id,name,wavenum,bis,year,month,totalnum,user_id,project_manager_id) values(' . $id . ',"' . addslashes($name) . '","' . $_POST['wavenum'] . '","' . $_POST['bis'] . '","' . $yearMonthArr[1] . '","' . $yearMonthArr[0] . '","' . $_POST['totalnum'] . '","' . $_POST['user_id'] . '","' . $_POST['project_manager_id'] . '")';
+
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+
+            return $this->redirect($this->generateUrl('view_project') . '?id=' . $id . '&msg=success&type=wave', 301);
+        }
+
+        //////for update wave form///////
+        if (isset($_POST['action']) and $_POST['action'] == 'edit_wave') {
+            $connection = $em->getConnection();
+
+            $yearMonthArr = explode('_', $_POST['month_year_sel']);
+            $name = $_POST['project_name'] . '_w' . $_POST['wavenum'] . '_' . $this->getMonthName($yearMonthArr[0]) . ' ' . $yearMonthArr[1];
+
+            $sql = 'update customwave set name="' . addslashes($name) . '",wavenum="' . $_POST['wavenum'] . '",bis="' . $_POST['bis'] . '",year="' . $yearMonthArr[1] . '",month="' . $yearMonthArr[0] . '",totalnum="' . $_POST['totalnum'] . '",user_id="' . $_POST['user_id'] . '",project_manager_id="' . $_POST['project_manager_id'] . '" where id="' . $_POST['wave_id'] . '"';
+            $statement = $connection->prepare($sql);
+            $statement->execute();
+
+            return $this->redirect($this->generateUrl('view_project') . '?id=' . $id . '&msg=success&type=editwave', 301);
+        }
 
         $successMsg = '';
         ////////for displaying success message///////////////
@@ -388,6 +622,16 @@ class DefaultController extends Controller {
                 $successMsg = 'DIC form updated successfully';
             else if ($_GET['type'] == 'report')
                 $successMsg = 'Report form updated successfully.';
+            else if ($_GET['type'] == 'wave')
+                $successMsg = 'Wave added successfully.';
+            else if ($_GET['type'] == 'editwave')
+                $successMsg = 'Wave updated successfully.';
+            else if ($_GET['type'] == 'fw_recap')
+                $successMsg = 'Fieldwork recap form updated successfully.';
+            else if ($_GET['type'] == 'iof_add')
+                $successMsg = 'IOF upload form updated successfully.';
+            else if ($_GET['type'] == 'iof_upd')
+                $successMsg = 'IOF upload form updated successfully.';
         }
         /////////////////////////////////////////////////////
 
@@ -493,7 +737,23 @@ class DefaultController extends Controller {
             $briefquery = $briefqb->getQuery();
             $brief = $briefquery->getArrayResult();
             $arrWaveData[$wave->getId()]['brief'] = (isset($brief[0])) ? $brief[0] : '';
+            /////////for getting information for IOF Upload form/////////
+            $iofqb = $em->createQueryBuilder();
+            $iofqb->select('a,u,ai,b,im,if')
+                    ->from('AlbatrossAceBundle:Attachments', 'a')
+                    ->leftJoin('a.user', 'u')
+                    ->leftJoin('a.attachinfo', 'ai')
+                    ->leftJoin('ai.bu', 'b')
+                    ->leftJoin('a.customwave', 'cw')
+                    ->leftJoin('a.iofmessage', 'im')
+                    ->leftJoin('im.ioffile', 'if')
+                    ->where('cw.id=:wid')
+                    ->setParameter('wid', $wave->getId());
 
+            $iofquery = $iofqb->getQuery();
+            $iof = $iofquery->getArrayResult();
+            $arrWaveData[$wave->getId()]['iof'] = (isset($iof[0])) ? $iof[0] : '';
+            //echo '<pre>';print_r($iof);exit;
             /////////for getting information for Report form/////////
             $reportqb = $em->createQueryBuilder();
             $reportqb->select('c,u')
@@ -508,6 +768,30 @@ class DefaultController extends Controller {
             $reportquery = $reportqb->getQuery();
             $report = $reportquery->getArrayResult();
             $arrWaveData[$wave->getId()]['report'] = (isset($report[0])) ? $report[0] : '';
+/////////for getting information for FW Recap form/////////
+            $recapqb = $em->createQueryBuilder();
+            $recapqb->select('r,a,p,i,u')
+                    ->from('AlbatrossCustomBundle:Recap', 'r')
+                    ->leftJoin('r.customwave', 'cw')
+                    ->leftJoin('r.actual', 'a')
+                    ->leftJoin('r.planned', 'p')
+                    ->leftJoin('r.infomations', 'i')
+                    ->leftJoin('r.user', 'u')
+                    ->where('cw.id=:wid')
+                    ->setParameter('wid', $wave->getId());
+
+            $recapquery = $recapqb->getQuery();
+            $recap = $recapquery->getArrayResult();
+            $arrWaveData[$wave->getId()]['recap'] = (isset($recap[0])) ? $recap[0] : '';
+
+            if (isset($recap[0]) and isset($recap[0]['actual']['scenarios']) and $recap[0]['actual']['scenarios'] != '') {
+                $arrWaveData[$wave->getId()]['recap']['actual']['scenarios_arr'] = json_decode($recap[0]['actual']['scenarios']);
+            }
+
+            if (isset($recap[0]) and isset($recap[0]['planned']['scenarios']) and $recap[0]['planned']['scenarios'] != '') {
+                $arrWaveData[$wave->getId()]['recap']['planned']['scenarios_arr'] = json_decode($recap[0]['planned']['scenarios']);
+            }
+
 
             /////////for getting information for DIC form/////////
             $dicqb = $em->createQueryBuilder();
@@ -570,7 +854,7 @@ class DefaultController extends Controller {
             $monthNum = date('m', mktime(0, 0, 0, date("m") + $x, date("d"), date("Y")));
             $month = date('M', mktime(0, 0, 0, date("m") + $x, date("d"), date("Y")));
             $year = date('Y', mktime(0, 0, 0, date("m") + $x, date("d"), date("Y")));
-            $month_year_list .= '<option value="' . $monthNum . '-' . $year . '">' . $month . ' ' . $year . '</option>';
+            $month_year_list .= '<option value="' . ($x + 1) . '_' . $year . '">' . $month . ' ' . $year . '</option>';
         }
 
         /////////for getting users/////////
@@ -579,6 +863,22 @@ class DefaultController extends Controller {
 
         $userquery = $userqb->getQuery();
         $userArr = $userquery->getArrayResult();
+        /////////for getting ace project/////////
+        $aprojqb = $em->createQueryBuilder();
+        $aprojqb->select('p')
+                ->from('AlbatrossAceBundle:Project', 'p')
+                ->where('p.customwave is null');
+
+        $aprojquery = $aprojqb->getQuery();
+        $aprojs = $aprojquery->getArrayResult();
+
+        /////////for getting questionnaires/////////
+        $quesqb = $em->createQueryBuilder();
+        $quesqb->select('a')->from('AlbatrossCustomBundle:Aolquestionnaire', 'a');
+
+        $quesquery = $quesqb->getQuery();
+        $quesArr = $quesquery->getArrayResult();
+
 
         //echo '<pre>';print_r($operationInformation);exit;
         return $this->render('ProjectBundle:Default:project_view.html.twig', array(
@@ -593,6 +893,8 @@ class DefaultController extends Controller {
                     'countryArr' => $countryArr,
                     'month_year_list' => $month_year_list,
                     'userArr' => $userArr,
+                    'aceArr' => $aprojs,
+                    'quesArr' => $quesArr,
                     'successMsg' => $successMsg
         ));
     }
@@ -768,6 +1070,7 @@ class DefaultController extends Controller {
         foreach ($pmResult as $p) {
             $pmFinalResult[$p['task']['id']]['project'] = $p['task']['project']['name'];
             $pmFinalResult[$p['task']['id']]['bu'] = $buArr[$p['task']['number'] - 100];
+            $pmFinalResult[$p['task']['id']]['bu_id'] = $p['task']['number'] - 100;
             $pmFinalResult[$p['task']['id']]['scope'] = $p['scope'];
             $pmFinalResult[$p['task']['id']]['fwstartdate'] = $p['fwstartdate']->format('Y-m-d');
             $pmFinalResult[$p['task']['id']]['fwenddate'] = $p['fwenddate']->format('Y-m-d');
@@ -827,6 +1130,9 @@ class DefaultController extends Controller {
                     $result[$buArr[$t['number'] - 100]]
                             [$tr['name']]
                             ['wavename'] = $tr['customwave']['name'];
+                    $result[$buArr[$t['number'] - 100]]
+                            [$tr['name']]
+                            ['bu_id'] = $t['number'] - 100;
                 }
             }
         }
@@ -837,6 +1143,7 @@ class DefaultController extends Controller {
                 $result[$pm['bu']][$pm['project']]['scope'] = $pm['scope'];
                 $result[$pm['bu']][$pm['project']]['step'] = 'PM';
                 $result[$pm['bu']][$pm['project']]['reportduedate'] = $pm['reportduedate'];
+                $result[$pm['bu']][$pm['project']]['bu_id'] = $pm['bu_id'];
             }
         }
 
@@ -855,6 +1162,9 @@ class DefaultController extends Controller {
                 $result[$iof['bu']['name']]
                         [$iof['project']['name']]
                         ['scope'] = $iof['scope'];
+                $result[$iof['bu']['name']]
+                        [$iof['project']['name']]
+                        ['bu_id'] = $iof['bu']['id'];
                 if (!$iof['reporttype']) {
                     $result[$iof['bu']['name']]
                             [$iof['project']['name']]
@@ -977,6 +1287,24 @@ class DefaultController extends Controller {
         }
 
         return $buArr;
+    }
+
+    public function getMonthName($num) {
+        $arrMonths = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+
+        return $arrMonths[$num - 1];
+    }
+
+    public function checkData($mydate) {
+        $arr = explode("-", $mydate);
+        if (is_array($arr) and count($arr) > 2) {
+            list($yy, $mm, $dd) = $arr;
+            if (is_numeric($yy) && is_numeric($mm) && is_numeric($dd)) {
+                return checkdate($mm, $dd, $yy);
+            }
+            return false;
+        } else
+            return false;
     }
 
 }

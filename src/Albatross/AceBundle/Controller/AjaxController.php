@@ -15,6 +15,303 @@ class AjaxController extends Controller {
         return new Response('success');
     }
 
+    public function populateCampaignAction() {
+        $em = $this->getDoctrine()->getManager();
+
+        $request = $this->getRequest();
+        $ques_id = $request->get('id');
+
+        $campqb = $em->createQueryBuilder();
+        $campqb->select('c')
+                ->from('AlbatrossAceBundle:Campaign', 'c')
+                ->where('c.questionnaire = :ques_id')
+                ->setParameter('ques_id', $ques_id);
+
+        $campquery = $campqb->getQuery();
+        $campArr = $campquery->getArrayResult();
+
+        $list = '<option value="">Select Campaign</option>';
+        if (is_array($campArr) and count($campArr) > 0) {
+            foreach ($campArr as $camp) {
+                $list .= '<option value="' . $camp['id'] . '">' . stripslashes($camp['name']) . '</option>';
+            }
+        }
+        echo $list;
+        exit;
+    }
+
+    public function getUploadsAction() {
+        $em = $this->getDoctrine()->getManager();
+
+        $request = $this->getRequest();
+        $cust_wave_id = $request->get('id');
+
+        $parammeter = $this->container->getParameter('valuelist');
+
+        $arrUploads = array();
+        //////////get brand files uploaded//////////
+        $brandQry = $em->createQueryBuilder();
+        $brandQry->select('c', 'u', 'w')
+                ->from('AlbatrossCustomBundle:Customfield', 'c')
+                ->leftJoin('c.user', 'u')
+                ->leftJoin('c.customwave', 'w')
+                ->where('c.fieldtype = :ftype')
+                ->orderBy('c.submittime', 'desc')->setMaxResults(10);
+        //->andWhere('u.id = :user_id');
+        if ($cust_wave_id != '') {
+            $brandQry->andWhere('c.customwave = :cust_wave_id');
+            $brandQry->setParameters(array(
+                'ftype' => 'material', 'cust_wave_id' => $cust_wave_id/* , 'user_id' => $this->getUser()->getId() */
+            ));
+        } else {
+            $brandQry->setParameters(array(
+                'ftype' => 'material'
+            ));
+        }
+        $brandQry = $brandQry->getQuery();
+        $brandEntity = $brandQry->getArrayResult();
+        //echo '<pre>';print_r($brandEntity);exit;
+
+        if (is_array($brandEntity) and count($brandEntity) > 0) {
+            foreach ($brandEntity as $brand) {
+                $typeArr = array_reverse(explode('.', stripslashes($brand['path'])));
+                $arrUploads[] = array(
+                    'name' => $parammeter['brandmaterial'][$brand['material_name']],
+                    'wave' => stripslashes($brand['customwave']['name']),
+                    'type' => strtoupper($typeArr[0]) . ' File',
+                    'uploaded' => $brand['submittime'],
+                    'url' => stripslashes($brand['path']),
+                    'user_name' => stripslashes($brand['user']['fullname']),
+                    'user_pic' => stripslashes($brand['user']['email'])
+                );
+            }
+        }
+
+        //////////get Questionnaire files uploaded//////////
+        $quesQry = $em->createQueryBuilder();
+        $quesQry->select('c', 'u', 'w')
+                ->from('AlbatrossCustomBundle:Customfield', 'c')
+                ->leftJoin('c.user', 'u')
+                ->leftJoin('c.customwave', 'w')
+                ->where('c.fieldtype = :ftype')
+                ->orderBy('c.submittime', 'desc')->setMaxResults(10);
+        //->andWhere('u.id = :user_id');
+
+        if ($cust_wave_id != '') {
+            $quesQry->andWhere('c.customwave = :cust_wave_id');
+            $quesQry->setParameters(array(
+                'ftype' => 'questionnaire', 'cust_wave_id' => $cust_wave_id/* , 'user_id' => $this->getUser()->getId() */
+            ));
+        } else {
+            $quesQry->setParameters(array(
+                'ftype' => 'questionnaire'
+            ));
+        }
+        $quesQry = $quesQry->getQuery();
+        $quesEntity = $quesQry->getArrayResult();
+        //echo '<pre>';print_r($quesEntity);exit;
+
+        if (is_array($quesEntity) and count($quesEntity) > 0) {
+            foreach ($quesEntity as $ques) {
+                for ($x = 1; $x <= 4; $x++) {
+                    $suffix = '';
+                    if ($x > 1)
+                        $suffix = '_' . $x;
+
+                    $typeArr = array_reverse(explode('.', stripslashes($ques['path' . $suffix])));
+                    $arrUploads[] = array(
+                        'name' => $ques['question_file' . $x . '_label'],
+                        'wave' => stripslashes($ques['customwave']['name']),
+                        'type' => strtoupper($typeArr[0]) . ' File',
+                        'uploaded' => $ques['submittime'],
+                        'url' => stripslashes($ques['path' . $suffix]),
+                        'user_name' => stripslashes($ques['user']['fullname']),
+                        'user_pic' => stripslashes($ques['user']['email'])
+                    );
+                }
+            }
+        }
+
+        //////////get pos file list files uploaded//////////
+        $posQry = $em->createQueryBuilder();
+        $posQry->select('p', 'c', 'u')
+                ->from('AlbatrossCustomBundle:Poslist', 'p')
+                ->leftJoin('p.customwave', 'c')
+                ->leftJoin('c.user', 'u')
+                ->orderBy('p.submittime', 'desc')->setMaxResults(10);
+        //->andWhere('u.id = :user_id');
+        if ($cust_wave_id != '') {
+            $posQry->where('p.customwave = :cust_wave_id');
+            $posQry->setParameters(array('cust_wave_id' => $cust_wave_id));
+        }
+
+        $posQry = $posQry->getQuery();
+        $posEntity = $posQry->getArrayResult();
+        //echo '<pre>';print_r($posEntity);exit;
+        if (is_array($posEntity) and count($posEntity) > 0) {
+            foreach ($posEntity as $pos) {
+                $typeArr = array_reverse(explode('.', stripslashes($pos['path'])));
+                $arrUploads[] = array(
+                    'name' => 'POS file',
+                    'wave' => stripslashes($pos['customwave']['name']),
+                    'type' => strtoupper($typeArr[0]) . ' File',
+                    'uploaded' => $pos['submittime'],
+                    'url' => stripslashes($pos['path']),
+                    'user_name' => stripslashes($pos['customwave']['user']['fullname']),
+                    'user_pic' => stripslashes($pos['customwave']['user']['email'])
+                );
+            }
+        }
+
+        //////////get spe brief files uploaded//////////
+        $briefQry = $em->createQueryBuilder();
+        $briefQry->select('c', 'u', 'w')
+                ->from('AlbatrossCustomBundle:Customfield', 'c')
+                ->leftJoin('c.user', 'u')
+                ->leftJoin('c.customwave', 'w')
+                ->where('c.fieldtype = :ftype')
+                ->orderBy('c.submittime', 'desc')->setMaxResults(10);
+        //->andWhere('u.id = :user_id');
+
+        if ($cust_wave_id != '') {
+            $briefQry->andWhere('c.customwave = :cust_wave_id');
+            $briefQry->setParameters(array(
+                'ftype' => 'brief', 'cust_wave_id' => $cust_wave_id/* , 'user_id' => $this->getUser()->getId() */
+            ));
+        } else {
+            $briefQry->setParameters(array(
+                'ftype' => 'brief'
+            ));
+        }
+
+        $briefQry = $briefQry->getQuery();
+        $briefEntity = $briefQry->getArrayResult();
+        //echo '<pre>';print_r($briefEntity);exit;
+        if (is_array($briefEntity) and count($briefEntity) > 0) {
+            foreach ($briefEntity as $brief) {
+                $typeArr = array_reverse(explode('.', stripslashes($brief['path'])));
+                $arrUploads[] = array(
+                    'name' => 'SPE Brief file',
+                    'wave' => stripslashes($brief['customwave']['name']),
+                    'type' => strtoupper($typeArr[0]) . ' File',
+                    'uploaded' => $brief['submittime'],
+                    'url' => stripslashes($brief['path']),
+                    'user_name' => stripslashes($brief['user']['fullname']),
+                    'user_pic' => stripslashes($brief['user']['email'])
+                );
+            }
+        }
+
+        //////////get DIC files uploaded//////////
+        $dicQry = $em->createQueryBuilder();
+        $dicQry->select('c', 'u', 'w')
+                ->from('AlbatrossCustomBundle:Customfield', 'c')
+                ->leftJoin('c.user', 'u')
+                ->leftJoin('c.customwave', 'w')
+                ->where('c.fieldtype = :ftype')
+                ->orderBy('c.submittime', 'desc')->setMaxResults(10);
+        //->andWhere('u.id = :user_id');
+        if ($cust_wave_id != '') {
+            $dicQry->andWhere('c.customwave = :cust_wave_id');
+            $dicQry->setParameters(array(
+                'ftype' => 'dic', 'cust_wave_id' => $cust_wave_id/* , 'user_id' => $this->getUser()->getId() */
+            ));
+        } else {
+            $dicQry->setParameters(array(
+                'ftype' => 'dic'
+            ));
+        }
+
+        $dicQry = $dicQry->getQuery();
+        $dicEntity = $dicQry->getArrayResult();
+        //echo '<pre>';print_r($dicEntity);exit;
+        if (is_array($dicEntity) and count($dicEntity) > 0) {
+            foreach ($dicEntity as $dic) {
+                $typeArr = array_reverse(explode('.', stripslashes($dic['path'])));
+                $arrUploads[] = array(
+                    'name' => stripslashes($dic['question_file1_label']),
+                    'wave' => stripslashes($dic['customwave']['name']),
+                    'type' => strtoupper($typeArr[0]) . ' File',
+                    'uploaded' => $dic['submittime'],
+                    'url' => stripslashes($dic['path']),
+                    'user_name' => stripslashes($dic['user']['fullname']),
+                    'user_pic' => stripslashes($dic['user']['email'])
+                );
+            }
+        }
+
+        //////////get Report files uploaded//////////
+        $reportQry = $em->createQueryBuilder();
+        $reportQry->select('c', 'u', 'w')
+                ->from('AlbatrossCustomBundle:Customfield', 'c')
+                ->leftJoin('c.user', 'u')
+                ->leftJoin('c.customwave', 'w')
+                ->where('c.fieldtype = :ftype')
+                ->orderBy('c.submittime', 'desc')->setMaxResults(10);
+        //->andWhere('u.id = :user_id');
+        if ($cust_wave_id != '') {
+            $reportQry->andWhere('c.customwave = :cust_wave_id');
+            $reportQry->setParameters(array(
+                'ftype' => 'report', 'cust_wave_id' => $cust_wave_id/* , 'user_id' => $this->getUser()->getId() */
+            ));
+        } else {
+            $reportQry->setParameters(array(
+                'ftype' => 'report'
+            ));
+        }
+        $reportQry = $reportQry->getQuery();
+        $reportEntity = $reportQry->getArrayResult();
+        //echo '<pre>';print_r($reportEntity);exit;
+        if (is_array($reportEntity) and count($reportEntity) > 0) {
+            foreach ($reportEntity as $report) {
+                $typeArr = array_reverse(explode('.', stripslashes($report['path'])));
+                $arrUploads[] = array(
+                    'name' => stripslashes($report['question_file1_label']),
+                    'wave' => stripslashes($report['customwave']['name']),
+                    'type' => strtoupper($typeArr[0]) . ' File',
+                    'uploaded' => $report['submittime'],
+                    'url' => stripslashes($report['path']),
+                    'user_name' => stripslashes($report['user']['fullname']),
+                    'user_pic' => stripslashes($report['user']['email'])
+                );
+            }
+        }
+
+        $site_url = $this->container->getParameter('FILE_SITE_URL');
+        //echo '<pre>';print_r($arrUploads);exit;
+        $uploadList = '';
+        if (is_array($arrUploads) and count($arrUploads)) {
+            foreach ($arrUploads as $upload) {
+                $itemPic = $site_url . 'web/images/user/' . $upload['user_pic'];
+                if (!file_exists($itemPic))
+                    $itemPic = $site_url . 'web/bundles/falgun/images/item-pic.png';
+
+                $uploadList .= '<div class="item-block clearfix">
+									<div class="item-thumb pull-left">
+										<ul>
+											<li class="item-pic"><img src="' . $itemPic . '" width="34" height="34" alt="anchor"></li>
+										</ul>
+									</div>
+									<div class="item-intro pull-left" style="width:50%;">
+										<a href="javascript:;">' . $upload['wave'] . '</a>
+										<div class="item-meta">
+											<ul>
+												<li><strong>Type:</strong> ' . $upload['type'] . '</li>
+												<li><strong>Uploaded:</strong> ' . $upload['uploaded'] . '</li>
+											</ul>
+										</div>
+									</div>
+									<div class="pull-right">
+										<a href="' . $site_url . 'web/' . $upload['url'] . '" target="_blank"><button class="btn btn-primary" type="button"><i class="icon-upload-alt"></i> Download</button></a>
+									</div>
+								</div>';
+            }
+        }
+
+        echo $uploadList;
+        exit;
+    }
+
     public function changeBUAction() {
         $request = $this->getRequest();
         $session = $request->getSession();
@@ -28,7 +325,7 @@ class AjaxController extends Controller {
 
     public function iof_list_ajaxAction() {
         $request = $this->getRequest();
-        
+
         $aColumns = array('f.label', 'a.submitteddate', 'a.status', 'u.fullname');
         $aColumnSort = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
         $aColumnSearch = array('a.id', 'a.label', 'a.submitteddate', 'a.status', 'u.fullname');
@@ -509,7 +806,7 @@ class AjaxController extends Controller {
                     $lastUpload = '-';
                     if ($rec && $rec->getLabel() != '') {
 //                        $lastUpload = '<a href="web/' . $rec->getPath() . '" target="_blank">' . $rec->getLabel() . '</a> (' . $rec->getSubmitteddate()->format("y-m-d H:i:s") . ')'; // ' .$this->basicElements['rootPath'] . '
-                        $lastUpload = '<a href="'. $this->generateUrl('file_download', array("id" => $rec->getId())) .'" target="_blank">' . $rec->getLabel() . '</a> (' . $rec->getSubmitteddate()->format("y-m-d H:i:s") . ')'; // ' .$this->basicElements['rootPath'] . '
+                        $lastUpload = '<a href="' . $this->generateUrl('file_download', array("id" => $rec->getId())) . '" target="_blank">' . $rec->getLabel() . '</a> (' . $rec->getSubmitteddate()->format("y-m-d H:i:s") . ')'; // ' .$this->basicElements['rootPath'] . '
                     }
 
                     $row = '';
@@ -537,7 +834,7 @@ class AjaxController extends Controller {
 
         $connection = $em->getConnection();
         ///////Code for project listing////////
-        $aColumns = array('c.name', 'ka.fullname','pm.fullname', 'cw.year, cw.month, cw.wavenum', 'cw.delivery_date', 'actions', 'progress');
+        $aColumns = array('c.name', 'ka.fullname', 'pm.fullname', 'cw.year, cw.month, cw.wavenum', 'cw.delivery_date', 'actions', 'progress');
 //        $aColumnSort = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
 //        $aColumnSearch = array('c.id', 'c.name', 'project_manager', 'a.scope', 'type', 'status', 'date');
 
@@ -560,11 +857,11 @@ class AjaxController extends Controller {
             for ($i = 0; $i < intval($_REQUEST['iSortingCols']); $i++) {
                 if ($_REQUEST['bSortable_' . intval($_REQUEST['iSortCol_' . $i])] == "true") {
                     $sortColumnStr = explode(',', $aColumns[intval($_REQUEST['iSortCol_' . $i])]);
-                    if(count($sortColumnStr) > 1){
-                        foreach($sortColumnStr as $s){
+                    if (count($sortColumnStr) > 1) {
+                        foreach ($sortColumnStr as $s) {
                             $sOrder .= $s . ' ' . ( $_REQUEST['sSortDir_' . $i] ) . ", ";
                         }
-                    }else{
+                    } else {
                         $sOrder .= $aColumns[intval($_REQUEST['iSortCol_' . $i])] . "
                                                             " . ( $_REQUEST['sSortDir_' . $i] ) . ", ";
                     }
@@ -649,8 +946,8 @@ class AjaxController extends Controller {
             $statementR = $connection->prepare($sql);
             $statementR->execute();
             $reportCount = $statementR->rowCount();
-            
-            $lastWaveNameArr = explode('_', $project['customwave_name'],4);
+
+            $lastWaveNameArr = explode('_', $project['customwave_name'], 4);
             $perReportPer = 0;
             if ($reportCount > 0)
                 $perReportPer = 100;
@@ -665,18 +962,18 @@ class AjaxController extends Controller {
             $row[] = $project['delivery'];
             $row[] = '<div class="btn-group">
                             <button class="brown noborder" data-original-title="Open Project" onclick="window.location.href=\'' . $this->generateUrl('view_project') . '?id=' . $project['id'] . '\'"><i class="icon-eye-open"></i></button>
-                            <button class="blue noborder" data-original-title="Follow Project" onclick="followProject('.$project['id'].');"><i class="icon-twitter"></i></button>
-                            <button class="green noborder" data-original-title="Edit Project" onclick="window.location.href=\'' . $this->generateUrl('customproject_edit', array('id' => $project['id'])).'\'"><i class=" icon-pencil"></i></button>
-                            <button class="orange noborder" data-original-title="Remove Project" onclick="deleteProject('.$project['id'].');"><i class=" icon-remove"></i></button>
+                            <button class="blue noborder" data-original-title="Follow Project" onclick="followProject(' . $project['id'] . ');"><i class="icon-twitter"></i></button>
+                            <button class="green noborder" data-original-title="Edit Project" onclick="window.location.href=\'' . $this->generateUrl('customproject_edit', array('id' => $project['id'])) . '\'"><i class=" icon-pencil"></i></button>
+                            <button class="orange noborder" data-original-title="Remove Project" onclick="deleteProject(' . $project['id'] . ');"><i class=" icon-remove"></i></button>
                     </div>';
             $row[] = '<div class="progress progress-info progress-striped active tipsy" data-original-title="Project Preparation">
                             <div class="bar" style="width: ' . $perProjectPrep . '%"></div>
                     </div>
                     <div class="progress progress-success progress-striped active tipsy" data-original-title="Field Work">
-                          <div class="bar" style="width: '. $project['fw'] .'%"></div>
+                          <div class="bar" style="width: ' . $project['fw'] . '%"></div>
                     </div>
                     <div class="progress progress-warning progress-striped active tipsy" data-original-title="Editing">
-                          <div class="bar" style="width: '. $project['edit'] .'%"></div>
+                          <div class="bar" style="width: ' . $project['edit'] . '%"></div>
                     </div>
                     <div class="progress progress-danger progress-striped active tipsy" data-original-title="Report Delivery">
                           <div class="bar" style="width: ' . $perReportPer . '%"></div>
@@ -868,6 +1165,22 @@ class AjaxController extends Controller {
         }
         echo $perResult;
         exit;
+    }
+
+    public function aasort(&$array, $key) {
+        $sorter = array();
+        $ret = array();
+        reset($array);
+        foreach ($array as $ii => $va) {
+            $sorter[$ii] = $va[$key];
+        }
+        asort($sorter);
+        foreach ($sorter as $ii => $va) {
+            $ret[$ii] = $array[$ii];
+        }
+        $array = $ret;
+
+        return $array;
     }
 
 }

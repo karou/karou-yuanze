@@ -5,9 +5,9 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <li><a href="{{ path('project_homepage') }}">Project List</a><span class="divider"><i class="icon-angle-right"></i></span></li>
+    <li><a href="{{ path('project_homepage') }}">Project View</a><span class="divider"><i class="icon-angle-right"></i></span></li>
     <li class="active"> {{project.name}}</li>
-{% endblock %}
+    {% endblock %}
 
 {% block pageHeading %}
     {{project.name}}
@@ -27,9 +27,9 @@
                 <ul class="nav nav-tabs" id="myTab1">
                     {% set counter = 1 %}
                     {% for wave in waveArr %}
-                    <li {% if counter==1 %}class="active"{% endif %}><a href="#tab-wave{{counter}}">Wave {{counter}}</a></li>
-                        {% set counter = counter+1 %}
-                    {% endfor %}
+                        <li {% if counter==1 %}class="active"{% endif %}><a href="#tab-wave{{counter}}">Wave {{counter}}</a></li>
+                            {% set counter = counter+1 %}
+                        {% endfor %}
                     <li><a href="#tab-new-wave">New Wave +</a></li>
                 </ul>
                 <div class="tab-content">
@@ -40,12 +40,12 @@
                             <div class="user_list">
                                 <div class="">
                                     <div class="thumbnail pull-left">
-                                        <img alt="300x200" data-src="holder.js/300x200" style="width: 200px; height: 200px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASwAAADICAYAAABS39xVAAAELElEQVR4nO3bMW7iQABA0b3/UXwDDkBP75aaK2QrR7NeO4HskvCtVzwJWQOaZr7Gg/3rdru9ART8+ukJANxLsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgTrQE6n09s0Te8ul8vu2PP5/JSxjxh/c/HK8+XnCdZBbC3+aZrezufzX2PXYftfY+81z/PufKdpertery81X16HYB3A5XJ5X5jzPO9eW19fwjAG5KtjHzFGZbl2vV7fr51Op5eaL69DsA5gCcC40McAjAt1GbvecWxdv3fsXmzGsWOc9nY9463cM+dLl2Ad1Lj4x1usvXOdZfwYnEfGbu3oHt3dbAXrWfOlSbAOZn0+NMZq3AntLeolFo+MXax3enu7rj3rndez50uPYB3MuNNZ3wY9OwDrW8O9Q/QtWztCwWJNsA5qawF/RwC+8kjB+J1xvGCxJlgH9i+L+qsBGL93z+5qL1bfNV9aBOvAfuIQe/0c1EfnVx/F6rvmS4tgxd2zsxgX6tYjEOP1rccE7hl7u/15frb+vJ73GKuP/kF85nzpEawD2DrgHv8tHIPxrAcxx3AuYdg7eB9/97OIeHCUkWAdwPrc6LNbsme86vLZ0+vj+L25jp49X5oE60DWi/S7Xn7e282tvzvP86fvEe4djnv5mdtNsIAQwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjIEC8gQLCBDsIAMwQIyBAvIECwgQ7CADMECMgQLyBAsIEOwgAzBAjJ+A8sf5ZmmLjF2AAAAAElFTkSuQmCC">
+                                        <img alt="300x200" data-src="holder.js/300x200" style="width: 200px; height: 200px;" src="">
                                     </div>
                                     <div class="pull-left span6">
                                         <div class="wave-content-list">
                                             <label class="pull-left"><strong>Report KA:</strong></label>
-                                            <label>{% if wave.user.id is defined %}{{wave.user.fullname}}{% else %}not set{% endif %}</label>
+                                            <label>{% if wave.user.fullname is defined %}{{wave.user.fullname}}{% else %} &nbsp; {% endif%}</label>
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left"><strong>Global PM:</strong></label>
@@ -61,18 +61,18 @@
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left"><strong>FW Period:</strong></label>
-                                            <label><em>{{taskArr[wave.id][0].fwstartdate}}</em> to <em>{{taskArr[wave.id][0].fwenddate}}</em></label>
+                                            <label><em>{% if taskArr[wave.id][0] is defined %} {{taskArr[wave.id][0].fwstartdate}} {% else %} &nbsp; {% endif%}</em> to <em>{% if taskArr[wave.id][0] is defined %} {{taskArr[wave.id][0].fwenddate}} {% else %} &nbsp; {% endif%}</em></label>
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left"><strong>ACE Project:</strong></label>
-                                            <label>{{wave.name}} [ <em># {{taskArr[wave.id][0].projectNumber}}</em> ]</label>
+                                            <label>{{wave.name}} [ <em># {% if taskArr[wave.id][0] is defined %} {{taskArr[wave.id][0].projectNumber}} {% else %} &nbsp; {% endif%}</em> ]</label>
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left"><strong>AOL Questionnaire:</strong></label>
                                             <label>{% if wave['campaign'][0] is defined %} {{wave['campaign'][0]['questionnaire']['name']}} (<em>Campaign: {{wave['campaign'][0]['name']}}</em>) {% else %} &nbsp; {% endif%}</label>
                                         </div>
                                         <div class="wave-content-list">
-                                            <a href="#">Edit Wave</a>
+                                            <a href="javascript:;" onclick="showHideEditWaveForm('edit_wave_{{wave.id}}');">Edit Wave</a>
                                         </div>
                                     </div>
                                     <div class="pull-right">
@@ -81,21 +81,120 @@
                                             <button class="btn btn-success" style="width:137px; text-align:left;">Submit</button>
                                             <button data-toggle="dropdown" class="btn btn-success dropdown-toggle"><span class="icon-ok"></span></button>
                                             <ul class="dropdown-menu submit-dropdown">
-                                                <li><a href="javascript:;" onclick="showMiniForm('meeting-minutes-frm{{wave.id}}');"><i class="icon-plus-sign gray"></i>Meeting Minutes</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('brand-material-frm{{wave.id}}');"><i class="icon-plus-sign gray"></i>Brand Material</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('kick-off-meetings-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>Kick-Off Meeting</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('questionnaire-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>Questionnaire</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('pos-file-upload-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>POS List</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('spe-brief-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>SPE Brief</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('upload-iof-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>IOF</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('fw-recap-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>FW Recap</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('dic-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>DIC</a></li>
-                                                <li><a href="javascript:;" onclick="showMiniForm('report-frm{{wave.id}}');"><i class="icon-ok-sign green"></i>Report</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('meeting-minutes-frm{{wave.id}}');"><i class="icon-plus-sign {% if formArr[wave.id]['mm']['id'] is defined %} green {% else %} gray {% endif %}"></i>Meeting Minutes</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('brand-material-frm{{wave.id}}');"><i class="icon-plus-sign {% if formArr[wave.id]['brand']['id'] is defined %} green {% else %} gray {% endif %}"></i>Brand Material</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('kick-off-meetings-frm{{wave.id}}');"><i class="icon-ok-sign {% if formArr[wave.id]['meeting']['id'] is defined %} green {% else %} gray {% endif %}"></i>Kick-Off Meeting</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('questionnaire-frm{{wave.id}}');"><i class="icon-ok-sign {% if formArr[wave.id]['questionnaire']['id'] is defined %} green {% else %} gray {% endif %}"></i>Questionnaire</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('pos-file-upload-frm{{wave.id}}');"><i class="icon-ok-sign {% if formArr[wave.id]['poslist']['id'] is defined %} green {% else %} gray {% endif %}"></i>POS List</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('spe-brief-frm{{wave.id}}');"><i class="icon-ok-sign {% if formArr[wave.id]['brief']['id'] is defined %} green {% else %} gray {% endif %}"></i>SPE Brief</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('upload-iof-frm{{wave.id}}');"><i class="icon-ok-sign gray"></i>IOF</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('fw-recap-frm{{wave.id}}');"><i class="icon-ok-sign {% if formArr[wave.id]['recap']['id'] is defined %} green {% else %} gray {% endif %}"></i>FW Recap</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('dic-frm{{wave.id}}');"><i class="icon-ok-sign {% if formArr[wave.id]['dic']['id'] is defined %} green {% else %} gray {% endif %}"></i>DIC</a></li>
+                                                <li><a href="javascript:;" onclick="showMiniForm('report-frm{{wave.id}}');"><i class="icon-ok-sign {% if formArr[wave.id]['report']['id'] is defined %} green {% else %} gray {% endif %}"></i>Report</a></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
+                                <!--Wave edit form start-->
+                                <div class="span11" style="display:none;" id="edit_wave_{{wave.id}}">
+                                    <form name="edit_wave_frm" id="edit_wave_frm" action="" method="post" onsubmit="chkWaveFrm();">
+                                        <input type="hidden" name="action" value="edit_wave" />
+                                        <input type="hidden" name="wave_id" value="{{wave.id}}" />
+                                        <div class="span12 mini-form" style="border:none;">
+                                            <div class="wave-content-list">
+                                                <label class="pull-left">Client:</label>
+                                                <label><strong>{{project.name}}</strong></label>
+                                            </div>
+                                            <div class="wave-content-list">
+                                                <label class="pull-left">Project:</label>
+                                                <label><strong>{{project['customclient']['name']}}</strong></label>
+                                            </div>
+                                            <div class="wave-content-list">
+                                                <label class="pull-left">Name:</label>
+                                                <input type="text" name="project_name" id="edit_project_name{{wave.id}}" value="{{project.name}}" />
+                                                <select name="wavenum" id="wavenum" style="width:80px;">
+                                                    <option value="">Select</option>
+                                                    <option value="1" {% if wave.wavenum == 1 %} selected="selected"{% endif %}>W1</option>
+                                                    <option value="2" {% if wave.wavenum == 2 %} selected="selected"{% endif %}>W2</option>
+                                                    <option value="3" {% if wave.wavenum == 3 %} selected="selected"{% endif %}>W3</option>
+                                                    <option value="4" {% if wave.wavenum == 4 %} selected="selected"{% endif %}>W4</option>
+                                                </select>
+                                                <select name="bis" id="edit_bis{{wave.id}}" style="width:80px;">
+                                                    <option value="">Select</option>
+                                                    <option value="bis" {% if wave.bis == "bis" %} selected="selected"{% endif %}>bis</option>
+                                                </select>
+                                                <select name="month_year_sel" id="edit_month_year_sel{{wave.id}}" style="width:100px;">
+                                                    <option value="">Select</option>
+                                                    {{month_year_list|raw}}
+                                                </select>
+                                                <input type="text" name="totalnum" id="edit_totalnum{{wave.id}}" placeholder="Total Number" value="{{wave.totalnum}}" />
+                                            </div>
+                                            <div class="wave-content-list">
+                                                <label class="pull-left">Report KA:</label>
+                                                <select name="user_id" id="edit_user_id">
+                                                    <option value="">Select</option>
+                                                    {% for uarr in userArr %}
+                                                        {% set sel = '' %}
+                                                        {% if wave.user.id is defined %}
+                                                            {% if wave.user.id == uarr['id'] %}
+                                                                {% set sel = 'selected="selected"' %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        <option value="{{uarr['id']}}" {{sel}}>{{uarr['fullname']}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="wave-content-list">
+                                                <label class="pull-left">Project Manager:</label>
+                                                <select name="project_manager_id" id="edit_project_manager_id{{wave.id}}">
+                                                    <option value="">Select</option>
+                                                    {% for uarr in userArr %}
+                                                        {% set sel = '' %}
+                                                        {% if wave.project_manager.id is defined %}
+                                                            {% if wave.project_manager.id == uarr['id'] %}
+                                                                {% set sel = 'selected="selected"' %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                        <option value="{{uarr['id']}}" {{sel}}>{{uarr['fullname']}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="wave-content-list">
+                                                <label class="pull-left">ACE Project:</label>
+                                                <select name="ace_project" id="edit_ace_project{{wave.id}}">
+                                                    <option value="">Select</option>
+                                                    {% for aarr in aceArr %}
+                                                        <option value="{{aarr['id']}}">{{aarr['name']}}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                            <div class="wave-content-list">
+                                                <label class="pull-left" style="float:left;">AOL Survey:</label>
+                                                <select name="wave_questionnaire_id" id="edit_wave_questionnaire_id{{wave.id}}" onchange="populateCampaign(this.value, 'edit_wave_campaign_id{{wave.id}}', 'edit_quesLoadingIcon{{wave.id}}');" style="float:left;">
+                                                    <option value="">Select Questionnaire</option>
+                                                    {% for qarr in quesArr %}
+                                                        <option value="{{qarr['id']}}">{{qarr['name']}}</option>
+                                                    {% endfor %}
+                                                </select> &nbsp;&nbsp; 
+                                                <select name="wave_campaign_id" id="edit_wave_campaign_id{{wave.id}}" style="float:left; margin-left:10px;">
+                                                    <option value="">Select Questionnaire first</option>
+                                                </select> &nbsp;&nbsp; 
+                                                <img src="{{ asset('/images/loading.gif') }} id="edit_quesLoadingIcon{{wave.id}}" style="float:left;margin:-2px 0 0 15px; display:none;" />
+                                            </div>
+                                            <div class="wave-content-list">
+                                                <label class="pull-left"></label>
+                                                <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Update</button> &nbsp; 
+                                                <button class="btn">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <script type="text/javascript">
+                                                                    $(document).ready(function(){
+                                                            document.getElementById('edit_month_year_sel{{wave.id}}').value = '{{wave.month}}_{{wave.year}}';
+                                                            });							</script>
+                                </div>
+                                <!--Wave edit form end-->
                                 <div class="span8">
                                     <div class="primary-head">
                                         <br />
@@ -115,64 +214,64 @@
                                                 <th>Report Delivery</th>
                                             </tr>
                                             {% if operation[wave.id] is defined %}
-                                            {% for bu,info in operation[wave.id] %}
-                                            <tr>
-                                                <td title="{{bu}}">{{bu}}</td>
-                                                {% if info['ace'] != '' %}
-                                                {% for pname,aceinfo in info['ace'] %}
-                                                <td>
-                                                    {{aceinfo['step']}}<br/>
-                                                </td>
-                                                <td>
-                                                    {{aceinfo['scope']}}<br/>
-                                                </td>
-                                                <td>
-                                                    {{aceinfo['fwstartdate']}}<br/>
-                                                </td>
-                                                <td>
-                                                    {{aceinfo['fwenddate']}}<br/>
-                                                </td>
-                                            {% endfor %}
-                                            {% else %}
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                            {% endif %}
+                                                {% for bu,info in operation[wave.id] %}
+                                                    <tr>
+                                                        <td title="{{bu}}">{{bu}}</td>
+                                                        {% if info['ace'] != '' %}
+                                                            {% for pname,aceinfo in info['ace'] %}
+                                                                <td>
+                                                                    {{aceinfo['step']}}<br/>
+                                                                </td>
+                                                                <td>
+                                                                    {{aceinfo['scope']}}<br/>
+                                                                </td>
+                                                                <td>
+                                                                    {{aceinfo['fwstartdate']}}<br/>
+                                                                </td>
+                                                                <td>
+                                                                    {{aceinfo['fwenddate']}}<br/>
+                                                                </td>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <td class="empty_value">empty</td>
+                                                            <td class="empty_value">empty</td>
+                                                            <td class="empty_value">empty</td>
+                                                            <td class="empty_value">empty</td>
+                                                        {% endif %}
 
-                                            {% if info['aol'] != '' %}
-                                                <td>{{info['aol']['assignPercent']}}
-                                                </td>
-                                                <td>{{info['aol']['fwdonePercent']}}
-                                                </td>
-                                                <td>{{info['aol']['validationPercent']}}
-                                                </td>
+                                                        {% if info['aol'] != '' %}
+                                                            <td>{{info['aol']['assignPercent']}}
+                                                            </td>
+                                                            <td>{{info['aol']['fwdonePercent']}}
+                                                            </td>
+                                                            <td>{{info['aol']['validationPercent']}}
+                                                            </td>
+                                                        {% else %}
+                                                            <td class="empty_value">empty</td>
+                                                            <td class="empty_value">empty</td>
+                                                            <td class="empty_value">empty</td>
+                                                        {% endif %}
+                                                        {% if info['ace'] != '' %}
+                                                            {% for pname,aceinfo in info['ace'] %}
+                                                                <td>{{aceinfo['reportduedate']}}</td>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <td class="empty_value">empty</td>
+                                                        {% endif %}
+                                                    </tr>
+                                                {% endfor %}
                                             {% else %}
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                            {% endif %}
-                                            {% if info['ace'] != '' %}
-                                            {% for pname,aceinfo in info['ace'] %}
-                                                <td>{{aceinfo['reportduedate']}}</td>
-                                            {% endfor %}
-                                            {% else %}
-                                                <td class="empty_value">empty</td>
-                                            {% endif %}
-                                            </tr>
-                                            {% endfor %}
-                                            {% else %}
-                                            <tr>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                                <td class="empty_value">empty</td>
-                                            </tr>
+                                                <tr>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                    <td class="empty_value">empty</td>
+                                                </tr>
                                             {% endif %}
                                         </tbody>
                                     </table>
@@ -206,12 +305,12 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                    {% if formArr[wave.id]['mm']['user']['fullname'] is defined %}
-                                                        {{formArr[wave.id]['mm']['user']['fullname']}}
-                                                    {% else %}
-                                                        &nbsp;
-                                                    {% endif %}
-                                                </strong></label>
+                                                        {% if formArr[wave.id]['mm']['user']['fullname'] is defined %}
+                                                            {{formArr[wave.id]['mm']['user']['fullname']}}
+                                                        {% else %}
+                                                            &nbsp;
+                                                        {% endif %}
+                                                    </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left"><span class="error">*</span>Brand:</label>
@@ -280,22 +379,22 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit Time:</label>
                                                 <label><strong>
-                                                    {% if formArr[wave.id]['brand']['submittime'] is defined %}
-                                                        {{formArr[wave.id]['brand']['submittime']}}
-                                                    {% else %}
-                                                        &nbsp;
-                                                    {% endif %}
-                                                </strong></label>
+                                                        {% if formArr[wave.id]['brand']['submittime'] is defined %}
+                                                            {{formArr[wave.id]['brand']['submittime']}}
+                                                        {% else %}
+                                                            &nbsp;
+                                                        {% endif %}
+                                                    </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                    {% if formArr[wave.id]['brand']['user']['fullname'] is defined %}
-                                                        {{formArr[wave.id]['brand']['user']['fullname']}}
-                                                    {% else %}
-                                                        &nbsp;
-                                                    {% endif %}
-                                                </strong></label>
+                                                        {% if formArr[wave.id]['brand']['user']['fullname'] is defined %}
+                                                            {{formArr[wave.id]['brand']['user']['fullname']}}
+                                                        {% else %}
+                                                            &nbsp;
+                                                        {% endif %}
+                                                    </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left"><span class="error">*</span>File:</label>
@@ -311,13 +410,13 @@
                                                 <select name="material_name" id="material_name{{wave.id}}" required="">
                                                     <option value="">Please select</option>
                                                     {% for mid,mname in material %}
-                                                    {% set sel = '' %}
-                                                    {% if formArr[wave.id]['brand']['materialName'] is defined %}
-                                                        {% if formArr[wave.id]['brand']['materialName'] == mid %}
-                                                            {% set sel = 'selected="selected"' %}
-                                                        {% endif %}
-                                                    {% endif %}	
-                                                    <option value="{{mid}}" {{sel}}>{{mname}}</option>
+                                                        {% set sel = '' %}
+                                                        {% if formArr[wave.id]['brand']['materialName'] is defined %}
+                                                            {% if formArr[wave.id]['brand']['materialName'] == mid %}
+                                                                {% set sel = 'selected="selected"' %}
+                                                            {% endif %}
+                                                        {% endif %}	
+                                                        <option value="{{mid}}" {{sel}}>{{mname}}</option>
                                                     {% endfor %}
                                                 </select>
                                             </div>
@@ -434,22 +533,22 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit Time:</label>
                                                 <label><strong>
-                                                    {% if formArr[wave.id]['questionnaire']['submittime'] is defined %}
-                                                        {{formArr[wave.id]['questionnaire']['submittime']}}
-                                                    {% else %}
-                                                        &nbsp;
-                                                    {% endif %}
-                                                </strong></label>
+                                                        {% if formArr[wave.id]['questionnaire']['submittime'] is defined %}
+                                                            {{formArr[wave.id]['questionnaire']['submittime']}}
+                                                        {% else %}
+                                                            &nbsp;
+                                                        {% endif %}
+                                                    </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                    {% if formArr[wave.id]['questionnaire']['user']['fullname'] is defined %}
-                                                        {{formArr[wave.id]['questionnaire']['user']['fullname']}}
-                                                    {% else %}
-                                                        &nbsp;
-                                                    {% endif %}
-                                                </strong></label>
+                                                        {% if formArr[wave.id]['questionnaire']['user']['fullname'] is defined %}
+                                                            {{formArr[wave.id]['questionnaire']['user']['fullname']}}
+                                                        {% else %}
+                                                            &nbsp;
+                                                        {% endif %}
+                                                    </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <div class="wave-content-list-inner">
@@ -578,22 +677,22 @@
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit Time:</label>
                                                 <label><strong>
-                                                    {% if formArr[wave.id]['brief']['submittime'] is defined %}
-                                                        {{formArr[wave.id]['brief']['submittime']}}
-                                                    {% else %}
-                                                        &nbsp;
-                                                    {% endif %}
-                                                </strong></label>
+                                                        {% if formArr[wave.id]['brief']['submittime'] is defined %}
+                                                            {{formArr[wave.id]['brief']['submittime']}}
+                                                        {% else %}
+                                                            &nbsp;
+                                                        {% endif %}
+                                                    </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left">Submit User:</label>
                                                 <label><strong>
-                                                    {% if formArr[wave.id]['brief']['user']['fullname'] is defined %}
-                                                        {{formArr[wave.id]['brief']['user']['fullname']}}
-                                                    {% else %}
-                                                        &nbsp;
-                                                    {% endif %}
-                                                </strong></label>
+                                                        {% if formArr[wave.id]['brief']['user']['fullname'] is defined %}
+                                                            {{formArr[wave.id]['brief']['user']['fullname']}}
+                                                        {% else %}
+                                                            &nbsp;
+                                                        {% endif %}
+                                                    </strong></label>
                                             </div>
                                             <div class="wave-content-list">
                                                 <label class="pull-left"><span class="error">*</span>File:</label>
@@ -641,532 +740,569 @@
                                         <h3 class="page-header">Upload IOF</h3>
                                         <div class="wave-content-list">
                                             <label class="pull-left">Project Name:</label>
-                                            Canali_Retail_WW
+                                            <label><strong>{{project.name}}</strong></label>
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left">Wave Name:</label>
-                                            Canali_Retail_WW_w1_May 2014
+                                            <label><strong>{{wave.name}}</strong></label>
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left">Submit Time:</label>
-                                            &nbsp;
+                                            <label><strong>
+                                                    {% if formArr[wave.id]['iof']['submitteddate'].date is defined %}
+                                                        {{formArr[wave.id]['iof']['submitteddate'].date}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left">Submit User:</label>
-                                            &nbsp;
+                                            <label><strong>
+                                                    {% if formArr[wave.id]['iof']['user']['fullname'] is defined %}
+                                                        {{formArr[wave.id]['iof']['user']['fullname']}}
+                                                    {% else %}
+                                                        &nbsp;
+                                                    {% endif %}
+                                                </strong></label>
                                         </div>
                                         <div class="wave-content-list">
                                             <label class="pull-left">PM:</label>
-                                            <select name="" id="">
-                                                <option value="">Select</option>
+                                            <select name="">
+                                                <option value="">Please select</option>
+                                                {% for uarr in userArr %}
+                                                    {% set sel = '' %}
+                                                    {% if wave.project_manager.id is defined %}
+                                                        {% if wave.project_manager.id == uarr['id'] %}
+                                                            {% set sel = 'selected="selected"' %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    <option value="{{uarr['id']}}" {{sel}}>{{uarr['fullname']}}</option>
+                                                {% endfor %}
                                             </select>
                                         </div>
                                         <div class="wave-content-list">
                                             <div class="tab-widget">
                                                 <ul class="nav nav-tabs" id="myTab3">
-                                                    <li class="active"><a href="#iof_form_1{{wave.id}}">Form 1</a></li>
-                                                    <li><a href="#iof_form_2{{wave.id}}">Form 2</a></li>
+                                                    {% set acnt = 1 %}
+                                                    {% for attach in formArr[wave.id]['iof']['iofmessage'] %}
+                                                        {% if acnt==attach['formindex'] %}
+                                                            <li {% if acnt==1 %}class="active"{% endif %}><a href="#tab-iof_form_{{acnt}}{{wave.id}}">Form {{acnt}}</a></li>
+                                                                {% set acnt = acnt+1 %}
+                                                            {% endif %}
+                                                        {% endfor %}
                                                     <li><a href="#iof_new_form{{wave.id}}">New Form +</a></li>
                                                 </ul>
                                                 <div class="tab-content">
-                                                    <div class="tab-pane active" id="iof_form_1{{wave.id}}">
-                                                        <div class="comment-items">
-                                                            <div class="wave-content-list">
-                                                                <label class="pull-left">FW Period:</label>
-                                                                <input type="text" name="" id="" />
+                                                    {% set cnt = 1 %}
+                                                    {% set acnt = 1 %}
+                                                    {% for imsg in formArr[wave.id]['iof']['iofmessage'] %}
+
+                                                        {% if acnt==imsg['formindex'] %}
+
+                                                            {% if acnt!=1 %}
                                                             </div>
-                                                            <div class="wave-content-list">
-                                                                <label class="pull-left">Report Due:</label>
-                                                                <input type="text" name="" id="" />
+
+                                                            {% set cntNw = cnt-1 %}
+                                                            {% set acntNw = acnt-1 %}
+                                                            <div class="add-more-file-message">
+                                                                <a href="javascript:;" onclick="addMoreFileMessage({{wave.id}},{{acntNw}} ,{{cntNw}} )">
+                                                                    <i class="icon-plus-sign"></i> &nbsp; Add more file and message
+                                                                </a>
                                                             </div>
+
                                                             <div class="wave-content-list">
-                                                                <h5 class="page-header" style="font-size:20px;">Message</h5>
-                                                                <textarea name="" id="" style="width:98%; height:80px;"></textarea>
+
+                                                                {% if operation[wave.id] is defined %}
+                                                                    {% for bu,info in operation[wave.id] %}
+                                                                        {% if info['ace'] != '' %}
+                                                                            {% for pname,aceinfo in info['ace'] %}
+
+                                                                                <input type="hidden" name="bu_id[]" value="{{aceinfo['bu_id']}}" />
+                                                                                <div class="wave-content-list-inner3">
+                                                                                    <div class="wave-content-list-divider">
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">Business Unit:</label>
+                                                                                            <b>{{bu}}</b>
+                                                                                        </div>
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">Scope:</label>
+                                                                                            <input type="text" name="scope[]" value="{{aceinfo['scope']}}" />
+                                                                                        </div>
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">FW Start Date:</label>
+                                                                                            <input type="text" name="fw_start_date[]" value="{{aceinfo['fwstartdate']}}" />
+                                                                                        </div>
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">Comment:</label>
+                                                                                            <input type="text" name="comment[]" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="wave-content-list-divider">
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">ACE:</label>
+                                                                                            <b>{{pname}}</b>
+                                                                                        </div>
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">Report Due Date:</label>
+                                                                                            <input type="text" name="report_due_date[]" value="{{aceinfo['reportduedate']}}" />
+                                                                                        </div>
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">FW End Date:</label>
+                                                                                            <input type="text" name="fw_end_date[]" value="{{aceinfo['fwenddate']}}" />
+                                                                                        </div>
+                                                                                        <div class="wave-content-list">
+                                                                                            <label class="pull-left">Select This BU:</label>
+                                                                                            <input type="checkbox" name="bu_checked[]" value="{{aceinfo['bu_id']}}" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                            {% endfor %}
+                                                                        {% endif %}
+                                                                    {% endfor %}
+                                                                {% endif %}
                                                             </div>
-                                                            <div class="wave-content-list">
-                                                                <h5 class="page-header" style="font-size:20px;">File</h5>
-                                                                <div class="wave-content-list-inner1">
-                                                                    <b>Label:</b> &nbsp; <input type="text" name="" id="" />
-                                                                </div>
-                                                                <div class="wave-content-list-inner1">
-                                                                    <b>File:</b> &nbsp; <input type="file" name="" id="" />
-                                                                </div>
-                                                                <div class="wave-content-list-inner2">
-                                                                    <button class="btn btn-blue1"><i class="icon-cloud-upload"></i> &nbsp; Upload</button> &nbsp; 
-                                                                    <button class="btn btn-orange">Cancel</button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="wave-content-list">
-                                                                <div class="wave-content-list-inner3">
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Business Unit:</label>
-                                                                        <b>United States</b>
-                                                                    </div>
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Scope:</label>
-                                                                        <input type="text" name="" id="" />
-                                                                    </div>
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Comment:</label>
-                                                                        <input type="text" name="" id="" />
-                                                                    </div>
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Select This BU:</label>
-                                                                        <input type="checkbox" name="" id="" />
-                                                                    </div>
-                                                                </div>
-                                                                <div class="wave-content-list-inner4">
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Business Unit:</label>
-                                                                        <b>United States</b>
-                                                                    </div>
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Scope:</label>
-                                                                        <input type="text" name="" id="" />
-                                                                    </div>
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Comment:</label>
-                                                                        <input type="text" name="" id="" />
-                                                                    </div>
-                                                                    <div class="wave-content-list">
-                                                                        <label class="pull-left">Select This BU:</label>
-                                                                        <input type="checkbox" name="" id="" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>												
+
+                                                        </div>
+
+                                                        <div class="wave-content-list">
+                                                            <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
+                                                            <button class="btn">Cancel</button>
+                                                        </div>
+
+                                                        </form>
+
                                                     </div>
-                                                    <div class="tab-pane" id="iof_form_2{{wave.id}}">
 
-                                                    </div>
-                                                    <div class="tab-pane" id="iof_new_form{{wave.id}}">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="wave-content-list">
-                                            <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
-                                            <button class="btn">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <!--IOF form ends-->
-
-                                    <!--FW recap form starts-->
-                                    <div class="span12 mini-form fw-recap-frm{{wave.id}}" style="display:none;">
-                                        <h3 class="page-header">Fieldwork Recap</h3>
-                                        <div class="wave-content-list">
-                                            <label class="pull-left">Project Name:</label>
-                                            Canali_Retail_WW
-                                        </div>
-                                        <div class="wave-content-list">
-                                            <label class="pull-left">Wave Name:</label>
-                                            Canali_Retail_WW_w1_May 2014
-                                        </div>
-                                        <div class="wave-content-list">
-                                            <label class="pull-left">Submit Time:</label>
-                                            &nbsp;
-                                        </div>
-                                        <div class="wave-content-list">
-                                            <label class="pull-left">Submit User:</label>
-                                            &nbsp;
-                                        </div>
-                                        <div class="wave-content-list">
-                                            <label class="pull-left">Country:</label>
-                                            No country info from POS list.
-                                        </div>
-                                        <div class="wave-content-list">
-                                            <label class="pull-left">Aol Questionnaire:</label>
-                                            No aol questionnaire.
-                                        </div>
-                                        <div class="wave-content-list">
-                                            <div class="mini-form-inner">
-                                                <h3 class="page-header">Planned</h3>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left"><span class="error">*</span>Pos:</label>
-                                                    <input type="text" name="planned_pos" id="planned_pos" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left"><span class="error">*</span>Surveys:</label>
-                                                    <input type="text" name="planned_surveys" id="planned_surveys" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">Name:</label>
-                                                    <input type="text" name="planned_name" id="planned_name" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">Value:</label>
-                                                    <input type="text" name="planned_value" id="planned_value" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">&nbsp;</label>
-                                                    <a href="javascript:;">x Delete this Tag</a><br/>
-                                                    <a href="javascript:;">+ Add a Scenario</a>
-                                                </div>
-                                            </div>
-                                            <div class="mini-form-inner">
-                                                <h3 class="page-header">Actual</h3>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left"><span class="error">*</span>Pos:</label>
-                                                    <input type="text" name="actual_pos" id="actual_pos" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left"><span class="error">*</span>Surveys:</label>
-                                                    <input type="text" name="actual_surveys" id="actual_surveys" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left"><span class="error">*</span>Misfire:</label>
-                                                    <input type="text" name="actual_misfire" id="actual_misfire" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left"><span class="error">*</span>Invalid:</label>
-                                                    <input type="text" name="actual_invalid" id="actual_invalid" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">&nbsp;</label>
-                                                    <a href="javascript:;">+ Add a Scenario</a>
-                                                </div>
-                                            </div>
-                                            <div class="mini-form-inner last-inner-form">
-                                                <h3 class="page-header">Additional Information</h3>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">New pos in wave:</label>
-                                                    <input type="text" name="add_new_pos" id="add_new_pos" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">Delete pos in wave:</label>
-                                                    <input type="text" name="add_del_pos" id="add_del_pos" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">Invalids to be invoiced:</label>
-                                                    <input type="text" name="add_invalid_inv" id="add_invalid_inv" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">Misfires to be invoiced:</label>
-                                                    <input type="text" name="add_mis_inv" id="add_mis_inv" />
-                                                </div>
-                                                <div class="wave-content-list">
-                                                    <label class="pull-left">Purchases made:</label>
-                                                    <input type="text" name="add_pur_made" id="add_pur_made" />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="wave-content-list">
-                                            <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
-                                            <button class="btn">Cancel</button>
-                                        </div>
-                                    </div>
-                                    <!--FW recap form ends-->
-
-                                    <!--DIC form starts-->
-                                    <form name="dic_frm{{wave.id}}" id="dic_frm{{wave.id}}" action="" method="post" onsubmit="chkProjectForms('dic', 'dic_frm{{wave.id}}',{{wave.id}} );" enctype="multipart/form-data" >
-                                        <input type="hidden" name="action" value="dic" />
-                                        <input type="hidden" name="wave_id" value="{{wave.id}}" />
-                                        <input type="hidden" name="wave_name" value="{{wave.name}}" />
-                                        <div class="span10 mini-form dic-frm{{wave.id}}" style="display:none;">
-                                            <h3 class="page-header">DIC</h3>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Project Name:</label>
-                                                <label><strong>{{project.name}}</strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Wave Name:</label>
-                                                <label><strong>{{wave.name}}</strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Submit Time:</label>
-                                                <label><strong>
-                                                        {% if formArr[wave.id]['dic']['submittime'] is defined %}
-                                                            {{formArr[wave.id]['dic']['submittime']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Submit User:</label>
-                                                <label><strong>
-                                                        {% if formArr[wave.id]['dic']['user']['fullname'] is defined %}
-                                                            {{formArr[wave.id]['dic']['user']['fullname']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <div class="wave-content-list-inner">
-                                                    <label class="pull-left">File:</label>
-                                                    <input type="file" name="dic_file" id="dic_file{{wave.id}}" style="width:168px;" />
-                                                    {% if formArr[wave.id]['dic']['path'] is defined %}
-                                                        {% if formArr[wave.id]['dic']['path']!='' %}
-                                                            <br/><a href="{{FILE_SITE_URL ~ 'web/' ~formArr[wave.id]['dic']['path']}}" target="_blank" style="margin-left:150px;">Download file</a>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </div>
-                                                <div class="wave-content-list-inner">
-                                                    <b>File Label: </b> &nbsp;
-                                                    <input type="text" name="dic_label" id="dic_label{{wave.id}}" value="{% if formArr[wave.id]['dic']['questionFile1Label'] is defined %} {{formArr[wave.id]['dic']['questionFile1Label']}} {% endif %}" />
-                                                </div>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Country:</label>
-                                                <select name="dic_country" id="dic_country{{wave.id}}">
-                                                    <option value="">Specify Country</option>
-                                                    {% for carr in countryArr %}
-                                                        {% if formArr[wave.id]['dic']['mmAddress'] is defined %}
-                                                            {% set sel = '' %}
-                                                            {% if formArr[wave.id]['dic']['mmAddress'] == carr['id'] %}
-                                                                {% set sel = 'selected="selected"' %}
-                                                            {% endif %}
-                                                        {% endif %}	
-                                                        <option value="{{carr['id']}}" {{sel}}>{{carr['name']}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-
-                                            <div class="wave-content-list">
-                                                <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
-                                                <button class="btn">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <!--DIC form ends-->
-
-                                    <!--Report form starts-->
-                                    <form name="report_frm{{wave.id}}" id="report_frm{{wave.id}}" action="" method="post" onsubmit="chkProjectForms('report', 'report_frm{{wave.id}}',{{wave.id}} );" enctype="multipart/form-data" >
-                                        <input type="hidden" name="action" value="report" />
-                                        <input type="hidden" name="wave_id" value="{{wave.id}}" />
-                                        <input type="hidden" name="wave_name" value="{{wave.name}}" />
-                                        <div class="span10 mini-form report-frm{{wave.id}}" style="display:none;">
-                                            <h3 class="page-header">REPORT</h3>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Project Name:</label>
-                                                <label><strong>{{project.name}}</strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Wave Name:</label>
-                                                <label><strong>{{wave.name}}</strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Submit Time:</label>
-                                                <label><strong>
-                                                        {% if formArr[wave.id]['report']['submittime'] is defined %}
-                                                            {{formArr[wave.id]['report']['submittime']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Submit User:</label>
-                                                <label><strong>
-                                                        {% if formArr[wave.id]['report']['user']['fullname'] is defined %}
-                                                            {{formArr[wave.id]['report']['user']['fullname']}}
-                                                        {% else %}
-                                                            &nbsp;
-                                                        {% endif %}
-                                                    </strong></label>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left"><span class="error">*</span>File:</label>
-                                                <input type="file" name="report_file" id="report_file{{wave.id}}" />
-                                                {% if formArr[wave.id]['report']['path'] is defined %}
-                                                    {% if formArr[wave.id]['report']['path']!='' %}
-                                                        <br/><a href="{{FILE_SITE_URL ~ 'web/' ~formArr[wave.id]['report']['path']}}" target="_blank" style="margin-left:150px;">Download file</a>
-                                                    {% endif %}
                                                 {% endif %}
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Country:</label>
-                                                <select name="report_country" id="report_country{{wave.id}}">
-                                                    <option value="">Specify Country</option>
-                                                    {% for carr in countryArr %}
-                                                        {% if formArr[wave.id]['report']['mmAddress'] is defined %}
-                                                            {% set sel = '' %}
-                                                            {% if formArr[wave.id]['report']['mmAddress'] == carr['id'] %}
-                                                                {% set sel = 'selected="selected"' %}
+
+                                                {% set cnt = 1 %}
+                                                <div class="tab-pane {% if acnt==1 %}active{% endif %}" id="tab-iof_form_{{acnt}}{{wave.id}}">
+
+                                                    <form name="iof_frm{{acnt}}{{wave.id}}" id="iof_frm{{acnt}}{{wave.id}}" action="" method="post" onsubmit="chkProjectForms('iof', 'iof_frm{{acnt}}{{wave.id}}',{{wave.id}} );" enctype="multipart/form-data" >
+                                                        <input type="hidden" name="action" value="iof" />
+                                                        <input type="hidden" name="wave_id" value="{{wave.id}}" />
+                                                        <input type="hidden" name="form_index" value="{{acnt}}" />
+                                                        <div class="comment-items">
+                                                            <div id="wave-filemessage-outer{{acnt}}-{{wave.id}}">
+                                                            {% endif %}		
+
+                                                            <div class="wave-filemessage-inner">
+                                                                <input type="hidden" name="formindex2[]" value="{{cnt}}" />
+                                                                <div class="wave-filemessage-heading">
+                                                                    File & Message {{cnt}}														
+                                                                </div>
+                                                                <div class="wave-filemessage-inner1">
+                                                                    <div class="wave-content-list">
+                                                                        <h5 class="page-header" style="font-size:20px;">Message</h5>
+                                                                        <textarea name="message[{{cnt}}]" style="width:98%; height:80px;">{{imsg['message']}}</textarea>
+                                                                    </div>
+                                                                    <div class="wave-content-list">
+                                                                        <h5 class="page-header" style="font-size:20px;">File</h5>
+
+                                                                        <div id="wave-file-outer{{acnt}}-{{cnt}}-{{wave.id}}">
+
+                                                                            {% set cntai = 1 %}
+                                                                            {% for afile in imsg['ioffile'] %}
+                                                                                <div class="wave-file-inner">
+                                                                                    <div class="wave-content-list-inner1">
+                                                                                        <b>Label:</b> &nbsp; <input type="text" name="label[{{cnt}}][]" value="{{afile['label']}}" />
+                                                                                    </div>
+                                                                                    <div class="wave-content-list-inner1">
+                                                                                        <b>File:</b> &nbsp; <input type="file" name="path[{{cnt}}][]" />
+                                                                                        {% if afile['path'] is defined %}
+                                                                                            {% if afile['path']!='' %}
+                                                                                                <br/><a href="{{ asset(afile['path']) }}" target="_blank">View File</a>
+                                                                                            {% endif %}
+                                                                                        {% endif %}
+                                                                                    </div>
+                                                                                    <div class="wave-content-list-inner2">
+                                                                                        {% if cntai == 1 %}
+                                                                                            <button class="btn btn-blue1" onclick="addMoreFileLabel({{wave.id}},{{acnt}} ,{{cnt}} ); return false;">
+                                                                                                <i class="icon-plus-sign"></i> &nbsp; Add more
+                                                                                            </button>
+                                                                                        {% else %}
+                                                                                            <button class="btn btn-orange" onclick="$(this).parent().parent().remove();">
+                                                                                                <i class="icon-remove-sign"></i> &nbsp; Remove
+                                                                                            </button>
+                                                                                        {% endif %}
+                                                                                    </div>
+                                                                                </div>
+                                                                                {% set cntai = cntai+1 %}
+                                                                            {% endfor %}
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            {% set cnt = cnt+1 %}
+
+
+                                                            {% if acnt==imsg['formindex'] %}			
+                                                                {% set acnt = acnt+1 %}
                                                             {% endif %}
-                                                        {% endif %}	
-                                                        <option value="{{carr['id']}}" {{sel}}>{{carr['name']}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Report type:</label>
-                                                <select name="report_type" id="report_type{{wave.id}}">
-                                                    <option value="0">Select</option>
-                                                    {% for type in 1..5 %}
-                                                        {% if formArr[wave.id]['report']['mmAddress'] is defined %}
-                                                            {% set sel = '' %}
-                                                            {% if formArr[wave.id]['report']['mmAddress'] == type %}
-                                                                {% set sel = 'selected="selected"' %}
+
+                                                        {% endfor %}
+
+                                                        {% if acnt>1 %}
+                                                        </div>
+
+
+                                                        {% set cntNw = cnt-1 %}
+                                                        {% set acntNw = acnt-1 %}
+                                                        <div class="add-more-file-message">
+                                                            <a href="javascript:;" onclick="addMoreFileMessage({{wave.id}},{{acntNw}} ,{{cntNw}} )">
+                                                                <i class="icon-plus-sign"></i> &nbsp; Add more file and message
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="wave-content-list">
+
+                                                            {% if operation[wave.id] is defined %}
+                                                                {% for bu,info in operation[wave.id] %}
+                                                                    {% if info['ace'] != '' %}
+                                                                        {% for pname,aceinfo in info['ace'] %}
+
+                                                                            <input type="hidden" name="bu_id[]" value="{{aceinfo['bu_id']}}" />
+                                                                            <div class="wave-content-list-inner3">
+                                                                                <div class="wave-content-list-divider">
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">Business Unit:</label>
+                                                                                        <b>{{bu}}</b>
+                                                                                    </div>
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">Scope:</label>
+                                                                                        <input type="text" name="scope[]" value="{{aceinfo['scope']}}" />
+                                                                                    </div>
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">FW Start Date:</label>
+                                                                                        <input type="text" name="fw_start_date[]" value="{{aceinfo['fwstartdate']}}" />
+                                                                                    </div>
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">Comment:</label>
+                                                                                        <input type="text" name="comment[]" />
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="wave-content-list-divider">
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">ACE:</label>
+                                                                                        <b>{{pname}}</b>
+                                                                                    </div>
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">Report Due Date:</label>
+                                                                                        <input type="text" name="report_due_date[]" value="{{aceinfo['reportduedate']}}" />
+                                                                                    </div>
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">FW End Date:</label>
+                                                                                        <input type="text" name="fw_end_date[]" value="{{aceinfo['fwenddate']}}" />
+                                                                                    </div>
+                                                                                    <div class="wave-content-list">
+                                                                                        <label class="pull-left">Select This BU:</label>
+                                                                                        <input type="checkbox" name="bu_checked[]" value="{{aceinfo['bu_id']}}" />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        {% endfor %}
+                                                                    {% endif %}
+                                                                {% endfor %}
                                                             {% endif %}
-                                                        {% endif %}	
-                                                        <option value="{{type}}" {{sel}}>Type {{type}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Report executive:</label>
-                                                <input type="checkbox" name="report_executive" id="report_executive{{wave.id}}" {% if formArr[wave.id]['report']['reportExecutive'] is defined %}{% if formArr[wave.id]['report']['reportExecutive']==1 %} checked="checked"{% endif %}{% endif %} />
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">Report zone:</label>
-                                                <input type="text" name="report_zone" id="report_zone{{wave.id}}" {% if formArr[wave.id]['report']['reportZone'] is defined %}{% if formArr[wave.id]['report']['reportZone']!='' %} value="{{formArr[wave.id]['report']['reportZone']}}" {% endif %}{% endif %} />
-                                            </div>
-                                            <div class="wave-content-list">
-                                                <label class="pull-left">No file to upload:</label>
-                                                <input type="checkbox" name="report_nofileupload" id="report_nofileupload{{wave.id}}" />
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="wave-content-list">
+                                                        <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
+                                                        <button class="btn">Cancel</button>
+                                                    </div>
+
+                                                </form>
+
                                             </div>
 
-                                            <div class="wave-content-list">
-                                                <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
-                                                <button class="btn">Cancel</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                    <!--Report form ends-->
+                                        {% endif %}
 
-                                    <!--Other submit forms ends-->
-                                </div>
-                                <div class="span4" style="width:28.914894%">
-                                    <div class="primary-head">
-                                        <br />
-                                        <h3 class="page-header">Comments & Uploads</h3>
-                                    </div>
-                                    <div class="tab-widget">
-                                        <ul class="nav nav-tabs" id="myTab2">
-                                            <li class="active"><a href="#tab-upload{{wave.id}}"><i class="icon-cloud-upload"></i>Uploads</a></li>
-                                            <li class><a href="#tab-comment{{wave.id}}"><i class="icon-comments"></i>Comments</a></li>
-                                        </ul>
-                                        <div class="tab-content">
-                                            <div class="tab-pane active" id="tab-upload{{wave.id}}">
+                                        <div class="tab-pane {% if acnt==1 %}active{% endif %}" id="iof_new_form{{wave.id}}">
+                                            <form name="iof_frm_new{{wave.id}}" id="iof_frm_new{{wave.id}}" action="" method="post" onsubmit="chkProjectForms('iof', 'iof_frm_new{{wave.id}}',{{wave.id}} );" enctype="multipart/form-data" >
+                                                <input type="hidden" name="action" value="iof" />
+                                                <input type="hidden" name="wave_id" value="{{wave.id}}" />
+                                                <input type="hidden" name="form_index" value="{{acnt}}" />
                                                 <div class="comment-items">
-                                                    {% for i in 0..5 %}
-                                                        <div class="item-block clearfix">
-                                                            <div class="item-thumb pull-left">
-                                                                <ul>
-                                                                    <li class="item-pic"><img src="{{ asset('bundles/falgun/') }}images/item-pic.png" width="34" height="34" alt="anchor"></li>
-                                                                </ul>
+
+                                                    <div id="wave-filemessage-outer{{acnt}}-{{wave.id}}">
+                                                        <div class="wave-filemessage-inner">
+                                                            <input type="hidden" name="formindex2[]" value="1" />
+                                                            <div class="wave-filemessage-heading">
+                                                                File & Message 1														
                                                             </div>
-                                                            <div class="item-intro pull-left" style="width:50%;">
-                                                                <a href="#">IOF-FR-CHRISTOFLE-RETAIL-R-September wave 2013</a>
-                                                                <div class="item-meta">
-                                                                    <ul>
-                                                                        <li><strong>Type:</strong> IOF File</li>
-                                                                        <li><strong>Uploaded:</strong> 2013-08-21</li>
-                                                                    </ul>
+                                                            <div class="wave-filemessage-inner1">
+                                                                <div class="wave-content-list">
+                                                                    <h5 class="page-header" style="font-size:20px;">Message</h5>
+                                                                    <textarea name="message[1]" style="width:98%; height:80px;"></textarea>
+                                                                </div>
+                                                                <div class="wave-content-list">
+                                                                    <h5 class="page-header" style="font-size:20px;">File</h5>
+
+                                                                    <div id="wave-file-outer{{acnt}}-1-{{wave.id}}">
+
+                                                                        <div class="wave-file-inner">
+                                                                            <div class="wave-content-list-inner1">
+                                                                                <b>Label:</b> &nbsp; <input type="text" name="label[1][]" />
+                                                                            </div>
+                                                                            <div class="wave-content-list-inner1">
+                                                                                <b>File:</b> &nbsp; <input type="file" name="path[1][]" />
+                                                                            </div>
+                                                                            <div class="wave-content-list-inner2">
+                                                                                <button class="btn btn-blue1" onclick="addMoreFileLabel({{wave.id}},{{acnt}} , 1); return false;">
+                                                                                    <i class="icon-plus-sign"></i> &nbsp; Add more
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+
+                                                                    </div>
+
                                                                 </div>
                                                             </div>
-                                                            <div class="pull-right">
-                                                                <button class="btn btn-primary" type="button"><i class="icon-upload-alt"></i> Download</button>
-                                                            </div>
+
                                                         </div>
-                                                    {% endfor %}
-                                                </div>
-                                            </div>
-                                            <div class="tab-pane" id="tab-comment{{wave.id}}">
-                                                <div class="comment-items">
-                                                    {% for com in wave.comment %}
-                                                        <div class="item-block clearfix">
-                                                            <div class="item-thumb pull-left">
-                                                                <ul>
-                                                                    <li class="item-pic"><img src="{{ asset(com.user.webPath) }}" width="34" height="34" alt="anchor"></li>
-                                                                </ul>
-                                                            </div>
-                                                            <div class="item-intro pull-left" style="width:85%;">
-                                                                <p>{{com.content}}</p>
-                                                                <div class="item-meta">
-                                                                    <ul>
-                                                                        <li>{{com.user.username}}</li>
-                                                                        <li>Project: <a href="#">{{com.wave.customproject.name}}</a></li>
-                                                                        <li>{{com.submittime|date('Y-m-d H:i:s')}}</li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    {% endfor %}
-                                                    <div class="item-block clearfix">
-                                                        <textarea class="user-comment" id="user-comment-{{wave.id}}" style="width: 96%;"></textarea>
-                                                        <button class="btn btn-success" onclick="submitComment(this);" style="width:46%">Submit</button>
+
+                                                    </div>
+                                                    <div class="add-more-file-message">
+                                                        <a href="javascript:;" onclick="addMoreFileMessage({{wave.id}},{{acnt}} , 1)">
+                                                            <i class="icon-plus-sign"></i> &nbsp; Add more file and message
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="wave-content-list">
+
+                                                        {% if operation[wave.id] is defined %}
+                                                            {% for bu,info in operation[wave.id] %}
+                                                                {% if info['ace'] != '' %}
+                                                                    {% for pname,aceinfo in info['ace'] %}
+                                                                        <input type="hidden" name="bu_id[]" value="{{aceinfo['bu_id']}}" />
+                                                                        <div class="wave-content-list-inner3">
+                                                                            <div class="wave-content-list-divider">
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">Business Unit:</label>
+                                                                                    <b>{{bu}}</b>
+                                                                                </div>
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">Scope:</label>
+                                                                                    <input type="text" name="scope[]" value="{{aceinfo['scope']}}" />
+                                                                                </div>
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">FW Start Date:</label>
+                                                                                    <input type="text" name="fw_start_date[]" value="{{aceinfo['fwstartdate']}}" />
+                                                                                </div>
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">Comment:</label>
+                                                                                    <input type="text" name="comment[]" />
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="wave-content-list-divider">
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">ACE:</label>
+                                                                                    <b>{{pname}}</b>
+                                                                                </div>
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">Report Due Date:</label>
+                                                                                    <input type="text" name="report_due_date[]" value="{{aceinfo['reportduedate']}}" />
+                                                                                </div>
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">FW End Date:</label>
+                                                                                    <input type="text" name="fw_end_date[]" value="{{aceinfo['fwenddate']}}" />
+                                                                                </div>
+                                                                                <div class="wave-content-list">
+                                                                                    <label class="pull-left">Select This BU:</label>
+                                                                                    <input type="checkbox" name="bu_checked[]" value="{{aceinfo['bu_id']}}" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endfor %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endif %}
                                                     </div>
                                                 </div>
-                                            </div>
+
+                                                <div class="wave-content-list">
+                                                    <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
+                                                    <button class="btn">Cancel</button>
+                                                </div>
+
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {% set counter = counter+1 %}
-                    {% endfor %}
-                    <!--Code for fetching and displaying waves ends here-->
 
-                    <div class="tab-pane" id="tab-new-wave">
-                        <!--New wave form starts-->
-                        <form name="new_wave_frm" id="new_wave_frm" action="" method="post" onsubmit="chkWaveFrm();" enctype="multipart/form-data" >
-                            <input type="hidden" name="action" value="new_wave" />
-                            <div class="span12 mini-form" style="border:none;">
+                        </div>
+                        </form>
+                        <!--IOF form ends-->
+
+                        <!--FW recap form starts-->
+                        <form name="fw_recap_frm{{wave.id}}" id="fw_recap_frm{{wave.id}}" action="" method="post" onsubmit="chkProjectForms('fw_recap', 'fw_recap_frm{{wave.id}}',{{wave.id}} );">
+                            <input type="hidden" name="action" value="fw_recap" />
+                            <input type="hidden" name="wave_id" value="{{wave.id}}" />
+                            <input type="hidden" name="wave_name" value="{{wave.name}}" />
+                            <div class="span12 mini-form fw-recap-frm{{wave.id}}" style="display:none;">
+                                <h3 class="page-header">Fieldwork Recap</h3>
                                 <div class="wave-content-list">
-                                    <label class="pull-left">Client:</label>
+                                    <label class="pull-left">Project Name:</label>
                                     <label><strong>{{project.name}}</strong></label>
                                 </div>
                                 <div class="wave-content-list">
-                                    <label class="pull-left">Project:</label>
-                                    <label><strong>{{project['customclient']['name']}}</strong></label>
+                                    <label class="pull-left">Wave Name:</label>
+                                    <label><strong>{{wave.name}}</strong></label>
                                 </div>
                                 <div class="wave-content-list">
-                                    <label class="pull-left">Name:</label>
-                                    <input type="text" name="project_name" id="project_name" value="{{project.name}}" />
-                                    <select name="wavenum" id="wavenum">
-                                        <option value="">Select</option>
-                                        <option value="1">W1</option>
-                                        <option value="2">W2</option>
-                                        <option value="3">W3</option>
-                                        <option value="4">W4</option>
-                                    </select>
-                                    <select name="bis" id="bis">
-                                        <option value="">Select</option>
-                                        <option value="bis">bis</option>
-                                    </select>
-                                    <select name="month_year_sel" id="month_year_sel">
-                                        <option value="">Select</option>
-                                        {{month_year_list|raw}}
-                                    </select>
-                                    <input type="text" name="totalnum" id="totalnum" placeholder="Total Number" />
+                                    <label class="pull-left">Submit Time:</label>
+                                    <label><strong>
+                                            {% if formArr[wave.id]['recap']['submittime'] is defined %}
+                                                {{formArr[wave.id]['recap']['submittime']}}
+                                            {% else %}
+                                                &nbsp;
+                                            {% endif %}
+                                        </strong></label>
                                 </div>
                                 <div class="wave-content-list">
-                                    <label class="pull-left">Report KA:</label>
-                                    <select name="user_id" id="user_id">
-                                        <option value="">Select</option>
-                                        {% for uarr in userArr %}
-                                            <option value="{{uarr['id']}}">{{uarr['fullname']}}</option>
-                                        {% endfor %}
-                                    </select>
+                                    <label class="pull-left">Submit User:</label>
+                                    <label><strong>
+                                            {% if formArr[wave.id]['recap']['user']['fullname'] is defined %}
+                                                {{formArr[wave.id]['recap']['user']['fullname']}}
+                                            {% else %}
+                                                &nbsp;
+                                            {% endif %}
+                                        </strong></label>
                                 </div>
                                 <div class="wave-content-list">
-                                    <label class="pull-left">Project Manager:</label>
-                                    <select name="project_manager_id" id="project_manager_id">
-                                        <option value="">Select</option>
-                                        {% for uarr in userArr %}
-                                            <option value="{{uarr['id']}}">{{uarr['fullname']}}</option>
-                                        {% endfor %}
-                                    </select>
+                                    <label class="pull-left"><span class="error">*</span>Area Name:</label>
+                                    <input type="text" name="recap_name" id="recap_name{{wave.id}}" value="{% if formArr[wave.id]['recap']['name'] is defined %} {{formArr[wave.id]['recap']['name']}} {% endif %}" required="" />
                                 </div>
                                 <div class="wave-content-list">
-                                    <label class="pull-left">Act Project:</label>
-                                    <select name="ace_project" id="ace_project">
-                                        <option value="">Select</option>
-                                    </select>
+                                    <label class="pull-left">Country:</label>
+                                    No country info from POS list.
                                 </div>
                                 <div class="wave-content-list">
-                                    <label class="pull-left">AOL Survey:</label>
-                                    <select name="questionnaire" id="questionnaire">
-                                        <option value="">Select Questionnaire</option>
-                                    </select>
+                                    <label class="pull-left">Aol Questionnaire:</label>
+                                    No aol questionnaire.
                                 </div>
-
+                                <div class="wave-content-list">
+                                    <div class="mini-form-inner">
+                                        <h3 class="page-header">Planned</h3>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left"><span class="error">*</span>Pos:</label>
+                                            <input type="text" name="planned_pos" id="planned_pos{{wave.id}}" value="{% if formArr[wave.id]['recap']['planned']['pos'] is defined %} {{formArr[wave.id]['recap']['planned']['pos']}} {% endif %}" required="" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left"><span class="error">*</span>Surveys:</label>
+                                            <input type="text" name="planned_surveys" id="planned_surveys{{wave.id}}" value="{% if formArr[wave.id]['recap']['planned']['surveys'] is defined %} {{formArr[wave.id]['recap']['planned']['surveys']}} {% endif %}" required="" />
+                                        </div>
+                                        <div class="planned-list-outer">
+                                            {% if formArr[wave.id]['recap']['planned']['scenarios_arr'] is defined %}
+                                                {% for planned_sc in formArr[wave.id]['recap']['planned']['scenarios_arr'] %}
+                                                    <div class="scenario-list-inner">
+                                                        <div class="wave-content-list">
+                                                            <label class="pull-left">Name:</label>
+                                                            <input type="text" name="planned_name[]" value="{{planned_sc.name}}" />
+                                                        </div>
+                                                        <div class="wave-content-list">
+                                                            <label class="pull-left">Value:</label>
+                                                            <input type="text" name="planned_value[]" value="{{planned_sc.value}}" />
+                                                        </div>
+                                                        <a href="javascript:;" style="float:left;" onclick="$(this).parent().remove();">
+                                                            x Delete this Scenario
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            {% else %}
+                                                <div class="scenario-list-inner">
+                                                    <div class="wave-content-list">
+                                                        <label class="pull-left">Name:</label>
+                                                        <input type="text" name="planned_name[]" value="" />
+                                                    </div>
+                                                    <div class="wave-content-list">
+                                                        <label class="pull-left">Value:</label>
+                                                        <input type="text" name="planned_value[]" value="" />
+                                                    </div>
+                                                    <a href="javascript:;" style="float:left;" onclick="$(this).parent().remove();">
+                                                        x Delete this Scenario
+                                                    </a>
+                                                </div>
+                                            {% endif %}										
+                                        </div>	
+                                        <div class="wave-content-list">
+                                            <a href="javascript:;" onclick="addScenario('planned');">+ Add a Scenario</a>
+                                        </div>
+                                    </div>
+                                    <div class="mini-form-inner">
+                                        <h3 class="page-header">Actual</h3>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left"><span class="error">*</span>Pos:</label>
+                                            <input type="text" name="actual_pos" id="actual_pos{{wave.id}}" value="{% if formArr[wave.id]['recap']['actual']['pos'] is defined %} {{formArr[wave.id]['recap']['actual']['pos']}} {% endif %}" required="" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left"><span class="error">*</span>Surveys:</label>
+                                            <input type="text" name="actual_surveys" id="actual_surveys{{wave.id}}" value="{% if formArr[wave.id]['recap']['actual']['surveys'] is defined %} {{formArr[wave.id]['recap']['actual']['surveys']}} {% endif %}" required="" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left"><span class="error">*</span>Misfire:</label>
+                                            <input type="text" name="actual_misfire" id="actual_misfire{{wave.id}}" value="{% if formArr[wave.id]['recap']['actual']['misfire'] is defined %} {{formArr[wave.id]['recap']['actual']['misfire']}} {% endif %}" required="" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left"><span class="error">*</span>Invalid:</label>
+                                            <input type="text" name="actual_invalid" id="actual_invalid{{wave.id}}" value="{% if formArr[wave.id]['recap']['actual']['invalid'] is defined %} {{formArr[wave.id]['recap']['actual']['invalid']}} {% endif %}" required="" />
+                                        </div>
+                                        <div class="actual-list-outer">
+                                            {% if formArr[wave.id]['recap']['actual']['scenarios_arr'] is defined %}
+                                                {% for actual_sc in formArr[wave.id]['recap']['actual']['scenarios_arr'] %}
+                                                    <div class="scenario-list-inner">
+                                                        <div class="wave-content-list">
+                                                            <label class="pull-left">Name:</label>
+                                                            <input type="text" name="actual_name[]" value="{{actual_sc.name}}" />
+                                                        </div>
+                                                        <div class="wave-content-list">
+                                                            <label class="pull-left">Value:</label>
+                                                            <input type="text" name="actual_value[]" value="{{actual_sc.value}}" />
+                                                        </div>
+                                                        <a href="javascript:;" style="float:left;" onclick="$(this).parent().remove();">
+                                                            x Delete this Scenario
+                                                        </a>
+                                                    </div>
+                                                {% endfor %}
+                                            {% endif %}									
+                                        </div>	
+                                        <div class="wave-content-list">
+                                            <a href="javascript:;" onclick="addScenario('actual');">+ Add a Scenario</a>
+                                        </div>
+                                    </div>
+                                    <div class="mini-form-inner last-inner-form">
+                                        <h3 class="page-header">Additional Information</h3>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left">New pos in wave:</label>
+                                            <input type="text" name="add_new_pos" id="add_new_pos{{wave.id}}" value="{% if formArr[wave.id]['recap']['infomations']['new_pos_in_Wave'] is defined %} {{formArr[wave.id]['recap']['infomations']['new_pos_in_Wave']}} {% endif %}" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left">Delete pos in wave:</label>
+                                            <input type="text" name="add_del_pos" id="add_del_pos{{wave.id}}" value="{% if formArr[wave.id]['recap']['infomations']['delete_pos_in_Wave'] is defined %} {{formArr[wave.id]['recap']['infomations']['delete_pos_in_Wave']}} {% endif %}" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left">Invalids to be invoiced:</label>
+                                            <input type="text" name="add_invalid_inv" id="add_invalid_inv{{wave.id}}" value="{% if formArr[wave.id]['recap']['infomations']['invalids_to_be_invoiced'] is defined %} {{formArr[wave.id]['recap']['infomations']['invalids_to_be_invoiced']}} {% endif %}" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left">Misfires to be invoiced:</label>
+                                            <input type="text" name="add_mis_inv" id="add_mis_inv{{wave.id}}" value="{% if formArr[wave.id]['recap']['infomations']['misfires_to_be_invoiced'] is defined %} {{formArr[wave.id]['recap']['infomations']['misfires_to_be_invoiced']}} {% endif %}" />
+                                        </div>
+                                        <div class="wave-content-list">
+                                            <label class="pull-left">Purchases made:</label>
+                                            <input type="text" name="add_pur_made" id="add_pur_made{{wave.id}}" value="{% if formArr[wave.id]['recap']['infomations']['purchases_made'] is defined %} {{formArr[wave.id]['recap']['infomations']['purchases_made']}} {% endif %}" />
+                                        </div>
+                                    </div>
+                                </div>
 
                                 <div class="wave-content-list">
                                     <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
@@ -1174,160 +1310,514 @@
                                 </div>
                             </div>
                         </form>
-                        <!--New wave form ends-->
+                        <!--FW recap form ends-->
+
+                        <!--DIC form starts-->
+                        <form name="dic_frm{{wave.id}}" id="dic_frm{{wave.id}}" action="" method="post" onsubmit="chkProjectForms('dic', 'dic_frm{{wave.id}}',{{wave.id}} );" enctype="multipart/form-data" >
+                            <input type="hidden" name="action" value="dic" />
+                            <input type="hidden" name="wave_id" value="{{wave.id}}" />
+                            <input type="hidden" name="wave_name" value="{{wave.name}}" />
+                            <div class="span10 mini-form dic-frm{{wave.id}}" style="display:none;">
+                                <h3 class="page-header">DIC</h3>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Project Name:</label>
+                                    <label><strong>{{project.name}}</strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Wave Name:</label>
+                                    <label><strong>{{wave.name}}</strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Submit Time:</label>
+                                    <label><strong>
+                                            {% if formArr[wave.id]['dic']['submittime'] is defined %}
+                                                {{formArr[wave.id]['dic']['submittime']}}
+                                            {% else %}
+                                                &nbsp;
+                                            {% endif %}
+                                        </strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Submit User:</label>
+                                    <label><strong>
+                                            {% if formArr[wave.id]['dic']['user']['fullname'] is defined %}
+                                                {{formArr[wave.id]['dic']['user']['fullname']}}
+                                            {% else %}
+                                                &nbsp;
+                                            {% endif %}
+                                        </strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <div class="wave-content-list-inner">
+                                        <label class="pull-left">File:</label>
+                                        <input type="file" name="dic_file" id="dic_file{{wave.id}}" style="width:168px;" />
+                                        {% if formArr[wave.id]['dic']['path'] is defined %}
+                                            {% if formArr[wave.id]['dic']['path']!='' %}
+                                                <br/><a href="{{FILE_SITE_URL ~ 'web/' ~formArr[wave.id]['dic']['path']}}" target="_blank" style="margin-left:150px;">Download file</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                    <div class="wave-content-list-inner">
+                                        <b>File Label: </b> &nbsp;
+                                        <input type="text" name="dic_label" id="dic_label{{wave.id}}" value="{% if formArr[wave.id]['dic']['questionFile1Label'] is defined %} {{formArr[wave.id]['dic']['questionFile1Label']}} {% endif %}" />
+                                    </div>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Country:</label>
+                                    <select name="dic_country" id="dic_country{{wave.id}}">
+                                        <option value="">Specify Country</option>
+                                        {% for carr in countryArr %}
+                                            {% if formArr[wave.id]['dic']['mmAddress'] is defined %}
+                                                {% set sel = '' %}
+                                                {% if formArr[wave.id]['dic']['mmAddress'] == carr['id'] %}
+                                                    {% set sel = 'selected="selected"' %}
+                                                {% endif %}
+                                            {% endif %}	
+                                            <option value="{{carr['id']}}" {{sel}}>{{carr['name']}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="wave-content-list">
+                                    <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
+                                    <button class="btn">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!--DIC form ends-->
+
+                        <!--Report form starts-->
+                        <form name="report_frm{{wave.id}}" id="report_frm{{wave.id}}" action="" method="post" onsubmit="chkProjectForms('report', 'report_frm{{wave.id}}',{{wave.id}} );" enctype="multipart/form-data" >
+                            <input type="hidden" name="action" value="report" />
+                            <input type="hidden" name="wave_id" value="{{wave.id}}" />
+                            <input type="hidden" name="wave_name" value="{{wave.name}}" />
+                            <div class="span10 mini-form report-frm{{wave.id}}" style="display:none;">
+                                <h3 class="page-header">REPORT</h3>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Project Name:</label>
+                                    <label><strong>{{project.name}}</strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Wave Name:</label>
+                                    <label><strong>{{wave.name}}</strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Submit Time:</label>
+                                    <label><strong>
+                                            {% if formArr[wave.id]['report']['submittime'] is defined %}
+                                                {{formArr[wave.id]['report']['submittime']}}
+                                            {% else %}
+                                                &nbsp;
+                                            {% endif %}
+                                        </strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Submit User:</label>
+                                    <label><strong>
+                                            {% if formArr[wave.id]['report']['user']['fullname'] is defined %}
+                                                {{formArr[wave.id]['report']['user']['fullname']}}
+                                            {% else %}
+                                                &nbsp;
+                                            {% endif %}
+                                        </strong></label>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left"><span class="error">*</span>File:</label>
+                                    <input type="file" name="report_file" id="report_file{{wave.id}}" />
+                                    {% if formArr[wave.id]['report']['path'] is defined %}
+                                        {% if formArr[wave.id]['report']['path']!='' %}
+                                            <br/><a href="{{FILE_SITE_URL ~ 'web/' ~formArr[wave.id]['report']['path']}}" target="_blank" style="margin-left:150px;">Download file</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Country:</label>
+                                    <select name="report_country" id="report_country{{wave.id}}">
+                                        <option value="">Specify Country</option>
+                                        {% for carr in countryArr %}
+                                            {% if formArr[wave.id]['report']['mmAddress'] is defined %}
+                                                {% set sel = '' %}
+                                                {% if formArr[wave.id]['report']['mmAddress'] == carr['id'] %}
+                                                    {% set sel = 'selected="selected"' %}
+                                                {% endif %}
+                                            {% endif %}	
+                                            <option value="{{carr['id']}}" {{sel}}>{{carr['name']}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Report type:</label>
+                                    <select name="report_type" id="report_type{{wave.id}}">
+                                        <option value="0">Select</option>
+                                        {% for type in 1..5 %}
+                                            {% if formArr[wave.id]['report']['mmAddress'] is defined %}
+                                                {% set sel = '' %}
+                                                {% if formArr[wave.id]['report']['mmAddress'] == type %}
+                                                    {% set sel = 'selected="selected"' %}
+                                                {% endif %}
+                                            {% endif %}	
+                                            <option value="{{type}}" {{sel}}>Type {{type}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Report executive:</label>
+                                    <input type="checkbox" name="report_executive" id="report_executive{{wave.id}}" {% if formArr[wave.id]['report']['reportExecutive'] is defined %}{% if formArr[wave.id]['report']['reportExecutive']==1 %} checked="checked"{% endif %}{% endif %} />
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">Report zone:</label>
+                                    <input type="text" name="report_zone" id="report_zone{{wave.id}}" {% if formArr[wave.id]['report']['reportZone'] is defined %}{% if formArr[wave.id]['report']['reportZone']!='' %} value="{{formArr[wave.id]['report']['reportZone']}}" {% endif %}{% endif %} />
+                                </div>
+                                <div class="wave-content-list">
+                                    <label class="pull-left">No file to upload:</label>
+                                    <input type="checkbox" name="report_nofileupload" id="report_nofileupload{{wave.id}}" />
+                                </div>
+
+                                <div class="wave-content-list">
+                                    <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
+                                    <button class="btn">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                        <!--Report form ends-->
+
+                        <!--Other submit forms ends-->
+                    </div>
+                    <div class="span4" style="width:28.914894%">
+                        <div class="primary-head">
+                            <br />
+                            <h3 class="page-header">Comments & Uploads</h3>
+                        </div>
+                        <div class="tab-widget">
+                            <ul class="nav nav-tabs" id="myTab2">
+                                <li class="active"><a href="#tab-upload{{wave.id}}"><i class="icon-cloud-upload"></i>Uploads</a></li>
+                                <li class><a href="#tab-comment{{wave.id}}"><i class="icon-comments"></i>Comments</a></li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab-upload{{wave.id}}">
+                                    <div class="comment-items" id="uploads_container{{wave.id}}">
+                                        <div style="width:100%; float:left; text-align:center; margin:20px 0;">
+                                            <img src="{{ asset('/images/loading.gif') }}" />
+                                        </div>
+                                    </div>
+                                    <script type="text/javascript">
+                                                $(document).ready(function(){
+                                        var result = $.ajax({
+                                                                                    type: "POST",
+                                                url: "{{path('get_uploads',{'id': wave.id})}}",
+                                                data: '',
+                                                async: false
+                                                                                    }).responseText;
+                                                document.getElementById('uploads_container{{wave.id}}').innerHTML = result;
+                                        });										</script>
+                                </div>
+                                <div class="tab-pane" id="tab-comment{{wave.id}}">
+                                    <div class="comment-items">
+                                        {% for com in wave.comment %}
+                                            <div class="item-block clearfix">
+                                                <div class="item-thumb pull-left">
+                                                    <ul>
+                                                                    <li class="item-pic"><img src="{{ asset(com.user.webPath) }}" width="34" height="34" alt="anchor"></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="item-intro pull-left" style="width:85%;">
+                                                                <p>{{com.content}}</p>
+                                                    <div class="item-meta">
+                                                        <ul>
+                                                                        <li>{{com.user.username}}</li>
+                                                                        <li>Project: <a href="#">{{com.wave.customproject.name}}</a></li>
+                                                                        <li>{{com.submittime|date('Y-m-d H:i:s')}}</li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+            {% set counter = counter+1 %}
+        {% endfor %}
+        <!--Code for fetching and displaying waves ends here-->
+
+        <div class="tab-pane" id="tab-new-wave">
+            <!--New wave form starts-->
+            <form name="new_wave_frm" id="new_wave_frm" action="" method="post" onsubmit="chkWaveFrm();" enctype="multipart/form-data" >
+                <input type="hidden" name="action" value="new_wave" />
+                <div class="span12 mini-form" style="border:none;">
+                    <div class="wave-content-list">
+                        <label class="pull-left">Client:</label>
+                        <label><strong>{{project.name}}</strong></label>
+                    </div>
+                    <div class="wave-content-list">
+                        <label class="pull-left">Project:</label>
+                        <label><strong>{{project['customclient']['name']}}</strong></label>
+                    </div>
+                    <div class="wave-content-list">
+                        <label class="pull-left">Name:</label>
+                        <input type="text" name="project_name" id="project_name" value="{{project.name}}" />
+                        <select name="wavenum" id="wavenum" style="width:80px;">
+                            <option value="">Select</option>
+                            <option value="1">W1</option>
+                            <option value="2">W2</option>
+                            <option value="3">W3</option>
+                            <option value="4">W4</option>
+                        </select>
+                        <select name="bis" id="bis" style="width:80px;">
+                            <option value="">Select</option>
+                            <option value="bis">bis</option>
+                        </select>
+                        <select name="month_year_sel" id="month_year_sel" style="width:100px;">
+                            <option value="">Select</option>
+                            {{month_year_list|raw}}
+                        </select>
+                        <input type="text" name="totalnum" id="totalnum" placeholder="Total Number" />
+                    </div>
+                    <div class="wave-content-list">
+                        <label class="pull-left">Report KA:</label>
+                        <select name="user_id" id="user_id">
+                            <option value="">Select</option>
+                            {% for uarr in userArr %}
+                                <option value="{{uarr['id']}}">{{uarr['fullname']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="wave-content-list">
+                        <label class="pull-left">Project Manager:</label>
+                        <select name="project_manager_id" id="project_manager_id">
+                            <option value="">Select</option>
+                            {% for uarr in userArr %}
+                                <option value="{{uarr['id']}}">{{uarr['fullname']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="wave-content-list">
+                        <label class="pull-left">ACE Project:</label>
+                        <select name="ace_project" id="ace_project">
+                            <option value="">Select</option>
+                            {% for aarr in aceArr %}
+                                <option value="{{aarr['id']}}">{{aarr['name']}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="wave-content-list">
+                        <label class="pull-left" style="float:left;">AOL Survey:</label>
+                        <select name="wave_questionnaire_id" id="wave_questionnaire_id" onchange="populateCampaign(this.value, 'wave_campaign_id', 'quesLoadingIcon');" style="float:left;">
+                            <option value="">Select Questionnaire</option>
+                            {% for qarr in quesArr %}
+                                <option value="{{qarr['id']}}">{{qarr['name']}}</option>
+                            {% endfor %}
+                        </select> &nbsp;&nbsp; 
+                        <select name="wave_campaign_id" id="wave_campaign_id" style="float:left; margin-left:10px;">
+                            <option value="">Select Questionnaire first</option>
+                        </select> &nbsp;&nbsp; 
+                        <img src="{{FILE_SITE_URL}}web/images/loading.gif" id="quesLoadingIcon" style="float:left;margin:-2px 0 0 15px; display:none;" />
+                    </div>
+
+                    <div class="wave-content-list">
+                        <label class="pull-left"></label>
+                        <button class="btn btn-blue"><span class="icon-ok"></span> &nbsp; Submit</button> &nbsp; 
+                        <button class="btn">Cancel</button>
+                    </div>
+                </div>
+            </form>
+            <!--New wave form ends-->
         </div>
     </div>
+</div>
+</div>
+</div>
 
-    <!--BODY ENDS-->
-    <style>
-        html, *{outline:none;}
-        .wave-content-list{margin:5px 0px; width:100%; float:left;}
-        .wave-content-list-inner {width:50%; float:left;}
-        .wave-content-list-inner1 {width:38%; float:left;}
-        .wave-content-list-inner2 {width:24%; float:left;}
-        .wave-content-list-inner3 {width:47%; float:left; padding:10px 1%; background:#ededed; border:1px solid #e4e4e4; }
-        .wave-content-list-inner4 {width:47%; float:right; padding:10px 1%; background:#f5f5f5; border:1px solid #ebebeb;}
-        .wave-content-list label.pull-left{width:150px; margin-right:5px;}
-        .large_label label.pull-left {width:323px;}
-        .submit-dropdown i{color:#fff;padding:3px 2px 3px 1px;display:inline-block;margin-right:10px;}
-        .mini-form-inner {width:28%; float:left; margin:0 1% 0 0; border:1px solid #e8e8e8; background:#f5f5f5; padding:10px 1%; min-height:460px;}
-        .last-inner-form {width:35%; float:right; margin:0 !important;}
-        .large_input {width:460px;}
+<!--BODY ENDS-->
+<style>
+    html, *{outline:none;}
+    .wave-content-list{margin:5px 0px; width:100%; float:left;}
+    .wave-content-list-inner {width:50%; float:left;}
+    .wave-content-list-inner1 {width:38%; float:left;}
+    .wave-content-list-inner2 {width:24%; float:left;}
+    .wave-content-list-inner3 {width:98%; float:left; padding:10px 1%; background:#ededed; border:1px solid #e4e4e4; margin-bottom:10px;}
+    .wave-content-list-inner4 {width:98%; float:left; padding:10px 1%; background:#f5f5f5; border:1px solid #ebebeb; margin-bottom:10px;}
+    .wave-content-list-divider {width:50%; float:left;}
+    .wave-content-list label.pull-left{width:150px; margin-right:5px;}
+    .large_label label.pull-left {width:323px;}
+    .submit-dropdown i{color:#fff;padding:3px 2px 3px 1px;display:inline-block;margin-right:10px;}
+    .mini-form-inner {width:28%; float:left; margin:0 1% 0 0; border:1px solid #e8e8e8; background:#f5f5f5; padding:10px 1%; min-height:460px;}
+    .last-inner-form {width:35%; float:right; margin:0 !important;}
+    .large_input {width:460px;}
 
-        .successUl {width:96%;background:#ffcece; border:1px solid #df8f8f; border-radius: 4px; padding:5px 2%; margin:0 0 10px;}
-        .successUl li {color:#9b5269; list-style:circle; padding:2px; margin-left:17px;}
-    </style>
-    <script>
-        $(function() {
+    .successUl {width:96%;background:#60ff44; border:1px solid #0f7d30; border-radius: 4px; padding:5px 2%; margin:0 0 10px;}
+    .successUl li {color:#0f7d30; list-style:circle; padding:2px; margin-left:17px; font-weight:bold;}
+
+    .scenario-list-inner  {float:left; width:100%;border-top:1px solid #ccc;border-bottom:1px solid #ddd;}
+
+    .wave-filemessage-inner {float:left; width:100%;padding:0 0 5px; border:1px solid #d4d4d4; border-radius: 2px; border-bottom-width:2px;margin:5px 0 0;}
+    .wave-file-inner {width:100%; float:left; padding:2px 0;}
+    .wave-filemessage-inner1 {float:left; width:96%; padding:0 2%;}
+    .wave-filemessage-heading { float:left; width:100%; background:#ededed;padding:7px 0; text-align:center; color:#000; font-size:20px;}
+    .add-more-file-message {float:left; width:100%; margin:5px 0 10px;}
+    .add-more-file-message a {float:left; width:100%; padding:5px 0; background:#ededed; border-radius: 5px; border:1px solid #d4d4d4; text-align:center; text-decoration:none;color:#000;}
+    .add-more-file-message a:hover {text-decoration:none; color:#000; background:#ccc;}
+</style>
+<script>
+            $(function() {
             $('textarea.chat-inputbox').tinymce({
-                script_url : 'js/tiny_mce/tiny_mce.js',
-                theme : "simple",
-                width : 350
-            });
-            {% if successMsg != '' %}
-            $('.successUl').show('slow');{% endif %}
+            script_url : 'js/tiny_mce/tiny_mce.js',
+                    theme : "simple",
+                    width : 350
+            });        {% if successMsg != '' %}
+                                $('.successUl').show('slow');        {% endif %}
 
-            setTimeout(function(){$('.successUl').hide('slow'); }, 5000);
-        });
-        function showMiniForm(id)
-        {
-            $('.mini-form').hide('fast');
-                $('.' + id).show('slow');
-                $('body,html').animate({
-            scrollTop: 850
-            }, 500);
-                return false;
-        }
-        {#    function for commit use comment use ajax    #}
-        function submitComment(e) {
-            var text = $(e).parent().children('.user-comment').val();
-            var waveId = $(e).parent().children('.user-comment').attr('id').split('-')[2];
+                                                    setTimeout(function(){$('.successUl').hide('slow'); }, 5000);
+                                                    });
+                                            function showMiniForm(id)
+                                                    {
+                                                    $('.mini-form').hide('fast');
+                                                            $('.' + id).show('slow');
+                                                            $('body,html').animate({
+                                                    scrollTop: 850
+                                                    }, 500);
+                                                            return false;
+                                                            }
 
-            $.ajax({
-                type: "POST",
-                url: "{{ path('saveUserComment') }}",
-                data: {text: text, waveid: waveId},
-                success: function(result) {
-                    $(e).parent().parent().prepend(result);
-                    $(e).parent().children('.user-comment').val('');
-                }
-            });
-        }
-        
-        function chkProjectForms(type, frmId, waveId)
-        {
-        var chk = 1;
-                if (type == 'meetingMinutes')
-        {
-            var mm_brand = document.getElementById('mm_brand' + waveId).value;
-            var mm_date = document.getElementById('mm_date' + waveId).value;
-            var mm_address = document.getElementById('mm_address' + waveId).value;
-            var mm_purpose = document.getElementById('mm_purpose' + waveId).value;
-            var mm_nextstep = document.getElementById('mm_nextstep' + waveId).value;
-            var mm_agenda_of_the_meeting = document.getElementById('mm_agenda_of_the_meeting' + waveId).value;
-            var mm_clients_feedback = document.getElementById('mm_clients_feedback' + waveId).value;
-            var mm_comments = document.getElementById('mm_comments' + waveId).value;
-            if (mm_brand == '' || mm_date == '' || mm_address == '' || mm_purpose == '' || mm_nextstep == '' || mm_agenda_of_the_meeting == '' || mm_clients_feedback == '' || mm_comments == '')
-            {
-                chk = 0;
-            }
-        }
-        else if (type == 'brand')
-        {
-            var fileBrand = document.getElementById('fileBrand' + waveId).value;
-            var material_name = document.getElementById('material_name' + waveId).value;
-            var mNoFileUploadId = document.getElementById('mNoFileUpload' + waveId);
-            if (material_name == '')
-        {
-        chk = 0;
-        }
+                                            function populateCampaign(quesId, waveCampSelId, quesLoadingId)
+                                                    {
+                                                    document.getElementById(quesLoadingId).style.display = 'block';
+                                                            var result = $.ajax({
+                                                            type: "POST",
+                                                                    url: "{{path('populate_campaign')}}",
+                                                                    data: 'id=' + quesId,
+                                                                    async: false
+                                                            }).responseText;
+                                                            document.getElementById(waveCampSelId).innerHTML = result;
+                                                            document.getElementById(quesLoadingId).style.display = 'none';
+                                                            }
 
-        if (fileBrand == '' && mNoFileUploadId.checked == false)
-        {
-        alert('Please either select file to upload or check "No file to upload".');
-            return false;
-        }
-        }
-        else if (type == "questionnaire")
-        {
-            var path = document.getElementById('path' + waveId).value;
-            var file1_label = document.getElementById('question_file1_label' + waveId).value;
-            var quesNoFileUploadId = document.getElementById('quesNoFileUpload' + waveId);
-            if (path == '' && quesNoFileUploadId.checked == false)
-            {
-                alert('Please either select file to upload or check "No file to upload".');
-                return false;
-            }
-        }
-        else if (type == 'pos_file')
-        {
-            var filePos = document.getElementById('pos_list_file' + waveId).value;
-            if (filePos == '')
-            {
-                chk = 0;
-            }
-        }
-        else if (type == 'brief')
-        {
-            var spePath = document.getElementById('spePath' + waveId).value;
-            var not_file_upload_spe = document.getElementById('not_file_upload_spe' + waveId);
-            if (material_name == '')
-            {
-                chk = 0;
-            }
+                                            function chkProjectForms(type, frmId, waveId)
+                                                    {
+                                                    var chk = 1;
+                                                            if (type == 'meetingMinutes')
+                                                    {
+                                                    var mm_brand = document.getElementById('mm_brand' + waveId).value;
+                                                            var mm_date = document.getElementById('mm_date' + waveId).value;
+                                                            var mm_address = document.getElementById('mm_address' + waveId).value;
+                                                            var mm_purpose = document.getElementById('mm_purpose' + waveId).value;
+                                                            var mm_nextstep = document.getElementById('mm_nextstep' + waveId).value;
+                                                            var mm_agenda_of_the_meeting = document.getElementById('mm_agenda_of_the_meeting' + waveId).value;
+                                                            var mm_clients_feedback = document.getElementById('mm_clients_feedback' + waveId).value;
+                                                            var mm_comments = document.getElementById('mm_comments' + waveId).value;
+                                                            if (mm_brand == '' || mm_date == '' || mm_address == '' || mm_purpose == '' || mm_nextstep == '' || mm_agenda_of_the_meeting == '' || mm_clients_feedback == '' || mm_comments == '')
+                                                    {
+                                                    chk = 0;
+                                                    }
+                                                    }
+                                                    else if (type == 'brand')
+                                                    {
+                                                    var fileBrand = document.getElementById('fileBrand' + waveId).value;
+                                                            var material_name = document.getElementById('material_name' + waveId).value;
+                                                            var mNoFileUploadId = document.getElementById('mNoFileUpload' + waveId);
+                                                            if (material_name == '')
+                                                    {
+                                                    chk = 0;
+                                                    }
 
-            if (spePath == '' && not_file_upload_spe.checked == false)
-            {
-                alert('Please either select file to upload or check "No file to upload".');
-                return false;
-            }
-        }
-        else if (type == 'report')
-        {
-            var report_file = document.getElementById('report_file' + waveId).value;
-            var report_nofileupload = document.getElementById('report_nofileupload' + waveId);
-            if (material_name == '')
-            {
-                chk = 0;
-            }
+                                                    if (fileBrand == '' && mNoFileUploadId.checked == false)
+                                                    {
+                                                    alert('Please either select file to upload or check "No file to upload".');
+                                                            return false;
+                                                    }
+                                                    }
+                                                    else if (type == "questionnaire")
+                                                    {
+                                                    var path = document.getElementById('path' + waveId).value;
+                                                            var file1_label = document.getElementById('question_file1_label' + waveId).value;
+                                                            var quesNoFileUploadId = document.getElementById('quesNoFileUpload' + waveId);
+                                                            if (path == '' && quesNoFileUploadId.checked == false)
+                                                    {
+                                                    alert('Please either select file to upload or check "No file to upload".');
+                                                            return false;
+                                                    }
+                                                    }
+                                                    else if (type == 'pos_file')
+                                                    {
+                                                    var filePos = document.getElementById('pos_list_file' + waveId).value;
+                                                            if (filePos == '')
+                                                    {
+                                                    chk = 0;
+                                                    }
+                                                    }
+                                                    else if (type == 'brief')
+                                                    {
+                                                    var spePath = document.getElementById('spePath' + waveId).value;
+                                                            var not_file_upload_spe = document.getElementById('not_file_upload_spe' + waveId);
+                                                            if (material_name == '')
+                                                    {
+                                                    chk = 0;
+                                                    }
 
-            if (report_file == '' && report_nofileupload.checked == false)
-            {
-                alert('Please either select file to upload or check "No file to upload".');
-                    return false;
-            }
-        }
+                                                    if (spePath == '' && not_file_upload_spe.checked == false)
+                                                    {
+                                                    alert('Please either select file to upload or check "No file to upload".');
+                                                            return false;
+                                                    }
+                                                    }
+                                                    else if (type == 'report')
+                                                    {
+                                                    var report_file = document.getElementById('report_file' + waveId).value;
+                                                            var report_nofileupload = document.getElementById('report_nofileupload' + waveId);
+                                                            if (material_name == '')
+                                                    {
+                                                    chk = 0;
+                                                    }
 
-        if (chk == 0)
-        {
-            alert('Please fill all the required fields');
-            return false;
-        }
-        else
-            return true;
-        }
-    </script>
+                                                    if (report_file == '' && report_nofileupload.checked == false)
+                                                    {
+                                                    alert('Please either select file to upload or check "No file to upload".');
+                                                            return false;
+                                                    }
+                                                    }
+                                                    else if (type == 'fw_recap')
+                                                    {
+                                                    var recap_name = document.getElementById('recap_name' + waveId).value;
+                                                            var planned_pos = document.getElementById('planned_pos' + waveId).value;
+                                                            var planned_surveys = document.getElementById('planned_surveys' + waveId).value;
+                                                            var actual_pos = document.getElementById('actual_pos' + waveId).value;
+                                                            var actual_surveys = document.getElementById('actual_surveys' + waveId).value;
+                                                            var actual_misfire = document.getElementById('actual_misfire' + waveId).value;
+                                                            var actual_invalid = document.getElementById('actual_invalid' + waveId).value;
+                                                            if (recap_name == '' || planned_pos == '' || planned_surveys == '' || actual_pos == '' || actual_surveys == '' || actual_misfire == '' || actual_invalid == '')
+                                                    {
+                                                    chk = 0;
+                                                    }
+                                                    }
+
+                                                    if (chk == 0)
+                                                    {
+                                                    alert('Please fill all the required fields');
+                                                            return false;
+                                                    }
+                                                    else
+                                                            return true;
+                                                            }
+
+                                            function addScenario(type)
+                                                    {
+                                                    $('<div class="scenario-list-inner"><div class="wave-content-list"><label class="pull-left">Name:</label><input type="text" name="' + type + '_name[]" /></div><div class="wave-content-list"><label class="pull-left">Value:</label><input type="text" name="' + type + '_value[]" /></div><a href="javascript:;" style="float:left;" onclick="$(this).parent().remove();">x Delete this Scenario</a></div>').appendTo('.' + type + '-list-outer');
+                                                            }
+                                            function showHideEditWaveForm(id)
+                                                    {
+                                                    $('#' + id).slideToggle('slow');
+                                                            }
+                                            function addMoreFileLabel(waveId, counter, num)
+                                                    {
+                                                    $('<div class="wave-file-inner"><div class="wave-content-list-inner1"><b>Label:</b> &nbsp; <input type="text" name="label[' + num + '][]" /></div><div class="wave-content-list-inner1"><b>File:</b> &nbsp; <input type="file" name="path[' + num + '][]" /></div><div class="wave-content-list-inner2"><button class="btn btn-orange" onclick="$(this).parent().parent().remove();"><i class="icon-remove-sign"></i> &nbsp; Remove</button></div></div>').appendTo('#wave-file-outer' + counter + '-' + num + '-' + waveId);
+                                                            }
+                                            function addMoreFileMessage(waveId, counter, cnt)
+                                                    {
+                                                    var num = parseInt($('#wave-filemessage-outer' + counter + '-' + waveId).children('div.wave-filemessage-inner').length) + 1;
+                                                            $('<div class="wave-filemessage-inner"><input type="hidden" name="formindex2[]" value="' + num + '" /><div class="wave-filemessage-heading">File & Message ' + num + '</div><div class="wave-filemessage-inner1"><div class="wave-content-list"><h5 class="page-header" style="font-size:20px;">Message</h5><textarea name="message[' + num + ']" style="width:98%; height:80px;"></textarea></div><div class="wave-content-list"><h5 class="page-header" style="font-size:20px;">File</h5><div id="wave-file-outer' + counter + '-' + num + '-' + waveId + '"><div class="wave-file-inner"><div class="wave-content-list-inner1"><b>Label:</b> &nbsp; <input type="text" name="label[' + num + '][]" /></div><div class="wave-content-list-inner1"><b>File:</b> &nbsp; <input type="file" name="path[' + num + '][]" /></div><div class="wave-content-list-inner2"><button class="btn btn-blue1" onclick="addMoreFileLabel(' + waveId + ',' + counter + ',' + num + '); return false;"><i class="icon-plus-sign"></i> &nbsp; Add more</button></div></div></div></div></div></div>').appendTo('#wave-filemessage-outer' + counter + '-' + waveId);
+                                                            }
+</script>
 {% endblock %}
