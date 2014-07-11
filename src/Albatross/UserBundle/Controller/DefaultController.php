@@ -148,7 +148,8 @@ class DefaultController extends Controller {
                     'penSurveys' => $penSurveys,
                     'todayForecastVal' => $todayForecastVal,
                     'todayPrevForecastVal' => $todayPrevForecastVal,
-                    'pendingQuesData' => $pendingQuesData
+                    'pendingQuesData' => $pendingQuesData,
+                    'userInfo' => $user
         ));
     }
 
